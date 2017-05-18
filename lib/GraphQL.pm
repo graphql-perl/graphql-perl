@@ -6,20 +6,18 @@ use warnings;
 
 =head1 NAME
 
-GraphQL - The great new GraphQL!
+GraphQL - Perl implementation
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 
 =head1 SYNOPSIS
-
-Quick summary of what the module does.
 
 Perhaps a little code snippet.
 
@@ -59,15 +57,11 @@ Please report any bugs or feature requests to C<bug-graphql at rt.cpan.org>, or 
 the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=GraphQL>.  I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
 
-
-
-
 =head1 SUPPORT
 
 You can find documentation for this module with the perldoc command.
 
     perldoc GraphQL
-
 
 You can also look for information at:
 
@@ -135,7 +129,6 @@ CONTRIBUTOR WILL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, OR
 CONSEQUENTIAL DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THE PACKAGE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 =cut
 
-1; # End of GraphQL
+1;
