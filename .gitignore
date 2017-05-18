@@ -1,35 +1,18 @@
-!Build/
-.last_cover_stats
-/META.yml
-/META.json
-/MYMETA.*
-*.o
-*.pm.tdy
-*.bs
-
-# Devel::Cover
-cover_db/
-
-# Devel::NYTProf
-nytprof.out
-
-# Dizt::Zilla
-/.build/
-
-# Module::Build
-_build/
+Makefile
+Makefile.old
 Build
 Build.bat
-
-# Module::Install
+META.*
+MYMETA.*
+.build/
+_build/
+cover_db/
+blib/
 inc/
-
-# ExtUitls::MakeMaker
-/blib/
-/_eumm/
-/*.gz
-/Makefile
-/Makefile.old
-/MANIFEST.bak
-/pm_to_blib
-/*.zip
+.lwpcookies
+.last_cover_stats
+nytprof.out
+pod2htm*.tmp
+pm_to_blib
+GraphQL-*
+GraphQL-*.tar.gz
