@@ -1,0 +1,11 @@
+MANIFEST.SKIP
+MANIFEST.bak
+.git\/
+^.gitignore
+blib\/
+MYMETA\..*
+^GraphQL-\d.*
+^xt\/
+^Makefile$
+^Makefile.bak$
+pm_to_blib

@@ -16,3 +16,4 @@ pod2htm*.tmp
 pm_to_blib
 GraphQL-*
 GraphQL-*.tar.gz
+MANIFEST.bak
