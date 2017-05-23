@@ -5,6 +5,7 @@ lib/GraphQL/Execution.pm
 lib/GraphQL/Language.pm
 lib/GraphQL/Subscription.pm
 lib/GraphQL/Type.pm
+lib/GraphQL/Type/Interface.pm
 lib/GraphQL/Utilities.pm
 lib/GraphQL/Validation.pm
 Makefile.PL
@@ -14,4 +15,5 @@ t/00-load.t
 t/manifest.t
 t/pod-coverage.t
 t/pod.t
+t/type-interface.t
 xt/boilerplate.t
