@@ -1,7 +1,10 @@
 package GraphQL::Type::Interface;
 
 use 5.006;
-use Mouse;
+use strict;
+use warnings;
+use Moo;
+use Types::Standard qw(Str HashRef CodeRef);
 
 =head1 NAME
 
@@ -33,7 +36,7 @@ our $VERSION = '0.02';
 
 =cut
 
-has 'name' => (is => 'ro', isa => 'Str', required => 1);
+has 'name' => (is => 'ro', isa => Str, required => 1);
 
 =head2 description
 
@@ -41,7 +44,7 @@ Optional description.
 
 =cut
 
-has 'description' => (is => 'ro', isa => 'Str');
+has 'description' => (is => 'ro', isa => Str);
 
 =head2 fields
 
@@ -49,7 +52,7 @@ Hash-ref mapping fields to their types.
 
 =cut
 
-has 'fields' => (is => 'ro', isa => 'HashRef[HashRef]', required => 1);
+has 'fields' => (is => 'ro', isa => HashRef, required => 1);
 
 =head2 resolveType
 
@@ -57,7 +60,7 @@ Optional code-ref to resolve types.
 
 =cut
 
-has 'resolveType' => (is => 'ro', isa => 'CodeRef'); # GraphQL::Type::Resolver
+has 'resolveType' => (is => 'ro', isa => CodeRef);
 
 __PACKAGE__->meta->make_immutable();
 

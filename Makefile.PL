@@ -18,7 +18,8 @@ WriteMakefile(
         'Test::More' => '0.88', # done_testing
     },
     PREREQ_PM => {
-        'Mouse' => '0',
+        'Moo' => '0',
+        'Type::Tiny' => '0',
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'GraphQL-*' },
