@@ -20,6 +20,7 @@ WriteMakefile(
     PREREQ_PM => {
         'Moo' => '0',
         'Type::Tiny' => '0',
+        'Function::Parameters' => '0',
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'GraphQL-*' },
