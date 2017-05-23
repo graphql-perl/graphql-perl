@@ -2,6 +2,7 @@ MANIFEST.SKIP
 MANIFEST.bak
 .git\/
 ^.gitignore
+^.travis.yml
 blib\/
 MYMETA\..*
 ^GraphQL-\d.*
