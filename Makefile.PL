@@ -1,4 +1,4 @@
-use 5.008;
+use 5.014;
 use strict;
 use warnings;
 use ExtUtils::MakeMaker;
@@ -9,7 +9,7 @@ WriteMakefile(
   VERSION_FROM     => 'lib/GraphQL.pm',
   ABSTRACT_FROM    => 'lib/GraphQL.pm',
   LICENSE          => 'artistic_2',
-  MIN_PERL_VERSION => '5.008',
+  MIN_PERL_VERSION => '5.014',
   CONFIGURE_REQUIRES => {
     'ExtUtils::MakeMaker' => '0',
   },
