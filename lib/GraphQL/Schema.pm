@@ -1,6 +1,6 @@
 package GraphQL::Schema;
 
-use 5.006;
+use 5.014;
 use strict;
 use warnings;
 
