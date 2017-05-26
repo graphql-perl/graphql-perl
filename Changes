@@ -1,7 +1,12 @@
 Revision history for GraphQL
 
-0.01    Thu May 18 15:46:07 BST 2017
-        First version, released on an unsuspecting world.
+0.03    Fri May 26 18:54:36 BST 2017
+        Include meta info
+        Basic class system in place
+        Start of t and xt dirs
 
 0.02    Thu May 18 16:00:15 BST 2017
         JS classnames to Perl classnames
+
+0.01    Thu May 18 15:46:07 BST 2017
+        First version, released on an unsuspecting world.
