@@ -51,6 +51,9 @@ sub function2 {
 
 Ed J, C<< <etj at cpan.org> >>
 
+The creation of this work has been sponsored by Perl Careers:
+L<https://perl.careers/>.
+
 =head1 BUGS
 
 Please report any bugs or feature requests to C<bug-graphql at rt.cpan.org>, or through
