@@ -1,0 +1,21 @@
+# A simple grammar for GraphQL
+%grammar graphql
+%version 0.01
+%include pegex-atoms
+
+# from atoms use:
+#DOLLAR, LPAREN, RPAREN, COLON, AT, LSQUARE, RSQUARE, LCURLY, RCURLY, PIPE, BANG, EQUAL
+
+graphql: 
+
+spread: /\.\.\./
+
+name: /Name/
+
+int: /Int/
+
+float: /Float/
+
+string: /String/
+
+comment: /Comment/
