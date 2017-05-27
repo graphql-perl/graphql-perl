@@ -12,16 +12,21 @@ my $parser = Pegex::Parser->new(
   receiver => Pegex::Tree::Wrap->new,
 );
 open my $fh, '<', 't/kitchen-sink.graphql';
-my $input = Pegex::Input->new(string => join('', <$fh>));
 
+my $got = do_lex(join('', <$fh>));
 my $expected = eval join '', <DATA>;
-my $got = $parser->parse($input);
 local $Data::Dumper::Indent = $Data::Dumper::Sortkeys = $Data::Dumper::Terse = 1;
 #open $fh, '>', 'tf'; # uncomment these two lines to regenerate
 #print $fh Dumper $got;
-is_deeply $got, $expected, 'lex correct' or diag Dumper $got;
+is_deeply $got, $expected, 'lex big doc correct' or diag Dumper $got;
 
 done_testing;
+
+sub do_lex {
+  my ($text) = @_;
+  my $input = Pegex::Input->new(string => $text);
+  return $parser->parse($input);
+}
 
 __DATA__
 {
