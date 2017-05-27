@@ -3,19 +3,114 @@
 %version 0.01
 %include pegex-atoms
 
-# from atoms use:
-#DOLLAR, LPAREN, RPAREN, COLON, AT, LSQUARE, RSQUARE, LCURLY, RCURLY, PIPE, BANG, EQUAL
+# canonical: https://github.com/facebook/graphql/blob/master/spec/Appendix%20B%20--%20Grammar%20Summary.md
+# inspiration drawn from the slightly obsolete https://github.com/antlr/grammars-v4/blob/master/graphql/GraphQL.g4
+# string and number from https://github.com/ingydotnet/json-pgx/blob/master/json.pgx
 
-graphql: 
+graphql: /-/ definition+
 
-spread: /\.\.\./
+definition: /-/ operationDefinition | /-/ fragmentDefinition
 
-name: /Name/
+operationDefinition: selectionSet | operationType /-/ name? /-/ variableDefinitions? /-/ directives? /-/ selectionSet
 
-int: /Int/
+operationType: /(query|mutation|subscription)/
 
-float: /Float/
+selectionSet: /- LCURLY -/ (selection+ %% /- COMMA? -/) /- RCURLY -/
 
-string: /String/
+selection: field | inlineFragment | fragmentSpread
 
-comment: /Comment/
+field: alias? name /-/ arguments? /-/ directives? selectionSet?
+
+alias: name /- COLON -/
+
+arguments: /- LPAREN -/ (argument+ %% /- COMMA? -/) /- RPAREN -/
+
+argument: name /- COLON -/ value
+
+fragmentSpread: .spread fragmentName /-/ directives?
+
+inlineFragment: .spread typeCondition? /-/ directives? /-/ selectionSet
+
+fragmentDefinition: 'fragment' /-/ fragmentName /-/ typeCondition /-/ directives? /-/ selectionSet
+
+# TODO: can't be 'on'
+fragmentName: name
+
+typeCondition: 'on' /-/ namedType
+
+# HERE
+
+value: variable | number | string | boolean | null | enumValue | listValue | objectValue
+
+boolean: /(true|false)/
+
+null: /null/
+
+# TODO: not true, false, null
+enumValue: name
+
+listValue: LSQUARE (value* % /- COMMA? -/) RSQUARE
+
+objectValue: /- LCURLY -/ (objectField+ % /- COMMA? -/) /- RCURLY -/
+
+objectField: name /- COLON -/ value
+
+variableDefinitions: /- LPAREN -/ (variableDefinition+ % /- COMMA? -/) /- RPAREN -/
+
+variableDefinition: variable /- COLON -/ type defaultValue?
+
+variable: /- DOLLAR/ name
+
+defaultValue: /- EQUAL -/ value
+
+type: namedType nonNullType? | listType nonNullType?
+
+namedType: name
+
+listType: LSQUARE type RSQUARE
+
+nonNullType: BANG
+
+directives: directive+
+
+directive: /- AT/ name arguments?
+
+string: /
+  DOUBLE
+    (
+      (:
+        BACK (:     # Backslash escapes
+          [
+            DOUBLE    # Double Quote
+            BACK    # Back Slash
+            SLASH     # Foreward Slash
+            'b'     # Back Space
+            'f'     # Form Feed
+            'n'     # New Line
+            'r'     # Carriage Return
+            't'     # Horizontal Tab
+          ]
+        |
+          'u' HEX{4}    # Unicode octet pair
+        )
+      |
+        [^ DOUBLE CONTROLS ]  # Anything else
+      )*
+    )
+  DOUBLE
+/
+
+number: /(
+  DASH?
+  (: 0 | [1-9] DIGIT* )
+  (: DOT DIGIT* )?
+  (: [eE] [ DASH PLUS ]? DIGIT+ )?
+)/
+
+name: /([ UNDER ALPHAS ] [ WORDS ]*)/
+
+spread: /\.{3}/ /-/
+
+ws: / (: WS | comment ) /
+
+comment: / HASH [^\r\n]* (: EOL | CR !NL | EOS ) / # CR is because MacOS 9

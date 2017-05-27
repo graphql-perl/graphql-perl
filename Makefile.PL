@@ -45,3 +45,10 @@ WriteMakefile(
     },
   },
 );
+
+sub MY::postamble {
+  <<EOF;
+lib/GraphQL/Grammar.pm : graphql.pgx
+\t\$(PERL) -Ilib -MGraphQL::Grammar=compile
+EOF
+}
