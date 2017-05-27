@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 use Test::More;
+use Test::Exception;
 use Pegex::Parser;
 use GraphQL::Grammar;
 use Pegex::Tree::Wrap;
@@ -19,6 +20,8 @@ local $Data::Dumper::Indent = $Data::Dumper::Sortkeys = $Data::Dumper::Terse = 1
 #open $fh, '>', 'tf'; # uncomment these two lines to regenerate
 #print $fh Dumper $got;
 is_deeply $got, $expected, 'lex big doc correct' or diag Dumper $got;
+
+throws_ok { do_lex("\x{0007}") } qr/Parse document failed for some reason/, 'invalid char';
 
 done_testing;
 
