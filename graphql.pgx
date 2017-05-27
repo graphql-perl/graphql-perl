@@ -111,6 +111,6 @@ name: /([ UNDER ALPHAS ] [ WORDS ]*)/
 
 spread: /\.{3}/ /-/
 
-ws: / (: WS | comment ) /
+ws: / (: WS | \x{FEFF} | comment ) /
 
 comment: / HASH [^\r\n]* (: EOL | CR !NL | EOS ) / # CR is because MacOS 9

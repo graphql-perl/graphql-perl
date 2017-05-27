@@ -23,6 +23,8 @@ is_deeply $got, $expected, 'lex big doc correct' or diag Dumper $got;
 
 throws_ok { do_lex("\x{0007}") } qr/Parse document failed for some reason/, 'invalid char';
 
+lives_ok { do_lex("\x{FEFF} query foo { id }") } 'accepts BOM';
+
 done_testing;
 
 sub do_lex {
