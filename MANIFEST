@@ -16,6 +16,7 @@ MANIFEST			This list of files
 README
 t/00-load.t
 t/kitchen-sink.graphql
+t/language-lexer.t
 t/language-parser.t
 t/schema-kitchen-sink.graphql
 t/type-interface.t
