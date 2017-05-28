@@ -35,6 +35,8 @@ is string_lookup($got), 'quote \\"', 'string quote kept' or diag Dumper $got; # 
 
 throws_ok { do_lex(string_make('quote \\')) } qr/line:\s*1.*column:\s*21/s, 'error on unterminated string';
 
+throws_ok { do_lex(q(query q { foo(name: 'hello') { id } })) } qr/line:\s*1.*column:\s*21/s, 'error on single quote';
+
 done_testing;
 
 sub string_make {
