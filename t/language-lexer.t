@@ -33,6 +33,8 @@ is string_lookup($got), ' x ', 'string preserve whitespace' or diag Dumper $got;
 $got = do_lex(string_make('quote \\"'));
 is string_lookup($got), 'quote \\"', 'string quote kept' or diag Dumper $got; # not de-quoted by lexer
 
+throws_ok { do_lex(string_make('quote \\')) } qr/line:\s*1.*column:\s*21/s, 'error on unterminated string';
+
 done_testing;
 
 sub string_make {

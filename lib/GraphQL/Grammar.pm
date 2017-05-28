@@ -466,7 +466,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
       ]
     },
     'string' => {
-      '.rgx' => qr/\G"((?:\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})|[^"\x00-\x1f])*)"/
+      '.rgx' => qr/\G"((?:\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})|[^"\x00-\x1f\\])*)"/
     },
     'type' => {
       '.any' => [

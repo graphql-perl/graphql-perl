@@ -94,7 +94,7 @@ string: /
           'u' HEX{4}    # Unicode octet pair
         )
       |
-        [^ DOUBLE CONTROLS ]  # Anything else
+        [^ DOUBLE CONTROLS BACK ]  # Anything else
       )*
     )
   DOUBLE
