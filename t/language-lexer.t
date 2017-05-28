@@ -25,7 +25,22 @@ throws_ok { do_lex("\x{0007}") } qr/Parse document failed for some reason/, 'inv
 
 lives_ok { do_lex("\x{FEFF} query foo { id }") } 'accepts BOM';
 
+throws_ok { do_lex("\n\n    ?  \n\n\n") } qr/line:\s*3.*column:\s*5/s, 'error respects whitespace';
+
+$got = do_lex(string_make(' x '));
+is string_lookup($got), ' x ', 'string preserve whitespace' or diag Dumper $got;
+
 done_testing;
+
+sub string_make {
+  my ($text) = @_;
+  return sprintf 'query q { foo(name: "%s") { id } }', $text;
+}
+
+sub string_lookup {
+  my ($got) = @_;
+  return $got->{graphql}[0][0]{definition}[0]{operationDefinition}[2]{selectionSet}[0][0]{selection}{field}[1]{arguments}[0][0]{argument}[1]{value}{string};
+}
 
 sub do_lex {
   my ($text) = @_;
