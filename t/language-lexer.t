@@ -30,6 +30,9 @@ throws_ok { do_lex("\n\n    ?  \n\n\n") } qr/line:\s*3.*column:\s*5/s, 'error re
 $got = do_lex(string_make(' x '));
 is string_lookup($got), ' x ', 'string preserve whitespace' or diag Dumper $got;
 
+$got = do_lex(string_make('quote \\"'));
+is string_lookup($got), 'quote \\"', 'string quote kept' or diag Dumper $got; # not de-quoted by lexer
+
 done_testing;
 
 sub string_make {
