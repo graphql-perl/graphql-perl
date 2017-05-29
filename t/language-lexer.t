@@ -37,6 +37,15 @@ throws_ok { do_lex(string_make('quote \\')) } qr/line:\s*1.*column:\s*21/s, 'err
 
 throws_ok { do_lex(q(query q { foo(name: 'hello') { id } })) } qr/line:\s*1.*column:\s*21/s, 'error on single quote';
 
+throws_ok { do_lex("\x{0007}") } qr/line:\s*1.*column:\s*1/s, 'error on invalid char';
+
+throws_ok { do_lex(string_make("\x{0000}")) } qr/line:\s*1.*column:\s*21/s, 'error on NUL char';
+
+throws_ok { do_lex(string_make("hi\nthere")) } qr/line:\s*1.*column:\s*21/s, 'error on multi-line string';
+throws_ok { do_lex(string_make("hi\rthere")) } qr/line:\s*1.*column:\s*21/s, 'error on MacOS multi-line string';
+
+throws_ok { do_lex(string_make('\z')) } qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
+
 done_testing;
 
 sub string_make {
