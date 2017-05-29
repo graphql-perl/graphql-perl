@@ -6,7 +6,7 @@ use warnings;
 
 =head1 NAME
 
-GraphQL - Perl implementation
+GraphQL - A reference implementation of the GraphQL spec in Perl.
 
 =cut
 
@@ -17,14 +17,11 @@ our $VERSION = '0.03';
 Perhaps a little code snippet.
 
     use GraphQL;
-
     my $foo = GraphQL->new();
-    ...
 
 =head1 EXPORT
 
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
+None yet.
 
 =head1 SUBROUTINES/METHODS
 
@@ -79,13 +76,15 @@ L<http://cpanratings.perl.org/d/GraphQL>
 
 =item * Search CPAN
 
-L<http://search.cpan.org/dist/GraphQL/>
+L<https://metacpan.org/release/GraphQL>
 
 =back
 
 
 =head1 ACKNOWLEDGEMENTS
 
+The creation of this work has been sponsored by Perl Careers:
+L<https://perl.careers/>.
 
 =head1 LICENSE AND COPYRIGHT
 
