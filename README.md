@@ -1,47 +1,83 @@
-GraphQL
+# NAME
 
-A reference implementation of the GraphQL spec in Perl.
+GraphQL - A reference implementation of the GraphQL spec in Perl.
 
-INSTALLATION
+# SYNOPSIS
 
-To install this module, run the following commands:
+Perhaps a little code snippet.
 
-	perl Makefile.PL
-	make
-	make test
-	make install
+    use GraphQL;
+    my $foo = GraphQL->new();
 
-SUPPORT AND DOCUMENTATION
+# PROJECT STATUS
 
-After installing, you can find documentation for this module with the
-perldoc command.
+| OS      |  Build status |
+|:-------:|--------------:|
+| Linux   | [![Build Status](https://travis-ci.org/mohawk2/graphql-perl.svg?branch=master)](https://travis-ci.org/mohawk2/graphql-perl) |
+
+[![CPAN version](https://badge.fury.io/pl/GraphQL.svg)](https://metacpan.org/pod/GraphQL)
+
+# EXPORT
+
+None yet.
+
+# SUBROUTINES/METHODS
+
+## function1
+
+## function2
+
+# AUTHOR
+
+Ed J, `<etj at cpan.org>`
+
+The creation of this work has been sponsored by Perl Careers:
+[https://perl.careers/](https://perl.careers/).
+
+# BUGS
+
+Please report any bugs or feature requests to `bug-graphql at rt.cpan.org`, or through
+the web interface at [http://rt.cpan.org/NoAuth/ReportBug.html?Queue=GraphQL](http://rt.cpan.org/NoAuth/ReportBug.html?Queue=GraphQL).  I will be notified, and then you'll
+automatically be notified of progress on your bug as I make changes.
+
+# SUPPORT
+
+You can find documentation for this module with the perldoc command.
 
     perldoc GraphQL
 
 You can also look for information at:
 
-    RT, CPAN's request tracker (report bugs here)
-        http://rt.cpan.org/NoAuth/Bugs.html?Dist=GraphQL
+- RT: CPAN's request tracker (report bugs here)
 
-    AnnoCPAN, Annotated CPAN documentation
-        http://annocpan.org/dist/GraphQL
+    [http://rt.cpan.org/NoAuth/Bugs.html?Dist=GraphQL](http://rt.cpan.org/NoAuth/Bugs.html?Dist=GraphQL)
 
-    CPAN Ratings
-        http://cpanratings.perl.org/d/GraphQL
+- AnnoCPAN: Annotated CPAN documentation
 
-    Search CPAN
-        http://search.cpan.org/dist/GraphQL/
+    [http://annocpan.org/dist/GraphQL](http://annocpan.org/dist/GraphQL)
 
+- CPAN Ratings
 
-LICENSE AND COPYRIGHT
+    [http://cpanratings.perl.org/d/GraphQL](http://cpanratings.perl.org/d/GraphQL)
 
-Copyright (C) 2017 Ed J
+- Search CPAN
+
+    [https://metacpan.org/release/GraphQL](https://metacpan.org/release/GraphQL)
+
+# ACKNOWLEDGEMENTS
+
+The creation of this work has been sponsored by Perl Careers:
+[https://perl.careers/](https://perl.careers/).
+
+# LICENSE AND COPYRIGHT
+
+Copyright 2017 Ed J.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of the the Artistic License (2.0). You may obtain a
 copy of the full license at:
 
-L<http://www.perlfoundation.org/artistic_license_2_0>
+[http://www.perlfoundation.org/artistic\_license\_2\_0](http://www.perlfoundation.org/artistic_license_2_0)
 
 Any use, modification, and distribution of the Standard or Modified
 Versions is governed by this Artistic License. By using, modifying or
@@ -72,4 +108,3 @@ YOUR LOCAL LAW. UNLESS REQUIRED BY LAW, NO COPYRIGHT HOLDER OR
 CONTRIBUTOR WILL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, OR
 CONSEQUENTIAL DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THE PACKAGE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
