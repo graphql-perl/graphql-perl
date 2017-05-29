@@ -26,9 +26,7 @@ Perhaps a little code snippet.
 | OS      |  Build status |
 |:-------:|--------------:|
 | Linux   | [![Build Status](https://travis-ci.org/mohawk2/graphql-perl.svg?branch=master)](https://travis-ci.org/mohawk2/graphql-perl) |
-| Windows | [![Build status](https://ci.appveyor.com/api/projects/status/96mjqd4fymv0h8yw/branch/master?svg=true)](https://ci.appveyor.com/project/zmughal/pdl/branch/master) |
 
-[![Coverage Status](https://coveralls.io/repos/PDLPorters/pdl/badge.png?branch=master)](https://coveralls.io/r/PDLPorters/pdl?branch=master)
 [![CPAN version](https://badge.fury.io/pl/GraphQL.svg)](https://metacpan.org/pod/GraphQL)
 
 =end markdown
