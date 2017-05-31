@@ -13,7 +13,7 @@ Perhaps a little code snippet.
 
 | OS      |  Build status |
 |:-------:|--------------:|
-| Linux   | [![Build Status](https://travis-ci.org/mohawk2/graphql-perl.svg?branch=master)](https://travis-ci.org/mohawk2/graphql-perl) |
+| Linux   | [![Build Status](https://travis-ci.org/graphql-perl/graphql-perl.svg?branch=master)](https://travis-ci.org/graphql-perl/graphql-perl) |
 
 [![CPAN version](https://badge.fury.io/pl/GraphQL.svg)](https://metacpan.org/pod/GraphQL)
 

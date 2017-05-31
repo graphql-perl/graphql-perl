@@ -31,8 +31,8 @@ WriteMakefile(
     resources => {
       repository => {
         type => 'git',
-        url => 'git@github.com:mohawk2/graphql-perl.git',
-        web => 'https://github.com/mohawk2/graphql-perl',
+        url => 'git@github.com:graphql-perl/graphql-perl.git',
+        web => 'https://github.com/graphql-perl/graphql-perl',
       },
     },
     prereqs => {
