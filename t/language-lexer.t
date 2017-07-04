@@ -56,7 +56,12 @@ done_testing;
 
 sub string_make {
   my ($text) = @_;
-  return sprintf 'query q { foo(name: "%s") { id } }', $text;
+  return query_make(sprintf '"%s"', $text);
+}
+
+sub query_make {
+  my ($text) = @_;
+  return sprintf 'query q { foo(name: %s) { id } }', $text;
 }
 
 sub string_lookup {
