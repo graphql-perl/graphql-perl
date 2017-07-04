@@ -52,7 +52,18 @@ throws_ok { do_lex(string_make('bad \\uXXXX esc')) } qr/line:\s*1.*column:\s*21/
 throws_ok { do_lex(string_make('bad \\uFXXX esc')) } qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
 throws_ok { do_lex(string_make('bad \\uXXXF esc')) } qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
 
+$got = do_lex(number_make('4'));
+is query_lookup($got, 'number'), '4', 'simple number' or diag Dumper $got;
+
+$got = do_lex(number_make('4.123'));
+is query_lookup($got, 'number'), '4.123', 'simple float' or diag Dumper $got;
+
 done_testing;
+
+sub number_make {
+  my ($text) = @_;
+  return query_make($text);
+}
 
 sub string_make {
   my ($text) = @_;
