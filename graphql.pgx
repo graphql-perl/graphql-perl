@@ -40,7 +40,7 @@ typeCondition: 'on' /-/ namedType
 
 # HERE
 
-value: variable | number | string | boolean | null | enumValue | listValue | objectValue
+value: variable | float | int | string | boolean | null | enumValue | listValue | objectValue
 
 boolean: /(true|false)/
 
@@ -100,11 +100,20 @@ string: /
   DOUBLE
 /
 
-number: /(
+float: /(
   DASH?
   (: 0 | [1-9] DIGIT* )
-  (: DOT DIGIT* )?
-  (: [eE] [ DASH PLUS ]? DIGIT+ )?
+  (:
+    # one or other or both. not neither
+    (: DOT DIGIT* ) (: [eE] [ DASH PLUS ]? DIGIT+ ) |
+    (: DOT DIGIT* ) |
+    (: [eE] [ DASH PLUS ]? DIGIT+ )
+  )
+)/
+
+int: /(
+  DASH?
+  (: 0 | [1-9] DIGIT* )
 )/
 
 name: /([ UNDER ALPHAS ] [ WORDS ]*)/

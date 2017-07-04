@@ -176,6 +176,9 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
         }
       ]
     },
+    'float' => {
+      '.rgx' => qr/\G(\-?(?:0|[1-9][0-9]*)(?:(?:\.[0-9]*)(?:[eE][\-\+]?[0-9]+)|(?:\.[0-9]*)|(?:[eE][\-\+]?[0-9]+)))/
+    },
     'fragmentDefinition' => {
       '.all' => [
         {
@@ -265,6 +268,9 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
         }
       ]
     },
+    'int' => {
+      '.rgx' => qr/\G(\-?(?:0|[1-9][0-9]*))/
+    },
     'listType' => {
       '.all' => [
         {
@@ -319,9 +325,6 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
     },
     'null' => {
       '.rgx' => qr/\Gnull/
-    },
-    'number' => {
-      '.rgx' => qr/\G(\-?(?:0|[1-9][0-9]*)(?:\.[0-9]*)?(?:[eE][\-\+]?[0-9]+)?)/
     },
     'objectField' => {
       '.all' => [
@@ -513,7 +516,10 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
           '.ref' => 'variable'
         },
         {
-          '.ref' => 'number'
+          '.ref' => 'float'
+        },
+        {
+          '.ref' => 'int'
         },
         {
           '.ref' => 'string'

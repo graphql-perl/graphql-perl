@@ -53,10 +53,10 @@ throws_ok { do_lex(string_make('bad \\uFXXX esc')) } qr/line:\s*1.*column:\s*21/
 throws_ok { do_lex(string_make('bad \\uXXXF esc')) } qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
 
 $got = do_lex(number_make('4'));
-is query_lookup($got, 'number'), '4', 'simple number' or diag Dumper $got;
+is query_lookup($got, 'int'), '4', 'simple int' or diag Dumper $got;
 
 $got = do_lex(number_make('4.123'));
-is query_lookup($got, 'number'), '4.123', 'simple float' or diag Dumper $got;
+is query_lookup($got, 'float'), '4.123', 'simple float' or diag Dumper $got;
 
 done_testing;
 
@@ -192,12 +192,12 @@ __DATA__
                                           [
                                             {
                                               'value' => {
-                                                'number' => '123'
+                                                'int' => '123'
                                               }
                                             },
                                             {
                                               'value' => {
-                                                'number' => '456'
+                                                'int' => '456'
                                               }
                                             }
                                           ]
@@ -288,7 +288,7 @@ __DATA__
                                                                         },
                                                                         {
                                                                           'value' => {
-                                                                            'number' => '10'
+                                                                            'int' => '10'
                                                                           }
                                                                         }
                                                                       ]
@@ -503,7 +503,7 @@ __DATA__
                                     },
                                     {
                                       'value' => {
-                                        'number' => '123'
+                                        'int' => '123'
                                       }
                                     }
                                   ]
