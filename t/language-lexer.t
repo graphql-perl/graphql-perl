@@ -66,7 +66,12 @@ sub query_make {
 
 sub string_lookup {
   my ($got) = @_;
-  return $got->{graphql}[0][0]{definition}[0]{operationDefinition}[2]{selectionSet}[0][0]{selection}{field}[1]{arguments}[0][0]{argument}[1]{value}{string};
+  return query_lookup($got, 'string');
+}
+
+sub query_lookup {
+  my ($got, $type) = @_;
+  return $got->{graphql}[0][0]{definition}[0]{operationDefinition}[2]{selectionSet}[0][0]{selection}{field}[1]{arguments}[0][0]{argument}[1]{value}{$type};
 }
 
 sub do_lex {
