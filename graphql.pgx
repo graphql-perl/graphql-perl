@@ -105,8 +105,8 @@ float: /(
   (: 0 | [1-9] DIGIT* )
   (:
     # one or other or both. not neither
-    (: DOT DIGIT* ) (: [eE] [ DASH PLUS ]? DIGIT+ ) |
-    (: DOT DIGIT* ) |
+    (: DOT DIGIT+ ) (: [eE] [ DASH PLUS ]? DIGIT+ ) |
+    (: DOT DIGIT+ ) |
     (: [eE] [ DASH PLUS ]? DIGIT+ )
   )
 )/
