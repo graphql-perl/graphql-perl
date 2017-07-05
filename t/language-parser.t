@@ -5,11 +5,11 @@ use warnings;
 use Test::More;
 
 BEGIN {
-  use_ok( 'GraphQL::Language' ) || print "Bail out!\n";
+  use_ok( 'GraphQL::Parser' ) || print "Bail out!\n";
 }
 
 my $implementingType;
-my $interfaceType = GraphQL::Language->parse(
+my $interfaceType = GraphQL::Parser->parse(
   '{',
 );
 

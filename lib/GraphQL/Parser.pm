@@ -1,4 +1,4 @@
-package GraphQL::Language;
+package GraphQL::Parser;
 
 use 5.014;
 use strict;
@@ -10,7 +10,7 @@ use Function::Parameters;
 
 =head1 NAME
 
-GraphQL::Language - GraphQL language parser
+GraphQL::Parser - GraphQL language parser
 
 =head1 VERSION
 
@@ -22,8 +22,8 @@ our $VERSION = '0.02';
 
 =head1 SYNOPSIS
 
-  use GraphQL::Language;
-  my $parsed = GraphQL::Language->parse(
+  use GraphQL::Parser;
+  my $parsed = GraphQL::Parser->parse(
     $source
   );
 
@@ -31,7 +31,7 @@ our $VERSION = '0.02';
 
 =head2 parse
 
-  GraphQL::Language->parse($source, $noLocation);
+  GraphQL::Parser->parse($source, $noLocation);
 
 =cut
 
