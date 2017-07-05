@@ -6,9 +6,30 @@ use warnings;
 use base 'Pegex::Grammar';
 use constant file => './graphql.pgx';
 
+our $VERSION = '0.02';
+
 =head1 NAME
 
-GraphQL - Perl implementation
+GraphQL::Grammar - GraphQL grammar
+
+=head1 SYNOPSIS
+
+  use Pegex::Parser;
+  use GraphQL::Grammar;
+  use Pegex::Tree::Wrap;
+  use Pegex::Input;
+
+  my $parser = Pegex::Parser->new(
+    grammar => GraphQL::Grammar->new,
+    receiver => Pegex::Tree::Wrap->new,
+  );
+  my $text = 'query q { foo(name: "hi") { id } }';
+  my $input = Pegex::Input->new(string => $text);
+  my $got = $parser->parse($input);
+
+=head1 DESCRIPTION
+
+This is a subclass of L<Pegex::Grammar>, with the GraphQL grammar.
 
 =head1 METHODS
 
@@ -599,23 +620,5 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
     }
   }
 }
-
-=head1 NAME
-
-GraphQL::Grammar - GraphQL Pegex grammar class
-
-=cut
-
-our $VERSION = '0.02';
-
-=head1 SYNOPSIS
-
-=head1 METHODS
-
-=head2 parse
-
-  GraphQL::Language->parse($source, $noLocation);
-
-=cut
 
 1;
