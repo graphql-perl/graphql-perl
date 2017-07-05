@@ -52,13 +52,29 @@ throws_ok { do_lex(string_make('bad \\uXXXX esc')) } qr/line:\s*1.*column:\s*21/
 throws_ok { do_lex(string_make('bad \\uFXXX esc')) } qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
 throws_ok { do_lex(string_make('bad \\uXXXF esc')) } qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
 
-$got = do_lex(number_make('4'));
-is query_lookup($got, 'int'), '4', 'simple int' or diag Dumper $got;
-
-$got = do_lex(number_make('4.123'));
-is query_lookup($got, 'float'), '4.123', 'simple float' or diag Dumper $got;
+number_test('4', 'int', 'simple int');
+number_test('4.123', 'float', 'simple float');
+number_test('9', 'int', 'simple int');
+number_test('0', 'int', 'simple int');
+number_test('-4.123', 'float', 'negative float');
+number_test('0.123', 'float', 'simple float 0');
+number_test('123e4', 'float', 'float exp lower');
+number_test('123E4', 'float', 'float exp upper');
+number_test('123e-4', 'float', 'float negexp lower');
+number_test('123e+4', 'float', 'float posexp lower');
+number_test('-1.123e4', 'float', 'neg float exp lower');
+number_test('-1.123E4', 'float', 'neg float exp upper');
+number_test('-1.123e-4', 'float', 'neg float negexp lower');
+number_test('-1.123e+4', 'float', 'neg float posexp lower');
+number_test('-1.123e4567', 'float', 'neg float longexp lower');
 
 done_testing;
+
+sub number_test {
+  my ($text, $type, $label) = @_;
+  my $got = do_lex(number_make($text));
+  is query_lookup($got, $type), $text, $label or diag Dumper $got;
+}
 
 sub number_make {
   my ($text) = @_;
