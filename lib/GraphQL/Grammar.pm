@@ -6,7 +6,7 @@ use warnings;
 use base 'Pegex::Grammar';
 use constant file => './graphql.pgx';
 
-our $VERSION = '0.02';
+our $VERSION = '0.05';
 
 =head1 NAME
 

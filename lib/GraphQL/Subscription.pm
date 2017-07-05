@@ -10,11 +10,11 @@ GraphQL::Subscription - Perl implementation
 
 =head1 VERSION
 
-Version 0.02
+Version 0.05
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.05';
 
 
 =head1 SYNOPSIS
