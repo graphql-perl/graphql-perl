@@ -68,6 +68,10 @@ number_test('-1.123e-4', 'float', 'neg float negexp lower');
 number_test('-1.123e+4', 'float', 'neg float posexp lower');
 number_test('-1.123e4567', 'float', 'neg float longexp lower');
 
+throws_ok { do_lex(number_make('00')) } qr/line:\s*1.*column:\s*22/s, 'error on invalid int';
+throws_ok { do_lex(number_make('+1')) } qr/line:\s*1.*column:\s*21/s, 'error on invalid int';
+throws_ok { do_lex(number_make('.123')) } qr/line:\s*1.*column:\s*21/s, 'error on invalid float';
+
 done_testing;
 
 sub number_test {
