@@ -1,5 +1,9 @@
 Revision history for GraphQL
 
+0.05	Wed Jul  5 03:08:25 BST 2017
+        Fuller Pegex lexer
+        Incorporate rest of graphql-js lexer tests
+
 0.04	Wed May 31 16:20:17 BST 2017
         Switch to new graphql-perl GH organisation repo
         Nicer README.md
