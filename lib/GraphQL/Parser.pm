@@ -5,8 +5,12 @@ use strict;
 use warnings;
 use Moo;
 use Return::Type;
-use Types::Standard qw(Str Bool);
+use Types::Standard qw(Str Bool HashRef);
 use Function::Parameters;
+
+require Pegex::Parser;
+require GraphQL::Grammar;
+require Pegex::Tree::Wrap;
 
 =head1 NAME
 
@@ -35,8 +39,13 @@ our $VERSION = '0.02';
 
 =cut
 
-method parse(Str $source, Bool $noLocation = undef) :ReturnType(Str) {
-  return 'Yo';
+method parse(Str $source, Bool $noLocation = undef) :ReturnType(HashRef) {
+  my $parser = Pegex::Parser->new(
+    grammar => GraphQL::Grammar->new,
+    receiver => Pegex::Tree::Wrap->new,
+  );
+  my $input = Pegex::Input->new(string => $source);
+  return $parser->parse($input);
 }
 
 __PACKAGE__->meta->make_immutable();
