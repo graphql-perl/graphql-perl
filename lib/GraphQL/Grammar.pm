@@ -215,7 +215,14 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
           '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
         },
         {
-          '.ref' => 'typeCondition'
+          '.any' => [
+            {
+              '.ref' => 'typeCondition'
+            },
+            {
+              '.err' => 'Expected "on"'
+            }
+          ]
         },
         {
           '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u

@@ -31,7 +31,7 @@ fragmentSpread: .spread fragmentName /-/ directives?
 
 inlineFragment: .spread typeCondition? /-/ directives? /-/ selectionSet
 
-fragmentDefinition: 'fragment' /-/ fragmentName /-/ typeCondition /-/ directives? /-/ selectionSet
+fragmentDefinition: 'fragment' /-/ fragmentName /-/ (typeCondition | `Expected "on"`) /-/ directives? /-/ selectionSet
 
 # TODO: can't be 'on'
 fragmentName: name

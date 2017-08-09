@@ -11,6 +11,12 @@ BEGIN {
 
 throws_ok { do_parse('{') } qr/Expected name/, 'trivial fail';
 
+throws_ok { do_parse(<<'EOF'
+{ ...MissingOn }
+fragment MissingOn Type
+EOF
+) } qr/Expected "on"/, 'missing "on"';
+
 sub do_parse {
   return GraphQL::Parser->parse($_[0]);
 }
