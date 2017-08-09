@@ -315,7 +315,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
     'listValue' => {
       '.all' => [
         {
-          '.ref' => 'LSQUARE'
+          '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*\[(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
         },
         {
           '+max' => 1,
@@ -338,7 +338,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
           ]
         },
         {
-          '.ref' => 'RSQUARE'
+          '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*\](?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
         }
       ]
     },

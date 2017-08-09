@@ -1,4 +1,4 @@
-#!perl -T
+#!perl
 use 5.014;
 use strict;
 use warnings;
@@ -20,6 +20,8 @@ EOF
 throws_ok { do_parse('{ field: {} }') } qr/Expected name/, 'expected';
 throws_ok { do_parse('notanoperation Foo { field }') } qr/Parse document failed/, 'bad op';
 throws_ok { do_parse('...') } qr/Parse document failed/, 'spread wrong place';
+
+lives_ok { do_parse('{ field(complex: { a: { b: [ $var ] } }) }') } 'parses variable inline values';
 
 sub do_parse {
   return GraphQL::Parser->parse($_[0]);

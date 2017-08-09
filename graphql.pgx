@@ -49,7 +49,7 @@ null: /null/
 # TODO: not true, false, null
 enumValue: name
 
-listValue: LSQUARE (value* % /- COMMA? -/) RSQUARE
+listValue: /- LSQUARE -/ (value* % /- COMMA? -/) /- RSQUARE -/
 
 objectValue: /- LCURLY -/ ( (objectField+ % /- COMMA? -/) | `Expected name` ) /- RCURLY -/
 
