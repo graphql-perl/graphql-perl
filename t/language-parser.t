@@ -17,6 +17,10 @@ fragment MissingOn Type
 EOF
 ) } qr/Expected "on"/, 'missing "on"';
 
+throws_ok { do_parse('{ field: {} }') } qr/Expected name/, 'expected';
+throws_ok { do_parse('notanoperation Foo { field }') } qr/Parse document failed/, 'bad op';
+throws_ok { do_parse('...') } qr/Parse document failed/, 'spread wrong place';
+
 sub do_parse {
   return GraphQL::Parser->parse($_[0]);
 }
