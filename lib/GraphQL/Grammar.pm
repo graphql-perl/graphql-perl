@@ -366,21 +366,28 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
           '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*\{(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
         },
         {
-          '.all' => [
+          '.any' => [
             {
-              '.ref' => 'objectField'
-            },
-            {
-              '+min' => 0,
-              '-flat' => 1,
               '.all' => [
                 {
-                  '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*,?(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+                  '.ref' => 'objectField'
                 },
                 {
-                  '.ref' => 'objectField'
+                  '+min' => 0,
+                  '-flat' => 1,
+                  '.all' => [
+                    {
+                      '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*,?(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+                    },
+                    {
+                      '.ref' => 'objectField'
+                    }
+                  ]
                 }
               ]
+            },
+            {
+              '.err' => 'Expected name'
             }
           ]
         },
@@ -452,25 +459,32 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
           '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*\{(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
         },
         {
-          '.all' => [
+          '.any' => [
             {
-              '.ref' => 'selection'
-            },
-            {
-              '+min' => 0,
-              '-flat' => 1,
               '.all' => [
                 {
-                  '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*,?(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+                  '.ref' => 'selection'
                 },
                 {
-                  '.ref' => 'selection'
+                  '+min' => 0,
+                  '-flat' => 1,
+                  '.all' => [
+                    {
+                      '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*,?(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+                    },
+                    {
+                      '.ref' => 'selection'
+                    }
+                  ]
+                },
+                {
+                  '+max' => 1,
+                  '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*,?(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
                 }
               ]
             },
             {
-              '+max' => 1,
-              '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*,?(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+              '.err' => 'Expected name'
             }
           ]
         },

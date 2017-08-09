@@ -15,7 +15,7 @@ operationDefinition: selectionSet | operationType /-/ name? /-/ variableDefiniti
 
 operationType: /(query|mutation|subscription)/
 
-selectionSet: /- LCURLY -/ (selection+ %% /- COMMA? -/) /- RCURLY -/
+selectionSet: /- LCURLY -/ ( (selection+ %% /- COMMA? -/) | `Expected name` ) /- RCURLY -/
 
 selection: field | inlineFragment | fragmentSpread
 
@@ -51,7 +51,7 @@ enumValue: name
 
 listValue: LSQUARE (value* % /- COMMA? -/) RSQUARE
 
-objectValue: /- LCURLY -/ (objectField+ % /- COMMA? -/) /- RCURLY -/
+objectValue: /- LCURLY -/ ( (objectField+ % /- COMMA? -/) | `Expected name` ) /- RCURLY -/
 
 objectField: name /- COLON -/ value
 
