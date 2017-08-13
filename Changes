@@ -1,5 +1,9 @@
 Revision history for GraphQL
 
+0.06	Sun Aug 13 22:41:08 BST 2017
+        rename ::Language to ::Parser
+        language parser with tests
+
 0.05	Wed Jul  5 03:08:25 BST 2017
         Fuller Pegex lexer
         Incorporate rest of graphql-js lexer tests

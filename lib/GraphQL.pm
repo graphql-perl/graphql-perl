@@ -10,7 +10,7 @@ GraphQL - A reference implementation of the GraphQL spec in Perl.
 
 =cut
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 =head1 SYNOPSIS
 
