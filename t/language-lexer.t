@@ -77,6 +77,10 @@ throws_ok { do_lex(number_make('-A')) } qr/line:\s*1.*column:\s*21/s, 'error on 
 throws_ok { do_lex(number_make('1.0e')) } qr/line:\s*1.*column:\s*25/s, 'error on invalid int';
 throws_ok { do_lex(number_make('1.0eA')) } qr/line:\s*1.*column:\s*26/s, 'error on invalid int';
 
+my $multibyte = "Has a \x{0A0A} multi-byte character.";
+$got = do_lex(string_make($multibyte));
+is string_lookup($got), $multibyte, 'multibyte kept' or diag Dumper $got;
+
 done_testing;
 
 sub number_test {
