@@ -26,6 +26,29 @@ throws_ok { do_parse('query Foo($x: Complex = { a: { b: [ $var ] } }) { field }'
 throws_ok { do_parse('fragment on on on { on }') } qr/Unexpected Name "on"/, 'no accept fragments named "on"';
 throws_ok { do_parse('{ ...on }') } qr/Unexpected Name "on"/, 'no accept fragment spread named "on"';
 
+my @nonKeywords = (
+  'on',
+  'fragment',
+  'query',
+  'mutation',
+  'subscription',
+  'true',
+  'false',
+);
+my %k2sub = (on => 'a');
+for my $keyword (@nonKeywords) {
+  my $fragmentName = $k2sub{$keyword} || $keyword;
+  lives_ok { do_parse(<<EOF) } 'non keywords allowed';
+query $keyword {
+  ... $fragmentName
+  ... on $keyword { field }
+}
+fragment $fragmentName on Type {
+  $keyword($keyword: \$$keyword) \@$keyword($keyword: $keyword)
+}
+EOF
+}
+
 sub do_parse {
   return GraphQL::Parser->parse($_[0]);
 }
