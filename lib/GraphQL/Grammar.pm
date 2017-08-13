@@ -865,6 +865,9 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
         },
         {
           '.ref' => 'namedType'
+        },
+        {
+          '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
         }
       ]
     },
@@ -1053,18 +1056,28 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
       ]
     },
     'typeSystemDefinition' => {
-      '.any' => [
+      '.all' => [
         {
-          '.ref' => 'schemaDefinition'
+          '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
         },
         {
-          '.ref' => 'typeDefinition'
+          '.any' => [
+            {
+              '.ref' => 'schemaDefinition'
+            },
+            {
+              '.ref' => 'typeDefinition'
+            },
+            {
+              '.ref' => 'typeExtensionDefinition'
+            },
+            {
+              '.ref' => 'directiveDefinition'
+            }
+          ]
         },
         {
-          '.ref' => 'typeExtensionDefinition'
-        },
-        {
-          '.ref' => 'directiveDefinition'
+          '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
         }
       ]
     },

@@ -132,11 +132,11 @@ ws: / (: WS | \x{FEFF} | comment ) /
 
 comment: / HASH [^\r\n]* (: EOL | CR !NL | EOS ) / # CR is because MacOS 9
 
-typeSystemDefinition: schemaDefinition | typeDefinition | typeExtensionDefinition | directiveDefinition
+typeSystemDefinition: /-/ (schemaDefinition | typeDefinition | typeExtensionDefinition | directiveDefinition) /-/
 
 schemaDefinition: 'schema' /-/ directives? /- LCURLY -/ operationTypeDefinition+ /- RCURLY -/
 
-operationTypeDefinition: operationType /- COLON -/ namedType
+operationTypeDefinition: operationType /- COLON -/ namedType /-/
 
 typeDefinition: scalarTypeDefinition | objectTypeDefinition | interfaceTypeDefinition | unionTypeDefinition | enumTypeDefinition | inputObjectTypeDefinition
 
