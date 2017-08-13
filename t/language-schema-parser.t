@@ -21,6 +21,11 @@ lives_ok { do_parse('type Hello { world(flag: Boolean): String }') } 'type with 
 lives_ok { do_parse('type Hello { world(flag: Boolean = true): String }') } 'type with default arg';
 lives_ok { do_parse('type Hello { world(things: [String]): String }') } 'type with list arg';
 lives_ok { do_parse('type Hello { world(argOne: Boolean, argTwo: Int): String }') } 'type with two args';
+lives_ok { do_parse('union Hello = World') } 'simple union';
+lives_ok { do_parse('union Hello = Wo | Rld') } 'union of two';
+lives_ok { do_parse('scalar Hello') } 'scalar';
+lives_ok { do_parse('input Hello { world: String }') } 'simple input';
+throws_ok { do_parse('input Hello { world(foo: Int): String }') } qr/Parse document failed/, 'input with arg should fail';
 
 sub do_parse {
   return GraphQL::Parser->parse($_[0]);
