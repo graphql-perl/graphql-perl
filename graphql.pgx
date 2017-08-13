@@ -10,7 +10,7 @@
 
 graphql: /-/ definition+
 
-definition: /-/ operationDefinition | /-/ fragmentDefinition | /-/ typeSystemDefinition
+definition: /-/ (operationDefinition | fragmentDefinition | typeSystemDefinition)
 
 operationDefinition: selectionSet | operationType /-/ name? /-/ variableDefinitions? /-/ directives? /-/ selectionSet
 

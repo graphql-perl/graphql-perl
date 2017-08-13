@@ -153,31 +153,17 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
       ]
     },
     'definition' => {
-      '.any' => [
+      '.all' => [
         {
-          '.all' => [
-            {
-              '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
-            },
-            {
-              '.ref' => 'operationDefinition'
-            }
-          ]
+          '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
         },
         {
-          '.all' => [
+          '.any' => [
             {
-              '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+              '.ref' => 'operationDefinition'
             },
             {
               '.ref' => 'fragmentDefinition'
-            }
-          ]
-        },
-        {
-          '.all' => [
-            {
-              '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
             },
             {
               '.ref' => 'typeSystemDefinition'
