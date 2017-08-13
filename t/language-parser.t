@@ -49,6 +49,16 @@ fragment $fragmentName on Type {
 EOF
 }
 
+for my $anon (qw(mutation subscription)) {
+  lives_ok { do_parse(<<EOF) } 'non keywords allowed';
+${anon} {
+  ${anon}Field
+}
+EOF
+}
+
+lives_ok { do_parse('{ field(complex: { a: { b: [ 123 "abc" ] } }) }') } 'list values';
+
 sub do_parse {
   return GraphQL::Parser->parse($_[0]);
 }
