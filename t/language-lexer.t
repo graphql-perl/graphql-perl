@@ -174,7 +174,7 @@ __DATA__
                         {
                           'defaultValue' => [
                             {
-                              'value' => {
+                              'value_const' => {
                                 'enumValue' => {
                                   'name' => 'MOBILE'
                                 }

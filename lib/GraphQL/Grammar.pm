@@ -119,7 +119,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
           '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*=(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
         },
         {
-          '.ref' => 'value'
+          '.ref' => 'value_const'
         }
       ]
     },
@@ -342,6 +342,36 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
         }
       ]
     },
+    'listValue_const' => {
+      '.all' => [
+        {
+          '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*\[(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+        },
+        {
+          '+max' => 1,
+          '.all' => [
+            {
+              '.ref' => 'value_const'
+            },
+            {
+              '+min' => 0,
+              '-flat' => 1,
+              '.all' => [
+                {
+                  '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*,?(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+                },
+                {
+                  '.ref' => 'value_const'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*\](?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+        }
+      ]
+    },
     'name' => {
       '.rgx' => qr/\G([_a-zA-Z][0-9A-Za-z_]*)/
     },
@@ -364,6 +394,19 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
         },
         {
           '.ref' => 'value'
+        }
+      ]
+    },
+    'objectField_const' => {
+      '.all' => [
+        {
+          '.ref' => 'name'
+        },
+        {
+          '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*:(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+        },
+        {
+          '.ref' => 'value_const'
         }
       ]
     },
@@ -395,6 +438,42 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
             },
             {
               '.err' => 'Expected name'
+            }
+          ]
+        },
+        {
+          '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*\}(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+        }
+      ]
+    },
+    'objectValue_const' => {
+      '.all' => [
+        {
+          '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*\{(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+        },
+        {
+          '.any' => [
+            {
+              '.all' => [
+                {
+                  '.ref' => 'objectField_const'
+                },
+                {
+                  '+min' => 0,
+                  '-flat' => 1,
+                  '.all' => [
+                    {
+                      '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*,?(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+                    },
+                    {
+                      '.ref' => 'objectField_const'
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              '.err' => 'Expected name or constant'
             }
           ]
         },
@@ -580,6 +659,34 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
         },
         {
           '.ref' => 'objectValue'
+        }
+      ]
+    },
+    'value_const' => {
+      '.any' => [
+        {
+          '.ref' => 'float'
+        },
+        {
+          '.ref' => 'int'
+        },
+        {
+          '.ref' => 'string'
+        },
+        {
+          '.ref' => 'boolean'
+        },
+        {
+          '.ref' => 'null'
+        },
+        {
+          '.ref' => 'enumValue'
+        },
+        {
+          '.ref' => 'listValue_const'
+        },
+        {
+          '.ref' => 'objectValue_const'
         }
       ]
     },

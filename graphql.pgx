@@ -42,6 +42,8 @@ typeCondition: 'on' /-/ namedType
 
 value: variable | float | int | string | boolean | null | enumValue | listValue | objectValue
 
+value_const: float | int | string | boolean | null | enumValue | listValue_const | objectValue_const
+
 boolean: /(true|false)/
 
 null: /null/
@@ -51,9 +53,15 @@ enumValue: name
 
 listValue: /- LSQUARE -/ (value* % /- COMMA? -/) /- RSQUARE -/
 
+listValue_const: /- LSQUARE -/ (value_const* % /- COMMA? -/) /- RSQUARE -/
+
 objectValue: /- LCURLY -/ ( (objectField+ % /- COMMA? -/) | `Expected name` ) /- RCURLY -/
 
+objectValue_const: /- LCURLY -/ ( (objectField_const+ % /- COMMA? -/) | `Expected name or constant` ) /- RCURLY -/
+
 objectField: name /- COLON -/ value
+
+objectField_const: name /- COLON -/ value_const
 
 variableDefinitions: /- LPAREN -/ (variableDefinition+ % /- COMMA? -/) /- RPAREN -/
 
@@ -61,7 +69,7 @@ variableDefinition: variable /- COLON -/ type defaultValue?
 
 variable: /- DOLLAR/ name
 
-defaultValue: /- EQUAL -/ value
+defaultValue: /- EQUAL -/ value_const
 
 type: namedType nonNullType? | listType nonNullType?
 
