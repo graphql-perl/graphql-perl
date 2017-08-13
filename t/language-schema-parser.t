@@ -13,6 +13,7 @@ lives_ok { do_parse('type Hello { world: String }') } 'simple schema';
 lives_ok { do_parse('extend type Hello { world: String }') } 'simple extend';
 lives_ok { do_parse('type Hello { world: String! }') } 'non-null';
 lives_ok { do_parse('type Hello implements World { }') } 'implements';
+lives_ok { do_parse('type Hello implements Wo, rld { }') } 'implements multi';
 
 sub do_parse {
   return GraphQL::Parser->parse($_[0]);

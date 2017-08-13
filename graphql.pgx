@@ -145,7 +145,7 @@ scalarTypeDefinition: 'scalar' /-/ name /-/ directives?
 # fieldDefinition is "*" not "+" because JS implementation test allows
 objectTypeDefinition: 'type' /-/ name /-/ implementsInterfaces? /-/ directives? /- LCURLY -/ fieldDefinition* /- RCURLY -/
 
-implementsInterfaces: 'implements' /-/ namedType+
+implementsInterfaces: 'implements' /-/ (namedType+ % /- COMMA? -/)
 
 fieldDefinition: name /-/ argumentsDefinition? /- COLON -/ type /-/ directives?
 
