@@ -240,7 +240,21 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
       ]
     },
     'fragmentName' => {
-      '.ref' => 'name'
+      '.any' => [
+        {
+          '.all' => [
+            {
+              '.rgx' => qr/\Gon/
+            },
+            {
+              '.err' => 'Unexpected Name "on"'
+            }
+          ]
+        },
+        {
+          '.ref' => 'name'
+        }
+      ]
     },
     'fragmentSpread' => {
       '.all' => [

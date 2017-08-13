@@ -23,6 +23,7 @@ throws_ok { do_parse('...') } qr/Parse document failed/, 'spread wrong place';
 
 lives_ok { do_parse('{ field(complex: { a: { b: [ $var ] } }) }') } 'parses variable inline values';
 throws_ok { do_parse('query Foo($x: Complex = { a: { b: [ $var ] } }) { field }') } qr/Expected name or constant/, 'no var in default values';
+throws_ok { do_parse('fragment on on on { on }') } qr/Unexpected Name "on"/, 'no accept fragments named "on"';
 
 sub do_parse {
   return GraphQL::Parser->parse($_[0]);
