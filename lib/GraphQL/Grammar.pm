@@ -116,8 +116,23 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
           '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*\((?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
         },
         {
-          '+min' => 1,
-          '.ref' => 'inputValueDefinition'
+          '.all' => [
+            {
+              '.ref' => 'inputValueDefinition'
+            },
+            {
+              '+min' => 0,
+              '-flat' => 1,
+              '.all' => [
+                {
+                  '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*,?(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+                },
+                {
+                  '.ref' => 'inputValueDefinition'
+                }
+              ]
+            }
+          ]
         },
         {
           '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*\)(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u

@@ -149,7 +149,7 @@ implementsInterfaces: 'implements' /-/ (namedType+ % /- COMMA? -/)
 
 fieldDefinition: name /-/ argumentsDefinition? /- COLON -/ type /-/ directives?
 
-argumentsDefinition: /- LPAREN -/ inputValueDefinition+ /- RPAREN -/
+argumentsDefinition: /- LPAREN -/ (inputValueDefinition+ % /- COMMA? -/) /- RPAREN -/
 
 inputValueDefinition: name /- COLON -/ type /-/ defaultValue? /-/ directives?
 
