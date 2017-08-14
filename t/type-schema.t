@@ -5,8 +5,8 @@ use warnings;
 use Test::More;
 
 BEGIN {
-plan skip_all => 'work in progress';
-  use_ok( 'GraphQL::Type' ) || print "Bail out!\n";
+  use_ok( 'GraphQL::Type::Interface' ) || print "Bail out!\n";
+  use_ok( 'GraphQL::Type::Object' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Schema' ) || print "Bail out!\n";
 }
 
@@ -25,8 +25,8 @@ $implementingType = GraphQL::Type::Object->new(
   fields => { fieldName => { type => 'GraphQLString', resolve => sub { '' } }},
 );
 
-my $schema = new GraphQL::Schema(
-  query => new GraphQLObjectType(
+my $schema = GraphQL::Schema->new(
+  query => GraphQL::Type::Object->new(
     name => 'Query',
     fields => {
       getObject => {
