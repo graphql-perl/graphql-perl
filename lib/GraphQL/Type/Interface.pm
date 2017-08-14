@@ -4,8 +4,8 @@ use 5.014;
 use strict;
 use warnings;
 use Moo;
-use Types::Standard qw(Str HashRef CodeRef);
-use GraphQL::Utilities qw(assert_valid_name);
+use Types::Standard qw(HashRef CodeRef);
+extends qw(GraphQL::Type);
 
 our $VERSION = '0.02';
 
@@ -27,19 +27,7 @@ GraphQL::Type::Interface - Perl implementation of a GraphQL interface type
 
 =head1 ATTRIBUTES
 
-=head2 name
-
-=cut
-
-has 'name' => (is => 'ro', isa => \&assert_valid_name, required => 1);
-
-=head2 description
-
-Optional description.
-
-=cut
-
-has 'description' => (is => 'ro', isa => Str);
+Inherits C<name>, C<description> from L<GraphQL::Type>.
 
 =head2 fields
 
