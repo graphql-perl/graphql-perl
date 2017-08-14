@@ -3,48 +3,35 @@ package GraphQL::Utilities;
 use 5.014;
 use strict;
 use warnings;
+use Types::Standard qw(Str);
+use Function::Parameters;
+use Exporter qw(import);
+
+our $VERSION = '0.02';
+our @EXPORT_OK = qw(
+  assert_valid_name
+);
 
 =head1 NAME
 
-GraphQL::Utilities - Perl implementation
-
-=head1 VERSION
-
-Version 0.02
-
-=cut
-
-our $VERSION = '0.02';
-
+GraphQL::Utilities - GraphQL utility functions
 
 =head1 SYNOPSIS
 
-Perhaps a little code snippet.
+    use GraphQL::Utilities qw(assert_valid_name);
+    assert_valid_name('hello');
 
-    use GraphQL;
+=head1 FUNCTIONS
 
-    my $foo = GraphQL->new();
-    ...
+=head2 assert_valid_name($name)
 
-=head1 EXPORT
-
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
-
-=head1 SUBROUTINES/METHODS
-
-=head2 function1
+If called with a string that is not a valid GraphQL name, will throw
+an exception. Suitable for passing to an C<isa> constraint in L<Moo>.
 
 =cut
 
-sub function1 {
-}
-
-=head2 function2
-
-=cut
-
-sub function2 {
+fun assert_valid_name(Str $name) {
+  die "Names must match /^[_a-zA-Z][_a-zA-Z0-9]*$/ but \"$name\" does not." unless $name =~ /^[_a-zA-Z][_a-zA-Z0-9]*$/;
 }
 
 =head1 AUTHOR

@@ -5,18 +5,13 @@ use strict;
 use warnings;
 use Moo;
 use Types::Standard qw(Str HashRef CodeRef);
+use GraphQL::Utilities qw(assert_valid_name);
+
+our $VERSION = '0.02';
 
 =head1 NAME
 
-GraphQL::Type::Interface - Perl implementation
-
-=head1 VERSION
-
-Version 0.02
-
-=cut
-
-our $VERSION = '0.02';
+GraphQL::Type::Interface - Perl implementation of a GraphQL interface type
 
 =head1 SYNOPSIS
 
@@ -36,7 +31,7 @@ our $VERSION = '0.02';
 
 =cut
 
-has 'name' => (is => 'ro', isa => Str, required => 1);
+has 'name' => (is => 'ro', isa => \&assert_valid_name, required => 1);
 
 =head2 description
 

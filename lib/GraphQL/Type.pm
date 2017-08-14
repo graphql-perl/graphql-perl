@@ -4,41 +4,22 @@ use 5.014;
 use strict;
 use warnings;
 
+our $VERSION = '0.02';
+
 =head1 NAME
 
 GraphQL::Type - Perl implementation
 
-=head1 VERSION
-
-Version 0.02
-
-=cut
-
-our $VERSION = '0.02';
-
-
 =head1 SYNOPSIS
 
-Perhaps a little code snippet.
-
-    use GraphQL;
-
-    my $foo = GraphQL->new();
+    use GraphQL::Type;
     ...
 
-=head1 EXPORT
+=head1 DESCRIPTION
 
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
-
-=head1 SUBROUTINES/METHODS
-
-=head2 function1
+Documentation for Perl interface to GraphQL type system.
 
 =cut
-
-sub function1 {
-}
 
 =head2 function2
 
