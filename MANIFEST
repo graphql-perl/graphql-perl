@@ -7,8 +7,13 @@ lib/GraphQL/Error.pm
 lib/GraphQL/Execution.pm
 lib/GraphQL/Grammar.pm
 lib/GraphQL/Parser.pm
+lib/GraphQL/Role/Abstract.pm
+lib/GraphQL/Role/Composite.pm
 lib/GraphQL/Role/Input.pm
+lib/GraphQL/Role/Leaf.pm
 lib/GraphQL/Role/Named.pm
+lib/GraphQL/Role/Nullable.pm
+lib/GraphQL/Role/Output.pm
 lib/GraphQL/Schema.pm
 lib/GraphQL/Subscription.pm
 lib/GraphQL/Type.pm

@@ -9,7 +9,7 @@ our $VERSION = '0.02';
 
 =head1 NAME
 
-GraphQL::Role::Input - GraphQL "input" object role
+GraphQL::Role::Input - GraphQL object role
 
 =head1 SYNOPSIS
 
