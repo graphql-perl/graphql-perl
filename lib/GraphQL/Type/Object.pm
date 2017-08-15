@@ -17,10 +17,10 @@ GraphQL::Type::Object - GraphQL object type
 =head1 SYNOPSIS
 
   use GraphQL::Type::Object;
-  my $interfaceType;
-  my $ImplementingType = GraphQL::Type::Object->new(
+  my $interface_type;
+  my $implementing_type = GraphQL::Type::Object->new(
     name => 'Object',
-    interfaces => [ $interfaceType ],
+    interfaces => [ $interface_type ],
     fields => { fieldName => { type => 'GraphQLString', resolve => sub { '' } }},
   );
 
