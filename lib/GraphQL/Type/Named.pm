@@ -3,22 +3,21 @@ package GraphQL::Type::Named;
 use 5.014;
 use strict;
 use warnings;
-use Moo;
-extends qw(GraphQL::Type);
+use Moo::Role;
 
 our $VERSION = '0.02';
 
 =head1 NAME
 
-GraphQL::Type::Named - GraphQL "named" object type
+GraphQL::Type::Named - GraphQL "named" object role
 
 =head1 SYNOPSIS
 
-  extends qw(GraphQL::Type::Named);
+  with qw(GraphQL::Type::Named);
 
-=head1 ATTRIBUTES
+=head1 DESCRIPTION
 
-Inherits C<name>, C<description> from L<GraphQL::Type>.
+Allows type constraints for named objects.
 
 =cut
 

@@ -5,7 +5,8 @@ use strict;
 use warnings;
 use Moo;
 use Types::Standard qw(HashRef ArrayRef);
-extends qw(GraphQL::Type::Named);
+extends qw(GraphQL::Type);
+with qw(GraphQL::Type::Named);
 
 our $VERSION = '0.02';
 
@@ -25,7 +26,7 @@ GraphQL::Type::Object - GraphQL object type
 
 =head1 ATTRIBUTES
 
-Inherits C<name>, C<description> from L<GraphQL::Type::Named>.
+Inherits C<name>, C<description> from L<GraphQL::Type>.
 
 =head2 fields
 

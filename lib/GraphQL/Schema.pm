@@ -4,7 +4,7 @@ use 5.014;
 use strict;
 use warnings;
 use Moo;
-use Types::Standard qw(Str InstanceOf ArrayRef);
+use Types::Standard qw(Str InstanceOf ArrayRef ConsumerOf);
 
 our $VERSION = '0.02';
 
@@ -58,7 +58,7 @@ has subscription => (is => 'ro', isa => InstanceOf['GraphQL::Type::Object']);
 
 =cut
 
-has types => (is => 'ro', isa => ArrayRef[InstanceOf['GraphQL::Type::Named']]);
+has types => (is => 'ro', isa => ArrayRef[ConsumerOf['GraphQL::Type::Named']]);
 
 =head2 directives
 
