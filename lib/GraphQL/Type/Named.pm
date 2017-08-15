@@ -20,6 +20,8 @@ GraphQL::Type::Named - GraphQL "named" object type
 
 Inherits C<name>, C<description> from L<GraphQL::Type>.
 
+=cut
+
 __PACKAGE__->meta->make_immutable();
 
 1;
