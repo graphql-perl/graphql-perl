@@ -27,7 +27,7 @@ Superclass for other GraphQL type classes to inherit from.
 
 =cut
 
-has 'name' => (is => 'ro', isa => \&assert_valid_name, required => 1);
+has name => (is => 'ro', isa => \&assert_valid_name, required => 1);
 
 =head2 description
 
@@ -35,7 +35,7 @@ Optional description.
 
 =cut
 
-has 'description' => (is => 'ro', isa => Str);
+has description => (is => 'ro', isa => Str);
 
 __PACKAGE__->meta->make_immutable();
 

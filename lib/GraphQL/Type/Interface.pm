@@ -35,7 +35,7 @@ Hash-ref mapping fields to their types.
 
 =cut
 
-has 'fields' => (is => 'ro', isa => HashRef, required => 1);
+has fields => (is => 'ro', isa => HashRef, required => 1);
 
 =head2 resolveType
 
@@ -43,7 +43,7 @@ Optional code-ref to resolve types.
 
 =cut
 
-has 'resolveType' => (is => 'ro', isa => CodeRef);
+has resolveType => (is => 'ro', isa => CodeRef);
 
 __PACKAGE__->meta->make_immutable();
 
