@@ -15,6 +15,9 @@ GraphQL::Role::Input - GraphQL "input" object role
 
   with qw(GraphQL::Role::Input);
 
+  # or runtime
+  Role::Tiny->apply_roles_to_object($foo, qw(GraphQL::Role::Input));
+
 =head1 DESCRIPTION
 
 Allows type constraints for input objects.
