@@ -4,7 +4,7 @@ use 5.014;
 use strict;
 use warnings;
 use Moo;
-use Types::Standard qw(Str InstanceOf);
+use Types::Standard qw(Str InstanceOf ArrayRef);
 
 our $VERSION = '0.02';
 
@@ -40,7 +40,31 @@ Class implementing GraphQL schema.
 
 =cut
 
-has 'query' => (is => 'ro', isa => InstanceOf['GraphQL::Type::Object'], required => 1);
+has query => (is => 'ro', isa => InstanceOf['GraphQL::Type::Object'], required => 1);
+
+=head2 mutation
+
+=cut
+
+has mutation => (is => 'ro', isa => InstanceOf['GraphQL::Type::Object']);
+
+=head2 subscription
+
+=cut
+
+has subscription => (is => 'ro', isa => InstanceOf['GraphQL::Type::Object']);
+
+=head2 types
+
+=cut
+
+has types => (is => 'ro', isa => ArrayRef[InstanceOf['GraphQL::Type::Named']]);
+
+=head2 directives
+
+=cut
+
+has directives => (is => 'ro', isa => ArrayRef[InstanceOf['GraphQL::Type::Object']]);
 
 __PACKAGE__->meta->make_immutable();
 
