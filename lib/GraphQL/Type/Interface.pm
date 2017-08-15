@@ -20,7 +20,7 @@ GraphQL::Type::Interface - GraphQL interface type
   my $InterfaceType = GraphQL::Type::Interface->new(
     name => 'Interface',
     fields => { fieldName => { type => 'GraphQLString' } },
-    resolveType => sub {
+    resolve_type => sub {
       return $ImplementingType;
     },
   );
@@ -37,13 +37,13 @@ Hash-ref mapping fields to their types.
 
 has fields => (is => 'ro', isa => HashRef, required => 1);
 
-=head2 resolveType
+=head2 resolve_type
 
 Optional code-ref to resolve types.
 
 =cut
 
-has resolveType => (is => 'ro', isa => CodeRef);
+has resolve_type => (is => 'ro', isa => CodeRef);
 
 __PACKAGE__->meta->make_immutable();
 
