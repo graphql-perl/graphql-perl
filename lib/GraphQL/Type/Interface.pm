@@ -5,13 +5,13 @@ use strict;
 use warnings;
 use Moo;
 use Types::Standard qw(HashRef CodeRef);
-extends qw(GraphQL::Type);
+extends qw(GraphQL::Type::Named);
 
 our $VERSION = '0.02';
 
 =head1 NAME
 
-GraphQL::Type::Interface - Perl implementation of a GraphQL interface type
+GraphQL::Type::Interface - GraphQL interface type
 
 =head1 SYNOPSIS
 
@@ -27,7 +27,7 @@ GraphQL::Type::Interface - Perl implementation of a GraphQL interface type
 
 =head1 ATTRIBUTES
 
-Inherits C<name>, C<description> from L<GraphQL::Type>.
+Inherits C<name>, C<description> from L<GraphQL::Type::Named>.
 
 =head2 fields
 
