@@ -64,7 +64,7 @@ has types => (is => 'ro', isa => ArrayRef[InstanceOf['GraphQL::Type::Named']]);
 
 =cut
 
-has directives => (is => 'ro', isa => ArrayRef[InstanceOf['GraphQL::Type::Object']]);
+has directives => (is => 'ro', isa => ArrayRef[InstanceOf['GraphQL::Directive']]);
 
 __PACKAGE__->meta->make_immutable();
 
