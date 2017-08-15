@@ -1,4 +1,4 @@
-package GraphQL::Type::Named;
+package GraphQL::Role::Named;
 
 use 5.014;
 use strict;
@@ -9,11 +9,11 @@ our $VERSION = '0.02';
 
 =head1 NAME
 
-GraphQL::Type::Named - GraphQL "named" object role
+GraphQL::Role::Named - GraphQL "named" object role
 
 =head1 SYNOPSIS
 
-  with qw(GraphQL::Type::Named);
+  with qw(GraphQL::Role::Named);
 
 =head1 DESCRIPTION
 

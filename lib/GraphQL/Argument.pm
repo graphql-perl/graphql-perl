@@ -31,7 +31,7 @@ GraphQL input-type object.
 
 =cut
 
-has type => (is => 'ro', isa => ConsumerOf['GraphQL::Type::Input'], required => 1);
+has type => (is => 'ro', isa => ConsumerOf['GraphQL::Role::Input'], required => 1);
 
 =head2 default_value
 

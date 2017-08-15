@@ -1,14 +1,19 @@
 Changes
 graphql.pgx
 lib/GraphQL.pm
+lib/GraphQL/Argument.pm
+lib/GraphQL/Directive.pm
 lib/GraphQL/Error.pm
 lib/GraphQL/Execution.pm
 lib/GraphQL/Grammar.pm
 lib/GraphQL/Parser.pm
+lib/GraphQL/Role/Input.pm
+lib/GraphQL/Role/Named.pm
 lib/GraphQL/Schema.pm
 lib/GraphQL/Subscription.pm
 lib/GraphQL/Type.pm
 lib/GraphQL/Type/Interface.pm
+lib/GraphQL/Type/Object.pm
 lib/GraphQL/Utilities.pm
 lib/GraphQL/Validation.pm
 Makefile.PL
@@ -18,6 +23,7 @@ t/00-load.t
 t/kitchen-sink.graphql
 t/language-lexer.t
 t/language-parser.t
+t/language-schema-parser.t
 t/schema-kitchen-sink.graphql
 t/type-interface.t
 t/type-schema.t

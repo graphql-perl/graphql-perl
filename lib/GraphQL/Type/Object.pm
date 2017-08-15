@@ -6,7 +6,7 @@ use warnings;
 use Moo;
 use Types::Standard qw(HashRef ArrayRef);
 extends qw(GraphQL::Type);
-with qw(GraphQL::Type::Named);
+with qw(GraphQL::Role::Named);
 
 our $VERSION = '0.02';
 

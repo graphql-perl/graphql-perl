@@ -1,4 +1,4 @@
-package GraphQL::Type::Input;
+package GraphQL::Role::Input;
 
 use 5.014;
 use strict;
@@ -9,11 +9,11 @@ our $VERSION = '0.02';
 
 =head1 NAME
 
-GraphQL::Type::Input - GraphQL "input" object role
+GraphQL::Role::Input - GraphQL "input" object role
 
 =head1 SYNOPSIS
 
-  with qw(GraphQL::Type::Input);
+  with qw(GraphQL::Role::Input);
 
 =head1 DESCRIPTION
 
