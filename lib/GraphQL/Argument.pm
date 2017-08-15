@@ -4,7 +4,7 @@ use 5.014;
 use strict;
 use warnings;
 use Moo;
-use Types::Standard qw(Str InstanceOf Any);
+use Types::Standard qw(Str ConsumerOf Any);
 extends qw(GraphQL::Type);
 
 our $VERSION = '0.02';
@@ -31,7 +31,7 @@ GraphQL input-type object.
 
 =cut
 
-has type => (is => 'ro', isa => InstanceOf['GraphQL::Type::Input'], required => 1);
+has type => (is => 'ro', isa => ConsumerOf['GraphQL::Type::Input'], required => 1);
 
 =head2 default_value
 
