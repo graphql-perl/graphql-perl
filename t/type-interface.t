@@ -23,6 +23,6 @@ throws_ok {
     name => '@Interface',
     fields => { fieldName => { type => 'GraphQLString' } },
   )
-} qr/Names must match/, 'name validation';
+} qr/did not pass type constraint/, 'name validation';
 
 done_testing;

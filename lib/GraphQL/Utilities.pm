@@ -3,13 +3,14 @@ package GraphQL::Utilities;
 use 5.014;
 use strict;
 use warnings;
-use Types::Standard qw(Str);
-use Function::Parameters;
+use Type::Library -base;
+use Type::Utils -all;
+BEGIN { extends "Types::Standard" };
 use Exporter qw(import);
 
 our $VERSION = '0.02';
 our @EXPORT_OK = qw(
-  assert_valid_name
+  StrNameValid
 );
 
 =head1 NAME
@@ -18,21 +19,19 @@ GraphQL::Utilities - GraphQL utility functions
 
 =head1 SYNOPSIS
 
-    use GraphQL::Utilities qw(assert_valid_name);
-    assert_valid_name('hello');
+    use GraphQL::Utilities qw(StrNameValid);
+    has name => (is => 'ro', isa => StrNameValid, required => 1);
 
 =head1 FUNCTIONS
 
-=head2 assert_valid_name($name)
+=head2 StrNameValid
 
 If called with a string that is not a valid GraphQL name, will throw
 an exception. Suitable for passing to an C<isa> constraint in L<Moo>.
 
 =cut
 
-fun assert_valid_name(Str $name) {
-  die "Names must match /^[_a-zA-Z][_a-zA-Z0-9]*$/ but \"$name\" does not." unless $name =~ /^[_a-zA-Z][_a-zA-Z0-9]*$/;
-}
+declare "StrNameValid", as StrMatch[ qr/^[_a-zA-Z][_a-zA-Z0-9]*$/ ];
 
 =head1 AUTHOR
 

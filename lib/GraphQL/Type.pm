@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Moo;
 use Types::Standard qw(Str);
-use GraphQL::Utilities qw(assert_valid_name);
+use GraphQL::Utilities qw(StrNameValid);
 
 our $VERSION = '0.02';
 
@@ -27,7 +27,7 @@ Superclass for other GraphQL type classes to inherit from.
 
 =cut
 
-has name => (is => 'ro', isa => \&assert_valid_name, required => 1);
+has name => (is => 'ro', isa => StrNameValid, required => 1);
 
 =head2 description
 
