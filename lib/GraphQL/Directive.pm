@@ -4,7 +4,7 @@ use 5.014;
 use strict;
 use warnings;
 use Moo;
-use Types::Standard qw(ArrayRef InstanceOf);
+use Types::Standard qw(ArrayRef InstanceOf Enum);
 extends qw(GraphQL::Type);
 
 our $VERSION = '0.02';
@@ -29,7 +29,6 @@ my @LOCATIONS = qw(
   INPUT_OBJECT
   INPUT_FIELD_DEFINITION
 );
-my %LOC21 = map { ($_ => 1) } @LOCATIONS;
 
 =head1 NAME
 
@@ -74,10 +73,7 @@ these strings:
 
 =cut
 
-has locations => (is => 'ro', isa => sub {
-  die "Directive location $_[0] must be array" if ref($_[0]) ne 'ARRAY';
-  map { die "Invalid directive location $_" if !$LOC21{$_} } @{$_[0]};
-}, required => 1);
+has locations => (is => 'ro', isa => ArrayRef[Enum[@LOCATIONS]], required => 1);
 
 =head2 args
 
