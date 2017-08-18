@@ -287,7 +287,21 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
       ]
     },
     'enumValue' => {
-      '.ref' => 'name'
+      '.any' => [
+        {
+          '.all' => [
+            {
+              '.rgx' => qr/\G(true|false|null)/
+            },
+            {
+              '.err' => 'Invalid enum value'
+            }
+          ]
+        },
+        {
+          '.ref' => 'name'
+        }
+      ]
     },
     'enumValueDefinition' => {
       '.all' => [

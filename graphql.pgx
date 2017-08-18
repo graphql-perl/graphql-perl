@@ -48,8 +48,7 @@ boolean: /(true|false)/
 
 null: /null/
 
-# TODO: not true, false, null
-enumValue: name
+enumValue: (/(true|false|null)/ `Invalid enum value` | name)
 
 listValue: /- LSQUARE -/ (value* % /- COMMA? -/) /- RSQUARE -/
 
