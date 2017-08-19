@@ -31,7 +31,7 @@ GraphQL::Type::Object - GraphQL object type
 
 =head1 ATTRIBUTES
 
-Inherits C<name>, C<description> from L<GraphQL::Type>.
+Has C<name>, C<description> from L<GraphQL::Role::Named>.
 
 =head2 fields
 

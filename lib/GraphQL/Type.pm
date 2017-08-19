@@ -4,14 +4,12 @@ use 5.014;
 use strict;
 use warnings;
 use Moo;
-use Types::Standard qw(Str);
-use GraphQL::Utilities qw(StrNameValid);
 
 our $VERSION = '0.02';
 
 =head1 NAME
 
-GraphQL::Type - Perl implementation
+GraphQL::Type - GraphQL type object
 
 =head1 SYNOPSIS
 
@@ -21,21 +19,7 @@ GraphQL::Type - Perl implementation
 
 Superclass for other GraphQL type classes to inherit from.
 
-=head1 ATTRIBUTES
-
-=head2 name
-
 =cut
-
-has name => (is => 'ro', isa => StrNameValid, required => 1);
-
-=head2 description
-
-Optional description.
-
-=cut
-
-has description => (is => 'ro', isa => Str);
 
 __PACKAGE__->meta->make_immutable();
 
