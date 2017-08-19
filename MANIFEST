@@ -17,8 +17,12 @@ lib/GraphQL/Role/Output.pm
 lib/GraphQL/Schema.pm
 lib/GraphQL/Subscription.pm
 lib/GraphQL/Type.pm
+lib/GraphQL/Type/Enum.pm
+lib/GraphQL/Type/InputObject.pm
 lib/GraphQL/Type/Interface.pm
 lib/GraphQL/Type/Object.pm
+lib/GraphQL/Type/Scalar.pm
+lib/GraphQL/Type/Union.pm
 lib/GraphQL/Utilities.pm
 lib/GraphQL/Validation.pm
 Makefile.PL
