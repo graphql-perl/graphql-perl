@@ -20,6 +20,7 @@ lib/GraphQL/Type.pm
 lib/GraphQL/Type/Enum.pm
 lib/GraphQL/Type/InputObject.pm
 lib/GraphQL/Type/Interface.pm
+lib/GraphQL/Type/List.pm
 lib/GraphQL/Type/Object.pm
 lib/GraphQL/Type/Scalar.pm
 lib/GraphQL/Type/Union.pm
