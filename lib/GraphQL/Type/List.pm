@@ -22,7 +22,8 @@ GraphQL::Type::List - GraphQL type that is a list of another type
 
 Type that is a wrapper for the type it is a list of. If the wrapped type
 has any of these roles, it will assume them: L<GraphQL::Role::Input>,
-L<GraphQL::Role::Output>, L<GraphQL::Role::Nullable>.
+L<GraphQL::Role::Output>, L<GraphQL::Role::Nullable>,
+L<GraphQL::Role::NonNull>.
 
 =head1 ATTRIBUTES
 
