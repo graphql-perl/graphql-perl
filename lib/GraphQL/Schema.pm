@@ -58,7 +58,7 @@ has subscription => (is => 'ro', isa => InstanceOf['GraphQL::Type::Object']);
 
 =cut
 
-has types => (is => 'ro', isa => ArrayRef[ConsumerOf['GraphQL::Type::Named']]);
+has types => (is => 'ro', isa => ArrayRef[ConsumerOf['GraphQL::Role::Named']]);
 
 =head2 directives
 
