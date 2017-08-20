@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Type::Library
   -base,
-  -declare => qw( StrNameValid FieldMapInput );
+  -declare => qw( StrNameValid FieldMapInput FieldMapOutput );
 use Type::Utils -all;
 BEGIN { extends "Types::Standard" };
 use Exporter qw(import);
@@ -14,6 +14,7 @@ our $VERSION = '0.02';
 our @EXPORT_OK = qw(
   StrNameValid
   FieldMapInput
+  FieldMapOutput
 );
 
 =head1 NAME
@@ -39,7 +40,7 @@ declare "StrNameValid", as StrMatch[ qr/^[_a-zA-Z][_a-zA-Z0-9]*$/ ];
 =head2 FieldMapInput
 
 Hash-ref mapping field names to a hash-ref description. Description keys,
-all optional:
+all optional except C<type>:
 
 =over
 
@@ -67,6 +68,53 @@ declare "FieldMapInput", as Map[
     # TODO: change Any to check that is same as supplied "type". Possibly
     # with builder?
     default_value => Optional[Any],
+    description => Optional[Str],
+  ]
+];
+
+=head2 FieldMapOutput
+
+Hash-ref mapping field names to a hash-ref description. Description keys,
+all optional except C<type>:
+
+=over
+
+=item type
+
+GraphQL output type for the field.
+
+=item args
+
+Array-ref of L<GraphQL::Argument>s.
+
+=item resolve
+
+Code-ref to return a given property from a given source-object.
+
+=item subscribe
+
+Code-ref to return a given property from a given source-object.
+
+=item deprecation_reason
+
+Reason if deprecated.
+
+=item description
+
+Description.
+
+=back
+
+=cut
+
+declare "FieldMapOutput", as Map[
+  StrNameValid,
+  Dict[
+    type => ConsumerOf['GraphQL::Role::Output'],
+    args => Optional[ArrayRef[InstanceOf['GraphQL::Argument']]],
+    resolve => Optional[CodeRef],
+    subscribe => Optional[CodeRef],
+    deprecation_reason => Optional[Str],
     description => Optional[Str],
   ]
 ];
