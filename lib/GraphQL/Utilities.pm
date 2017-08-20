@@ -3,7 +3,9 @@ package GraphQL::Utilities;
 use 5.014;
 use strict;
 use warnings;
-use Type::Library -base;
+use Type::Library
+  -base,
+  -declare => qw( StrNameValid FieldMapInput );
 use Type::Utils -all;
 BEGIN { extends "Types::Standard" };
 use Exporter qw(import);
@@ -11,6 +13,7 @@ use Exporter qw(import);
 our $VERSION = '0.02';
 our @EXPORT_OK = qw(
   StrNameValid
+  FieldMapInput
 );
 
 =head1 NAME
@@ -32,6 +35,41 @@ an exception. Suitable for passing to an C<isa> constraint in L<Moo>.
 =cut
 
 declare "StrNameValid", as StrMatch[ qr/^[_a-zA-Z][_a-zA-Z0-9]*$/ ];
+
+=head2 FieldMapInput
+
+Hash-ref mapping field names to a hash-ref description. Description keys,
+all optional:
+
+=over
+
+=item type
+
+GraphQL input type for the field.
+
+=item default_value
+
+Default value for this argument if none supplied. Must be same type as
+the C<type>.
+
+=item description
+
+Description.
+
+=back
+
+=cut
+
+declare "FieldMapInput", as Map[
+  StrNameValid,
+  Dict[
+    type => ConsumerOf['GraphQL::Role::Input'],
+    # TODO: change Any to check that is same as supplied "type". Possibly
+    # with builder?
+    default_value => Optional[Any],
+    description => Optional[Str],
+  ]
+];
 
 =head1 AUTHOR
 
