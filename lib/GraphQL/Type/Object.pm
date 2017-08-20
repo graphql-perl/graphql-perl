@@ -4,7 +4,8 @@ use 5.014;
 use strict;
 use warnings;
 use Moo;
-use Types::Standard qw(HashRef ArrayRef);
+use Types::Standard qw(ArrayRef);
+use GraphQL::Utilities qw(FieldMapOutput);
 extends qw(GraphQL::Type);
 with qw(
   GraphQL::Role::Output
@@ -36,10 +37,11 @@ Has C<name>, C<description> from L<GraphQL::Role::Named>.
 =head2 fields
 
 Hash-ref mapping fields to their types.
+See L<GraphQL::Utilities/FieldMapOutput>.
 
 =cut
 
-has fields => (is => 'ro', isa => HashRef, required => 1);
+has fields => (is => 'ro', isa => FieldMapOutput, required => 1);
 
 =head2 interfaces
 
