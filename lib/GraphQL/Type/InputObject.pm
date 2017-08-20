@@ -4,7 +4,7 @@ use 5.014;
 use strict;
 use warnings;
 use Moo;
-use Types::Standard qw(ArrayRef);
+use Types::Standard qw(ArrayRef InstanceOf);
 use GraphQL::Utilities qw(FieldMapInput);
 extends qw(GraphQL::Type);
 with qw(
@@ -46,7 +46,7 @@ Optional array-ref of interface type objects implemented.
 
 =cut
 
-has interfaces => (is => 'ro', isa => ArrayRef);
+has interfaces => (is => 'ro', isa => ArrayRef[InstanceOf['GraphQL::Type::Interface']]);
 
 __PACKAGE__->meta->make_immutable();
 
