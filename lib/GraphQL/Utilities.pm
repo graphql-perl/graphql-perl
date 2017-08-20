@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Type::Library
   -base,
-  -declare => qw( StrNameValid FieldMapInput FieldMapOutput );
+  -declare => qw( StrNameValid FieldMapInput FieldMapOutput Int32Signed );
 use Type::Utils -all;
 BEGIN { extends "Types::Standard" };
 use Exporter qw(import);
@@ -15,6 +15,7 @@ our @EXPORT_OK = qw(
   StrNameValid
   FieldMapInput
   FieldMapOutput
+  Int32Signed
 );
 
 =head1 NAME
@@ -118,6 +119,14 @@ declare "FieldMapOutput", as Map[
     description => Optional[Str],
   ]
 ];
+
+=head2 Int32Signed
+
+32-bit signed integer.
+
+=cut
+
+declare "Int32Signed", as Int, where { $_ >= -2147483648 and $_ <= 2147483647 };
 
 =head1 AUTHOR
 
