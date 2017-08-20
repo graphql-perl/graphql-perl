@@ -10,18 +10,18 @@ BEGIN {
   use_ok( 'GraphQL::Schema' ) || print "Bail out!\n";
 }
 
-my $implementingType;
-my $interfaceType = GraphQL::Type::Interface->new(
+my $implementing_type;
+my $interface_type = GraphQL::Type::Interface->new(
   name => 'Interface',
   fields => { fieldName => { type => 'GraphQLString' } },
   resolve_type => sub {
-    return $implementingType;
+    return $implementing_type;
   },
 );
 
-$implementingType = GraphQL::Type::Object->new(
+$implementing_type = GraphQL::Type::Object->new(
   name => 'Object',
-  interfaces => [ $interfaceType ],
+  interfaces => [ $interface_type ],
   fields => { fieldName => { type => 'GraphQLString', resolve => sub { '' } }},
 );
 
@@ -30,7 +30,7 @@ my $schema = GraphQL::Schema->new(
     name => 'Query',
     fields => {
       getObject => {
-        type => $interfaceType,
+        type => $interface_type,
         resolve => sub {
           return {};
         }
