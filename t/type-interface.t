@@ -7,12 +7,13 @@ use Test::Exception;
 
 BEGIN {
   use_ok( 'GraphQL::Type::Interface' ) || print "Bail out!\n";
+  use_ok( 'GraphQL::Type::Scalar', qw($String) ) || print "Bail out!\n";
 }
 
 my $implementingType;
 my $interfaceType = GraphQL::Type::Interface->new(
   name => 'Interface',
-  fields => { fieldName => { type => 'GraphQLString' } },
+  fields => { fieldName => { type => $String } },
   resolve_type => sub {
     return $implementingType;
   },
@@ -21,7 +22,7 @@ my $interfaceType = GraphQL::Type::Interface->new(
 throws_ok {
   GraphQL::Type::Interface->new(
     name => '@Interface',
-    fields => { fieldName => { type => 'GraphQLString' } },
+    fields => { fieldName => { type => $String } },
   )
 } qr/did not pass type constraint/, 'name validation';
 

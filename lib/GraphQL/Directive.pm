@@ -40,7 +40,7 @@ GraphQL::Directive - GraphQL directive
   my $directive = GraphQL::Directive->new(
     name => 'Object',
     interfaces => [ $interfaceType ],
-    fields => { fieldName => { type => 'GraphQLString', resolve => sub { '' } }},
+    fields => { fieldName => { type => $scalar_type, resolve => sub { '' } }},
   );
 
 =head1 ATTRIBUTES

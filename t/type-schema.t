@@ -8,12 +8,13 @@ BEGIN {
   use_ok( 'GraphQL::Type::Interface' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::Object' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Schema' ) || print "Bail out!\n";
+  use_ok( 'GraphQL::Type::Scalar', qw($String) ) || print "Bail out!\n";
 }
 
 my $implementing_type;
 my $interface_type = GraphQL::Type::Interface->new(
   name => 'Interface',
-  fields => { fieldName => { type => 'GraphQLString' } },
+  fields => { fieldName => { type => $String } },
   resolve_type => sub {
     return $implementing_type;
   },
@@ -22,7 +23,7 @@ my $interface_type = GraphQL::Type::Interface->new(
 $implementing_type = GraphQL::Type::Object->new(
   name => 'Object',
   interfaces => [ $interface_type ],
-  fields => { fieldName => { type => 'GraphQLString', resolve => sub { '' } }},
+  fields => { fieldName => { type => $String, resolve => sub { '' } }},
 );
 
 my $schema = GraphQL::Schema->new(

@@ -24,7 +24,7 @@ GraphQL::Type::InputObject - GraphQL input object type
   use GraphQL::Type::InputObject;
   my $type = GraphQL::Type::InputObject->new(
     name => 'InputObject',
-    fields => { fieldName => { type => 'GraphQLString', resolve => sub { '' } }},
+    fields => { fieldName => { type => $scalar_type, resolve => sub { '' } }},
   );
 
 =head1 ATTRIBUTES

@@ -26,7 +26,7 @@ GraphQL::Type::Interface - GraphQL interface type
   my $ImplementingType;
   my $InterfaceType = GraphQL::Type::Interface->new(
     name => 'Interface',
-    fields => { fieldName => { type => 'GraphQLString' } },
+    fields => { fieldName => { type => $scalar_type } },
     resolve_type => sub {
       return $ImplementingType;
     },
