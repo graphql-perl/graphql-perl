@@ -5,7 +5,6 @@ use strict;
 use warnings;
 use Moo;
 use Types::Standard qw(CodeRef);
-use GraphQL::Type::Library qw(FieldMapOutput);
 extends qw(GraphQL::Type);
 with qw(
   GraphQL::Role::Output
@@ -13,6 +12,7 @@ with qw(
   GraphQL::Role::Abstract
   GraphQL::Role::Nullable
   GraphQL::Role::Named
+  GraphQL::Role::FieldsOutput
 );
 
 our $VERSION = '0.02';
@@ -36,15 +36,7 @@ GraphQL::Type::Interface - GraphQL interface type
 =head1 ATTRIBUTES
 
 Has C<name>, C<description> from L<GraphQL::Role::Named>.
-
-=head2 fields
-
-Hash-ref mapping fields to their types.
-See L<GraphQL::Type::Library/FieldMapOutput>.
-
-=cut
-
-has fields => (is => 'ro', isa => FieldMapOutput, required => 1);
+Has C<fields> from L<GraphQL::Role::FieldsOutput>.
 
 =head2 resolve_type
 

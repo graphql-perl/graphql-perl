@@ -9,6 +9,7 @@ lib/GraphQL/Grammar.pm
 lib/GraphQL/Parser.pm
 lib/GraphQL/Role/Abstract.pm
 lib/GraphQL/Role/Composite.pm
+lib/GraphQL/Role/FieldsOutput.pm
 lib/GraphQL/Role/Input.pm
 lib/GraphQL/Role/Leaf.pm
 lib/GraphQL/Role/Named.pm
