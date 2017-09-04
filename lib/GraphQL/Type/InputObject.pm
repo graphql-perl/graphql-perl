@@ -5,12 +5,12 @@ use strict;
 use warnings;
 use Moo;
 use Types::Standard qw(ArrayRef InstanceOf);
-use GraphQL::Type::Library qw(FieldMapInput);
 extends qw(GraphQL::Type);
 with qw(
   GraphQL::Role::Input
   GraphQL::Role::Nullable
   GraphQL::Role::Named
+  GraphQL::Role::FieldsInput
 );
 
 our $VERSION = '0.02';
@@ -30,15 +30,7 @@ GraphQL::Type::InputObject - GraphQL input object type
 =head1 ATTRIBUTES
 
 Has C<name>, C<description> from L<GraphQL::Role::Named>.
-
-=head2 fields
-
-Hash-ref mapping field names to a hash-ref description. See
-L<GraphQL::Type::Library/FieldMapInput>.
-
-=cut
-
-has fields => (is => 'ro', isa => FieldMapInput, required => 1);
+Has C<fields> from L<GraphQL::Role::FieldsInput>.
 
 =head2 interfaces
 
