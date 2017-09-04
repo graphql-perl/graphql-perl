@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Moo;
 use Types::Standard qw(ArrayRef InstanceOf);
-use GraphQL::Utilities qw(FieldMapInput);
+use GraphQL::Type::Library qw(FieldMapInput);
 extends qw(GraphQL::Type);
 with qw(
   GraphQL::Role::Input
@@ -34,7 +34,7 @@ Has C<name>, C<description> from L<GraphQL::Role::Named>.
 =head2 fields
 
 Hash-ref mapping field names to a hash-ref description. See
-L<GraphQL::Utilities/FieldMapInput>.
+L<GraphQL::Type::Library/FieldMapInput>.
 
 =cut
 

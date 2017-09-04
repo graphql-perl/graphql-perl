@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Moo;
 use Types::Standard qw(CodeRef Num Str Bool);
-use GraphQL::Utilities qw(Int32Signed);
+use GraphQL::Type::Library qw(Int32Signed);
 use Exporter qw(import);
 extends qw(GraphQL::Type);
 with qw(

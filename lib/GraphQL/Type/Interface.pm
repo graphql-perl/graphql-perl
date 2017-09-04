@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Moo;
 use Types::Standard qw(CodeRef);
-use GraphQL::Utilities qw(FieldMapOutput);
+use GraphQL::Type::Library qw(FieldMapOutput);
 extends qw(GraphQL::Type);
 with qw(
   GraphQL::Role::Output
@@ -40,7 +40,7 @@ Has C<name>, C<description> from L<GraphQL::Role::Named>.
 =head2 fields
 
 Hash-ref mapping fields to their types.
-See L<GraphQL::Utilities/FieldMapOutput>.
+See L<GraphQL::Type::Library/FieldMapOutput>.
 
 =cut
 

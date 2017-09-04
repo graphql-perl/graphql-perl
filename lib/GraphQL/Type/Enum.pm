@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Moo;
 use Types::Standard qw(Map Dict Optional Any Str);
-use GraphQL::Utilities qw(StrNameValid);
+use GraphQL::Type::Library qw(StrNameValid);
 extends qw(GraphQL::Type);
 with qw(
   GraphQL::Role::Input
