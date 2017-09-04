@@ -3,6 +3,7 @@ use 5.014;
 use strict;
 use warnings;
 use Test::More;
+use Test::Exception;
 
 BEGIN {
   use_ok( 'GraphQL::Type::Interface' ) || print "Bail out!\n";
@@ -14,7 +15,7 @@ BEGIN {
 my $implementing_type;
 my $interface_type = GraphQL::Type::Interface->new(
   name => 'Interface',
-  fields => { fieldName => { type => $String } },
+  fields => { field_name => { type => $String } },
   resolve_type => sub {
     return $implementing_type;
   },
@@ -23,10 +24,10 @@ my $interface_type = GraphQL::Type::Interface->new(
 $implementing_type = GraphQL::Type::Object->new(
   name => 'Object',
   interfaces => [ $interface_type ],
-  fields => { fieldName => { type => $String, resolve => sub { '' } }},
+  fields => { field_name => { type => $String, resolve => sub { '' } }},
 );
 
-my $schema = GraphQL::Schema->new(
+my @schema_args = (
   query => GraphQL::Type::Object->new(
     name => 'Query',
     fields => {
@@ -39,5 +40,14 @@ my $schema = GraphQL::Schema->new(
     }
   )
 );
+my $schema = GraphQL::Schema->new(@schema_args);
+throws_ok {
+  $schema->is_possible_type($interface_type, $implementing_type)
+} qr/not find possible implementing/, 'readable error if no types given';
+
+$schema = GraphQL::Schema->new(@schema_args, types => [ $implementing_type ]);
+lives_and {
+  ok $schema->is_possible_type($interface_type, $implementing_type)
+} 'no error if types given';
 
 done_testing;
