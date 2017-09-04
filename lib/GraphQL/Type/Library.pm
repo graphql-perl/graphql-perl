@@ -7,7 +7,8 @@ use Type::Library
   -base,
   -declare => qw( StrNameValid FieldMapInput FieldMapOutput Int32Signed );
 use Type::Utils -all;
-BEGIN { extends "Types::Standard" };
+use Types::TypeTiny -all;
+use Types::Standard -all;
 
 our $VERSION = '0.02';
 
@@ -124,6 +125,25 @@ declare "FieldMapOutput", as Map[
 =cut
 
 declare "Int32Signed", as Int, where { $_ >= -2147483648 and $_ <= 2147483647 };
+
+=head2 ArrayRefNonEmpty
+
+Like L<Types::Standard/ArrayRef> but requires at least one entry.
+
+=cut
+
+declare "ArrayRefNonEmpty", constraint_generator => sub {
+  intersection [ ArrayRef[@_], Tuple[Any, slurpy Any] ]
+};
+
+=head2 Thunk
+
+Can be either a L<Types::TypeTiny/CodeLike> or the type(s) given as
+parameters.
+
+=cut
+
+declare "Thunk", constraint_generator => sub { union [ CodeLike, @_ ] };
 
 =head1 AUTHOR
 
