@@ -145,6 +145,33 @@ parameters.
 
 declare "Thunk", constraint_generator => sub { union [ CodeLike, @_ ] };
 
+=head2 UniqueByProperty
+
+An ArrayRef, its members' property (the one in the parameter) can occur
+only once.
+
+  use Moo;
+  use GraphQL::Type::Library -all;
+  has types => (
+    is => 'ro',
+    isa => UniqueByProperty['name'] & ArrayRef[InstanceOf['GraphQL::Type::Object']],
+    required => 1,
+  );
+
+=cut
+
+declare "UniqueByProperty",
+  constraint_generator => sub {
+    die "must give one property name" unless @_ == 1;
+    my ($prop) = @_;
+    declare as ArrayRef[HasMethods[$prop]], where {
+      my %seen;
+      !grep $seen{$_->$prop}++, @$_;
+    }, inline_as {
+      (undef, "do { my %seen; !grep \$seen{\$_->$prop}++, \@$_[1]; }");
+    };
+  };
+
 =head1 AUTHOR
 
 Ed J, C<< <etj at cpan.org> >>
