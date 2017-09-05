@@ -1,5 +1,14 @@
 Revision history for GraphQL
 
+0.07	Tue Sep  5 19:50:33 BST 2017
+        make GraphQL::Directive, GraphQL::Argument
+        make GraphQL::Type::Library with Type::Tiny constraints
+        make GraphQL::Type superclass and subclasses
+        tidy quoting
+        standardise method and attribute snake_casing
+        working, tested GraphQL::Schema except assert_object_implements_interface
+        various GraphQL::Role-s
+
 0.06	Sun Aug 13 22:41:08 BST 2017
         rename ::Language to ::Parser
         language parser with tests
