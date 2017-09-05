@@ -8,6 +8,7 @@ Revision history for GraphQL
         standardise method and attribute snake_casing
         working, tested GraphQL::Schema except assert_object_implements_interface
         various GraphQL::Role-s
+        basic doc of type system
 
 0.06	Sun Aug 13 22:41:08 BST 2017
         rename ::Language to ::Parser

@@ -19,6 +19,10 @@ Perhaps a little code snippet.
     use GraphQL;
     my $foo = GraphQL->new();
 
+=head1 DESCRIPTION
+
+See L<GraphQL::Type> for description of how to create GraphQL types.
+
 =head1 PROJECT STATUS
 
 =begin markdown
