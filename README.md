@@ -9,6 +9,10 @@ Perhaps a little code snippet.
     use GraphQL;
     my $foo = GraphQL->new();
 
+# DESCRIPTION
+
+See [GraphQL::Type](https://metacpan.org/pod/GraphQL::Type) for description of how to create GraphQL types.
+
 # PROJECT STATUS
 
 | OS      |  Build status |
