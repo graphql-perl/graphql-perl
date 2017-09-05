@@ -29,11 +29,13 @@ WriteMakefile(
   META_MERGE => {
     "meta-spec" => { version => 2 },
     resources => {
+      x_IRC => 'irc://irc.perl.org/#graphql-perl',
       repository => {
         type => 'git',
         url => 'git@github.com:graphql-perl/graphql-perl.git',
         web => 'https://github.com/graphql-perl/graphql-perl',
       },
+      license => [ 'http://dev.perl.org/licenses/' ],
     },
     prereqs => {
       develop => {
