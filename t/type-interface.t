@@ -10,19 +10,18 @@ BEGIN {
   use_ok( 'GraphQL::Type::Scalar', qw($String) ) || print "Bail out!\n";
 }
 
-my $implementingType;
-my $interfaceType = GraphQL::Type::Interface->new(
+my $interface_type = GraphQL::Type::Interface->new(
   name => 'Interface',
-  fields => { fieldName => { type => $String } },
+  fields => { field_name => { type => $String } },
   resolve_type => sub {
-    return $implementingType;
+    return $String;
   },
 );
 
 throws_ok {
   GraphQL::Type::Interface->new(
     name => '@Interface',
-    fields => { fieldName => { type => $String } },
+    fields => { field_name => { type => $String } },
   )
 } qr/did not pass type constraint/, 'name validation';
 

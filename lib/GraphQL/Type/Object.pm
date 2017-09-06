@@ -27,7 +27,7 @@ GraphQL::Type::Object - GraphQL object type
   my $implementing_type = GraphQL::Type::Object->new(
     name => 'Object',
     interfaces => [ $interface_type ],
-    fields => { fieldName => { type => $scalar_type, resolve => sub { '' } }},
+    fields => { field_name => { type => $scalar_type, resolve => sub { '' } }},
   );
 
 =head1 ATTRIBUTES
