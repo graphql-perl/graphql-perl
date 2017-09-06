@@ -1,36 +1,36 @@
 Revision history for GraphQL
 
 0.07	Tue Sep  5 19:50:33 BST 2017
-        make GraphQL::Directive, GraphQL::Argument
-        make GraphQL::Type::Library with Type::Tiny constraints
-        make GraphQL::Type superclass and subclasses
-        tidy quoting
-        standardise method and attribute snake_casing
-        working, tested GraphQL::Schema except assert_object_implements_interface
-        various GraphQL::Role-s
-        basic doc of type system
+ - make GraphQL::Directive, GraphQL::Argument
+ - make GraphQL::Type::Library with Type::Tiny constraints
+ - make GraphQL::Type superclass and subclasses
+ - tidy quoting
+ - standardise method and attribute snake_casing
+ - working, tested GraphQL::Schema except assert_object_implements_interface
+ - various GraphQL::Role-s
+ - basic doc of type system
 
 0.06	Sun Aug 13 22:41:08 BST 2017
-        rename ::Language to ::Parser
-        language parser with tests
+ - rename ::Language to ::Parser
+ - language parser with tests
 
 0.05	Wed Jul  5 03:08:25 BST 2017
-        Fuller Pegex lexer
-        Incorporate rest of graphql-js lexer tests
+ - Fuller Pegex lexer
+ - Incorporate rest of graphql-js lexer tests
 
 0.04	Wed May 31 16:20:17 BST 2017
-        Switch to new graphql-perl GH organisation repo
-        Nicer README.md
-        Doc improvements
-        Basic Pegex lexer + tests
+ - Switch to new graphql-perl GH organisation repo
+ - Nicer README.md
+ - Doc improvements
+ - Basic Pegex lexer + tests
 
 0.03    Fri May 26 18:54:36 BST 2017
-        Include meta info
-        Basic class system in place
-        Start of t and xt dirs
+ - Include meta info
+ - Basic class system in place
+ - Start of t and xt dirs
 
 0.02    Thu May 18 16:00:15 BST 2017
-        JS classnames to Perl classnames
+ - JS classnames to Perl classnames
 
 0.01    Thu May 18 15:46:07 BST 2017
-        First version, released on an unsuspecting world.
+ - First version, released on an unsuspecting world.
