@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Type::Library
   -base,
-  -declare => qw( StrNameValid FieldMapInput FieldMapOutput Int32Signed );
+  -declare => qw( StrNameValid FieldMapInput FieldMapOutput Int32Signed Thunk );
 use Type::Utils -all;
 use Types::TypeTiny -all;
 use Types::Standard -all;
@@ -71,6 +71,15 @@ declare "FieldMapInput", as Map[
   ]
 ];
 
+=head2 Thunk
+
+Can be either a L<Types::TypeTiny/CodeLike> or the type(s) given as
+parameters.
+
+=cut
+
+declare "Thunk", constraint_generator => sub { union [ CodeLike, @_ ] };
+
 =head2 FieldMapOutput
 
 Hash-ref mapping field names to a hash-ref description. Description keys,
@@ -106,7 +115,7 @@ Description.
 
 =cut
 
-declare "FieldMapOutput", as Map[
+declare "FieldMapOutput", as Thunk[Map[
   StrNameValid,
   Dict[
     type => ConsumerOf['GraphQL::Role::Output'],
@@ -116,7 +125,7 @@ declare "FieldMapOutput", as Map[
     deprecation_reason => Optional[Str],
     description => Optional[Str],
   ]
-];
+]];
 
 =head2 Int32Signed
 
@@ -135,15 +144,6 @@ Like L<Types::Standard/ArrayRef> but requires at least one entry.
 declare "ArrayRefNonEmpty", constraint_generator => sub {
   intersection [ ArrayRef[@_], Tuple[Any, slurpy Any] ]
 };
-
-=head2 Thunk
-
-Can be either a L<Types::TypeTiny/CodeLike> or the type(s) given as
-parameters.
-
-=cut
-
-declare "Thunk", constraint_generator => sub { union [ CodeLike, @_ ] };
 
 =head2 UniqueByProperty
 
