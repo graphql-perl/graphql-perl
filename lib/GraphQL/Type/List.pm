@@ -7,6 +7,14 @@ use Moo;
 use Types::Standard qw(InstanceOf);
 extends qw(GraphQL::Type);
 
+# A-ha
+my @TAKE_ON_ME = qw(
+  GraphQL::Role::Input
+  GraphQL::Role::Output
+  GraphQL::Role::Nullable
+  GraphQL::Role::NonNull
+);
+
 our $VERSION = '0.02';
 
 =head1 NAME
@@ -34,6 +42,12 @@ GraphQL type object of which this is a list.
 =cut
 
 has of => (is => 'ro', isa => InstanceOf['GraphQL::Type'], required => 1);
+
+sub BUILD {
+  my ($self, $args) = @_;
+  my $of = $self->of;
+  Role::Tiny->apply_roles_to_object($self, grep $of->DOES($_), @TAKE_ON_ME);
+}
 
 __PACKAGE__->meta->make_immutable();
 
