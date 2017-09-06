@@ -82,8 +82,8 @@ declare "Thunk", constraint_generator => sub { union [ CodeLike, @_ ] };
 
 =head2 FieldMapOutput
 
-Hash-ref mapping field names to a hash-ref description. Description keys,
-all optional except C<type>:
+Thunk of hash-ref mapping field names to a hash-ref
+description. Description keys, all optional except C<type>:
 
 =over
 
@@ -93,7 +93,7 @@ GraphQL output type for the field.
 
 =item args
 
-Array-ref of L<GraphQL::Argument>s.
+A L</FieldMapInput>.
 
 =item resolve
 
@@ -119,7 +119,7 @@ declare "FieldMapOutput", as Thunk[Map[
   StrNameValid,
   Dict[
     type => ConsumerOf['GraphQL::Role::Output'],
-    args => Optional[ArrayRef[InstanceOf['GraphQL::Argument']]],
+    args => Optional[FieldMapInput],
     resolve => Optional[CodeRef],
     subscribe => Optional[CodeRef],
     deprecation_reason => Optional[Str],
