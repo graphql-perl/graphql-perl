@@ -168,7 +168,7 @@ declare "UniqueByProperty",
       my %seen;
       !grep $seen{$_->$prop}++, @$_;
     }, inline_as {
-      (undef, "do { my %seen; !grep \$seen{\$_->$prop}++, \@$_[1]; }");
+      (undef, "my %seen; !grep \$seen{\$_->$prop}++, \@{$_[1]};");
     };
   };
 
