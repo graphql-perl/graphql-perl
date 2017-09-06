@@ -39,6 +39,12 @@ L<GraphQL::Role::NonNull>.
 
 GraphQL type object of which this is a list.
 
+=head1 METHODS
+
+=head2 BUILD
+
+L<Moo> method that applies the relevant roles.
+
 =cut
 
 has of => (is => 'ro', isa => InstanceOf['GraphQL::Type'], required => 1);
