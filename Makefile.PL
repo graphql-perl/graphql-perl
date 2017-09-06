@@ -28,6 +28,7 @@ WriteMakefile(
   clean => { FILES => 'GraphQL-*' },
   META_MERGE => {
     "meta-spec" => { version => 2 },
+    dynamic_config => 0,
     resources => {
       x_IRC => 'irc://irc.perl.org/#graphql-perl',
       repository => {
