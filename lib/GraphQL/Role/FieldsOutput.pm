@@ -5,6 +5,7 @@ use strict;
 use warnings;
 use Moo::Role;
 use GraphQL::Type::Library qw(FieldMapOutput);
+use MooX::Thunking;
 
 our $VERSION = '0.02';
 
@@ -32,7 +33,7 @@ See L<GraphQL::Type::Library/FieldMapOutput>.
 
 =cut
 
-has fields => (is => 'ro', isa => FieldMapOutput, required => 1);
+has fields => (is => 'thunked', isa => FieldMapOutput, required => 1);
 
 __PACKAGE__->meta->make_immutable();
 
