@@ -34,6 +34,17 @@ See L<GraphQL::Type::Library/FieldMapOutput>.
 =cut
 
 has fields => (is => 'thunked', isa => FieldMapOutput, required => 1);
+has _fields_deprecation_applied => (is => 'rw');
+# after de-thunking
+after fields => sub {
+  my ($self) = @_;
+  return if $self->_fields_deprecation_applied;
+  my $v = $self->{fields};
+  for my $name (keys %$v) {
+    $v->{$name}{is_deprecated} = 1 if defined $v->{$name}{deprecation_reason};
+  }
+  $self->_fields_deprecation_applied(1);
+};
 
 __PACKAGE__->meta->make_immutable();
 

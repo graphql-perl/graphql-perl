@@ -105,7 +105,8 @@ Code-ref to return a given property from a given source-object.
 
 =item deprecation_reason
 
-Reason if deprecated.
+Reason if deprecated. If given, also sets a boolean key of
+C<is_deprecated> to true.
 
 =item description
 

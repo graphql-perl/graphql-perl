@@ -157,4 +157,18 @@ is_deeply $EnumTypeWithNullishValue->values, {
   },
 };
 
+my $TypeWithDeprecatedField = GraphQL::Type::Object->new(
+  name => 'foo',
+  fields => {
+    bar => { type => $String, deprecation_reason => 'A terrible reason' },
+  },
+);
+is_deeply $TypeWithDeprecatedField->fields, {
+  bar => {
+    type => $String,
+    deprecation_reason => 'A terrible reason',
+    is_deprecated => 1,
+  },
+};
+
 done_testing;
