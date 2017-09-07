@@ -319,4 +319,19 @@ subtest 'identifies output types', sub {
   test_as_type($InputObjectType, 'Output', '');
 };
 
+subtest 'prohibits putting non-Object types in unions', sub {
+  map { throws_ok { GraphQL::Type::Union->new(
+    name => 'BadUnion',
+    types => [ $_ ],
+  )} qr// } (
+    $Int,
+    $Int->non_null,
+    GraphQL::Type::List->new(of => $Int),
+    $InterfaceType,
+    $UnionType,
+    $EnumType,
+    $InputObjectType,
+  );
+};
+
 done_testing;
