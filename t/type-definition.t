@@ -278,4 +278,16 @@ subtest 'includes interfaces\' thunk subtypes in the type map', sub {
   };
 };
 
+# NB for now, not overloading stringification, but providing to_string method
+subtest 'stringifies simple types', sub {
+  is $Int->to_string, 'Int';
+  is $BlogArticle->to_string, 'Article';
+  is $InterfaceType->to_string, 'Interface';
+  is $UnionType->to_string, 'Union';
+  is $EnumType->to_string, 'Enum';
+  is $InputObjectType->to_string, 'InputObject';
+  is(GraphQL::Type::List->new(of => $Int)->to_string, '[Int]');
+  is(GraphQL::Type::List->new(of => GraphQL::Type::List->new(of => $Int))->to_string, '[[Int]]');
+};
+
 done_testing;

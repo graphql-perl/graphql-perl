@@ -4,7 +4,7 @@ use 5.014;
 use strict;
 use warnings;
 use Moo;
-use Types::Standard qw(InstanceOf);
+use Types::Standard -all;
 extends qw(GraphQL::Type);
 
 # A-ha
@@ -39,6 +39,10 @@ L<GraphQL::Role::NonNull>.
 
 GraphQL type object of which this is a list.
 
+=cut
+
+has of => (is => 'ro', isa => InstanceOf['GraphQL::Type'], required => 1);
+
 =head1 METHODS
 
 =head2 BUILD
@@ -47,13 +51,19 @@ L<Moo> method that applies the relevant roles.
 
 =cut
 
-has of => (is => 'ro', isa => InstanceOf['GraphQL::Type'], required => 1);
-
 sub BUILD {
   my ($self, $args) = @_;
   my $of = $self->of;
   Role::Tiny->apply_roles_to_object($self, grep $of->DOES($_), @TAKE_ON_ME);
 }
+
+=head2 to_string
+
+Part of serialisation.
+
+=cut
+
+has to_string => (is => 'lazy', isa => Str, builder => sub { '[' . shift->of->to_string . ']' });
 
 __PACKAGE__->meta->make_immutable();
 
