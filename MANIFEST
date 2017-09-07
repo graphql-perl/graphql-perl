@@ -38,6 +38,7 @@ t/language-lexer.t
 t/language-parser.t
 t/language-schema-parser.t
 t/schema-kitchen-sink.graphql
+t/type-definition.t
 t/type-interface.t
 t/type-schema.t
 xt/manifest.t
