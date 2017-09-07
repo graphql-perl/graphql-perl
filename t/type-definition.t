@@ -334,4 +334,12 @@ subtest 'prohibits putting non-Object types in unions', sub {
   );
 };
 
+subtest 'allows a thunk for Union\'s types', sub {
+  my $u = GraphQL::Type::Union->new(
+    name => 'ThunkUnion',
+    types => sub { [ $ObjectType ] },
+  );
+  is_deeply $u->types, [ $ObjectType ];
+};
+
 done_testing;

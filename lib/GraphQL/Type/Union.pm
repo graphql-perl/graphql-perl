@@ -4,6 +4,7 @@ use 5.014;
 use strict;
 use warnings;
 use Moo;
+use MooX::Thunking;
 use Types::Standard -all;
 use GraphQL::Type::Library -all;
 use Return::Type;
@@ -46,8 +47,8 @@ Array-ref of L<GraphQL::Type::Object> objects.
 =cut
 
 has types => (
-  is => 'ro',
-  isa => UniqueByProperty['name'] & ArrayRefNonEmpty[InstanceOf['GraphQL::Type::Object']],
+  is => 'thunked',
+  isa => Thunk[UniqueByProperty['name'] & ArrayRefNonEmpty[InstanceOf['GraphQL::Type::Object']]],
   required => 1,
 );
 
