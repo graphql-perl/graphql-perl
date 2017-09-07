@@ -4,7 +4,9 @@ use 5.014;
 use strict;
 use warnings;
 use Moo;
-use Types::Standard qw(ArrayRef);
+use Types::Standard -all;
+use GraphQL::Type::Library -all;
+use MooX::Thunking;
 extends qw(GraphQL::Type);
 with qw(
   GraphQL::Role::Output
@@ -41,7 +43,7 @@ Optional array-ref of interface type objects implemented.
 
 =cut
 
-has interfaces => (is => 'ro', isa => ArrayRef);
+has interfaces => (is => 'thunked', isa => Thunk[ArrayRef[InstanceOf['GraphQL::Type::Interface']]]);
 
 __PACKAGE__->meta->make_immutable();
 
