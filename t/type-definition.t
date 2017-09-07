@@ -230,4 +230,28 @@ subtest 'includes nested input objects in the map', sub {
   };
 };
 
+subtest 'includes interfaces\' subtypes in the type map', sub {
+  my $SomeInterface = GraphQL::Type::Interface->new(
+    name => 'SomeInterface',
+    fields => { f => { type => $Int } },
+  );
+  my $SomeSubtype = GraphQL::Type::Object->new(
+    name => 'SomeSubtype',
+    fields => { f => { type => $Int } },
+    interfaces => [ $SomeInterface ],
+    is_type_of => sub { 1 },
+  );
+  my $query = GraphQL::Type::Object->new(
+    name => 'Query',
+    fields => { iface => { type => $SomeInterface } },
+  );
+  my $schema = GraphQL::Schema->new(query => $query, types => [ $SomeSubtype ]);
+  is_deeply $schema->name2type, {
+    'Int' => $Int,
+    'Query' => $query,
+    'SomeInterface' => $SomeInterface,
+    'SomeSubtype' => $SomeSubtype,
+  };
+};
+
 done_testing;
