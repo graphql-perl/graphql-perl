@@ -116,4 +116,16 @@ is $recent_article_field->{type}, $BlogArticle;
 my $feed_field = $BlogQuery->fields->{feed};
 is $feed_field->{type}->of, $BlogArticle;
 
+$schema = GraphQL::Schema->new(query => $BlogQuery, mutation => $BlogMutation);
+is $schema->mutation, $BlogMutation;
+my $write_mutation = $BlogMutation->fields->{writeArticle};
+is $write_mutation->{type}, $BlogArticle;
+is $write_mutation->{type}->name, 'Article';
+
+$schema = GraphQL::Schema->new(query => $BlogQuery, subscription => $BlogSubscription);
+is $schema->subscription, $BlogSubscription;
+my $sub = $BlogSubscription->fields->{articleSubscribe};
+is $sub->{type}, $BlogArticle;
+is $sub->{type}->name, 'Article';
+
 done_testing;
