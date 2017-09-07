@@ -61,7 +61,7 @@ Part of serialisation.
 
 =cut
 
-has to_string => (is => 'lazy', isa => Str, init_arg => '_noclone_to_string', builder => sub {
+has to_string => (is => 'lazy', isa => Str, init_arg => undef, builder => sub {
   my ($self) = @_;
   '[' . $self->of->to_string . ']' . ($self->does('GraphQL::Role::NonNull') ? '!' : '');
 });
