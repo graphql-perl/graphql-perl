@@ -13,6 +13,7 @@ with qw(
   GraphQL::Role::Leaf
   GraphQL::Role::Nullable
   GraphQL::Role::Named
+  GraphQL::Role::FieldDeprecation
 );
 
 our $VERSION = '0.02';
@@ -82,9 +83,9 @@ Internal method.
 
 sub BUILD {
   my ($self, $args) = @_;
+  $self->_fields_deprecation_apply('values');
   my $v = $self->values;
   for my $name (keys %$v) {
-    $v->{$name}{is_deprecated} = 1 if defined $v->{$name}{deprecation_reason};
     $v->{$name}{value} = $name if !exists $v->{$name}{value}; # undef valid
   }
 }

@@ -342,4 +342,18 @@ subtest 'allows a thunk for Union\'s types', sub {
   is_deeply $u->types, [ $ObjectType ];
 };
 
+subtest 'does not mutate passed field definitions', sub {
+  my $fields = {
+    field1 => { type => $String, deprecation_reason => 'because' },
+    field2 => { type => $String, args => { id => { type => $String } } },
+  };
+  my $o1 = GraphQL::Type::Object->new(name => 'O1', fields => $fields);
+  my $o2 = GraphQL::Type::Object->new(name => 'O2', fields => $fields);
+  is_deeply $o1->fields, $o2->fields;
+  is_deeply $fields, {
+    field1 => { type => $String, deprecation_reason => 'because' },
+    field2 => { type => $String, args => { id => { type => $String } } },
+  };
+};
+
 done_testing;
