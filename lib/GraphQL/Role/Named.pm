@@ -46,7 +46,10 @@ Part of serialisation.
 
 =cut
 
-has to_string => (is => 'lazy', isa => StrNameValid, builder => sub { shift->name });
+has to_string => (is => 'lazy', isa => Str, init_arg => '_noclone_to_string', builder => sub {
+  my ($self) = @_;
+  $self->name . ($self->does('GraphQL::Role::NonNull') ? '!' : '');
+});
 
 __PACKAGE__->meta->make_immutable();
 

@@ -286,7 +286,10 @@ subtest 'stringifies simple types', sub {
   is $UnionType->to_string, 'Union';
   is $EnumType->to_string, 'Enum';
   is $InputObjectType->to_string, 'InputObject';
+  is($Int->non_null->to_string, 'Int!');
   is(GraphQL::Type::List->new(of => $Int)->to_string, '[Int]');
+  is(GraphQL::Type::List->new(of => $Int)->non_null->to_string, '[Int]!');
+  is(GraphQL::Type::List->new(of => $Int->non_null)->to_string, '[Int!]');
   is(GraphQL::Type::List->new(of => GraphQL::Type::List->new(of => $Int))->to_string, '[[Int]]');
 };
 

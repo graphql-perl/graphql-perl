@@ -12,7 +12,6 @@ my @TAKE_ON_ME = qw(
   GraphQL::Role::Input
   GraphQL::Role::Output
   GraphQL::Role::Nullable
-  GraphQL::Role::NonNull
 );
 
 our $VERSION = '0.02';
@@ -30,8 +29,7 @@ GraphQL::Type::List - GraphQL type that is a list of another type
 
 Type that is a wrapper for the type it is a list of. If the wrapped type
 has any of these roles, it will assume them: L<GraphQL::Role::Input>,
-L<GraphQL::Role::Output>, L<GraphQL::Role::Nullable>,
-L<GraphQL::Role::NonNull>.
+L<GraphQL::Role::Output>, L<GraphQL::Role::Nullable>.
 
 =head1 ATTRIBUTES
 
@@ -63,7 +61,10 @@ Part of serialisation.
 
 =cut
 
-has to_string => (is => 'lazy', isa => Str, builder => sub { '[' . shift->of->to_string . ']' });
+has to_string => (is => 'lazy', isa => Str, init_arg => '_noclone_to_string', builder => sub {
+  my ($self) = @_;
+  '[' . $self->of->to_string . ']' . ($self->does('GraphQL::Role::NonNull') ? '!' : '');
+});
 
 __PACKAGE__->meta->make_immutable();
 

@@ -3,6 +3,9 @@ package GraphQL::Type;
 use 5.014;
 use strict;
 use warnings;
+use Types::Standard qw(InstanceOf); # if -all causes objects to be class 'Object'!
+use Return::Type;
+use Function::Parameters;
 use Moo;
 
 our $VERSION = '0.02';
@@ -79,7 +82,18 @@ L<GraphQL::Type::Library> - implements various L<Type::Tiny>
 type constraints, for use in L<Moo> attributes, and
 L<Function::Parameters>/L<Return::Type> methods and functions.
 
+=head1 METHODS
+
+=head2 clone
+
+Shallow copy of the object, suitable for reblessing without affecting
+the original object.
+
 =cut
+
+method clone() :ReturnType(InstanceOf['GraphQL::Type']) {
+  ref($self)->new(%$self)
+}
 
 __PACKAGE__->meta->make_immutable();
 
