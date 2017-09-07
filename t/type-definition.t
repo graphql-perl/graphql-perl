@@ -323,7 +323,7 @@ subtest 'prohibits putting non-Object types in unions', sub {
   map { throws_ok { GraphQL::Type::Union->new(
     name => 'BadUnion',
     types => [ $_ ],
-  )} qr// } (
+  )} qr/did not pass type constraint/ } (
     $Int,
     $Int->non_null,
     GraphQL::Type::List->new(of => $Int),
