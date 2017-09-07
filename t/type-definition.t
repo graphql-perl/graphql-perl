@@ -293,4 +293,30 @@ subtest 'stringifies simple types', sub {
   is(GraphQL::Type::List->new(of => GraphQL::Type::List->new(of => $Int))->to_string, '[[Int]]');
 };
 
+sub test_as_type {
+  my ($type, $as, $should) = @_;
+  $should = !!$should;
+  map {
+    my $got = !!$_->does("GraphQL::Role::$as");
+    is $got, $should, "$_ $as ($should)";
+  } $type, GraphQL::Type::List->new(of => $type), $type->non_null;
+}
+subtest 'identifies input types', sub {
+  test_as_type($Int, 'Input', 1);
+  test_as_type($ObjectType, 'Input', '');
+  test_as_type($InterfaceType, 'Input', '');
+  test_as_type($UnionType, 'Input', '');
+  test_as_type($EnumType, 'Input', 1);
+  test_as_type($InputObjectType, 'Input', 1);
+};
+
+subtest 'identifies output types', sub {
+  test_as_type($Int, 'Output', 1);
+  test_as_type($ObjectType, 'Output', 1);
+  test_as_type($InterfaceType, 'Output', 1);
+  test_as_type($UnionType, 'Output', 1);
+  test_as_type($EnumType, 'Output', 1);
+  test_as_type($InputObjectType, 'Output', '');
+};
+
 done_testing;
