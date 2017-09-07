@@ -354,6 +354,17 @@ subtest 'does not mutate passed field definitions', sub {
     field1 => { type => $String, deprecation_reason => 'because' },
     field2 => { type => $String, args => { id => { type => $String } } },
   };
+  my $fields2 = {
+    field1 => { type => $String },
+    field2 => { type => $String, default_value => 'hi' },
+  };
+  my $i1 = GraphQL::Type::InputObject->new(name => 'I1', fields => $fields2);
+  my $i2 = GraphQL::Type::InputObject->new(name => 'I2', fields => $fields2);
+  is_deeply $i1->fields, $i2->fields;
+  is_deeply $fields2, {
+    field1 => { type => $String },
+    field2 => { type => $String, default_value => 'hi' },
+  };
 };
 
 done_testing;
