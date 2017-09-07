@@ -171,4 +171,49 @@ is_deeply $TypeWithDeprecatedField->fields, {
   },
 };
 
+my $NestedInputObject = GraphQL::Type::InputObject->new(
+  name => 'NestedInputObject',
+  fields => { value => { type => $String } },
+);
+my $SomeInputObject = GraphQL::Type::InputObject->new(
+  name => 'SomeInputObject',
+  fields => { nested => { type => $NestedInputObject } },
+);
+my $SomeMutation = GraphQL::Type::Object->new(
+  name => 'SomeMutation',
+  fields => {
+    mutateSomething => {
+      type => $BlogArticle,
+      args => { input => { type => $SomeInputObject } },
+    },
+  },
+);
+my $SomeSubscription = GraphQL::Type::Object->new(
+  name => 'SomeSubscription',
+  fields => {
+    subscribeToSomething => {
+      type => $BlogArticle,
+      args => { input => { type => $SomeInputObject } },
+    },
+  },
+);
+$schema = GraphQL::Schema->new(
+  query => $BlogQuery,
+  mutation => $SomeMutation,
+  subscription => $SomeSubscription,
+);
+is_deeply $schema->name2type, {
+  'Article' => $BlogArticle,
+  'Author' => $BlogAuthor,
+  'Boolean' => $Boolean,
+  'Image' => $BlogImage,
+  'Int' => $Int,
+  'NestedInputObject' => $NestedInputObject,
+  'Query' => $BlogQuery,
+  'SomeInputObject' => $SomeInputObject,
+  'SomeMutation' => $SomeMutation,
+  'SomeSubscription' => $SomeSubscription,
+  'String' => $String,
+};
+
 done_testing;

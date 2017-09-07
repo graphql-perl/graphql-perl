@@ -75,6 +75,23 @@ has directives => (is => 'ro', isa => ArrayRef[InstanceOf['GraphQL::Directive']]
 
 =head1 METHODS
 
+=head2 name2type
+
+In this schema, returns a hash-ref mapping all types' names to their
+type object.
+
+=cut
+
+has name2type => (is => 'lazy', isa => Map[StrNameValid, ConsumerOf['GraphQL::Role::Named']]);
+sub _build_name2type {
+  my ($self) = @_;
+  my @types = grep $_, map $self->$_, qw(query mutation subscription); # TODO also __Schema
+  push @types, @{ $self->types || [] };
+  my %name2type;
+  map _expand_type(\%name2type, $_), @types;
+  \%name2type;
+}
+
 =head2 get_possible_types($abstract_type)
 
 In this schema, get all of either the implementation types
@@ -82,32 +99,24 @@ In this schema, get all of either the implementation types
 
 =cut
 
-has _name2type => (is => 'lazy', isa => Map[StrNameValid, ConsumerOf['GraphQL::Role::Named']]);
-sub _build__name2type {
-  my ($self) = @_;
-  my @types = grep $_, map $self->$_, qw(query mutation subscription); # TODO also __Schema
-  push @types, @{ $self->types || [] };
-  my %name2type;
-  my @bad = map $_->name, grep {
-    my $already = $name2type{$_->name}||0;
-    $already != ($name2type{$_->name} = $_) and $already
-  } map @{ _expand_type($_) }, @types;
-  die "non-unique types named @bad" if @bad;
-  \%name2type;
-}
-
 fun _expand_type(
+  (Map[StrNameValid, ConsumerOf['GraphQL::Role::Named']]) $map,
   (InstanceOf['GraphQL::Type']) $type,
-) :ReturnType(ArrayRef[InstanceOf['GraphQL::Type']]) {
-  my @types = ($type);
-  push @types, ($type, map @{ _expand_type($_) }, @{ $type->interfaces || [] })
+) :ReturnType(ArrayRef[ConsumerOf['GraphQL::Role::Named']]) {
+  return _expand_type($map, $type->of) if $type->can('of');
+  my $name = $type->name if $type->can('name');
+  return [] if $name and $map->{$name} and $map->{$name} == $type; # seen
+  die "Duplicate type $name" if $map->{$name};
+  $map->{$name} = $type;
+  my @types;
+  push @types, ($type, map @{ _expand_type($map, $_) }, @{ $type->interfaces || [] })
     if $type->isa('GraphQL::Type::Object');
-  push @types, ($type, map @{ _expand_type($_) }, $type->get_types)
+  push @types, ($type, map @{ _expand_type($map, $_) }, $type->get_types)
     if $type->isa('GraphQL::Type::Union');
   if (grep $type->DOES($_), qw(GraphQL::Role::FieldsInput GraphQL::Role::FieldsOutput)) {
     my $fields = $type->fields||{};
     push @types, map {
-      ($_->{type}, (map @{ _expand_type($_->type) }, @{ $_->{args}||[] }))
+      map @{ _expand_type($map, $_->{type}) }, $_, values %{ $_->{args}||{} }
     } values %$fields;
   }
   \@types;
@@ -116,7 +125,7 @@ fun _expand_type(
 has _interface2types => (is => 'lazy', isa => Map[StrNameValid, ArrayRef[InstanceOf['GraphQL::Type::Object']]]);
 sub _build__interface2types {
   my ($self) = @_;
-  my $name2type = $self->_name2type||{};
+  my $name2type = $self->name2type||{};
   my %interface2types;
   map {
     my $o = $_;
