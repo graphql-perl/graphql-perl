@@ -128,4 +128,33 @@ my $sub = $BlogSubscription->fields->{articleSubscribe};
 is $sub->{type}, $BlogArticle;
 is $sub->{type}->name, 'Article';
 
+my $EnumTypeWithDeprecatedValue = GraphQL::Type::Enum->new(
+  name => 'EnumTypeWithDeprecatedValue',
+  values => { foo => { deprecation_reason => 'Just because' } },
+);
+is_deeply $EnumTypeWithDeprecatedValue->values, {
+  foo => {
+    deprecation_reason => 'Just because',
+    is_deprecated => 1,
+    value => 'foo',
+  },
+};
+
+# var name from JS test, but Perl has no null only undef
+my $EnumTypeWithNullishValue = GraphQL::Type::Enum->new(
+  name => 'EnumTypeWithNullishValue',
+  values => {
+    foo => {},
+    UNDEFINED => { value => undef },
+  },
+);
+is_deeply $EnumTypeWithNullishValue->values, {
+  foo => {
+    value => 'foo',
+  },
+  UNDEFINED => {
+    value => undef,
+  },
+};
+
 done_testing;

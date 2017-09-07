@@ -48,7 +48,8 @@ the value. Integers are often useful.
 
 =item deprecation_reason
 
-Reason if deprecated.
+Reason if deprecated. If supplied, the hash for that value will also
+have a key C<is_deprecated> with a true value.
 
 =item description
 
@@ -70,6 +71,23 @@ has values => (
   ],
   required => 1,
 );
+
+=head1 METHODS
+
+=head2 BUILD
+
+Internal method.
+
+=cut
+
+sub BUILD {
+  my ($self, $args) = @_;
+  my $v = $self->values;
+  for my $name (keys %$v) {
+    $v->{$name}{is_deprecated} = 1 if defined $v->{$name}{deprecation_reason};
+    $v->{$name}{value} = $name if !exists $v->{$name}{value}; # undef valid
+  }
+}
 
 __PACKAGE__->meta->make_immutable();
 
