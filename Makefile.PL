@@ -24,6 +24,7 @@ WriteMakefile(
     'Return::Type' => '0',
     'Pegex' => '0',
     'MooX::Thunking' => '0',
+    'JSON' => '0',
   },
   dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
   clean => { FILES => 'GraphQL-*' },
