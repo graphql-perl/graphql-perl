@@ -358,13 +358,25 @@ subtest 'does not mutate passed field definitions', sub {
     field1 => { type => $String },
     field2 => { type => $String, default_value => 'hi' },
   };
-  my $i1 = GraphQL::Type::InputObject->new(name => 'I1', fields => $fields2);
-  my $i2 = GraphQL::Type::InputObject->new(name => 'I2', fields => $fields2);
-  is_deeply $i1->fields, $i2->fields;
-  is_deeply $fields2, {
-    field1 => { type => $String },
-    field2 => { type => $String, default_value => 'hi' },
+  lives_ok {
+    my $i1 = GraphQL::Type::InputObject->new(name => 'I1', fields => $fields2);
+    my $i2 = GraphQL::Type::InputObject->new(name => 'I2', fields => $fields2);
+    is_deeply $i1->fields, $i2->fields;
+    is_deeply $fields2, {
+      field1 => { type => $String },
+      field2 => { type => $String, default_value => 'hi' },
+    };
   };
+};
+
+subtest 'check default value type', sub {
+  throws_ok { GraphQL::Type::InputObject->new(
+    name => 'I1',
+    fields => {
+      ifield1 => { type => $String },
+      ifield2 => { type => $Int, default_value => 'hi invalid' },
+    },
+  ) } qr/did not pass type constraint/;
 };
 
 done_testing;

@@ -69,7 +69,13 @@ declare "FieldMapInput", as Map[
     default_value => Optional[Any],
     description => Optional[Str],
   ]
-];
+], where {
+  !grep {
+    !(!$_->{default_value} or
+      eval { $_->{type}->serialize->($_->{default_value}); 1 }
+    )
+  } values %$_
+};
 
 =head2 Thunk
 
