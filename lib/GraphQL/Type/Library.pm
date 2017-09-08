@@ -47,8 +47,8 @@ declare "Thunk", constraint_generator => sub { union [ CodeLike, @_ ] };
 
 =head2 FieldMapInput
 
-Hash-ref mapping field names to a hash-ref description. Description keys,
-all optional except C<type>:
+Hash-ref mapping field names to a hash-ref
+description. Description keys, all optional except C<type>:
 
 =over
 
@@ -69,7 +69,7 @@ Description.
 
 =cut
 
-declare "FieldMapInput", as Thunk[Map[
+declare "FieldMapInput", as Map[
   StrNameValid,
   Dict[
     type => ConsumerOf['GraphQL::Role::Input'],
@@ -78,8 +78,7 @@ declare "FieldMapInput", as Thunk[Map[
     default_value => Optional[Any],
     description => Optional[Str],
   ]
-]], where {
-  eval { CodeLike->($_); 1 } or
+], where {
   !grep {
     !(!$_->{default_value} or
       eval { $_->{type}->serialize->($_->{default_value}); 1 }
@@ -89,7 +88,7 @@ declare "FieldMapInput", as Thunk[Map[
 
 =head2 FieldMapOutput
 
-Thunk of hash-ref mapping field names to a hash-ref
+Hash-ref mapping field names to a hash-ref
 description. Description keys, all optional except C<type>:
 
 =over
@@ -123,7 +122,7 @@ Description.
 
 =cut
 
-declare "FieldMapOutput", as Thunk[Map[
+declare "FieldMapOutput", as Map[
   StrNameValid,
   Dict[
     type => ConsumerOf['GraphQL::Role::Output'],
@@ -133,7 +132,7 @@ declare "FieldMapOutput", as Thunk[Map[
     deprecation_reason => Optional[Str],
     description => Optional[Str],
   ]
-]];
+];
 
 =head2 Int32Signed
 

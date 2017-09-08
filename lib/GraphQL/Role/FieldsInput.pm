@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Moo::Role;
 use MooX::Thunking;
-use GraphQL::Type::Library qw(FieldMapInput);
+use GraphQL::Type::Library -all;
 
 our $VERSION = '0.02';
 
@@ -28,12 +28,12 @@ Implements input fields.
 
 =head2 fields
 
-Hash-ref mapping fields to their types.
+Thunk of hash-ref mapping fields to their types.
 See L<GraphQL::Type::Library/FieldMapInput>.
 
 =cut
 
-has fields => (is => 'thunked', isa => FieldMapInput, required => 1);
+has fields => (is => 'thunked', isa => Thunk[FieldMapInput], required => 1);
 
 __PACKAGE__->meta->make_immutable();
 

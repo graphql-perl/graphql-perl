@@ -4,7 +4,7 @@ use 5.014;
 use strict;
 use warnings;
 use Moo::Role;
-use GraphQL::Type::Library qw(FieldMapOutput);
+use GraphQL::Type::Library -all;
 use MooX::Thunking;
 with 'GraphQL::Role::FieldDeprecation';
 
@@ -29,12 +29,12 @@ Implements output fields.
 
 =head2 fields
 
-Hash-ref mapping fields to their types.
+Thunk of hash-ref mapping fields to their types.
 See L<GraphQL::Type::Library/FieldMapOutput>.
 
 =cut
 
-has fields => (is => 'thunked', isa => FieldMapOutput, required => 1);
+has fields => (is => 'thunked', isa => Thunk[FieldMapOutput], required => 1);
 around fields => sub {
   my ($orig, $self) = @_;
   $self->$orig; # de-thunk
