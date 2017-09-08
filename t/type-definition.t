@@ -380,11 +380,13 @@ subtest 'check default value type', sub {
 };
 
 subtest 'all other thunks', sub {
-  my $SomeInputObject = GraphQL::Type::InputObject->new(
-    name => 'SomeInputObject',
-    fields => sub { { nested => { type => $Int } } },
-  );
-  is_deeply $SomeInputObject->fields, { nested => { type => $Int } };
+  lives_ok {
+    my $SomeInputObject = GraphQL::Type::InputObject->new(
+      name => 'SomeInputObject',
+      fields => sub { { nested => { type => $Int } } },
+    );
+    is_deeply $SomeInputObject->fields, { nested => { type => $Int } };
+  };
 };
 
 done_testing;
