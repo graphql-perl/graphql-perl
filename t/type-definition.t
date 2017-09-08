@@ -379,4 +379,12 @@ subtest 'check default value type', sub {
   ) } qr/did not pass type constraint/;
 };
 
+subtest 'all other thunks', sub {
+  my $SomeInputObject = GraphQL::Type::InputObject->new(
+    name => 'SomeInputObject',
+    fields => sub { { nested => { type => $Int } } },
+  );
+  is_deeply $SomeInputObject->fields, { nested => { type => $Int } };
+};
+
 done_testing;

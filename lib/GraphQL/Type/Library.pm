@@ -36,6 +36,15 @@ an exception. Suitable for passing to an C<isa> constraint in L<Moo>.
 
 declare "StrNameValid", as StrMatch[ qr/^[_a-zA-Z][_a-zA-Z0-9]*$/ ];
 
+=head2 Thunk
+
+Can be either a L<Types::TypeTiny/CodeLike> or the type(s) given as
+parameters.
+
+=cut
+
+declare "Thunk", constraint_generator => sub { union [ CodeLike, @_ ] };
+
 =head2 FieldMapInput
 
 Hash-ref mapping field names to a hash-ref description. Description keys,
@@ -60,7 +69,7 @@ Description.
 
 =cut
 
-declare "FieldMapInput", as Map[
+declare "FieldMapInput", as Thunk[Map[
   StrNameValid,
   Dict[
     type => ConsumerOf['GraphQL::Role::Input'],
@@ -69,22 +78,14 @@ declare "FieldMapInput", as Map[
     default_value => Optional[Any],
     description => Optional[Str],
   ]
-], where {
+]], where {
+  eval { CodeLike->($_); 1 } or
   !grep {
     !(!$_->{default_value} or
       eval { $_->{type}->serialize->($_->{default_value}); 1 }
     )
   } values %$_
 };
-
-=head2 Thunk
-
-Can be either a L<Types::TypeTiny/CodeLike> or the type(s) given as
-parameters.
-
-=cut
-
-declare "Thunk", constraint_generator => sub { union [ CodeLike, @_ ] };
 
 =head2 FieldMapOutput
 
