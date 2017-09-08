@@ -81,6 +81,13 @@ declare "FieldMapInput", as Map[
     $_->{default_value} and
       !eval { $_->{type}->serialize->($_->{default_value}); 1 }
   } values %$_
+}, inline_as {
+  (undef, <<EOF);
+    !grep {
+      \$_->{default_value} and
+        !eval { \$_->{type}->serialize->(\$_->{default_value}); 1 }
+    } values %{$_[1]}
+EOF
 };
 
 =head2 FieldMapOutput
