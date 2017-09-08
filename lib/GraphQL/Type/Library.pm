@@ -73,8 +73,6 @@ declare "FieldMapInput", as Map[
   StrNameValid,
   Dict[
     type => ConsumerOf['GraphQL::Role::Input'],
-    # TODO: change Any to check that is same as supplied "type". Possibly
-    # with builder?
     default_value => Optional[Any],
     description => Optional[Str],
   ]
