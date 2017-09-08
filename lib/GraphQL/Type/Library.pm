@@ -80,9 +80,8 @@ declare "FieldMapInput", as Map[
   ]
 ], where {
   !grep {
-    !(!$_->{default_value} or
-      eval { $_->{type}->serialize->($_->{default_value}); 1 }
-    )
+    $_->{default_value} and
+      !eval { $_->{type}->serialize->($_->{default_value}); 1 }
   } values %$_
 };
 
