@@ -43,7 +43,7 @@ parameters.
 
 =cut
 
-declare "Thunk", constraint_generator => sub { union [ CodeLike, @_ ] };
+declare "Thunk", as CodeLike, constraint_generator => sub { union [ CodeLike, @_ ] };
 
 =head2 FieldMapInput
 
