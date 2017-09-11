@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Type::Library
   -base,
-  -declare => qw( StrNameValid FieldMapInput FieldMapOutput Int32Signed Thunk );
+  -declare => qw( StrNameValid FieldMapInput Thunk ValuesMatchTypes );
 use Type::Utils -all;
 use Types::TypeTiny -all;
 use Types::Standard -all;
@@ -45,6 +45,49 @@ parameters.
 
 declare "Thunk", as CodeLike, constraint_generator => sub { union [ CodeLike, @_ ] };
 
+=head2 ValuesMatchTypes
+
+Subtype of L<Types::Standard/HashRef>, whose values are hash-refs. Takes
+two parameters:
+
+=over
+
+=item value keyname
+
+Optional within the second-level hashes.
+
+=item type keyname
+
+Values will be a L<GraphQL::Type>. Mandatory within the second-level hashes.
+
+=back
+
+In the second-level hashes, the values (if given) must pass the GraphQL
+type constraint.
+
+=cut
+
+declare "ValuesMatchTypes",
+  constraint_generator => sub {
+    my ($value_key, $type_key) = @_;
+    declare as HashRef[Dict[
+      $type_key => ConsumerOf['GraphQL::Role::Input'],
+      slurpy Any,
+    ]], where {
+      !grep {
+        $_->{$value_key} and
+          !eval { $_->{$type_key}->serialize->($_->{$value_key}); 1 }
+      } values %$_
+    }, inline_as {
+      (undef, <<EOF);
+        !grep {
+          \$_->{$value_key} and
+            !eval { \$_->{$type_key}->serialize->(\$_->{$value_key}); 1 }
+        } values %{$_[1]}
+EOF
+    };
+};
+
 =head2 FieldMapInput
 
 Hash-ref mapping field names to a hash-ref
@@ -59,7 +102,7 @@ GraphQL input type for the field.
 =item default_value
 
 Default value for this argument if none supplied. Must be same type as
-the C<type>.
+the C<type> (implemented with type L</ValuesMatchTypes>.
 
 =item description
 
@@ -76,19 +119,7 @@ declare "FieldMapInput", as Map[
     default_value => Optional[Any],
     description => Optional[Str],
   ]
-], where {
-  !grep {
-    $_->{default_value} and
-      !eval { $_->{type}->serialize->($_->{default_value}); 1 }
-  } values %$_
-}, inline_as {
-  (undef, <<EOF);
-    !grep {
-      \$_->{default_value} and
-        !eval { \$_->{type}->serialize->(\$_->{default_value}); 1 }
-    } values %{$_[1]}
-EOF
-};
+] & ValuesMatchTypes['default_value', 'type' ];
 
 =head2 FieldMapOutput
 
