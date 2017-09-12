@@ -455,19 +455,15 @@ __DATA__
                     {
                       'directives' => [
                         {
-                          'directive' => [
-                            {
-                              'name' => 'onObject'
-                            },
-                            {
-                              'arguments' => {
-                                'arg' => {
-                                  'type' => 'string',
-                                  'value' => 'value'
-                                }
+                          'directive' => {
+                            'arguments' => {
+                              'arg' => {
+                                'type' => 'string',
+                                'value' => 'value'
                               }
-                            }
-                          ]
+                            },
+                            'name' => 'onObject'
+                          }
                         }
                       ]
                     },
@@ -506,11 +502,9 @@ __DATA__
                                     {
                                       'directives' => [
                                         {
-                                          'directive' => [
-                                            {
-                                              'name' => 'onArg'
-                                            }
-                                          ]
+                                          'directive' => {
+                                            'name' => 'onArg'
+                                          }
                                         }
                                       ]
                                     }
@@ -531,11 +525,9 @@ __DATA__
                           {
                             'directives' => [
                               {
-                                'directive' => [
-                                  {
-                                    'name' => 'onField'
-                                  }
-                                ]
+                                'directive' => {
+                                  'name' => 'onField'
+                                }
                               }
                             ]
                           }
@@ -644,11 +636,9 @@ __DATA__
                     {
                       'directives' => [
                         {
-                          'directive' => [
-                            {
-                              'name' => 'onInterface'
-                            }
-                          ]
+                          'directive' => {
+                            'name' => 'onInterface'
+                          }
                         }
                       ]
                     },
@@ -678,11 +668,9 @@ __DATA__
                                     {
                                       'directives' => [
                                         {
-                                          'directive' => [
-                                            {
-                                              'name' => 'onArg'
-                                            }
-                                          ]
+                                          'directive' => {
+                                            'name' => 'onArg'
+                                          }
                                         }
                                       ]
                                     }
@@ -703,11 +691,9 @@ __DATA__
                           {
                             'directives' => [
                               {
-                                'directive' => [
-                                  {
-                                    'name' => 'onField'
-                                  }
-                                ]
+                                'directive' => {
+                                  'name' => 'onField'
+                                }
                               }
                             ]
                           }
@@ -770,11 +756,9 @@ __DATA__
                     {
                       'directives' => [
                         {
-                          'directive' => [
-                            {
-                              'name' => 'onUnion'
-                            }
-                          ]
+                          'directive' => {
+                            'name' => 'onUnion'
+                          }
                         }
                       ]
                     },
@@ -829,11 +813,9 @@ __DATA__
                     {
                       'directives' => [
                         {
-                          'directive' => [
-                            {
-                              'name' => 'onScalar'
-                            }
-                          ]
+                          'directive' => {
+                            'name' => 'onScalar'
+                          }
                         }
                       ]
                     }
@@ -894,11 +876,9 @@ __DATA__
                     {
                       'directives' => [
                         {
-                          'directive' => [
-                            {
-                              'name' => 'onEnum'
-                            }
-                          ]
+                          'directive' => {
+                            'name' => 'onEnum'
+                          }
                         }
                       ]
                     },
@@ -913,11 +893,9 @@ __DATA__
                           {
                             'directives' => [
                               {
-                                'directive' => [
-                                  {
-                                    'name' => 'onEnumValue'
-                                  }
-                                ]
+                                'directive' => {
+                                  'name' => 'onEnumValue'
+                                }
                               }
                             ]
                           }
@@ -1013,11 +991,9 @@ __DATA__
                     {
                       'directives' => [
                         {
-                          'directive' => [
-                            {
-                              'name' => 'onInputObjectType'
-                            }
-                          ]
+                          'directive' => {
+                            'name' => 'onInputObjectType'
+                          }
                         }
                       ]
                     },
@@ -1039,11 +1015,9 @@ __DATA__
                           {
                             'directives' => [
                               {
-                                'directive' => [
-                                  {
-                                    'name' => 'onField'
-                                  }
-                                ]
+                                'directive' => {
+                                  'name' => 'onField'
+                                }
                               }
                             ]
                           }
@@ -1138,11 +1112,9 @@ __DATA__
                       {
                         'directives' => [
                           {
-                            'directive' => [
-                              {
-                                'name' => 'onType'
-                              }
-                            ]
+                            'directive' => {
+                              'name' => 'onType'
+                            }
                           }
                         ]
                       },
