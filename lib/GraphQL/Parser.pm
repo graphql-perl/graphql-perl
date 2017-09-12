@@ -63,4 +63,40 @@ method final (Any $param = undef) {
   return {$self->{parser}{rule} => []};
 }
 
+method got_arguments (Any $param = undef) {
+  return unless defined $param;
+  $param = $param->[0]; # zap first useless layer
+  my %args;
+  for my $arg (@$param) {
+    ($arg) = values %$arg; # zap useless layer
+    my $name = shift(@$arg)->{name};
+    my $value = shift(@$arg)->{value};
+    my ($value_type) = keys %$value;
+    $value = $value->{$value_type};
+    $args{$name} = {
+      type => $value_type,
+      value => $value,
+    };
+  }
+  return {$self->{parser}{rule} => \%args};
+}
+
+method got_objectValue (Any $param = undef) {
+  return unless defined $param;
+  $param = $param->[0]; # zap first useless layer
+  my %obj_value;
+  for my $arg (@$param) {
+    ($arg) = values %$arg; # zap useless layer
+    my $name = shift(@$arg)->{name};
+    my $value = shift(@$arg)->{value};
+    my ($value_type) = keys %$value;
+    $value = $value->{$value_type};
+    $obj_value{$name} = {
+      type => $value_type,
+      value => $value,
+    };
+  }
+  return {$self->{parser}{rule} => \%obj_value};
+}
+
 1;

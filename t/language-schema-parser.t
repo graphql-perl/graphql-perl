@@ -460,22 +460,12 @@ __DATA__
                               'name' => 'onObject'
                             },
                             {
-                              'arguments' => [
-                                [
-                                  {
-                                    'argument' => [
-                                      {
-                                        'name' => 'arg'
-                                      },
-                                      {
-                                        'value' => {
-                                          'string' => 'value'
-                                        }
-                                      }
-                                    ]
-                                  }
-                                ]
-                              ]
+                              'arguments' => {
+                                'arg' => {
+                                  'type' => 'string',
+                                  'value' => 'value'
+                                }
+                              }
                             }
                           ]
                         }
