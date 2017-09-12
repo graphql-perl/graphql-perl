@@ -3,14 +3,13 @@ package GraphQL::Parser;
 use 5.014;
 use strict;
 use warnings;
-use Moo;
+use base 'Pegex::Receiver';
 use Return::Type;
-use Types::Standard qw(Str Bool HashRef);
+use Types::Standard -all;
 use Function::Parameters;
 
 require Pegex::Parser;
 require GraphQL::Grammar;
-require Pegex::Tree::Wrap;
 
 =head1 NAME
 
@@ -31,6 +30,12 @@ our $VERSION = '0.02';
     $source
   );
 
+=head1 DESCRIPTION
+
+Provides both an outside-accessible point of entry into the GraphQL
+parser (see above), and a subclass of L<Pegex::Receiver> to turn Pegex
+parsing events into data usable by GraphQL.
+
 =head1 METHODS
 
 =head2 parse
@@ -42,12 +47,20 @@ our $VERSION = '0.02';
 method parse(Str $source, Bool $noLocation = undef) :ReturnType(HashRef) {
   my $parser = Pegex::Parser->new(
     grammar => GraphQL::Grammar->new,
-    receiver => Pegex::Tree::Wrap->new,
+    receiver => __PACKAGE__->new,
   );
   my $input = Pegex::Input->new(string => $source);
   return $parser->parse($input);
 }
 
-__PACKAGE__->meta->make_immutable();
+method gotrule (Any $param = undef) {
+  return unless defined $param;
+  return {$self->{parser}{rule} => $param};
+}
+
+method final (Any $param = undef) {
+  return $param if defined $param;
+  return {$self->{parser}{rule} => []};
+}
 
 1;
