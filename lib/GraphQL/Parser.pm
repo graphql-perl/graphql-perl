@@ -99,4 +99,20 @@ method got_objectValue (Any $param = undef) {
   return {$self->{parser}{rule} => \%obj_value};
 }
 
+method got_listValue (Any $param = undef) {
+  return unless defined $param;
+  $param = $param->[0]; # zap first useless layer
+  my @values;
+  for my $arg (@$param) {
+    ($arg) = values %$arg; # zap useless layer
+    my ($value_type) = keys %$arg;
+    my ($value) = values %$arg;
+    push @values, {
+      type => $value_type,
+      value => $value,
+    };
+  }
+  return {$self->{parser}{rule} => \@values};
+}
+
 1;
