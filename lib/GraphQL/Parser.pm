@@ -127,4 +127,16 @@ method got_directive (Any $param = undef) {
   return {$self->{parser}{rule} => \%value};
 }
 
+method got_inputValueDefinition (Any $param = undef) {
+  return unless defined $param;
+  my %value;
+  my $arg = shift @$param;
+  ($arg) = values %$arg; # zap useless layer
+  $value{name} = $arg;
+  while ($arg = shift @$param) {
+    %value = (%value, %$arg);
+  }
+  return {$self->{parser}{rule} => \%value};
+}
+
 1;
