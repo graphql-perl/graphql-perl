@@ -46,7 +46,7 @@ value_const: float | int | string | boolean | null | enumValue | listValue_const
 
 boolean: /(true|false)/
 
-null: /null/
+null: /(null)/
 
 enumValue: (/(true|false|null)/ `Invalid enum value` | name)
 

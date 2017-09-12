@@ -17,8 +17,8 @@ open my $fh, '<', 't/kitchen-sink.graphql';
 my $got = do_lex(join('', <$fh>));
 my $expected = eval join '', <DATA>;
 local $Data::Dumper::Indent = $Data::Dumper::Sortkeys = $Data::Dumper::Terse = 1;
-#open $fh, '>', 'tf'; # uncomment these two lines to regenerate
-#print $fh Dumper $got;
+#open $fh, '>', 'tf'; print $fh Dumper $got; # uncomment to regenerate
+
 is_deeply $got, $expected, 'lex big doc correct' or diag Dumper $got;
 
 throws_ok { do_lex("\x{0007}") } qr/Parse document failed for some reason/, 'invalid char';
@@ -882,6 +882,11 @@ __DATA__
                                 'argument' => [
                                   {
                                     'name' => 'nullish'
+                                  },
+                                  {
+                                    'value' => {
+                                      'null' => 'null'
+                                    }
                                   }
                                 ]
                               }

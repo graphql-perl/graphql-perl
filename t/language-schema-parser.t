@@ -373,7 +373,13 @@ __DATA__
                               [
                                 {
                                   'inputValueDefinition' => {
-                                    'defaultValue' => [],
+                                    'defaultValue' => [
+                                      {
+                                        'value_const' => {
+                                          'null' => 'null'
+                                        }
+                                      }
+                                    ],
                                     'name' => 'argument',
                                     'type' => [
                                       {

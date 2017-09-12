@@ -688,7 +688,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
       '.ref' => 'BANG'
     },
     'null' => {
-      '.rgx' => qr/\Gnull/
+      '.rgx' => qr/\G(null)/
     },
     'objectField' => {
       '.all' => [
