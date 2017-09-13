@@ -147,4 +147,9 @@ method got_name (Any $param = undef) {
   return $param;
 }
 
+method got_unionMembers (Any $param = undef) {
+  return unless defined $param;
+  return {$self->{parser}{rule} => [ map $_->{namedType}, @$param ]};
+}
+
 1;

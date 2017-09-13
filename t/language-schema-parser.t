@@ -587,15 +587,9 @@ __DATA__
                     'Feed',
                     {
                       'unionMembers' => [
-                        {
-                          'namedType' => 'Story'
-                        },
-                        {
-                          'namedType' => 'Article'
-                        },
-                        {
-                          'namedType' => 'Advert'
-                        }
+                        'Story',
+                        'Article',
+                        'Advert'
                       ]
                     }
                   ]
@@ -624,12 +618,8 @@ __DATA__
                     },
                     {
                       'unionMembers' => [
-                        {
-                          'namedType' => 'A'
-                        },
-                        {
-                          'namedType' => 'B'
-                        }
+                        'A',
+                        'B'
                       ]
                     }
                   ]
