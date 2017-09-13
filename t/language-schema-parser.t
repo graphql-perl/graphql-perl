@@ -635,9 +635,9 @@ __DATA__
             'typeSystemDefinition' => [
               {
                 'typeDefinition' => {
-                  'scalarTypeDefinition' => [
-                    'CustomScalar'
-                  ]
+                  'scalarTypeDefinition' => {
+                    'name' => 'CustomScalar'
+                  }
                 }
               }
             ]
@@ -650,18 +650,16 @@ __DATA__
             'typeSystemDefinition' => [
               {
                 'typeDefinition' => {
-                  'scalarTypeDefinition' => [
-                    'AnnotatedScalar',
-                    {
-                      'directives' => [
-                        {
-                          'directive' => {
-                            'name' => 'onScalar'
-                          }
+                  'scalarTypeDefinition' => {
+                    'directives' => [
+                      {
+                        'directive' => {
+                          'name' => 'onScalar'
                         }
-                      ]
-                    }
-                  ]
+                      }
+                    ],
+                    'name' => 'AnnotatedScalar'
+                  }
                 }
               }
             ]

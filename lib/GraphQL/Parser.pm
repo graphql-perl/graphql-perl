@@ -152,4 +152,15 @@ method got_unionMembers (Any $param = undef) {
   return {$self->{parser}{rule} => [ map $_->{namedType}, @$param ]};
 }
 
+method got_scalarTypeDefinition (Any $param = undef) {
+  return unless defined $param;
+  my %value;
+  my $arg = shift @$param;
+  $value{name} = $arg;
+  while ($arg = shift @$param) {
+    %value = (%value, %$arg);
+  }
+  return {$self->{parser}{rule} => \%value};
+}
+
 1;
