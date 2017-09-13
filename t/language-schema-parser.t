@@ -186,13 +186,10 @@ __DATA__
                               [
                                 {
                                   'inputValueDefinition' => {
-                                    'defaultValue' => [
-                                      {
-                                        'value_const' => {
-                                          'string' => 'string'
-                                        }
-                                      }
-                                    ],
+                                    'defaultValue' => {
+                                      'default_value' => 'string',
+                                      'type' => 'string'
+                                    },
                                     'name' => 'argument',
                                     'type' => [
                                       {
@@ -221,26 +218,23 @@ __DATA__
                               [
                                 {
                                   'inputValueDefinition' => {
-                                    'defaultValue' => [
-                                      {
-                                        'value_const' => {
-                                          'listValue_const' => [
-                                            [
-                                              {
-                                                'value_const' => {
-                                                  'string' => 'string'
-                                                }
-                                              },
-                                              {
-                                                'value_const' => {
-                                                  'string' => 'string'
-                                                }
-                                              }
-                                            ]
-                                          ]
-                                        }
-                                      }
-                                    ],
+                                    'defaultValue' => {
+                                      'default_value' => [
+                                        [
+                                          {
+                                            'value_const' => {
+                                              'string' => 'string'
+                                            }
+                                          },
+                                          {
+                                            'value_const' => {
+                                              'string' => 'string'
+                                            }
+                                          }
+                                        ]
+                                      ],
+                                      'type' => 'listValue_const'
+                                    },
                                     'name' => 'argument',
                                     'type' => [
                                       {
@@ -277,26 +271,23 @@ __DATA__
                               [
                                 {
                                   'inputValueDefinition' => {
-                                    'defaultValue' => [
-                                      {
-                                        'value_const' => {
-                                          'objectValue_const' => [
-                                            [
+                                    'defaultValue' => {
+                                      'default_value' => [
+                                        [
+                                          {
+                                            'objectField_const' => [
+                                              'key',
                                               {
-                                                'objectField_const' => [
-                                                  'key',
-                                                  {
-                                                    'value_const' => {
-                                                      'string' => 'value'
-                                                    }
-                                                  }
-                                                ]
+                                                'value_const' => {
+                                                  'string' => 'value'
+                                                }
                                               }
                                             ]
-                                          ]
-                                        }
-                                      }
-                                    ],
+                                          }
+                                        ]
+                                      ],
+                                      'type' => 'objectValue_const'
+                                    },
                                     'name' => 'argument',
                                     'type' => [
                                       {
@@ -325,13 +316,10 @@ __DATA__
                               [
                                 {
                                   'inputValueDefinition' => {
-                                    'defaultValue' => [
-                                      {
-                                        'value_const' => {
-                                          'null' => 'null'
-                                        }
-                                      }
-                                    ],
+                                    'defaultValue' => {
+                                      'default_value' => 'null',
+                                      'type' => 'null'
+                                    },
                                     'name' => 'argument',
                                     'type' => [
                                       {
@@ -392,13 +380,10 @@ __DATA__
                               [
                                 {
                                   'inputValueDefinition' => {
-                                    'defaultValue' => [
-                                      {
-                                        'value_const' => {
-                                          'string' => 'default'
-                                        }
-                                      }
-                                    ],
+                                    'defaultValue' => {
+                                      'default_value' => 'default',
+                                      'type' => 'string'
+                                    },
                                     'directives' => [
                                       {
                                         'directive' => {
@@ -472,13 +457,10 @@ __DATA__
                               [
                                 {
                                   'inputValueDefinition' => {
-                                    'defaultValue' => [
-                                      {
-                                        'value_const' => {
-                                          'string' => 'string'
-                                        }
-                                      }
-                                    ],
+                                    'defaultValue' => {
+                                      'default_value' => 'string',
+                                      'type' => 'string'
+                                    },
                                     'name' => 'argument',
                                     'type' => [
                                       {
@@ -765,13 +747,10 @@ __DATA__
                       },
                       {
                         'inputValueDefinition' => {
-                          'defaultValue' => [
-                            {
-                              'value_const' => {
-                                'int' => '42'
-                              }
-                            }
-                          ],
+                          'defaultValue' => {
+                            'default_value' => '42',
+                            'type' => 'int'
+                          },
                           'name' => 'answer',
                           'type' => [
                             {

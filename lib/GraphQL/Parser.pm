@@ -174,4 +174,11 @@ method got_enumValueDefinition (Any $param = undef) {
   return {$self->{parser}{rule} => \%value};
 }
 
+method got_defaultValue (Any $param = undef) {
+  return unless defined $param;
+  ($param) = values %{$param->[0]}; # zap useless layers
+  my ($value_type) = keys %$param;
+  return {$self->{parser}{rule} => { type => $value_type, default_value => $param->{$value_type} }};
+}
+
 1;
