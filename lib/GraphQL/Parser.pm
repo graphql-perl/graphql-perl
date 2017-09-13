@@ -163,4 +163,15 @@ method got_scalarTypeDefinition (Any $param = undef) {
   return {$self->{parser}{rule} => \%value};
 }
 
+method got_enumValueDefinition (Any $param = undef) {
+  return unless defined $param;
+  my %value;
+  my $arg = shift @$param;
+  $value{value} = $arg;
+  while ($arg = shift @$param) {
+    %value = (%value, %$arg);
+  }
+  return {$self->{parser}{rule} => \%value};
+}
+
 1;

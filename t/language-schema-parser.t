@@ -676,18 +676,18 @@ __DATA__
                     'Site',
                     [
                       {
-                        'enumValueDefinition' => [
-                          {
+                        'enumValueDefinition' => {
+                          'value' => {
                             'enumValue' => 'DESKTOP'
                           }
-                        ]
+                        }
                       },
                       {
-                        'enumValueDefinition' => [
-                          {
+                        'enumValueDefinition' => {
+                          'value' => {
                             'enumValue' => 'MOBILE'
                           }
-                        ]
+                        }
                       }
                     ]
                   ]
@@ -716,27 +716,25 @@ __DATA__
                     },
                     [
                       {
-                        'enumValueDefinition' => [
-                          {
-                            'enumValue' => 'ANNOTATED_VALUE'
-                          },
-                          {
-                            'directives' => [
-                              {
-                                'directive' => {
-                                  'name' => 'onEnumValue'
-                                }
+                        'enumValueDefinition' => {
+                          'directives' => [
+                            {
+                              'directive' => {
+                                'name' => 'onEnumValue'
                               }
-                            ]
+                            }
+                          ],
+                          'value' => {
+                            'enumValue' => 'ANNOTATED_VALUE'
                           }
-                        ]
+                        }
                       },
                       {
-                        'enumValueDefinition' => [
-                          {
+                        'enumValueDefinition' => {
+                          'value' => {
                             'enumValue' => 'OTHER_VALUE'
                           }
-                        ]
+                        }
                       }
                     ]
                   ]
