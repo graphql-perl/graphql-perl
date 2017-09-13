@@ -61,9 +61,7 @@ __DATA__
                           'operationType' => 'query'
                         },
                         {
-                          'namedType' => {
-                            'name' => 'QueryType'
-                          }
+                          'namedType' => 'QueryType'
                         }
                       ]
                     },
@@ -73,9 +71,7 @@ __DATA__
                           'operationType' => 'mutation'
                         },
                         {
-                          'namedType' => {
-                            'name' => 'MutationType'
-                          }
+                          'namedType' => 'MutationType'
                         }
                       ]
                     }
@@ -93,16 +89,12 @@ __DATA__
               {
                 'typeDefinition' => {
                   'objectTypeDefinition' => [
-                    {
-                      'name' => 'Foo'
-                    },
+                    'Foo',
                     {
                       'implementsInterfaces' => [
                         [
                           {
-                            'namedType' => {
-                              'name' => 'Bar'
-                            }
+                            'namedType' => 'Bar'
                           }
                         ]
                       ]
@@ -110,15 +102,11 @@ __DATA__
                     [
                       {
                         'fieldDefinition' => [
-                          {
-                            'name' => 'one'
-                          },
+                          'one',
                           {
                             'type' => [
                               {
-                                'namedType' => {
-                                  'name' => 'Type'
-                                }
+                                'namedType' => 'Type'
                               }
                             ]
                           }
@@ -126,9 +114,7 @@ __DATA__
                       },
                       {
                         'fieldDefinition' => [
-                          {
-                            'name' => 'two'
-                          },
+                          'two',
                           {
                             'argumentsDefinition' => [
                               [
@@ -137,9 +123,7 @@ __DATA__
                                     'name' => 'argument',
                                     'type' => [
                                       {
-                                        'namedType' => {
-                                          'name' => 'InputType'
-                                        }
+                                        'namedType' => 'InputType'
                                       }
                                     ]
                                   }
@@ -150,9 +134,7 @@ __DATA__
                           {
                             'type' => [
                               {
-                                'namedType' => {
-                                  'name' => 'Type'
-                                }
+                                'namedType' => 'Type'
                               }
                             ]
                           }
@@ -160,9 +142,7 @@ __DATA__
                       },
                       {
                         'fieldDefinition' => [
-                          {
-                            'name' => 'three'
-                          },
+                          'three',
                           {
                             'argumentsDefinition' => [
                               [
@@ -171,9 +151,7 @@ __DATA__
                                     'name' => 'argument',
                                     'type' => [
                                       {
-                                        'namedType' => {
-                                          'name' => 'InputType'
-                                        }
+                                        'namedType' => 'InputType'
                                       }
                                     ]
                                   }
@@ -183,9 +161,7 @@ __DATA__
                                     'name' => 'other',
                                     'type' => [
                                       {
-                                        'namedType' => {
-                                          'name' => 'String'
-                                        }
+                                        'namedType' => 'String'
                                       }
                                     ]
                                   }
@@ -196,9 +172,7 @@ __DATA__
                           {
                             'type' => [
                               {
-                                'namedType' => {
-                                  'name' => 'Int'
-                                }
+                                'namedType' => 'Int'
                               }
                             ]
                           }
@@ -206,9 +180,7 @@ __DATA__
                       },
                       {
                         'fieldDefinition' => [
-                          {
-                            'name' => 'four'
-                          },
+                          'four',
                           {
                             'argumentsDefinition' => [
                               [
@@ -224,9 +196,7 @@ __DATA__
                                     'name' => 'argument',
                                     'type' => [
                                       {
-                                        'namedType' => {
-                                          'name' => 'String'
-                                        }
+                                        'namedType' => 'String'
                                       }
                                     ]
                                   }
@@ -237,9 +207,7 @@ __DATA__
                           {
                             'type' => [
                               {
-                                'namedType' => {
-                                  'name' => 'String'
-                                }
+                                'namedType' => 'String'
                               }
                             ]
                           }
@@ -247,9 +215,7 @@ __DATA__
                       },
                       {
                         'fieldDefinition' => [
-                          {
-                            'name' => 'five'
-                          },
+                          'five',
                           {
                             'argumentsDefinition' => [
                               [
@@ -282,9 +248,7 @@ __DATA__
                                           {
                                             'type' => [
                                               {
-                                                'namedType' => {
-                                                  'name' => 'String'
-                                                }
+                                                'namedType' => 'String'
                                               }
                                             ]
                                           }
@@ -299,9 +263,7 @@ __DATA__
                           {
                             'type' => [
                               {
-                                'namedType' => {
-                                  'name' => 'String'
-                                }
+                                'namedType' => 'String'
                               }
                             ]
                           }
@@ -309,9 +271,7 @@ __DATA__
                       },
                       {
                         'fieldDefinition' => [
-                          {
-                            'name' => 'six'
-                          },
+                          'six',
                           {
                             'argumentsDefinition' => [
                               [
@@ -324,9 +284,7 @@ __DATA__
                                             [
                                               {
                                                 'objectField_const' => [
-                                                  {
-                                                    'name' => 'key'
-                                                  },
+                                                  'key',
                                                   {
                                                     'value_const' => {
                                                       'string' => 'value'
@@ -342,9 +300,7 @@ __DATA__
                                     'name' => 'argument',
                                     'type' => [
                                       {
-                                        'namedType' => {
-                                          'name' => 'InputType'
-                                        }
+                                        'namedType' => 'InputType'
                                       }
                                     ]
                                   }
@@ -355,9 +311,7 @@ __DATA__
                           {
                             'type' => [
                               {
-                                'namedType' => {
-                                  'name' => 'Type'
-                                }
+                                'namedType' => 'Type'
                               }
                             ]
                           }
@@ -365,9 +319,7 @@ __DATA__
                       },
                       {
                         'fieldDefinition' => [
-                          {
-                            'name' => 'seven'
-                          },
+                          'seven',
                           {
                             'argumentsDefinition' => [
                               [
@@ -383,9 +335,7 @@ __DATA__
                                     'name' => 'argument',
                                     'type' => [
                                       {
-                                        'namedType' => {
-                                          'name' => 'Int'
-                                        }
+                                        'namedType' => 'Int'
                                       }
                                     ]
                                   }
@@ -396,9 +346,7 @@ __DATA__
                           {
                             'type' => [
                               {
-                                'namedType' => {
-                                  'name' => 'Type'
-                                }
+                                'namedType' => 'Type'
                               }
                             ]
                           }
@@ -419,9 +367,7 @@ __DATA__
               {
                 'typeDefinition' => {
                   'objectTypeDefinition' => [
-                    {
-                      'name' => 'AnnotatedObject'
-                    },
+                    'AnnotatedObject',
                     {
                       'directives' => [
                         {
@@ -440,9 +386,7 @@ __DATA__
                     [
                       {
                         'fieldDefinition' => [
-                          {
-                            'name' => 'annotatedField'
-                          },
+                          'annotatedField',
                           {
                             'argumentsDefinition' => [
                               [
@@ -465,9 +409,7 @@ __DATA__
                                     'name' => 'arg',
                                     'type' => [
                                       {
-                                        'namedType' => {
-                                          'name' => 'Type'
-                                        }
+                                        'namedType' => 'Type'
                                       }
                                     ]
                                   }
@@ -478,9 +420,7 @@ __DATA__
                           {
                             'type' => [
                               {
-                                'namedType' => {
-                                  'name' => 'Type'
-                                }
+                                'namedType' => 'Type'
                               }
                             ]
                           },
@@ -510,21 +450,15 @@ __DATA__
               {
                 'typeDefinition' => {
                   'interfaceTypeDefinition' => [
-                    {
-                      'name' => 'Bar'
-                    },
+                    'Bar',
                     [
                       {
                         'fieldDefinition' => [
-                          {
-                            'name' => 'one'
-                          },
+                          'one',
                           {
                             'type' => [
                               {
-                                'namedType' => {
-                                  'name' => 'Type'
-                                }
+                                'namedType' => 'Type'
                               }
                             ]
                           }
@@ -532,9 +466,7 @@ __DATA__
                       },
                       {
                         'fieldDefinition' => [
-                          {
-                            'name' => 'four'
-                          },
+                          'four',
                           {
                             'argumentsDefinition' => [
                               [
@@ -550,9 +482,7 @@ __DATA__
                                     'name' => 'argument',
                                     'type' => [
                                       {
-                                        'namedType' => {
-                                          'name' => 'String'
-                                        }
+                                        'namedType' => 'String'
                                       }
                                     ]
                                   }
@@ -563,9 +493,7 @@ __DATA__
                           {
                             'type' => [
                               {
-                                'namedType' => {
-                                  'name' => 'String'
-                                }
+                                'namedType' => 'String'
                               }
                             ]
                           }
@@ -586,9 +514,7 @@ __DATA__
               {
                 'typeDefinition' => {
                   'interfaceTypeDefinition' => [
-                    {
-                      'name' => 'AnnotatedInterface'
-                    },
+                    'AnnotatedInterface',
                     {
                       'directives' => [
                         {
@@ -601,9 +527,7 @@ __DATA__
                     [
                       {
                         'fieldDefinition' => [
-                          {
-                            'name' => 'annotatedField'
-                          },
+                          'annotatedField',
                           {
                             'argumentsDefinition' => [
                               [
@@ -619,9 +543,7 @@ __DATA__
                                     'name' => 'arg',
                                     'type' => [
                                       {
-                                        'namedType' => {
-                                          'name' => 'Type'
-                                        }
+                                        'namedType' => 'Type'
                                       }
                                     ]
                                   }
@@ -632,9 +554,7 @@ __DATA__
                           {
                             'type' => [
                               {
-                                'namedType' => {
-                                  'name' => 'Type'
-                                }
+                                'namedType' => 'Type'
                               }
                             ]
                           },
@@ -664,25 +584,17 @@ __DATA__
               {
                 'typeDefinition' => {
                   'unionTypeDefinition' => [
-                    {
-                      'name' => 'Feed'
-                    },
+                    'Feed',
                     {
                       'unionMembers' => [
                         {
-                          'namedType' => {
-                            'name' => 'Story'
-                          }
+                          'namedType' => 'Story'
                         },
                         {
-                          'namedType' => {
-                            'name' => 'Article'
-                          }
+                          'namedType' => 'Article'
                         },
                         {
-                          'namedType' => {
-                            'name' => 'Advert'
-                          }
+                          'namedType' => 'Advert'
                         }
                       ]
                     }
@@ -700,9 +612,7 @@ __DATA__
               {
                 'typeDefinition' => {
                   'unionTypeDefinition' => [
-                    {
-                      'name' => 'AnnotatedUnion'
-                    },
+                    'AnnotatedUnion',
                     {
                       'directives' => [
                         {
@@ -715,14 +625,10 @@ __DATA__
                     {
                       'unionMembers' => [
                         {
-                          'namedType' => {
-                            'name' => 'A'
-                          }
+                          'namedType' => 'A'
                         },
                         {
-                          'namedType' => {
-                            'name' => 'B'
-                          }
+                          'namedType' => 'B'
                         }
                       ]
                     }
@@ -740,9 +646,7 @@ __DATA__
               {
                 'typeDefinition' => {
                   'scalarTypeDefinition' => [
-                    {
-                      'name' => 'CustomScalar'
-                    }
+                    'CustomScalar'
                   ]
                 }
               }
@@ -757,9 +661,7 @@ __DATA__
               {
                 'typeDefinition' => {
                   'scalarTypeDefinition' => [
-                    {
-                      'name' => 'AnnotatedScalar'
-                    },
+                    'AnnotatedScalar',
                     {
                       'directives' => [
                         {
@@ -783,25 +685,19 @@ __DATA__
               {
                 'typeDefinition' => {
                   'enumTypeDefinition' => [
-                    {
-                      'name' => 'Site'
-                    },
+                    'Site',
                     [
                       {
                         'enumValueDefinition' => [
                           {
-                            'enumValue' => {
-                              'name' => 'DESKTOP'
-                            }
+                            'enumValue' => 'DESKTOP'
                           }
                         ]
                       },
                       {
                         'enumValueDefinition' => [
                           {
-                            'enumValue' => {
-                              'name' => 'MOBILE'
-                            }
+                            'enumValue' => 'MOBILE'
                           }
                         ]
                       }
@@ -820,9 +716,7 @@ __DATA__
               {
                 'typeDefinition' => {
                   'enumTypeDefinition' => [
-                    {
-                      'name' => 'AnnotatedEnum'
-                    },
+                    'AnnotatedEnum',
                     {
                       'directives' => [
                         {
@@ -836,9 +730,7 @@ __DATA__
                       {
                         'enumValueDefinition' => [
                           {
-                            'enumValue' => {
-                              'name' => 'ANNOTATED_VALUE'
-                            }
+                            'enumValue' => 'ANNOTATED_VALUE'
                           },
                           {
                             'directives' => [
@@ -854,9 +746,7 @@ __DATA__
                       {
                         'enumValueDefinition' => [
                           {
-                            'enumValue' => {
-                              'name' => 'OTHER_VALUE'
-                            }
+                            'enumValue' => 'OTHER_VALUE'
                           }
                         ]
                       }
@@ -875,18 +765,14 @@ __DATA__
               {
                 'typeDefinition' => {
                   'inputObjectTypeDefinition' => [
-                    {
-                      'name' => 'InputType'
-                    },
+                    'InputType',
                     [
                       {
                         'inputValueDefinition' => {
                           'name' => 'key',
                           'type' => [
                             {
-                              'namedType' => {
-                                'name' => 'String'
-                              }
+                              'namedType' => 'String'
                             }
                           ]
                         }
@@ -903,9 +789,7 @@ __DATA__
                           'name' => 'answer',
                           'type' => [
                             {
-                              'namedType' => {
-                                'name' => 'Int'
-                              }
+                              'namedType' => 'Int'
                             }
                           ]
                         }
@@ -925,9 +809,7 @@ __DATA__
               {
                 'typeDefinition' => {
                   'inputObjectTypeDefinition' => [
-                    {
-                      'name' => 'AnnotatedInput'
-                    },
+                    'AnnotatedInput',
                     {
                       'directives' => [
                         {
@@ -950,9 +832,7 @@ __DATA__
                           'name' => 'annotatedField',
                           'type' => [
                             {
-                              'namedType' => {
-                                'name' => 'Type'
-                              }
+                              'namedType' => 'Type'
                             }
                           ]
                         }
@@ -973,15 +853,11 @@ __DATA__
                 'typeExtensionDefinition' => [
                   {
                     'objectTypeDefinition' => [
-                      {
-                        'name' => 'Foo'
-                      },
+                      'Foo',
                       [
                         {
                           'fieldDefinition' => [
-                            {
-                              'name' => 'seven'
-                            },
+                            'seven',
                             {
                               'argumentsDefinition' => [
                                 [
@@ -994,9 +870,7 @@ __DATA__
                                             {
                                               'type' => [
                                                 {
-                                                  'namedType' => {
-                                                    'name' => 'String'
-                                                  }
+                                                  'namedType' => 'String'
                                                 }
                                               ]
                                             }
@@ -1011,9 +885,7 @@ __DATA__
                             {
                               'type' => [
                                 {
-                                  'namedType' => {
-                                    'name' => 'Type'
-                                  }
+                                  'namedType' => 'Type'
                                 }
                               ]
                             }
@@ -1036,9 +908,7 @@ __DATA__
                 'typeExtensionDefinition' => [
                   {
                     'objectTypeDefinition' => [
-                      {
-                        'name' => 'Foo'
-                      },
+                      'Foo',
                       {
                         'directives' => [
                           {
@@ -1064,9 +934,7 @@ __DATA__
               {
                 'typeDefinition' => {
                   'objectTypeDefinition' => [
-                    {
-                      'name' => 'NoFields'
-                    },
+                    'NoFields',
                     []
                   ]
                 }
@@ -1081,9 +949,7 @@ __DATA__
             'typeSystemDefinition' => [
               {
                 'directiveDefinition' => [
-                  {
-                    'name' => 'skip'
-                  },
+                  'skip',
                   {
                     'argumentsDefinition' => [
                       [
@@ -1092,9 +958,7 @@ __DATA__
                             'name' => 'if',
                             'type' => [
                               {
-                                'namedType' => {
-                                  'name' => 'Boolean'
-                                }
+                                'namedType' => 'Boolean'
                               }
                             ]
                           }
@@ -1121,9 +985,7 @@ __DATA__
             'typeSystemDefinition' => [
               {
                 'directiveDefinition' => [
-                  {
-                    'name' => 'include'
-                  },
+                  'include',
                   {
                     'argumentsDefinition' => [
                       [
@@ -1132,9 +994,7 @@ __DATA__
                             'name' => 'if',
                             'type' => [
                               {
-                                'namedType' => {
-                                  'name' => 'Boolean'
-                                }
+                                'namedType' => 'Boolean'
                               }
                             ]
                           }

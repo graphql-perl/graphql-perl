@@ -69,7 +69,7 @@ method got_arguments (Any $param = undef) {
   my %args;
   for my $arg (@$param) {
     ($arg) = values %$arg; # zap useless layer
-    my $name = shift(@$arg)->{name};
+    my $name = shift @$arg;
     my $value = shift(@$arg)->{value};
     my ($value_type) = keys %$value;
     $value = $value->{$value_type};
@@ -87,7 +87,7 @@ method got_objectValue (Any $param = undef) {
   my %obj_value;
   for my $arg (@$param) {
     ($arg) = values %$arg; # zap useless layer
-    my $name = shift(@$arg)->{name};
+    my $name = shift @$arg;
     my $value = shift(@$arg)->{value};
     my ($value_type) = keys %$value;
     $value = $value->{$value_type};
@@ -119,7 +119,6 @@ method got_directive (Any $param = undef) {
   return unless defined $param;
   my %value;
   my $arg = shift @$param;
-  ($arg) = values %$arg; # zap useless layer
   $value{name} = $arg;
   if ($arg = shift @$param) {
     %value = (%value, %$arg);
@@ -131,7 +130,6 @@ method got_inputValueDefinition (Any $param = undef) {
   return unless defined $param;
   my %value;
   my $arg = shift @$param;
-  ($arg) = values %$arg; # zap useless layer
   $value{name} = $arg;
   while ($arg = shift @$param) {
     %value = (%value, %$arg);
@@ -141,7 +139,12 @@ method got_inputValueDefinition (Any $param = undef) {
 
 method got_directiveLocations (Any $param = undef) {
   return unless defined $param;
-  return {$self->{parser}{rule} => [ map $_->{name}, @$param ]};
+  return {$self->{parser}{rule} => $param};
+}
+
+method got_name (Any $param = undef) {
+  return unless defined $param;
+  return $param;
 }
 
 1;
