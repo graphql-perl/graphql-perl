@@ -1104,15 +1104,9 @@ __DATA__
                   },
                   {
                     'directiveLocations' => [
-                      {
-                        'name' => 'FIELD'
-                      },
-                      {
-                        'name' => 'FRAGMENT_SPREAD'
-                      },
-                      {
-                        'name' => 'INLINE_FRAGMENT'
-                      }
+                      'FIELD',
+                      'FRAGMENT_SPREAD',
+                      'INLINE_FRAGMENT'
                     ]
                   }
                 ]
@@ -1150,15 +1144,9 @@ __DATA__
                   },
                   {
                     'directiveLocations' => [
-                      {
-                        'name' => 'FIELD'
-                      },
-                      {
-                        'name' => 'FRAGMENT_SPREAD'
-                      },
-                      {
-                        'name' => 'INLINE_FRAGMENT'
-                      }
+                      'FIELD',
+                      'FRAGMENT_SPREAD',
+                      'INLINE_FRAGMENT'
                     ]
                   }
                 ]

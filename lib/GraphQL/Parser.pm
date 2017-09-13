@@ -139,4 +139,9 @@ method got_inputValueDefinition (Any $param = undef) {
   return {$self->{parser}{rule} => \%value};
 }
 
+method got_directiveLocations (Any $param = undef) {
+  return unless defined $param;
+  return {$self->{parser}{rule} => [ map $_->{name}, @$param ]};
+}
+
 1;
