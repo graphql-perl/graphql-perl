@@ -264,42 +264,26 @@ __DATA__
             'typeSystemDefinition' => [
               {
                 'typeDefinition' => {
-                  'interfaceTypeDefinition' => [
-                    'Bar',
-                    [
-                      {
-                        'fieldDefinition' => [
-                          'one',
-                          {
-                            'type' => [
-                              'Type'
-                            ]
+                  'interfaceTypeDefinition' => {
+                    'fields' => {
+                      'four' => {
+                        'args' => {
+                          'argument' => {
+                            'defaultValue' => {
+                              'default_value' => 'string',
+                              'type' => 'string'
+                            },
+                            'type' => 'String'
                           }
-                        ]
+                        },
+                        'type' => 'String'
                       },
-                      {
-                        'fieldDefinition' => [
-                          'four',
-                          {
-                            'args' => {
-                              'argument' => {
-                                'defaultValue' => {
-                                  'default_value' => 'string',
-                                  'type' => 'string'
-                                },
-                                'type' => 'String'
-                              }
-                            }
-                          },
-                          {
-                            'type' => [
-                              'String'
-                            ]
-                          }
-                        ]
+                      'one' => {
+                        'type' => 'Type'
                       }
-                    ]
-                  ]
+                    },
+                    'name' => 'Bar'
+                  }
                 }
               }
             ]
@@ -312,53 +296,40 @@ __DATA__
             'typeSystemDefinition' => [
               {
                 'typeDefinition' => {
-                  'interfaceTypeDefinition' => [
-                    'AnnotatedInterface',
-                    {
-                      'directives' => [
-                        {
-                          'directive' => {
-                            'name' => 'onInterface'
-                          }
-                        }
-                      ]
-                    },
-                    [
+                  'interfaceTypeDefinition' => {
+                    'directives' => [
                       {
-                        'fieldDefinition' => [
-                          'annotatedField',
-                          {
-                            'args' => {
-                              'arg' => {
-                                'directives' => [
-                                  {
-                                    'directive' => {
-                                      'name' => 'onArg'
-                                    }
-                                  }
-                                ],
-                                'type' => 'Type'
-                              }
-                            }
-                          },
-                          {
-                            'type' => [
-                              'Type'
-                            ]
-                          },
-                          {
+                        'directive' => {
+                          'name' => 'onInterface'
+                        }
+                      }
+                    ],
+                    'fields' => {
+                      'annotatedField' => {
+                        'args' => {
+                          'arg' => {
                             'directives' => [
                               {
                                 'directive' => {
-                                  'name' => 'onField'
+                                  'name' => 'onArg'
                                 }
                               }
-                            ]
+                            ],
+                            'type' => 'Type'
                           }
-                        ]
+                        },
+                        'directives' => [
+                          {
+                            'directive' => {
+                              'name' => 'onField'
+                            }
+                          }
+                        ],
+                        'type' => 'Type'
                       }
-                    ]
-                  ]
+                    },
+                    'name' => 'AnnotatedInterface'
+                  }
                 }
               }
             ]
