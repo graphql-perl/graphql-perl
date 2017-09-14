@@ -171,9 +171,7 @@ method got_enumValueDefinition (Any $param = undef) {
 
 method got_defaultValue (Any $param = undef) {
   return unless defined $param;
-  ($param) = values %{$param->[0]}; # zap useless layers
-  my ($value_type) = keys %$param;
-  return {$self->{parser}{rule} => { type => $value_type, default_value => $param->{$value_type} }};
+  return { default_value => values %{$param->[0]} };
 }
 
 method got_implementsInterfaces (Any $param = undef) {
@@ -260,6 +258,16 @@ method got_unionTypeDefinition (Any $param = undef) {
   %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
   $def{types} = delete $def{unionMembers};
   return {$self->{parser}{rule} => \%def};
+}
+
+method got_boolean (Any $param = undef) {
+  return unless defined $param;
+  return {$self->{parser}{rule} => ($param eq 'true' ? 1 : '')};
+}
+
+method got_null (Any $param = undef) {
+  return unless defined $param;
+  return {$self->{parser}{rule} => undef};
 }
 
 1;

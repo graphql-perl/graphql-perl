@@ -159,9 +159,8 @@ __DATA__
                           'type' => 'Site'
                         },
                         {
-                          'defaultValue' => {
-                            'default_value' => 'MOBILE',
-                            'type' => 'enumValue'
+                          'default_value' => {
+                            'enumValue' => 'MOBILE'
                           }
                         }
                       ]
@@ -624,13 +623,13 @@ __DATA__
                         {
                           'arguments' => {
                             'falsey' => {
-                              'boolean' => 'false'
+                              'boolean' => ''
                             },
                             'nullish' => {
-                              'null' => 'null'
+                              'null' => undef
                             },
                             'truthy' => {
-                              'boolean' => 'true'
+                              'boolean' => 1
                             }
                           }
                         }

@@ -89,8 +89,8 @@ __DATA__
                       'five' => {
                         'args' => {
                           'argument' => {
-                            'defaultValue' => {
-                              'default_value' => [
+                            'default_value' => {
+                              'listValue_const' => [
                                 [
                                   {
                                     'value_const' => {
@@ -103,8 +103,7 @@ __DATA__
                                     }
                                   }
                                 ]
-                              ],
-                              'type' => 'listValue_const'
+                              ]
                             },
                             'type' => {
                               'listType' => [
@@ -120,9 +119,8 @@ __DATA__
                       'four' => {
                         'args' => {
                           'argument' => {
-                            'defaultValue' => {
-                              'default_value' => 'string',
-                              'type' => 'string'
+                            'default_value' => {
+                              'string' => 'string'
                             },
                             'type' => 'String'
                           }
@@ -135,9 +133,8 @@ __DATA__
                       'seven' => {
                         'args' => {
                           'argument' => {
-                            'defaultValue' => {
-                              'default_value' => 'null',
-                              'type' => 'null'
+                            'default_value' => {
+                              'null' => undef
                             },
                             'type' => 'Int'
                           }
@@ -147,8 +144,8 @@ __DATA__
                       'six' => {
                         'args' => {
                           'argument' => {
-                            'defaultValue' => {
-                              'default_value' => [
+                            'default_value' => {
+                              'objectValue_const' => [
                                 [
                                   {
                                     'objectField_const' => [
@@ -161,8 +158,7 @@ __DATA__
                                     ]
                                   }
                                 ]
-                              ],
-                              'type' => 'objectValue_const'
+                              ]
                             },
                             'type' => 'InputType'
                           }
@@ -227,9 +223,8 @@ __DATA__
                       'annotatedField' => {
                         'args' => {
                           'arg' => {
-                            'defaultValue' => {
-                              'default_value' => 'default',
-                              'type' => 'string'
+                            'default_value' => {
+                              'string' => 'default'
                             },
                             'directives' => [
                               {
@@ -270,9 +265,8 @@ __DATA__
                       'four' => {
                         'args' => {
                           'argument' => {
-                            'defaultValue' => {
-                              'default_value' => 'string',
-                              'type' => 'string'
+                            'default_value' => {
+                              'string' => 'string'
                             },
                             'type' => 'String'
                           }
@@ -482,9 +476,8 @@ __DATA__
                   'inputObjectTypeDefinition' => {
                     'fields' => {
                       'answer' => {
-                        'defaultValue' => {
-                          'default_value' => '42',
-                          'type' => 'int'
+                        'default_value' => {
+                          'int' => '42'
                         },
                         'type' => 'Int'
                       },
