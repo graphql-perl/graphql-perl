@@ -145,20 +145,11 @@ __DATA__
                         'args' => {
                           'argument' => {
                             'default_value' => {
-                              'objectValue_const' => [
-                                [
-                                  {
-                                    'objectField_const' => [
-                                      'key',
-                                      {
-                                        'value_const' => {
-                                          'string' => 'value'
-                                        }
-                                      }
-                                    ]
-                                  }
-                                ]
-                              ]
+                              'objectValue_const' => {
+                                'key' => {
+                                  'string' => 'value'
+                                }
+                              }
                             },
                             'type' => 'InputType'
                           }

@@ -93,6 +93,17 @@ method got_objectValue (Any $param = undef) {
   return {$self->{parser}{rule} => \%value};
 }
 
+method got_objectField_const (Any $param = undef) {
+  return unless defined $param;
+  my $name = shift @$param;
+  my $value = shift(@$param)->{value_const};
+  return {$name => $value};
+}
+
+method got_objectValue_const (Any $param = undef) {
+  unshift @_, $self; goto &got_objectValue;
+}
+
 method got_listValue (Any $param = undef) {
   return unless defined $param;
   $param = $param->[0]; # zap first useless layer
