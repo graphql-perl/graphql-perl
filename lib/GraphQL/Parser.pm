@@ -79,7 +79,7 @@ method got_arguments (Any $param = undef) {
 method got_objectField (Any $param = undef) {
   return unless defined $param;
   my $name = shift @$param;
-  my $value = shift(@$param)->{value};
+  my ($value) = values %{ shift @$param };
   return {$name => $value};
 }
 
@@ -94,10 +94,7 @@ method got_objectValue (Any $param = undef) {
 }
 
 method got_objectField_const (Any $param = undef) {
-  return unless defined $param;
-  my $name = shift @$param;
-  my $value = shift(@$param)->{value_const};
-  return {$name => $value};
+  unshift @_, $self; goto &got_objectField;
 }
 
 method got_objectValue_const (Any $param = undef) {
