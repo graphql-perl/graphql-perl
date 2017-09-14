@@ -588,8 +588,7 @@ __DATA__
                               'obj' => {
                                 'objectValue' => {
                                   'key' => {
-                                    'type' => 'string',
-                                    'value' => 'value'
+                                    'string' => 'value'
                                   }
                                 }
                               },

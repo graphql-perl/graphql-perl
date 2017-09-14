@@ -76,22 +76,21 @@ method got_arguments (Any $param = undef) {
   return {$self->{parser}{rule} => \%args};
 }
 
+method got_objectField (Any $param = undef) {
+  return unless defined $param;
+  my $name = shift @$param;
+  my $value = shift(@$param)->{value};
+  return {$name => $value};
+}
+
 method got_objectValue (Any $param = undef) {
   return unless defined $param;
   $param = $param->[0]; # zap first useless layer
-  my %obj_value;
-  for my $arg (@$param) {
-    ($arg) = values %$arg; # zap useless layer
-    my $name = shift @$arg;
-    my $value = shift(@$arg)->{value};
-    my ($value_type) = keys %$value;
-    $value = $value->{$value_type};
-    $obj_value{$name} = {
-      type => $value_type,
-      value => $value,
-    };
+  my %value;
+  while (my $arg = shift @$param) {
+    %value = (%value, %$arg);
   }
-  return {$self->{parser}{rule} => \%obj_value};
+  return {$self->{parser}{rule} => \%value};
 }
 
 method got_listValue (Any $param = undef) {
