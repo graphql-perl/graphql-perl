@@ -107,6 +107,10 @@ method got_listValue (Any $param = undef) {
   return {$self->{parser}{rule} => [ map values %$_, @$param ]};
 }
 
+method got_listValue_const (Any $param = undef) {
+  unshift @_, $self; goto &got_listValue;
+}
+
 method got_directive (Any $param = undef) {
   return unless defined $param;
   my %value;

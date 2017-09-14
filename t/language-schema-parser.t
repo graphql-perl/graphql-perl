@@ -91,18 +91,12 @@ __DATA__
                           'argument' => {
                             'default_value' => {
                               'listValue_const' => [
-                                [
-                                  {
-                                    'value_const' => {
-                                      'string' => 'string'
-                                    }
-                                  },
-                                  {
-                                    'value_const' => {
-                                      'string' => 'string'
-                                    }
-                                  }
-                                ]
+                                {
+                                  'string' => 'string'
+                                },
+                                {
+                                  'string' => 'string'
+                                }
                               ]
                             },
                             'type' => {
