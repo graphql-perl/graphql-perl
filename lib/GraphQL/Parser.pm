@@ -216,4 +216,19 @@ method got_objectTypeDefinition (Any $param = undef) {
   return {$self->{parser}{rule} => \%def};
 }
 
+method got_inputObjectTypeDefinition (Any $param = undef) {
+  return unless defined $param;
+  my %def;
+  $def{name} = shift @$param;
+  %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
+  my %fields;
+  map {
+    my $name = delete $_->{name};
+    $_->{type} = $_->{type}->[0];
+    $fields{$name} = $_;
+  } map $_->{inputValueDefinition}, @{shift @$param};
+  $def{fields} = \%fields;
+  return {$self->{parser}{rule} => \%def};
+}
+
 1;

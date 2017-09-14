@@ -538,31 +538,21 @@ __DATA__
             'typeSystemDefinition' => [
               {
                 'typeDefinition' => {
-                  'inputObjectTypeDefinition' => [
-                    'InputType',
-                    [
-                      {
-                        'inputValueDefinition' => {
-                          'name' => 'key',
-                          'type' => [
-                            'String'
-                          ]
-                        }
+                  'inputObjectTypeDefinition' => {
+                    'fields' => {
+                      'answer' => {
+                        'defaultValue' => {
+                          'default_value' => '42',
+                          'type' => 'int'
+                        },
+                        'type' => 'Int'
                       },
-                      {
-                        'inputValueDefinition' => {
-                          'defaultValue' => {
-                            'default_value' => '42',
-                            'type' => 'int'
-                          },
-                          'name' => 'answer',
-                          'type' => [
-                            'Int'
-                          ]
-                        }
+                      'key' => {
+                        'type' => 'String'
                       }
-                    ]
-                  ]
+                    },
+                    'name' => 'InputType'
+                  }
                 }
               }
             ]
@@ -575,35 +565,28 @@ __DATA__
             'typeSystemDefinition' => [
               {
                 'typeDefinition' => {
-                  'inputObjectTypeDefinition' => [
-                    'AnnotatedInput',
-                    {
-                      'directives' => [
-                        {
-                          'directive' => {
-                            'name' => 'onInputObjectType'
-                          }
-                        }
-                      ]
-                    },
-                    [
+                  'inputObjectTypeDefinition' => {
+                    'directives' => [
                       {
-                        'inputValueDefinition' => {
-                          'directives' => [
-                            {
-                              'directive' => {
-                                'name' => 'onField'
-                              }
-                            }
-                          ],
-                          'name' => 'annotatedField',
-                          'type' => [
-                            'Type'
-                          ]
+                        'directive' => {
+                          'name' => 'onInputObjectType'
                         }
                       }
-                    ]
-                  ]
+                    ],
+                    'fields' => {
+                      'annotatedField' => {
+                        'directives' => [
+                          {
+                            'directive' => {
+                              'name' => 'onField'
+                            }
+                          }
+                        ],
+                        'type' => 'Type'
+                      }
+                    },
+                    'name' => 'AnnotatedInput'
+                  }
                 }
               }
             ]
