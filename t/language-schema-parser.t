@@ -342,16 +342,14 @@ __DATA__
             'typeSystemDefinition' => [
               {
                 'typeDefinition' => {
-                  'unionTypeDefinition' => [
-                    'Feed',
-                    {
-                      'unionMembers' => [
-                        'Story',
-                        'Article',
-                        'Advert'
-                      ]
-                    }
-                  ]
+                  'unionTypeDefinition' => {
+                    'name' => 'Feed',
+                    'types' => [
+                      'Story',
+                      'Article',
+                      'Advert'
+                    ]
+                  }
                 }
               }
             ]
@@ -364,24 +362,20 @@ __DATA__
             'typeSystemDefinition' => [
               {
                 'typeDefinition' => {
-                  'unionTypeDefinition' => [
-                    'AnnotatedUnion',
-                    {
-                      'directives' => [
-                        {
-                          'directive' => {
-                            'name' => 'onUnion'
-                          }
+                  'unionTypeDefinition' => {
+                    'directives' => [
+                      {
+                        'directive' => {
+                          'name' => 'onUnion'
                         }
-                      ]
-                    },
-                    {
-                      'unionMembers' => [
-                        'A',
-                        'B'
-                      ]
-                    }
-                  ]
+                      }
+                    ],
+                    'name' => 'AnnotatedUnion',
+                    'types' => [
+                      'A',
+                      'B'
+                    ]
+                  }
                 }
               }
             ]

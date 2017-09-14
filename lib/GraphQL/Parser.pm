@@ -262,4 +262,13 @@ method got_interfaceTypeDefinition (Any $param = undef) {
   return {$self->{parser}{rule} => \%def};
 }
 
+method got_unionTypeDefinition (Any $param = undef) {
+  return unless defined $param;
+  my %def;
+  $def{name} = shift @$param;
+  %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
+  $def{types} = delete $def{unionMembers};
+  return {$self->{parser}{rule} => \%def};
+}
+
 1;
