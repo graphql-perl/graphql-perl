@@ -199,4 +199,21 @@ method got_argumentsDefinition (Any $param = undef) {
   return { args => \%args };
 }
 
+method got_objectTypeDefinition (Any $param = undef) {
+  return unless defined $param;
+  my %def;
+  $def{name} = shift @$param;
+  %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
+  my %fields;
+  map {
+    my $name = shift @$_;
+    my %field_def;
+    %field_def = (%field_def, %{shift @$_}) while @$_;
+    $field_def{type} = $field_def{type}->[0];
+    $fields{$name} = \%field_def;
+  } map $_->{fieldDefinition}, @{shift @$param};
+  $def{fields} = \%fields;
+  return {$self->{parser}{rule} => \%def};
+}
+
 1;

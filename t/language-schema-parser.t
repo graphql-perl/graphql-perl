@@ -84,181 +84,118 @@ __DATA__
             'typeSystemDefinition' => [
               {
                 'typeDefinition' => {
-                  'objectTypeDefinition' => [
-                    'Foo',
-                    {
-                      'interfaces' => [
-                        'Bar'
-                      ]
-                    },
-                    [
-                      {
-                        'fieldDefinition' => [
-                          'one',
-                          {
-                            'type' => [
-                              'Type'
-                            ]
-                          }
-                        ]
-                      },
-                      {
-                        'fieldDefinition' => [
-                          'two',
-                          {
-                            'args' => {
-                              'argument' => {
-                                'type' => 'InputType'
-                              }
-                            }
-                          },
-                          {
-                            'type' => [
-                              'Type'
-                            ]
-                          }
-                        ]
-                      },
-                      {
-                        'fieldDefinition' => [
-                          'three',
-                          {
-                            'args' => {
-                              'argument' => {
-                                'type' => 'InputType'
-                              },
-                              'other' => {
-                                'type' => 'String'
-                              }
-                            }
-                          },
-                          {
-                            'type' => [
-                              'Int'
-                            ]
-                          }
-                        ]
-                      },
-                      {
-                        'fieldDefinition' => [
-                          'four',
-                          {
-                            'args' => {
-                              'argument' => {
-                                'defaultValue' => {
-                                  'default_value' => 'string',
-                                  'type' => 'string'
-                                },
-                                'type' => 'String'
-                              }
-                            }
-                          },
-                          {
-                            'type' => [
-                              'String'
-                            ]
-                          }
-                        ]
-                      },
-                      {
-                        'fieldDefinition' => [
-                          'five',
-                          {
-                            'args' => {
-                              'argument' => {
-                                'defaultValue' => {
-                                  'default_value' => [
-                                    [
-                                      {
-                                        'value_const' => {
-                                          'string' => 'string'
-                                        }
-                                      },
-                                      {
-                                        'value_const' => {
-                                          'string' => 'string'
-                                        }
-                                      }
-                                    ]
-                                  ],
-                                  'type' => 'listValue_const'
-                                },
-                                'type' => {
-                                  'listType' => [
-                                    {
-                                      'type' => [
-                                        'String'
-                                      ]
+                  'objectTypeDefinition' => {
+                    'fields' => {
+                      'five' => {
+                        'args' => {
+                          'argument' => {
+                            'defaultValue' => {
+                              'default_value' => [
+                                [
+                                  {
+                                    'value_const' => {
+                                      'string' => 'string'
                                     }
+                                  },
+                                  {
+                                    'value_const' => {
+                                      'string' => 'string'
+                                    }
+                                  }
+                                ]
+                              ],
+                              'type' => 'listValue_const'
+                            },
+                            'type' => {
+                              'listType' => [
+                                {
+                                  'type' => [
+                                    'String'
                                   ]
                                 }
-                              }
+                              ]
                             }
-                          },
-                          {
-                            'type' => [
-                              'String'
-                            ]
                           }
-                        ]
+                        },
+                        'type' => 'String'
                       },
-                      {
-                        'fieldDefinition' => [
-                          'six',
-                          {
-                            'args' => {
-                              'argument' => {
-                                'defaultValue' => {
-                                  'default_value' => [
-                                    [
+                      'four' => {
+                        'args' => {
+                          'argument' => {
+                            'defaultValue' => {
+                              'default_value' => 'string',
+                              'type' => 'string'
+                            },
+                            'type' => 'String'
+                          }
+                        },
+                        'type' => 'String'
+                      },
+                      'one' => {
+                        'type' => 'Type'
+                      },
+                      'seven' => {
+                        'args' => {
+                          'argument' => {
+                            'defaultValue' => {
+                              'default_value' => 'null',
+                              'type' => 'null'
+                            },
+                            'type' => 'Int'
+                          }
+                        },
+                        'type' => 'Type'
+                      },
+                      'six' => {
+                        'args' => {
+                          'argument' => {
+                            'defaultValue' => {
+                              'default_value' => [
+                                [
+                                  {
+                                    'objectField_const' => [
+                                      'key',
                                       {
-                                        'objectField_const' => [
-                                          'key',
-                                          {
-                                            'value_const' => {
-                                              'string' => 'value'
-                                            }
-                                          }
-                                        ]
+                                        'value_const' => {
+                                          'string' => 'value'
+                                        }
                                       }
                                     ]
-                                  ],
-                                  'type' => 'objectValue_const'
-                                },
-                                'type' => 'InputType'
-                              }
-                            }
-                          },
-                          {
-                            'type' => [
-                              'Type'
-                            ]
+                                  }
+                                ]
+                              ],
+                              'type' => 'objectValue_const'
+                            },
+                            'type' => 'InputType'
                           }
-                        ]
+                        },
+                        'type' => 'Type'
                       },
-                      {
-                        'fieldDefinition' => [
-                          'seven',
-                          {
-                            'args' => {
-                              'argument' => {
-                                'defaultValue' => {
-                                  'default_value' => 'null',
-                                  'type' => 'null'
-                                },
-                                'type' => 'Int'
-                              }
-                            }
+                      'three' => {
+                        'args' => {
+                          'argument' => {
+                            'type' => 'InputType'
                           },
-                          {
-                            'type' => [
-                              'Type'
-                            ]
+                          'other' => {
+                            'type' => 'String'
                           }
-                        ]
+                        },
+                        'type' => 'Int'
+                      },
+                      'two' => {
+                        'args' => {
+                          'argument' => {
+                            'type' => 'InputType'
+                          }
+                        },
+                        'type' => 'Type'
                       }
-                    ]
-                  ]
+                    },
+                    'interfaces' => [
+                      'Bar'
+                    ],
+                    'name' => 'Foo'
+                  }
                 }
               }
             ]
@@ -271,63 +208,50 @@ __DATA__
             'typeSystemDefinition' => [
               {
                 'typeDefinition' => {
-                  'objectTypeDefinition' => [
-                    'AnnotatedObject',
-                    {
-                      'directives' => [
-                        {
-                          'directive' => {
-                            'arguments' => {
-                              'arg' => {
-                                'type' => 'string',
-                                'value' => 'value'
-                              }
-                            },
-                            'name' => 'onObject'
-                          }
-                        }
-                      ]
-                    },
-                    [
+                  'objectTypeDefinition' => {
+                    'directives' => [
                       {
-                        'fieldDefinition' => [
-                          'annotatedField',
-                          {
-                            'args' => {
-                              'arg' => {
-                                'defaultValue' => {
-                                  'default_value' => 'default',
-                                  'type' => 'string'
-                                },
-                                'directives' => [
-                                  {
-                                    'directive' => {
-                                      'name' => 'onArg'
-                                    }
-                                  }
-                                ],
-                                'type' => 'Type'
-                              }
+                        'directive' => {
+                          'arguments' => {
+                            'arg' => {
+                              'type' => 'string',
+                              'value' => 'value'
                             }
                           },
-                          {
-                            'type' => [
-                              'Type'
-                            ]
-                          },
-                          {
+                          'name' => 'onObject'
+                        }
+                      }
+                    ],
+                    'fields' => {
+                      'annotatedField' => {
+                        'args' => {
+                          'arg' => {
+                            'defaultValue' => {
+                              'default_value' => 'default',
+                              'type' => 'string'
+                            },
                             'directives' => [
                               {
                                 'directive' => {
-                                  'name' => 'onField'
+                                  'name' => 'onArg'
                                 }
                               }
-                            ]
+                            ],
+                            'type' => 'Type'
                           }
-                        ]
+                        },
+                        'directives' => [
+                          {
+                            'directive' => {
+                              'name' => 'onField'
+                            }
+                          }
+                        ],
+                        'type' => 'Type'
                       }
-                    ]
-                  ]
+                    },
+                    'name' => 'AnnotatedObject'
+                  }
                 }
               }
             ]
@@ -693,36 +617,27 @@ __DATA__
               {
                 'typeExtensionDefinition' => [
                   {
-                    'objectTypeDefinition' => [
-                      'Foo',
-                      [
-                        {
-                          'fieldDefinition' => [
-                            'seven',
-                            {
-                              'args' => {
-                                'argument' => {
-                                  'type' => {
-                                    'listType' => [
-                                      {
-                                        'type' => [
-                                          'String'
-                                        ]
-                                      }
+                    'objectTypeDefinition' => {
+                      'fields' => {
+                        'seven' => {
+                          'args' => {
+                            'argument' => {
+                              'type' => {
+                                'listType' => [
+                                  {
+                                    'type' => [
+                                      'String'
                                     ]
                                   }
-                                }
+                                ]
                               }
-                            },
-                            {
-                              'type' => [
-                                'Type'
-                              ]
                             }
-                          ]
+                          },
+                          'type' => 'Type'
                         }
-                      ]
-                    ]
+                      },
+                      'name' => 'Foo'
+                    }
                   }
                 ]
               }
@@ -737,19 +652,17 @@ __DATA__
               {
                 'typeExtensionDefinition' => [
                   {
-                    'objectTypeDefinition' => [
-                      'Foo',
-                      {
-                        'directives' => [
-                          {
-                            'directive' => {
-                              'name' => 'onType'
-                            }
+                    'objectTypeDefinition' => {
+                      'directives' => [
+                        {
+                          'directive' => {
+                            'name' => 'onType'
                           }
-                        ]
-                      },
-                      []
-                    ]
+                        }
+                      ],
+                      'fields' => {},
+                      'name' => 'Foo'
+                    }
                   }
                 ]
               }
@@ -763,10 +676,10 @@ __DATA__
             'typeSystemDefinition' => [
               {
                 'typeDefinition' => {
-                  'objectTypeDefinition' => [
-                    'NoFields',
-                    []
-                  ]
+                  'objectTypeDefinition' => {
+                    'fields' => {},
+                    'name' => 'NoFields'
+                  }
                 }
               }
             ]
