@@ -187,4 +187,16 @@ method got_implementsInterfaces (Any $param = undef) {
   return { interfaces => $param };
 }
 
+method got_argumentsDefinition (Any $param = undef) {
+  return unless defined $param;
+  $param = $param->[0]; # zap first useless layer
+  my %args;
+  map {
+    my $name = delete $_->{name};
+    my $type = delete($_->{type})->[0];
+    $args{$name} = { type => $type, %$_ };
+  } map $_->{inputValueDefinition}, @$param;
+  return { args => \%args };
+}
+
 1;

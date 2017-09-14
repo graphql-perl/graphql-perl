@@ -106,18 +106,11 @@ __DATA__
                         'fieldDefinition' => [
                           'two',
                           {
-                            'argumentsDefinition' => [
-                              [
-                                {
-                                  'inputValueDefinition' => {
-                                    'name' => 'argument',
-                                    'type' => [
-                                      'InputType'
-                                    ]
-                                  }
-                                }
-                              ]
-                            ]
+                            'args' => {
+                              'argument' => {
+                                'type' => 'InputType'
+                              }
+                            }
                           },
                           {
                             'type' => [
@@ -130,26 +123,14 @@ __DATA__
                         'fieldDefinition' => [
                           'three',
                           {
-                            'argumentsDefinition' => [
-                              [
-                                {
-                                  'inputValueDefinition' => {
-                                    'name' => 'argument',
-                                    'type' => [
-                                      'InputType'
-                                    ]
-                                  }
-                                },
-                                {
-                                  'inputValueDefinition' => {
-                                    'name' => 'other',
-                                    'type' => [
-                                      'String'
-                                    ]
-                                  }
-                                }
-                              ]
-                            ]
+                            'args' => {
+                              'argument' => {
+                                'type' => 'InputType'
+                              },
+                              'other' => {
+                                'type' => 'String'
+                              }
+                            }
                           },
                           {
                             'type' => [
@@ -162,22 +143,15 @@ __DATA__
                         'fieldDefinition' => [
                           'four',
                           {
-                            'argumentsDefinition' => [
-                              [
-                                {
-                                  'inputValueDefinition' => {
-                                    'defaultValue' => {
-                                      'default_value' => 'string',
-                                      'type' => 'string'
-                                    },
-                                    'name' => 'argument',
-                                    'type' => [
-                                      'String'
-                                    ]
-                                  }
-                                }
-                              ]
-                            ]
+                            'args' => {
+                              'argument' => {
+                                'defaultValue' => {
+                                  'default_value' => 'string',
+                                  'type' => 'string'
+                                },
+                                'type' => 'String'
+                              }
+                            }
                           },
                           {
                             'type' => [
@@ -190,43 +164,36 @@ __DATA__
                         'fieldDefinition' => [
                           'five',
                           {
-                            'argumentsDefinition' => [
-                              [
-                                {
-                                  'inputValueDefinition' => {
-                                    'defaultValue' => {
-                                      'default_value' => [
-                                        [
-                                          {
-                                            'value_const' => {
-                                              'string' => 'string'
-                                            }
-                                          },
-                                          {
-                                            'value_const' => {
-                                              'string' => 'string'
-                                            }
-                                          }
-                                        ]
-                                      ],
-                                      'type' => 'listValue_const'
-                                    },
-                                    'name' => 'argument',
-                                    'type' => [
+                            'args' => {
+                              'argument' => {
+                                'defaultValue' => {
+                                  'default_value' => [
+                                    [
                                       {
-                                        'listType' => [
-                                          {
-                                            'type' => [
-                                              'String'
-                                            ]
-                                          }
-                                        ]
+                                        'value_const' => {
+                                          'string' => 'string'
+                                        }
+                                      },
+                                      {
+                                        'value_const' => {
+                                          'string' => 'string'
+                                        }
                                       }
                                     ]
-                                  }
+                                  ],
+                                  'type' => 'listValue_const'
+                                },
+                                'type' => {
+                                  'listType' => [
+                                    {
+                                      'type' => [
+                                        'String'
+                                      ]
+                                    }
+                                  ]
                                 }
-                              ]
-                            ]
+                              }
+                            }
                           },
                           {
                             'type' => [
@@ -239,35 +206,28 @@ __DATA__
                         'fieldDefinition' => [
                           'six',
                           {
-                            'argumentsDefinition' => [
-                              [
-                                {
-                                  'inputValueDefinition' => {
-                                    'defaultValue' => {
-                                      'default_value' => [
-                                        [
+                            'args' => {
+                              'argument' => {
+                                'defaultValue' => {
+                                  'default_value' => [
+                                    [
+                                      {
+                                        'objectField_const' => [
+                                          'key',
                                           {
-                                            'objectField_const' => [
-                                              'key',
-                                              {
-                                                'value_const' => {
-                                                  'string' => 'value'
-                                                }
-                                              }
-                                            ]
+                                            'value_const' => {
+                                              'string' => 'value'
+                                            }
                                           }
                                         ]
-                                      ],
-                                      'type' => 'objectValue_const'
-                                    },
-                                    'name' => 'argument',
-                                    'type' => [
-                                      'InputType'
+                                      }
                                     ]
-                                  }
-                                }
-                              ]
-                            ]
+                                  ],
+                                  'type' => 'objectValue_const'
+                                },
+                                'type' => 'InputType'
+                              }
+                            }
                           },
                           {
                             'type' => [
@@ -280,22 +240,15 @@ __DATA__
                         'fieldDefinition' => [
                           'seven',
                           {
-                            'argumentsDefinition' => [
-                              [
-                                {
-                                  'inputValueDefinition' => {
-                                    'defaultValue' => {
-                                      'default_value' => 'null',
-                                      'type' => 'null'
-                                    },
-                                    'name' => 'argument',
-                                    'type' => [
-                                      'Int'
-                                    ]
-                                  }
-                                }
-                              ]
-                            ]
+                            'args' => {
+                              'argument' => {
+                                'defaultValue' => {
+                                  'default_value' => 'null',
+                                  'type' => 'null'
+                                },
+                                'type' => 'Int'
+                              }
+                            }
                           },
                           {
                             'type' => [
@@ -340,29 +293,22 @@ __DATA__
                         'fieldDefinition' => [
                           'annotatedField',
                           {
-                            'argumentsDefinition' => [
-                              [
-                                {
-                                  'inputValueDefinition' => {
-                                    'defaultValue' => {
-                                      'default_value' => 'default',
-                                      'type' => 'string'
-                                    },
-                                    'directives' => [
-                                      {
-                                        'directive' => {
-                                          'name' => 'onArg'
-                                        }
-                                      }
-                                    ],
-                                    'name' => 'arg',
-                                    'type' => [
-                                      'Type'
-                                    ]
+                            'args' => {
+                              'arg' => {
+                                'defaultValue' => {
+                                  'default_value' => 'default',
+                                  'type' => 'string'
+                                },
+                                'directives' => [
+                                  {
+                                    'directive' => {
+                                      'name' => 'onArg'
+                                    }
                                   }
-                                }
-                              ]
-                            ]
+                                ],
+                                'type' => 'Type'
+                              }
+                            }
                           },
                           {
                             'type' => [
@@ -411,22 +357,15 @@ __DATA__
                         'fieldDefinition' => [
                           'four',
                           {
-                            'argumentsDefinition' => [
-                              [
-                                {
-                                  'inputValueDefinition' => {
-                                    'defaultValue' => {
-                                      'default_value' => 'string',
-                                      'type' => 'string'
-                                    },
-                                    'name' => 'argument',
-                                    'type' => [
-                                      'String'
-                                    ]
-                                  }
-                                }
-                              ]
-                            ]
+                            'args' => {
+                              'argument' => {
+                                'defaultValue' => {
+                                  'default_value' => 'string',
+                                  'type' => 'string'
+                                },
+                                'type' => 'String'
+                              }
+                            }
                           },
                           {
                             'type' => [
@@ -465,25 +404,18 @@ __DATA__
                         'fieldDefinition' => [
                           'annotatedField',
                           {
-                            'argumentsDefinition' => [
-                              [
-                                {
-                                  'inputValueDefinition' => {
-                                    'directives' => [
-                                      {
-                                        'directive' => {
-                                          'name' => 'onArg'
-                                        }
-                                      }
-                                    ],
-                                    'name' => 'arg',
-                                    'type' => [
-                                      'Type'
-                                    ]
+                            'args' => {
+                              'arg' => {
+                                'directives' => [
+                                  {
+                                    'directive' => {
+                                      'name' => 'onArg'
+                                    }
                                   }
-                                }
-                              ]
-                            ]
+                                ],
+                                'type' => 'Type'
+                              }
+                            }
                           },
                           {
                             'type' => [
@@ -768,26 +700,19 @@ __DATA__
                           'fieldDefinition' => [
                             'seven',
                             {
-                              'argumentsDefinition' => [
-                                [
-                                  {
-                                    'inputValueDefinition' => {
-                                      'name' => 'argument',
-                                      'type' => [
-                                        {
-                                          'listType' => [
-                                            {
-                                              'type' => [
-                                                'String'
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
+                              'args' => {
+                                'argument' => {
+                                  'type' => {
+                                    'listType' => [
+                                      {
+                                        'type' => [
+                                          'String'
+                                        ]
+                                      }
+                                    ]
                                   }
-                                ]
-                              ]
+                                }
+                              }
                             },
                             {
                               'type' => [
@@ -856,18 +781,11 @@ __DATA__
                 'directiveDefinition' => [
                   'skip',
                   {
-                    'argumentsDefinition' => [
-                      [
-                        {
-                          'inputValueDefinition' => {
-                            'name' => 'if',
-                            'type' => [
-                              'Boolean'
-                            ]
-                          }
-                        }
-                      ]
-                    ]
+                    'args' => {
+                      'if' => {
+                        'type' => 'Boolean'
+                      }
+                    }
                   },
                   {
                     'directiveLocations' => [
@@ -890,18 +808,11 @@ __DATA__
                 'directiveDefinition' => [
                   'include',
                   {
-                    'argumentsDefinition' => [
-                      [
-                        {
-                          'inputValueDefinition' => {
-                            'name' => 'if',
-                            'type' => [
-                              'Boolean'
-                            ]
-                          }
-                        }
-                      ]
-                    ]
+                    'args' => {
+                      'if' => {
+                        'type' => 'Boolean'
+                      }
+                    }
                   },
                   {
                     'directiveLocations' => [
