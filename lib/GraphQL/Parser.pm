@@ -193,8 +193,7 @@ method got_argumentsDefinition (Any $param = undef) {
   my %args;
   map {
     my $name = delete $_->{name};
-    my $type = delete($_->{type})->[0];
-    $args{$name} = { type => $type, %$_ };
+    $args{$name} = $_;
   } map $_->{inputValueDefinition}, @$param;
   return { args => \%args };
 }
@@ -209,7 +208,6 @@ method got_objectTypeDefinition (Any $param = undef) {
     my $name = shift @$_;
     my %field_def;
     %field_def = (%field_def, %{shift @$_}) while @$_;
-    $field_def{type} = $field_def{type}->[0];
     $fields{$name} = \%field_def;
   } map $_->{fieldDefinition}, @{shift @$param};
   $def{fields} = \%fields;
@@ -224,7 +222,6 @@ method got_inputObjectTypeDefinition (Any $param = undef) {
   my %fields;
   map {
     my $name = delete $_->{name};
-    $_->{type} = $_->{type}->[0];
     $fields{$name} = $_;
   } map $_->{inputValueDefinition}, @{shift @$param};
   $def{fields} = \%fields;
@@ -255,7 +252,6 @@ method got_interfaceTypeDefinition (Any $param = undef) {
     my $name = shift @$_;
     my %field_def;
     %field_def = (%field_def, %{shift @$_}) while @$_;
-    $field_def{type} = $field_def{type}->[0];
     $fields{$name} = \%field_def;
   } map $_->{fieldDefinition}, @{shift @$param};
   $def{fields} = \%fields;

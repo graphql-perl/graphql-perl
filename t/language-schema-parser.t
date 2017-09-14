@@ -109,9 +109,7 @@ __DATA__
                             'type' => {
                               'listType' => [
                                 {
-                                  'type' => [
-                                    'String'
-                                  ]
+                                  'type' => 'String'
                                 }
                               ]
                             }
@@ -185,7 +183,11 @@ __DATA__
                       'two' => {
                         'args' => {
                           'argument' => {
-                            'type' => 'InputType'
+                            'type' => {
+                              'nonNullType' => [
+                                'InputType'
+                              ]
+                            }
                           }
                         },
                         'type' => 'Type'
@@ -488,7 +490,11 @@ __DATA__
                         'type' => 'Int'
                       },
                       'key' => {
-                        'type' => 'String'
+                        'type' => {
+                          'nonNullType' => [
+                            'String'
+                          ]
+                        }
                       }
                     },
                     'name' => 'InputType'
@@ -548,9 +554,7 @@ __DATA__
                               'type' => {
                                 'listType' => [
                                   {
-                                    'type' => [
-                                      'String'
-                                    ]
+                                    'type' => 'String'
                                   }
                                 ]
                               }
@@ -619,7 +623,11 @@ __DATA__
                   {
                     'args' => {
                       'if' => {
-                        'type' => 'Boolean'
+                        'type' => {
+                          'nonNullType' => [
+                            'Boolean'
+                          ]
+                        }
                       }
                     }
                   },
@@ -646,7 +654,11 @@ __DATA__
                   {
                     'args' => {
                       'if' => {
-                        'type' => 'Boolean'
+                        'type' => {
+                          'nonNullType' => [
+                            'Boolean'
+                          ]
+                        }
                       }
                     }
                   },

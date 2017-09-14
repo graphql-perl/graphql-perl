@@ -38,8 +38,6 @@ fragmentName: ('on' `Unexpected Name "on"` | name)
 
 typeCondition: 'on' /-/ namedType
 
-# HERE
-
 value: variable | float | int | string | boolean | null | enumValue | listValue | objectValue
 
 value_const: float | int | string | boolean | null | enumValue | listValue_const | objectValue_const
@@ -70,13 +68,13 @@ variable: /- DOLLAR/ name
 
 defaultValue: /- EQUAL -/ value_const
 
-type: namedType nonNullType? | listType nonNullType?
+type: nonNullType | namedType | listType
 
 namedType: name
 
 listType: LSQUARE type RSQUARE
 
-nonNullType: BANG
+nonNullType: namedType /-/ BANG | listType /-/ BANG
 
 directives: directive+
 

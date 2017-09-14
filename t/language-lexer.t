@@ -144,9 +144,7 @@ __DATA__
                           ]
                         },
                         {
-                          'type' => [
-                            'ComplexType'
-                          ]
+                          'type' => 'ComplexType'
                         }
                       ]
                     },
@@ -158,9 +156,7 @@ __DATA__
                           ]
                         },
                         {
-                          'type' => [
-                            'Site'
-                          ]
+                          'type' => 'Site'
                         },
                         {
                           'defaultValue' => {
@@ -478,9 +474,7 @@ __DATA__
                           ]
                         },
                         {
-                          'type' => [
-                            'StoryLikeSubscribeInput'
-                          ]
+                          'type' => 'StoryLikeSubscribeInput'
                         }
                       ]
                     }

@@ -685,7 +685,34 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
       '.ref' => 'name'
     },
     'nonNullType' => {
-      '.ref' => 'BANG'
+      '.any' => [
+        {
+          '.all' => [
+            {
+              '.ref' => 'namedType'
+            },
+            {
+              '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+            },
+            {
+              '.ref' => 'BANG'
+            }
+          ]
+        },
+        {
+          '.all' => [
+            {
+              '.ref' => 'listType'
+            },
+            {
+              '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+            },
+            {
+              '.ref' => 'BANG'
+            }
+          ]
+        }
+      ]
     },
     'null' => {
       '.rgx' => qr/\G(null)/
@@ -998,26 +1025,13 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.60)
     'type' => {
       '.any' => [
         {
-          '.all' => [
-            {
-              '.ref' => 'namedType'
-            },
-            {
-              '+max' => 1,
-              '.ref' => 'nonNullType'
-            }
-          ]
+          '.ref' => 'nonNullType'
         },
         {
-          '.all' => [
-            {
-              '.ref' => 'listType'
-            },
-            {
-              '+max' => 1,
-              '.ref' => 'nonNullType'
-            }
-          ]
+          '.ref' => 'namedType'
+        },
+        {
+          '.ref' => 'listType'
         }
       ]
     },
