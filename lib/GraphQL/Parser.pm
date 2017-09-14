@@ -181,4 +181,10 @@ method got_defaultValue (Any $param = undef) {
   return {$self->{parser}{rule} => { type => $value_type, default_value => $param->{$value_type} }};
 }
 
+method got_implementsInterfaces (Any $param = undef) {
+  return unless defined $param;
+  $param = $param->[0]; # zap first useless layer
+  return { interfaces => $param };
+}
+
 1;

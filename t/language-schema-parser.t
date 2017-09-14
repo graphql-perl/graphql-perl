@@ -87,10 +87,8 @@ __DATA__
                   'objectTypeDefinition' => [
                     'Foo',
                     {
-                      'implementsInterfaces' => [
-                        [
-                          'Bar'
-                        ]
+                      'interfaces' => [
+                        'Bar'
                       ]
                     },
                     [
