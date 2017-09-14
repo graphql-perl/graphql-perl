@@ -60,9 +60,7 @@ __DATA__
                         {
                           'operationType' => 'query'
                         },
-                        {
-                          'namedType' => 'QueryType'
-                        }
+                        'QueryType'
                       ]
                     },
                     {
@@ -70,9 +68,7 @@ __DATA__
                         {
                           'operationType' => 'mutation'
                         },
-                        {
-                          'namedType' => 'MutationType'
-                        }
+                        'MutationType'
                       ]
                     }
                   ]
@@ -93,9 +89,7 @@ __DATA__
                     {
                       'implementsInterfaces' => [
                         [
-                          {
-                            'namedType' => 'Bar'
-                          }
+                          'Bar'
                         ]
                       ]
                     },
@@ -105,9 +99,7 @@ __DATA__
                           'one',
                           {
                             'type' => [
-                              {
-                                'namedType' => 'Type'
-                              }
+                              'Type'
                             ]
                           }
                         ]
@@ -122,9 +114,7 @@ __DATA__
                                   'inputValueDefinition' => {
                                     'name' => 'argument',
                                     'type' => [
-                                      {
-                                        'namedType' => 'InputType'
-                                      }
+                                      'InputType'
                                     ]
                                   }
                                 }
@@ -133,9 +123,7 @@ __DATA__
                           },
                           {
                             'type' => [
-                              {
-                                'namedType' => 'Type'
-                              }
+                              'Type'
                             ]
                           }
                         ]
@@ -150,9 +138,7 @@ __DATA__
                                   'inputValueDefinition' => {
                                     'name' => 'argument',
                                     'type' => [
-                                      {
-                                        'namedType' => 'InputType'
-                                      }
+                                      'InputType'
                                     ]
                                   }
                                 },
@@ -160,9 +146,7 @@ __DATA__
                                   'inputValueDefinition' => {
                                     'name' => 'other',
                                     'type' => [
-                                      {
-                                        'namedType' => 'String'
-                                      }
+                                      'String'
                                     ]
                                   }
                                 }
@@ -171,9 +155,7 @@ __DATA__
                           },
                           {
                             'type' => [
-                              {
-                                'namedType' => 'Int'
-                              }
+                              'Int'
                             ]
                           }
                         ]
@@ -192,9 +174,7 @@ __DATA__
                                     },
                                     'name' => 'argument',
                                     'type' => [
-                                      {
-                                        'namedType' => 'String'
-                                      }
+                                      'String'
                                     ]
                                   }
                                 }
@@ -203,9 +183,7 @@ __DATA__
                           },
                           {
                             'type' => [
-                              {
-                                'namedType' => 'String'
-                              }
+                              'String'
                             ]
                           }
                         ]
@@ -241,9 +219,7 @@ __DATA__
                                         'listType' => [
                                           {
                                             'type' => [
-                                              {
-                                                'namedType' => 'String'
-                                              }
+                                              'String'
                                             ]
                                           }
                                         ]
@@ -256,9 +232,7 @@ __DATA__
                           },
                           {
                             'type' => [
-                              {
-                                'namedType' => 'String'
-                              }
+                              'String'
                             ]
                           }
                         ]
@@ -290,9 +264,7 @@ __DATA__
                                     },
                                     'name' => 'argument',
                                     'type' => [
-                                      {
-                                        'namedType' => 'InputType'
-                                      }
+                                      'InputType'
                                     ]
                                   }
                                 }
@@ -301,9 +273,7 @@ __DATA__
                           },
                           {
                             'type' => [
-                              {
-                                'namedType' => 'Type'
-                              }
+                              'Type'
                             ]
                           }
                         ]
@@ -322,9 +292,7 @@ __DATA__
                                     },
                                     'name' => 'argument',
                                     'type' => [
-                                      {
-                                        'namedType' => 'Int'
-                                      }
+                                      'Int'
                                     ]
                                   }
                                 }
@@ -333,9 +301,7 @@ __DATA__
                           },
                           {
                             'type' => [
-                              {
-                                'namedType' => 'Type'
-                              }
+                              'Type'
                             ]
                           }
                         ]
@@ -393,9 +359,7 @@ __DATA__
                                     ],
                                     'name' => 'arg',
                                     'type' => [
-                                      {
-                                        'namedType' => 'Type'
-                                      }
+                                      'Type'
                                     ]
                                   }
                                 }
@@ -404,9 +368,7 @@ __DATA__
                           },
                           {
                             'type' => [
-                              {
-                                'namedType' => 'Type'
-                              }
+                              'Type'
                             ]
                           },
                           {
@@ -442,9 +404,7 @@ __DATA__
                           'one',
                           {
                             'type' => [
-                              {
-                                'namedType' => 'Type'
-                              }
+                              'Type'
                             ]
                           }
                         ]
@@ -463,9 +423,7 @@ __DATA__
                                     },
                                     'name' => 'argument',
                                     'type' => [
-                                      {
-                                        'namedType' => 'String'
-                                      }
+                                      'String'
                                     ]
                                   }
                                 }
@@ -474,9 +432,7 @@ __DATA__
                           },
                           {
                             'type' => [
-                              {
-                                'namedType' => 'String'
-                              }
+                              'String'
                             ]
                           }
                         ]
@@ -524,9 +480,7 @@ __DATA__
                                     ],
                                     'name' => 'arg',
                                     'type' => [
-                                      {
-                                        'namedType' => 'Type'
-                                      }
+                                      'Type'
                                     ]
                                   }
                                 }
@@ -535,9 +489,7 @@ __DATA__
                           },
                           {
                             'type' => [
-                              {
-                                'namedType' => 'Type'
-                              }
+                              'Type'
                             ]
                           },
                           {
@@ -739,9 +691,7 @@ __DATA__
                         'inputValueDefinition' => {
                           'name' => 'key',
                           'type' => [
-                            {
-                              'namedType' => 'String'
-                            }
+                            'String'
                           ]
                         }
                       },
@@ -753,9 +703,7 @@ __DATA__
                           },
                           'name' => 'answer',
                           'type' => [
-                            {
-                              'namedType' => 'Int'
-                            }
+                            'Int'
                           ]
                         }
                       }
@@ -796,9 +744,7 @@ __DATA__
                           ],
                           'name' => 'annotatedField',
                           'type' => [
-                            {
-                              'namedType' => 'Type'
-                            }
+                            'Type'
                           ]
                         }
                       }
@@ -834,9 +780,7 @@ __DATA__
                                           'listType' => [
                                             {
                                               'type' => [
-                                                {
-                                                  'namedType' => 'String'
-                                                }
+                                                'String'
                                               ]
                                             }
                                           ]
@@ -849,9 +793,7 @@ __DATA__
                             },
                             {
                               'type' => [
-                                {
-                                  'namedType' => 'Type'
-                                }
+                                'Type'
                               ]
                             }
                           ]
@@ -922,9 +864,7 @@ __DATA__
                           'inputValueDefinition' => {
                             'name' => 'if',
                             'type' => [
-                              {
-                                'namedType' => 'Boolean'
-                              }
+                              'Boolean'
                             ]
                           }
                         }
@@ -958,9 +898,7 @@ __DATA__
                           'inputValueDefinition' => {
                             'name' => 'if',
                             'type' => [
-                              {
-                                'namedType' => 'Boolean'
-                              }
+                              'Boolean'
                             ]
                           }
                         }

@@ -147,9 +147,9 @@ method got_name (Any $param = undef) {
   return $param;
 }
 
-method got_unionMembers (Any $param = undef) {
+method got_namedType (Any $param = undef) {
   return unless defined $param;
-  return {$self->{parser}{rule} => [ map $_->{namedType}, @$param ]};
+  return $param;
 }
 
 method got_scalarTypeDefinition (Any $param = undef) {
