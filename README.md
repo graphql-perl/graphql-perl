@@ -1,6 +1,6 @@
 # NAME
 
-GraphQL - A reference implementation of the GraphQL spec in Perl.
+GraphQL - Perl implementation of GraphQL
 
 # SYNOPSIS
 
