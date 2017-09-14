@@ -460,25 +460,13 @@ __DATA__
             'typeSystemDefinition' => [
               {
                 'typeDefinition' => {
-                  'enumTypeDefinition' => [
-                    'Site',
-                    [
-                      {
-                        'enumValueDefinition' => {
-                          'value' => {
-                            'enumValue' => 'DESKTOP'
-                          }
-                        }
-                      },
-                      {
-                        'enumValueDefinition' => {
-                          'value' => {
-                            'enumValue' => 'MOBILE'
-                          }
-                        }
-                      }
-                    ]
-                  ]
+                  'enumTypeDefinition' => {
+                    'name' => 'Site',
+                    'values' => {
+                      'DESKTOP' => {},
+                      'MOBILE' => {}
+                    }
+                  }
                 }
               }
             ]
@@ -491,41 +479,28 @@ __DATA__
             'typeSystemDefinition' => [
               {
                 'typeDefinition' => {
-                  'enumTypeDefinition' => [
-                    'AnnotatedEnum',
-                    {
-                      'directives' => [
-                        {
-                          'directive' => {
-                            'name' => 'onEnum'
-                          }
-                        }
-                      ]
-                    },
-                    [
+                  'enumTypeDefinition' => {
+                    'directives' => [
                       {
-                        'enumValueDefinition' => {
-                          'directives' => [
-                            {
-                              'directive' => {
-                                'name' => 'onEnumValue'
-                              }
-                            }
-                          ],
-                          'value' => {
-                            'enumValue' => 'ANNOTATED_VALUE'
-                          }
-                        }
-                      },
-                      {
-                        'enumValueDefinition' => {
-                          'value' => {
-                            'enumValue' => 'OTHER_VALUE'
-                          }
+                        'directive' => {
+                          'name' => 'onEnum'
                         }
                       }
-                    ]
-                  ]
+                    ],
+                    'name' => 'AnnotatedEnum',
+                    'values' => {
+                      'ANNOTATED_VALUE' => {
+                        'directives' => [
+                          {
+                            'directive' => {
+                              'name' => 'onEnumValue'
+                            }
+                          }
+                        ]
+                      },
+                      'OTHER_VALUE' => {}
+                    }
+                  }
                 }
               }
             ]
