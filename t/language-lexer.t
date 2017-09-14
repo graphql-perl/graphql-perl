@@ -185,12 +185,10 @@ __DATA__
                               'id' => {
                                 'listValue' => [
                                   {
-                                    'type' => 'int',
-                                    'value' => '123'
+                                    'int' => '123'
                                   },
                                   {
-                                    'type' => 'int',
-                                    'value' => '456'
+                                    'int' => '456'
                                   }
                                 ]
                               }

@@ -104,17 +104,7 @@ method got_objectValue_const (Any $param = undef) {
 method got_listValue (Any $param = undef) {
   return unless defined $param;
   $param = $param->[0]; # zap first useless layer
-  my @values;
-  for my $arg (@$param) {
-    ($arg) = values %$arg; # zap useless layer
-    my ($value_type) = keys %$arg;
-    my ($value) = values %$arg;
-    push @values, {
-      type => $value_type,
-      value => $value,
-    };
-  }
-  return {$self->{parser}{rule} => \@values};
+  return {$self->{parser}{rule} => [ map values %$_, @$param ]};
 }
 
 method got_directive (Any $param = undef) {
