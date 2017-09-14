@@ -4,13 +4,14 @@ use Test::More;
 use Test::Exception;
 use Pegex::Parser;
 use GraphQL::Grammar;
+use GraphQL::Parser;
 use Pegex::Tree::Wrap;
 use Pegex::Input;
 use Data::Dumper;
 
 my $parser = Pegex::Parser->new(
   grammar => GraphQL::Grammar->new,
-  receiver => Pegex::Tree::Wrap->new,
+  receiver => GraphQL::Parser->new,
 );
 open my $fh, '<', 't/kitchen-sink.graphql';
 
@@ -111,7 +112,7 @@ sub string_lookup {
 
 sub query_lookup {
   my ($got, $type) = @_;
-  return $got->{graphql}[0][0]{definition}[0]{operationDefinition}[2]{selectionSet}[0][0]{selection}{field}[1]{arguments}[0][0]{argument}[1]{value}{$type};
+  return $got->{graphql}[0][0]{definition}[0]{operationDefinition}[2]{selectionSet}[0][0]{selection}{field}[1]{arguments}{name}{value};
 }
 
 sub do_lex {
@@ -131,9 +132,7 @@ __DATA__
               {
                 'operationType' => 'query'
               },
-              {
-                'name' => 'queryName'
-              },
+              'queryName',
               {
                 'variableDefinitions' => [
                   [
@@ -141,18 +140,12 @@ __DATA__
                       'variableDefinition' => [
                         {
                           'variable' => [
-                            {
-                              'name' => 'foo'
-                            }
+                            'foo'
                           ]
                         },
                         {
                           'type' => [
-                            {
-                              'namedType' => {
-                                'name' => 'ComplexType'
-                              }
-                            }
+                            'ComplexType'
                           ]
                         }
                       ]
@@ -161,30 +154,19 @@ __DATA__
                       'variableDefinition' => [
                         {
                           'variable' => [
-                            {
-                              'name' => 'site'
-                            }
+                            'site'
                           ]
                         },
                         {
                           'type' => [
-                            {
-                              'namedType' => {
-                                'name' => 'Site'
-                              }
-                            }
+                            'Site'
                           ]
                         },
                         {
-                          'defaultValue' => [
-                            {
-                              'value_const' => {
-                                'enumValue' => {
-                                  'name' => 'MOBILE'
-                                }
-                              }
-                            }
-                          ]
+                          'defaultValue' => {
+                            'default_value' => 'MOBILE',
+                            'type' => 'enumValue'
+                          }
                         }
                       ]
                     }
@@ -199,44 +181,26 @@ __DATA__
                         'field' => [
                           {
                             'alias' => [
-                              {
-                                'name' => 'whoever123is'
+                              'whoever123is'
+                            ]
+                          },
+                          'node',
+                          {
+                            'arguments' => {
+                              'id' => {
+                                'type' => 'listValue',
+                                'value' => [
+                                  {
+                                    'type' => 'int',
+                                    'value' => '123'
+                                  },
+                                  {
+                                    'type' => 'int',
+                                    'value' => '456'
+                                  }
+                                ]
                               }
-                            ]
-                          },
-                          {
-                            'name' => 'node'
-                          },
-                          {
-                            'arguments' => [
-                              [
-                                {
-                                  'argument' => [
-                                    {
-                                      'name' => 'id'
-                                    },
-                                    {
-                                      'value' => {
-                                        'listValue' => [
-                                          [
-                                            {
-                                              'value' => {
-                                                'int' => '123'
-                                              }
-                                            },
-                                            {
-                                              'value' => {
-                                                'int' => '456'
-                                              }
-                                            }
-                                          ]
-                                        ]
-                                      }
-                                    }
-                                  ]
-                                }
-                              ]
-                            ]
+                            }
                           },
                           {
                             'selectionSet' => [
@@ -244,9 +208,7 @@ __DATA__
                                 {
                                   'selection' => {
                                     'field' => [
-                                      {
-                                        'name' => 'id'
-                                      }
+                                      'id'
                                     ]
                                   }
                                 },
@@ -255,21 +217,15 @@ __DATA__
                                     'inlineFragment' => [
                                       {
                                         'typeCondition' => [
-                                          {
-                                            'namedType' => {
-                                              'name' => 'User'
-                                            }
-                                          }
+                                          'User'
                                         ]
                                       },
                                       {
                                         'directives' => [
                                           {
-                                            'directive' => [
-                                              {
-                                                'name' => 'defer'
-                                              }
-                                            ]
+                                            'directive' => {
+                                              'name' => 'defer'
+                                            }
                                           }
                                         ]
                                       },
@@ -279,18 +235,14 @@ __DATA__
                                             {
                                               'selection' => {
                                                 'field' => [
-                                                  {
-                                                    'name' => 'field2'
-                                                  },
+                                                  'field2',
                                                   {
                                                     'selectionSet' => [
                                                       [
                                                         {
                                                           'selection' => {
                                                             'field' => [
-                                                              {
-                                                                'name' => 'id'
-                                                              }
+                                                              'id'
                                                             ]
                                                           }
                                                         },
@@ -299,78 +251,38 @@ __DATA__
                                                             'field' => [
                                                               {
                                                                 'alias' => [
-                                                                  {
-                                                                    'name' => 'alias'
+                                                                  'alias'
+                                                                ]
+                                                              },
+                                                              'field1',
+                                                              {
+                                                                'arguments' => {
+                                                                  'after' => {
+                                                                    'type' => 'variable',
+                                                                    'value' => [
+                                                                      'foo'
+                                                                    ]
+                                                                  },
+                                                                  'first' => {
+                                                                    'type' => 'int',
+                                                                    'value' => '10'
                                                                   }
-                                                                ]
-                                                              },
-                                                              {
-                                                                'name' => 'field1'
-                                                              },
-                                                              {
-                                                                'arguments' => [
-                                                                  [
-                                                                    {
-                                                                      'argument' => [
-                                                                        {
-                                                                          'name' => 'first'
-                                                                        },
-                                                                        {
-                                                                          'value' => {
-                                                                            'int' => '10'
-                                                                          }
-                                                                        }
-                                                                      ]
-                                                                    },
-                                                                    {
-                                                                      'argument' => [
-                                                                        {
-                                                                          'name' => 'after'
-                                                                        },
-                                                                        {
-                                                                          'value' => {
-                                                                            'variable' => [
-                                                                              {
-                                                                                'name' => 'foo'
-                                                                              }
-                                                                            ]
-                                                                          }
-                                                                        }
-                                                                      ]
-                                                                    }
-                                                                  ]
-                                                                ]
+                                                                }
                                                               },
                                                               {
                                                                 'directives' => [
                                                                   {
-                                                                    'directive' => [
-                                                                      {
-                                                                        'name' => 'include'
-                                                                      },
-                                                                      {
-                                                                        'arguments' => [
-                                                                          [
-                                                                            {
-                                                                              'argument' => [
-                                                                                {
-                                                                                  'name' => 'if'
-                                                                                },
-                                                                                {
-                                                                                  'value' => {
-                                                                                    'variable' => [
-                                                                                      {
-                                                                                        'name' => 'foo'
-                                                                                      }
-                                                                                    ]
-                                                                                  }
-                                                                                }
-                                                                              ]
-                                                                            }
+                                                                    'directive' => {
+                                                                      'arguments' => {
+                                                                        'if' => {
+                                                                          'type' => 'variable',
+                                                                          'value' => [
+                                                                            'foo'
                                                                           ]
-                                                                        ]
-                                                                      }
-                                                                    ]
+                                                                        }
+                                                                      },
+                                                                      'name' => 'include'
+                                                                    }
                                                                   }
                                                                 ]
                                                               },
@@ -380,9 +292,7 @@ __DATA__
                                                                     {
                                                                       'selection' => {
                                                                         'field' => [
-                                                                          {
-                                                                            'name' => 'id'
-                                                                          }
+                                                                          'id'
                                                                         ]
                                                                       }
                                                                     },
@@ -390,9 +300,7 @@ __DATA__
                                                                       'selection' => {
                                                                         'fragmentSpread' => [
                                                                           {
-                                                                            'fragmentName' => {
-                                                                              'name' => 'frag'
-                                                                            }
+                                                                            'fragmentName' => 'frag'
                                                                           }
                                                                         ]
                                                                       }
@@ -421,33 +329,17 @@ __DATA__
                                       {
                                         'directives' => [
                                           {
-                                            'directive' => [
-                                              {
-                                                'name' => 'skip'
-                                              },
-                                              {
-                                                'arguments' => [
-                                                  [
-                                                    {
-                                                      'argument' => [
-                                                        {
-                                                          'name' => 'unless'
-                                                        },
-                                                        {
-                                                          'value' => {
-                                                            'variable' => [
-                                                              {
-                                                                'name' => 'foo'
-                                                              }
-                                                            ]
-                                                          }
-                                                        }
-                                                      ]
-                                                    }
+                                            'directive' => {
+                                              'arguments' => {
+                                                'unless' => {
+                                                  'type' => 'variable',
+                                                  'value' => [
+                                                    'foo'
                                                   ]
-                                                ]
-                                              }
-                                            ]
+                                                }
+                                              },
+                                              'name' => 'skip'
+                                            }
                                           }
                                         ]
                                       },
@@ -457,9 +349,7 @@ __DATA__
                                             {
                                               'selection' => {
                                                 'field' => [
-                                                  {
-                                                    'name' => 'id'
-                                                  }
+                                                  'id'
                                                 ]
                                               }
                                             }
@@ -478,9 +368,7 @@ __DATA__
                                             {
                                               'selection' => {
                                                 'field' => [
-                                                  {
-                                                    'name' => 'id'
-                                                  }
+                                                  'id'
                                                 ]
                                               }
                                             }
@@ -510,44 +398,28 @@ __DATA__
               {
                 'operationType' => 'mutation'
               },
-              {
-                'name' => 'likeStory'
-              },
+              'likeStory',
               {
                 'selectionSet' => [
                   [
                     {
                       'selection' => {
                         'field' => [
+                          'like',
                           {
-                            'name' => 'like'
-                          },
-                          {
-                            'arguments' => [
-                              [
-                                {
-                                  'argument' => [
-                                    {
-                                      'name' => 'story'
-                                    },
-                                    {
-                                      'value' => {
-                                        'int' => '123'
-                                      }
-                                    }
-                                  ]
-                                }
-                              ]
-                            ]
+                            'arguments' => {
+                              'story' => {
+                                'type' => 'int',
+                                'value' => '123'
+                              }
+                            }
                           },
                           {
                             'directives' => [
                               {
-                                'directive' => [
-                                  {
-                                    'name' => 'defer'
-                                  }
-                                ]
+                                'directive' => {
+                                  'name' => 'defer'
+                                }
                               }
                             ]
                           },
@@ -557,18 +429,14 @@ __DATA__
                                 {
                                   'selection' => {
                                     'field' => [
-                                      {
-                                        'name' => 'story'
-                                      },
+                                      'story',
                                       {
                                         'selectionSet' => [
                                           [
                                             {
                                               'selection' => {
                                                 'field' => [
-                                                  {
-                                                    'name' => 'id'
-                                                  }
+                                                  'id'
                                                 ]
                                               }
                                             }
@@ -598,9 +466,7 @@ __DATA__
               {
                 'operationType' => 'subscription'
               },
-              {
-                'name' => 'StoryLikeSubscription'
-              },
+              'StoryLikeSubscription',
               {
                 'variableDefinitions' => [
                   [
@@ -608,18 +474,12 @@ __DATA__
                       'variableDefinition' => [
                         {
                           'variable' => [
-                            {
-                              'name' => 'input'
-                            }
+                            'input'
                           ]
                         },
                         {
                           'type' => [
-                            {
-                              'namedType' => {
-                                'name' => 'StoryLikeSubscribeInput'
-                              }
-                            }
+                            'StoryLikeSubscribeInput'
                           ]
                         }
                       ]
@@ -633,30 +493,16 @@ __DATA__
                     {
                       'selection' => {
                         'field' => [
+                          'storyLikeSubscribe',
                           {
-                            'name' => 'storyLikeSubscribe'
-                          },
-                          {
-                            'arguments' => [
-                              [
-                                {
-                                  'argument' => [
-                                    {
-                                      'name' => 'input'
-                                    },
-                                    {
-                                      'value' => {
-                                        'variable' => [
-                                          {
-                                            'name' => 'input'
-                                          }
-                                        ]
-                                      }
-                                    }
-                                  ]
-                                }
-                              ]
-                            ]
+                            'arguments' => {
+                              'input' => {
+                                'type' => 'variable',
+                                'value' => [
+                                  'input'
+                                ]
+                              }
+                            }
                           },
                           {
                             'selectionSet' => [
@@ -664,27 +510,21 @@ __DATA__
                                 {
                                   'selection' => {
                                     'field' => [
-                                      {
-                                        'name' => 'story'
-                                      },
+                                      'story',
                                       {
                                         'selectionSet' => [
                                           [
                                             {
                                               'selection' => {
                                                 'field' => [
-                                                  {
-                                                    'name' => 'likers'
-                                                  },
+                                                  'likers',
                                                   {
                                                     'selectionSet' => [
                                                       [
                                                         {
                                                           'selection' => {
                                                             'field' => [
-                                                              {
-                                                                'name' => 'count'
-                                                              }
+                                                              'count'
                                                             ]
                                                           }
                                                         }
@@ -697,18 +537,14 @@ __DATA__
                                             {
                                               'selection' => {
                                                 'field' => [
-                                                  {
-                                                    'name' => 'likeSentence'
-                                                  },
+                                                  'likeSentence',
                                                   {
                                                     'selectionSet' => [
                                                       [
                                                         {
                                                           'selection' => {
                                                             'field' => [
-                                                              {
-                                                                'name' => 'text'
-                                                              }
+                                                              'text'
                                                             ]
                                                           }
                                                         }
@@ -742,17 +578,11 @@ __DATA__
           {
             'fragmentDefinition' => [
               {
-                'fragmentName' => {
-                  'name' => 'frag'
-                }
+                'fragmentName' => 'frag'
               },
               {
                 'typeCondition' => [
-                  {
-                    'namedType' => {
-                      'name' => 'Friend'
-                    }
-                  }
+                  'Friend'
                 ]
               },
               {
@@ -761,73 +591,31 @@ __DATA__
                     {
                       'selection' => {
                         'field' => [
+                          'foo',
                           {
-                            'name' => 'foo'
-                          },
-                          {
-                            'arguments' => [
-                              [
-                                {
-                                  'argument' => [
-                                    {
-                                      'name' => 'size'
-                                    },
-                                    {
-                                      'value' => {
-                                        'variable' => [
-                                          {
-                                            'name' => 'size'
-                                          }
-                                        ]
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  'argument' => [
-                                    {
-                                      'name' => 'bar'
-                                    },
-                                    {
-                                      'value' => {
-                                        'variable' => [
-                                          {
-                                            'name' => 'b'
-                                          }
-                                        ]
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  'argument' => [
-                                    {
-                                      'name' => 'obj'
-                                    },
-                                    {
-                                      'value' => {
-                                        'objectValue' => [
-                                          [
-                                            {
-                                              'objectField' => [
-                                                {
-                                                  'name' => 'key'
-                                                },
-                                                {
-                                                  'value' => {
-                                                    'string' => 'value'
-                                                  }
-                                                }
-                                              ]
-                                            }
-                                          ]
-                                        ]
-                                      }
-                                    }
-                                  ]
+                            'arguments' => {
+                              'bar' => {
+                                'type' => 'variable',
+                                'value' => [
+                                  'b'
+                                ]
+                              },
+                              'obj' => {
+                                'type' => 'objectValue',
+                                'value' => {
+                                  'key' => {
+                                    'type' => 'string',
+                                    'value' => 'value'
+                                  }
                                 }
-                              ]
-                            ]
+                              },
+                              'size' => {
+                                'type' => 'variable',
+                                'value' => [
+                                  'size'
+                                ]
+                              }
+                            }
                           }
                         ]
                       }
@@ -848,50 +636,22 @@ __DATA__
                   {
                     'selection' => {
                       'field' => [
+                        'unnamed',
                         {
-                          'name' => 'unnamed'
-                        },
-                        {
-                          'arguments' => [
-                            [
-                              {
-                                'argument' => [
-                                  {
-                                    'name' => 'truthy'
-                                  },
-                                  {
-                                    'value' => {
-                                      'boolean' => 'true'
-                                    }
-                                  }
-                                ]
-                              },
-                              {
-                                'argument' => [
-                                  {
-                                    'name' => 'falsey'
-                                  },
-                                  {
-                                    'value' => {
-                                      'boolean' => 'false'
-                                    }
-                                  }
-                                ]
-                              },
-                              {
-                                'argument' => [
-                                  {
-                                    'name' => 'nullish'
-                                  },
-                                  {
-                                    'value' => {
-                                      'null' => 'null'
-                                    }
-                                  }
-                                ]
-                              }
-                            ]
-                          ]
+                          'arguments' => {
+                            'falsey' => {
+                              'type' => 'boolean',
+                              'value' => 'false'
+                            },
+                            'nullish' => {
+                              'type' => 'null',
+                              'value' => 'null'
+                            },
+                            'truthy' => {
+                              'type' => 'boolean',
+                              'value' => 'true'
+                            }
+                          }
                         }
                       ]
                     }
@@ -899,9 +659,7 @@ __DATA__
                   {
                     'selection' => {
                       'field' => [
-                        {
-                          'name' => 'query'
-                        }
+                        'query'
                       ]
                     }
                   }
