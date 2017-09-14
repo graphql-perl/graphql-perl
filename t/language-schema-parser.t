@@ -216,8 +216,7 @@ __DATA__
                         'directive' => {
                           'arguments' => {
                             'arg' => {
-                              'type' => 'string',
-                              'value' => 'value'
+                              'string' => 'value'
                             }
                           },
                           'name' => 'onObject'

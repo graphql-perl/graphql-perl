@@ -70,13 +70,8 @@ method got_arguments (Any $param = undef) {
   for my $arg (@$param) {
     ($arg) = values %$arg; # zap useless layer
     my $name = shift @$arg;
-    my $value = shift(@$arg)->{value};
-    my ($value_type) = keys %$value;
-    $value = $value->{$value_type};
-    $args{$name} = {
-      type => $value_type,
-      value => $value,
-    };
+    my ($value) = values %{ shift(@$arg) };
+    $args{$name} = $value;
   }
   return {$self->{parser}{rule} => \%args};
 }

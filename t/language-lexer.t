@@ -112,7 +112,7 @@ sub string_lookup {
 
 sub query_lookup {
   my ($got, $type) = @_;
-  return $got->{graphql}[0][0]{definition}[0]{operationDefinition}[2]{selectionSet}[0][0]{selection}{field}[1]{arguments}{name}{value};
+  return $got->{graphql}[0][0]{definition}[0]{operationDefinition}[2]{selectionSet}[0][0]{selection}{field}[1]{arguments}{name}{$type};
 }
 
 sub do_lex {
@@ -184,8 +184,7 @@ __DATA__
                           {
                             'arguments' => {
                               'id' => {
-                                'type' => 'listValue',
-                                'value' => [
+                                'listValue' => [
                                   {
                                     'type' => 'int',
                                     'value' => '123'
@@ -254,14 +253,12 @@ __DATA__
                                                               {
                                                                 'arguments' => {
                                                                   'after' => {
-                                                                    'type' => 'variable',
-                                                                    'value' => [
+                                                                    'variable' => [
                                                                       'foo'
                                                                     ]
                                                                   },
                                                                   'first' => {
-                                                                    'type' => 'int',
-                                                                    'value' => '10'
+                                                                    'int' => '10'
                                                                   }
                                                                 }
                                                               },
@@ -271,8 +268,7 @@ __DATA__
                                                                     'directive' => {
                                                                       'arguments' => {
                                                                         'if' => {
-                                                                          'type' => 'variable',
-                                                                          'value' => [
+                                                                          'variable' => [
                                                                             'foo'
                                                                           ]
                                                                         }
@@ -328,8 +324,7 @@ __DATA__
                                             'directive' => {
                                               'arguments' => {
                                                 'unless' => {
-                                                  'type' => 'variable',
-                                                  'value' => [
+                                                  'variable' => [
                                                     'foo'
                                                   ]
                                                 }
@@ -405,8 +400,7 @@ __DATA__
                           {
                             'arguments' => {
                               'story' => {
-                                'type' => 'int',
-                                'value' => '123'
+                                'int' => '123'
                               }
                             }
                           },
@@ -491,8 +485,7 @@ __DATA__
                           {
                             'arguments' => {
                               'input' => {
-                                'type' => 'variable',
-                                'value' => [
+                                'variable' => [
                                   'input'
                                 ]
                               }
@@ -589,14 +582,12 @@ __DATA__
                           {
                             'arguments' => {
                               'bar' => {
-                                'type' => 'variable',
-                                'value' => [
+                                'variable' => [
                                   'b'
                                 ]
                               },
                               'obj' => {
-                                'type' => 'objectValue',
-                                'value' => {
+                                'objectValue' => {
                                   'key' => {
                                     'type' => 'string',
                                     'value' => 'value'
@@ -604,8 +595,7 @@ __DATA__
                                 }
                               },
                               'size' => {
-                                'type' => 'variable',
-                                'value' => [
+                                'variable' => [
                                   'size'
                                 ]
                               }
@@ -634,16 +624,13 @@ __DATA__
                         {
                           'arguments' => {
                             'falsey' => {
-                              'type' => 'boolean',
-                              'value' => 'false'
+                              'boolean' => 'false'
                             },
                             'nullish' => {
-                              'type' => 'null',
-                              'value' => 'null'
+                              'null' => 'null'
                             },
                             'truthy' => {
-                              'type' => 'boolean',
-                              'value' => 'true'
+                              'boolean' => 'true'
                             }
                           }
                         }
