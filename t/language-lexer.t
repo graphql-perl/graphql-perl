@@ -112,7 +112,7 @@ sub string_lookup {
 
 sub query_lookup {
   my ($got, $type) = @_;
-  return $got->{graphql}[0][0]{definition}[0]{operationDefinition}[2]{selectionSet}[0][0]{selection}{arguments}{name};
+  return $got->{graphql}[0][0]{definition}[0]{operationDefinition}[2]{selectionSet}[0][0]{arguments}{name};
 }
 
 sub do_lex {
@@ -148,165 +148,141 @@ __DATA__
                 'selectionSet' => [
                   [
                     {
-                      'selection' => {
-                        'alias' => [
-                          'whoever123is'
-                        ],
-                        'arguments' => {
-                          'id' => [
-                            '123',
-                            '456'
-                          ]
-                        },
-                        'name' => 'node',
-                        'selectionSet' => [
-                          [
-                            {
-                              'selection' => {
-                                'name' => 'id'
-                              }
-                            },
-                            {
-                              'selection' => {
-                                'inlineFragment' => [
+                      'alias' => [
+                        'whoever123is'
+                      ],
+                      'arguments' => {
+                        'id' => [
+                          '123',
+                          '456'
+                        ]
+                      },
+                      'name' => 'node',
+                      'selectionSet' => [
+                        [
+                          {
+                            'name' => 'id'
+                          },
+                          {
+                            'inlineFragment' => [
+                              {
+                                'typeCondition' => [
+                                  'User'
+                                ]
+                              },
+                              {
+                                'directives' => [
                                   {
-                                    'typeCondition' => [
-                                      'User'
-                                    ]
-                                  },
-                                  {
-                                    'directives' => [
-                                      {
-                                        'directive' => {
-                                          'name' => 'defer'
-                                        }
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    'selectionSet' => [
-                                      [
-                                        {
-                                          'selection' => {
-                                            'name' => 'field2',
+                                    'directive' => {
+                                      'name' => 'defer'
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                'selectionSet' => [
+                                  [
+                                    {
+                                      'name' => 'field2',
+                                      'selectionSet' => [
+                                        [
+                                          {
+                                            'name' => 'id'
+                                          },
+                                          {
+                                            'alias' => [
+                                              'alias'
+                                            ],
+                                            'arguments' => {
+                                              'after' => {
+                                                'variable' => [
+                                                  'foo'
+                                                ]
+                                              },
+                                              'first' => '10'
+                                            },
+                                            'directives' => [
+                                              {
+                                                'directive' => {
+                                                  'arguments' => {
+                                                    'if' => {
+                                                      'variable' => [
+                                                        'foo'
+                                                      ]
+                                                    }
+                                                  },
+                                                  'name' => 'include'
+                                                }
+                                              }
+                                            ],
+                                            'name' => 'field1',
                                             'selectionSet' => [
                                               [
                                                 {
-                                                  'selection' => {
-                                                    'name' => 'id'
-                                                  }
+                                                  'name' => 'id'
                                                 },
                                                 {
-                                                  'selection' => {
-                                                    'alias' => [
-                                                      'alias'
-                                                    ],
-                                                    'arguments' => {
-                                                      'after' => {
-                                                        'variable' => [
-                                                          'foo'
-                                                        ]
-                                                      },
-                                                      'first' => '10'
-                                                    },
-                                                    'directives' => [
-                                                      {
-                                                        'directive' => {
-                                                          'arguments' => {
-                                                            'if' => {
-                                                              'variable' => [
-                                                                'foo'
-                                                              ]
-                                                            }
-                                                          },
-                                                          'name' => 'include'
-                                                        }
-                                                      }
-                                                    ],
-                                                    'name' => 'field1',
-                                                    'selectionSet' => [
-                                                      [
-                                                        {
-                                                          'selection' => {
-                                                            'name' => 'id'
-                                                          }
-                                                        },
-                                                        {
-                                                          'selection' => {
-                                                            'fragmentSpread' => [
-                                                              {
-                                                                'fragmentName' => 'frag'
-                                                              }
-                                                            ]
-                                                          }
-                                                        }
-                                                      ]
-                                                    ]
-                                                  }
+                                                  'fragmentSpread' => [
+                                                    {
+                                                      'fragmentName' => 'frag'
+                                                    }
+                                                  ]
                                                 }
                                               ]
                                             ]
                                           }
-                                        }
+                                        ]
                                       ]
-                                    ]
-                                  }
+                                    }
+                                  ]
                                 ]
                               }
-                            },
-                            {
-                              'selection' => {
-                                'inlineFragment' => [
+                            ]
+                          },
+                          {
+                            'inlineFragment' => [
+                              {
+                                'directives' => [
                                   {
-                                    'directives' => [
-                                      {
-                                        'directive' => {
-                                          'arguments' => {
-                                            'unless' => {
-                                              'variable' => [
-                                                'foo'
-                                              ]
-                                            }
-                                          },
-                                          'name' => 'skip'
+                                    'directive' => {
+                                      'arguments' => {
+                                        'unless' => {
+                                          'variable' => [
+                                            'foo'
+                                          ]
                                         }
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    'selectionSet' => [
-                                      [
-                                        {
-                                          'selection' => {
-                                            'name' => 'id'
-                                          }
-                                        }
-                                      ]
-                                    ]
+                                      },
+                                      'name' => 'skip'
+                                    }
                                   }
                                 ]
-                              }
-                            },
-                            {
-                              'selection' => {
-                                'inlineFragment' => [
-                                  {
-                                    'selectionSet' => [
-                                      [
-                                        {
-                                          'selection' => {
-                                            'name' => 'id'
-                                          }
-                                        }
-                                      ]
-                                    ]
-                                  }
+                              },
+                              {
+                                'selectionSet' => [
+                                  [
+                                    {
+                                      'name' => 'id'
+                                    }
+                                  ]
                                 ]
                               }
-                            }
-                          ]
+                            ]
+                          },
+                          {
+                            'inlineFragment' => [
+                              {
+                                'selectionSet' => [
+                                  [
+                                    {
+                                      'name' => 'id'
+                                    }
+                                  ]
+                                ]
+                              }
+                            ]
+                          }
                         ]
-                      }
+                      ]
                     }
                   ]
                 ]
@@ -327,37 +303,31 @@ __DATA__
                 'selectionSet' => [
                   [
                     {
-                      'selection' => {
-                        'arguments' => {
-                          'story' => '123'
-                        },
-                        'directives' => [
-                          {
-                            'directive' => {
-                              'name' => 'defer'
-                            }
+                      'arguments' => {
+                        'story' => '123'
+                      },
+                      'directives' => [
+                        {
+                          'directive' => {
+                            'name' => 'defer'
                           }
-                        ],
-                        'name' => 'like',
-                        'selectionSet' => [
-                          [
-                            {
-                              'selection' => {
-                                'name' => 'story',
-                                'selectionSet' => [
-                                  [
-                                    {
-                                      'selection' => {
-                                        'name' => 'id'
-                                      }
-                                    }
-                                  ]
-                                ]
-                              }
-                            }
-                          ]
+                        }
+                      ],
+                      'name' => 'like',
+                      'selectionSet' => [
+                        [
+                          {
+                            'name' => 'story',
+                            'selectionSet' => [
+                              [
+                                {
+                                  'name' => 'id'
+                                }
+                              ]
+                            ]
+                          }
                         ]
-                      }
+                      ]
                     }
                   ]
                 ]
@@ -385,57 +355,45 @@ __DATA__
                 'selectionSet' => [
                   [
                     {
-                      'selection' => {
-                        'arguments' => {
-                          'input' => {
-                            'variable' => [
-                              'input'
+                      'arguments' => {
+                        'input' => {
+                          'variable' => [
+                            'input'
+                          ]
+                        }
+                      },
+                      'name' => 'storyLikeSubscribe',
+                      'selectionSet' => [
+                        [
+                          {
+                            'name' => 'story',
+                            'selectionSet' => [
+                              [
+                                {
+                                  'name' => 'likers',
+                                  'selectionSet' => [
+                                    [
+                                      {
+                                        'name' => 'count'
+                                      }
+                                    ]
+                                  ]
+                                },
+                                {
+                                  'name' => 'likeSentence',
+                                  'selectionSet' => [
+                                    [
+                                      {
+                                        'name' => 'text'
+                                      }
+                                    ]
+                                  ]
+                                }
+                              ]
                             ]
                           }
-                        },
-                        'name' => 'storyLikeSubscribe',
-                        'selectionSet' => [
-                          [
-                            {
-                              'selection' => {
-                                'name' => 'story',
-                                'selectionSet' => [
-                                  [
-                                    {
-                                      'selection' => {
-                                        'name' => 'likers',
-                                        'selectionSet' => [
-                                          [
-                                            {
-                                              'selection' => {
-                                                'name' => 'count'
-                                              }
-                                            }
-                                          ]
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      'selection' => {
-                                        'name' => 'likeSentence',
-                                        'selectionSet' => [
-                                          [
-                                            {
-                                              'selection' => {
-                                                'name' => 'text'
-                                              }
-                                            }
-                                          ]
-                                        ]
-                                      }
-                                    }
-                                  ]
-                                ]
-                              }
-                            }
-                          ]
                         ]
-                      }
+                      ]
                     }
                   ]
                 ]
@@ -460,24 +418,22 @@ __DATA__
                 'selectionSet' => [
                   [
                     {
-                      'selection' => {
-                        'arguments' => {
-                          'bar' => {
-                            'variable' => [
-                              'b'
-                            ]
-                          },
-                          'obj' => {
-                            'key' => 'value'
-                          },
-                          'size' => {
-                            'variable' => [
-                              'size'
-                            ]
-                          }
+                      'arguments' => {
+                        'bar' => {
+                          'variable' => [
+                            'b'
+                          ]
                         },
-                        'name' => 'foo'
-                      }
+                        'obj' => {
+                          'key' => 'value'
+                        },
+                        'size' => {
+                          'variable' => [
+                            'size'
+                          ]
+                        }
+                      },
+                      'name' => 'foo'
                     }
                   ]
                 ]
@@ -493,19 +449,15 @@ __DATA__
               'selectionSet' => [
                 [
                   {
-                    'selection' => {
-                      'arguments' => {
-                        'falsey' => '',
-                        'nullish' => undef,
-                        'truthy' => 1
-                      },
-                      'name' => 'unnamed'
-                    }
+                    'arguments' => {
+                      'falsey' => '',
+                      'nullish' => undef,
+                      'truthy' => 1
+                    },
+                    'name' => 'unnamed'
                   },
                   {
-                    'selection' => {
-                      'name' => 'query'
-                    }
+                    'name' => 'query'
                   }
                 ]
               ]

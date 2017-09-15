@@ -316,4 +316,8 @@ method got_field (Any $param = undef) {
   return \%def;
 }
 
+method got_selection (Any $param = undef) {
+  unshift @_, $self; goto &got_value_const;
+}
+
 1;
