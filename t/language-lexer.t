@@ -112,7 +112,7 @@ sub string_lookup {
 
 sub query_lookup {
   my ($got, $type) = @_;
-  return $got->{graphql}[0][0]{definition}[0]{operationDefinition}[2]{selectionSet}[0][0]{selection}{field}[1]{arguments}{name}{$type};
+  return $got->{graphql}[0][0]{definition}[0]{operationDefinition}[2]{selectionSet}[0][0]{selection}{field}[1]{arguments}{name};
 }
 
 sub do_lex {
@@ -159,9 +159,7 @@ __DATA__
                           'type' => 'Site'
                         },
                         {
-                          'default_value' => {
-                            'enumValue' => 'MOBILE'
-                          }
+                          'default_value' => 'MOBILE'
                         }
                       ]
                     }
@@ -182,16 +180,10 @@ __DATA__
                           'node',
                           {
                             'arguments' => {
-                              'id' => {
-                                'listValue' => [
-                                  {
-                                    'int' => '123'
-                                  },
-                                  {
-                                    'int' => '456'
-                                  }
-                                ]
-                              }
+                              'id' => [
+                                '123',
+                                '456'
+                              ]
                             }
                           },
                           {
@@ -254,9 +246,7 @@ __DATA__
                                                                       'foo'
                                                                     ]
                                                                   },
-                                                                  'first' => {
-                                                                    'int' => '10'
-                                                                  }
+                                                                  'first' => '10'
                                                                 }
                                                               },
                                                               {
@@ -396,9 +386,7 @@ __DATA__
                           'like',
                           {
                             'arguments' => {
-                              'story' => {
-                                'int' => '123'
-                              }
+                              'story' => '123'
                             }
                           },
                           {
@@ -584,11 +572,7 @@ __DATA__
                                 ]
                               },
                               'obj' => {
-                                'objectValue' => {
-                                  'key' => {
-                                    'string' => 'value'
-                                  }
-                                }
+                                'key' => 'value'
                               },
                               'size' => {
                                 'variable' => [
@@ -619,15 +603,9 @@ __DATA__
                         'unnamed',
                         {
                           'arguments' => {
-                            'falsey' => {
-                              'boolean' => ''
-                            },
-                            'nullish' => {
-                              'null' => undef
-                            },
-                            'truthy' => {
-                              'boolean' => 1
-                            }
+                            'falsey' => '',
+                            'nullish' => undef,
+                            'truthy' => 1
                           }
                         }
                       ]

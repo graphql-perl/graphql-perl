@@ -89,16 +89,10 @@ __DATA__
                       'five' => {
                         'args' => {
                           'argument' => {
-                            'default_value' => {
-                              'listValue_const' => [
-                                {
-                                  'string' => 'string'
-                                },
-                                {
-                                  'string' => 'string'
-                                }
-                              ]
-                            },
+                            'default_value' => [
+                              'string',
+                              'string'
+                            ],
                             'type' => {
                               'listType' => [
                                 {
@@ -113,9 +107,7 @@ __DATA__
                       'four' => {
                         'args' => {
                           'argument' => {
-                            'default_value' => {
-                              'string' => 'string'
-                            },
+                            'default_value' => 'string',
                             'type' => 'String'
                           }
                         },
@@ -127,9 +119,7 @@ __DATA__
                       'seven' => {
                         'args' => {
                           'argument' => {
-                            'default_value' => {
-                              'null' => undef
-                            },
+                            'default_value' => undef,
                             'type' => 'Int'
                           }
                         },
@@ -139,11 +129,7 @@ __DATA__
                         'args' => {
                           'argument' => {
                             'default_value' => {
-                              'objectValue_const' => {
-                                'key' => {
-                                  'string' => 'value'
-                                }
-                              }
+                              'key' => 'value'
                             },
                             'type' => 'InputType'
                           }
@@ -196,9 +182,7 @@ __DATA__
                       {
                         'directive' => {
                           'arguments' => {
-                            'arg' => {
-                              'string' => 'value'
-                            }
+                            'arg' => 'value'
                           },
                           'name' => 'onObject'
                         }
@@ -208,9 +192,7 @@ __DATA__
                       'annotatedField' => {
                         'args' => {
                           'arg' => {
-                            'default_value' => {
-                              'string' => 'default'
-                            },
+                            'default_value' => 'default',
                             'directives' => [
                               {
                                 'directive' => {
@@ -250,9 +232,7 @@ __DATA__
                       'four' => {
                         'args' => {
                           'argument' => {
-                            'default_value' => {
-                              'string' => 'string'
-                            },
+                            'default_value' => 'string',
                             'type' => 'String'
                           }
                         },
@@ -461,9 +441,7 @@ __DATA__
                   'inputObjectTypeDefinition' => {
                     'fields' => {
                       'answer' => {
-                        'default_value' => {
-                          'int' => '42'
-                        },
+                        'default_value' => '42',
                         'type' => 'Int'
                       },
                       'key' => {

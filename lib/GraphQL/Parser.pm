@@ -70,8 +70,7 @@ method got_arguments (Any $param = undef) {
   for my $arg (@$param) {
     ($arg) = values %$arg; # zap useless layer
     my $name = shift @$arg;
-    my ($value) = values %{ shift(@$arg) };
-    $args{$name} = $value;
+    $args{$name} = shift @$arg;
   }
   return {$self->{parser}{rule} => \%args};
 }
@@ -79,7 +78,7 @@ method got_arguments (Any $param = undef) {
 method got_objectField (Any $param = undef) {
   return unless defined $param;
   my $name = shift @$param;
-  my ($value) = values %{ shift @$param };
+  my $value = shift @$param;
   return {$name => $value};
 }
 
@@ -90,7 +89,7 @@ method got_objectValue (Any $param = undef) {
   while (my $arg = shift @$param) {
     %value = (%value, %$arg);
   }
-  return {$self->{parser}{rule} => \%value};
+  return \%value;
 }
 
 method got_objectField_const (Any $param = undef) {
@@ -104,7 +103,7 @@ method got_objectValue_const (Any $param = undef) {
 method got_listValue (Any $param = undef) {
   return unless defined $param;
   $param = $param->[0]; # zap first useless layer
-  return {$self->{parser}{rule} => [ map values %$_, @$param ]};
+  return $param;
 }
 
 method got_listValue_const (Any $param = undef) {
@@ -172,7 +171,7 @@ method got_enumValueDefinition (Any $param = undef) {
 
 method got_defaultValue (Any $param = undef) {
   return unless defined $param;
-  return { default_value => values %{$param->[0]} };
+  return { default_value => $param->[0] };
 }
 
 method got_implementsInterfaces (Any $param = undef) {
@@ -229,7 +228,7 @@ method got_enumTypeDefinition (Any $param = undef) {
   %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
   my %values;
   map {
-    my $name = delete($_->{value})->{enumValue};
+    my $name = delete $_->{value};
     $values{$name} = $_;
   } map $_->{enumValueDefinition}, @{shift @$param};
   $def{values} = \%values;
@@ -263,12 +262,38 @@ method got_unionTypeDefinition (Any $param = undef) {
 
 method got_boolean (Any $param = undef) {
   return unless defined $param;
-  return {$self->{parser}{rule} => ($param eq 'true' ? 1 : '')};
+  return $param eq 'true' ? 1 : '';
 }
 
 method got_null (Any $param = undef) {
   return unless defined $param;
-  return {$self->{parser}{rule} => undef};
+  return undef;
+}
+
+method got_string (Any $param = undef) {
+  return unless defined $param;
+  return $param;
+}
+
+method got_int (Any $param = undef) {
+  unshift @_, $self; goto &got_string;
+}
+
+method got_float (Any $param = undef) {
+  unshift @_, $self; goto &got_string;
+}
+
+method got_enumValue (Any $param = undef) {
+  unshift @_, $self; goto &got_string;
+}
+
+# not returning empty list if undef
+method got_value_const (Any $param = undef) {
+  return $param;
+}
+
+method got_value (Any $param = undef) {
+  unshift @_, $self; goto &got_value_const;
 }
 
 1;
