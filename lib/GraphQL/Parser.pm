@@ -307,4 +307,13 @@ method got_variableDefinitions (Any $param = undef) {
   return {$self->{parser}{rule} => \%args};
 }
 
+method got_field (Any $param = undef) {
+  return unless defined $param;
+  my %def;
+  %def = (%def, %{shift @$param}) if ref($param->[0]) eq 'HASH'; # alias
+  $def{name} = shift @$param;
+  %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
+  return \%def;
+}
+
 1;
