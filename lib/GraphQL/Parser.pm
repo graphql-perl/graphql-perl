@@ -320,4 +320,9 @@ method got_selection (Any $param = undef) {
   unshift @_, $self; goto &got_value_const;
 }
 
+method got_alias (Any $param = undef) {
+  return unless defined $param;
+  return {$self->{parser}{rule} => @$param};
+}
+
 1;

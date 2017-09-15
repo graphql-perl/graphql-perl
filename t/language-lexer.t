@@ -148,9 +148,7 @@ __DATA__
                 'selectionSet' => [
                   [
                     {
-                      'alias' => [
-                        'whoever123is'
-                      ],
+                      'alias' => 'whoever123is',
                       'arguments' => {
                         'id' => [
                           '123',
@@ -190,9 +188,7 @@ __DATA__
                                             'name' => 'id'
                                           },
                                           {
-                                            'alias' => [
-                                              'alias'
-                                            ],
+                                            'alias' => 'alias',
                                             'arguments' => {
                                               'after' => {
                                                 'variable' => [
