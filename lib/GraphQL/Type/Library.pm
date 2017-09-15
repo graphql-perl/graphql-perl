@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Type::Library
   -base,
-  -declare => qw( StrNameValid FieldMapInput Thunk ValuesMatchTypes );
+  -declare => qw( StrNameValid FieldMapInput ValuesMatchTypes );
 use Type::Utils -all;
 use Types::TypeTiny -all;
 use Types::Standard -all;
@@ -35,15 +35,6 @@ an exception. Suitable for passing to an C<isa> constraint in L<Moo>.
 =cut
 
 declare "StrNameValid", as StrMatch[ qr/^[_a-zA-Z][_a-zA-Z0-9]*$/ ];
-
-=head2 Thunk
-
-Can be either a L<Types::TypeTiny/CodeLike> or the type(s) given as
-parameters.
-
-=cut
-
-declare "Thunk", as CodeLike, constraint_generator => sub { union [ CodeLike, @_ ] };
 
 =head2 ValuesMatchTypes
 

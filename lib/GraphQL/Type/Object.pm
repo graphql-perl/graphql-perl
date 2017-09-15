@@ -39,11 +39,11 @@ Has C<fields> from L<GraphQL::Role::FieldsOutput>.
 
 =head2 interfaces
 
-Optional array-ref of interface type objects implemented.
+Optional, thunked array-ref of interface type objects implemented.
 
 =cut
 
-has interfaces => (is => 'thunked', isa => Thunk[ArrayRef[InstanceOf['GraphQL::Type::Interface']]]);
+has interfaces => (is => 'thunked', isa => ArrayRef[InstanceOf['GraphQL::Type::Interface']]);
 
 __PACKAGE__->meta->make_immutable();
 

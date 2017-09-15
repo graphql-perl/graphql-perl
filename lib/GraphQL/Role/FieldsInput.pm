@@ -33,7 +33,7 @@ See L<GraphQL::Type::Library/FieldMapInput>.
 
 =cut
 
-has fields => (is => 'thunked', isa => Thunk[FieldMapInput], required => 1);
+has fields => (is => 'thunked', isa => FieldMapInput, required => 1);
 
 __PACKAGE__->meta->make_immutable();
 

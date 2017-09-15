@@ -34,7 +34,7 @@ See L<GraphQL::Type::Library/FieldMapOutput>.
 
 =cut
 
-has fields => (is => 'thunked', isa => Thunk[FieldMapOutput], required => 1);
+has fields => (is => 'thunked', isa => FieldMapOutput, required => 1);
 around fields => sub {
   my ($orig, $self) = @_;
   $self->$orig; # de-thunk

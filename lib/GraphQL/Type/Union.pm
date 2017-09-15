@@ -42,13 +42,13 @@ Inherits C<name>, C<description> from L<GraphQL::Type>.
 
 =head2 types
 
-Array-ref of L<GraphQL::Type::Object> objects.
+Thunked array-ref of L<GraphQL::Type::Object> objects.
 
 =cut
 
 has types => (
   is => 'thunked',
-  isa => Thunk[UniqueByProperty['name'] & ArrayRefNonEmpty[InstanceOf['GraphQL::Type::Object']]],
+  isa => UniqueByProperty['name'] & ArrayRefNonEmpty[InstanceOf['GraphQL::Type::Object']],
   required => 1,
 );
 

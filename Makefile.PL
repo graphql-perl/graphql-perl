@@ -23,7 +23,7 @@ WriteMakefile(
     'Function::Parameters' => '0',
     'Return::Type' => '0',
     'Pegex' => '0',
-    'MooX::Thunking' => '0',
+    'MooX::Thunking' => '0.07', # takes care of Thunk in isa
     'JSON' => '0',
   },
   dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
