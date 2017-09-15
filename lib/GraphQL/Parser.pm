@@ -296,4 +296,15 @@ method got_value (Any $param = undef) {
   unshift @_, $self; goto &got_value_const;
 }
 
+method got_variableDefinitions (Any $param = undef) {
+  return unless defined $param;
+  $param = $param->[0]; # zap first useless layer
+  my %args;
+  map {
+    my $name = shift(@$_)->{variable}[0];
+    $args{$name} = { map %$_, @$_ }; # merge
+  } map $_->{variableDefinition}, @$param;
+  return {$self->{parser}{rule} => \%args};
+}
+
 1;

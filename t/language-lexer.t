@@ -134,37 +134,15 @@ __DATA__
               },
               'queryName',
               {
-                'variableDefinitions' => [
-                  [
-                    {
-                      'variableDefinition' => [
-                        {
-                          'variable' => [
-                            'foo'
-                          ]
-                        },
-                        {
-                          'type' => 'ComplexType'
-                        }
-                      ]
-                    },
-                    {
-                      'variableDefinition' => [
-                        {
-                          'variable' => [
-                            'site'
-                          ]
-                        },
-                        {
-                          'type' => 'Site'
-                        },
-                        {
-                          'default_value' => 'MOBILE'
-                        }
-                      ]
-                    }
-                  ]
-                ]
+                'variableDefinitions' => {
+                  'foo' => {
+                    'type' => 'ComplexType'
+                  },
+                  'site' => {
+                    'default_value' => 'MOBILE',
+                    'type' => 'Site'
+                  }
+                }
               },
               {
                 'selectionSet' => [
@@ -443,22 +421,11 @@ __DATA__
               },
               'StoryLikeSubscription',
               {
-                'variableDefinitions' => [
-                  [
-                    {
-                      'variableDefinition' => [
-                        {
-                          'variable' => [
-                            'input'
-                          ]
-                        },
-                        {
-                          'type' => 'StoryLikeSubscribeInput'
-                        }
-                      ]
-                    }
-                  ]
-                ]
+                'variableDefinitions' => {
+                  'input' => {
+                    'type' => 'StoryLikeSubscribeInput'
+                  }
+                }
               },
               {
                 'selectionSet' => [
