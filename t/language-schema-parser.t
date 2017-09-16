@@ -338,46 +338,38 @@ __DATA__
     }
   },
   {
-    'typeExtensionDefinition' => [
-      {
-        'kind' => 'type',
-        'node' => {
-          'fields' => {
-            'seven' => {
-              'args' => {
-                'argument' => {
-                  'type' => {
-                    'listType' => [
-                      {
-                        'type' => 'String'
-                      }
-                    ]
+    'kind' => 'extend',
+    'node' => {
+      'fields' => {
+        'seven' => {
+          'args' => {
+            'argument' => {
+              'type' => {
+                'listType' => [
+                  {
+                    'type' => 'String'
                   }
-                }
-              },
-              'type' => 'Type'
+                ]
+              }
             }
           },
-          'name' => 'Foo'
+          'type' => 'Type'
         }
-      }
-    ]
+      },
+      'name' => 'Foo'
+    }
   },
   {
-    'typeExtensionDefinition' => [
-      {
-        'kind' => 'type',
-        'node' => {
-          'directives' => [
-            {
-              'name' => 'onType'
-            }
-          ],
-          'fields' => {},
-          'name' => 'Foo'
+    'kind' => 'extend',
+    'node' => {
+      'directives' => [
+        {
+          'name' => 'onType'
         }
-      }
-    ]
+      ],
+      'fields' => {},
+      'name' => 'Foo'
+    }
   },
   {
     'kind' => 'type',

@@ -207,6 +207,13 @@ method got_objectTypeDefinition (Any $param = undef) {
   return {kind => 'type', node => \%def};
 }
 
+method got_typeExtensionDefinition (Any $param = undef) {
+  return unless defined $param;
+  my $node = shift @$param;
+  $node->{kind} = 'extend';
+  return $node;
+}
+
 method got_inputObjectTypeDefinition (Any $param = undef) {
   return unless defined $param;
   my %def;
