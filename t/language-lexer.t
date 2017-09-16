@@ -164,9 +164,7 @@ __DATA__
                           {
                             'inlineFragment' => [
                               {
-                                'typeCondition' => [
-                                  'User'
-                                ]
+                                'on' => 'User'
                               },
                               {
                                 'directives' => [
@@ -406,9 +404,7 @@ __DATA__
                 'fragmentName' => 'frag'
               },
               {
-                'typeCondition' => [
-                  'Friend'
-                ]
+                'on' => 'Friend'
               },
               {
                 'selectionSet' => [

@@ -325,4 +325,9 @@ method got_alias (Any $param = undef) {
   return {$self->{parser}{rule} => @$param};
 }
 
+method got_typeCondition (Any $param = undef) {
+  return unless defined $param;
+  return {on => @$param};
+}
+
 1;
