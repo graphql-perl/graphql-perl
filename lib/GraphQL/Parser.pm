@@ -387,4 +387,14 @@ method got_operationDefinition (Any $param = undef) {
   return {operation => \%def};
 }
 
+method got_directiveDefinition (Any $param = undef) {
+  return unless defined $param;
+  my %def;
+  map {
+    $_ = { name => $_ } if !ref $_;
+    %def = (%def, %$_);
+  } @$param;
+  return {directive => \%def};
+}
+
 1;

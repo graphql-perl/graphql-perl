@@ -573,27 +573,23 @@ __DATA__
           {
             'typeSystemDefinition' => [
               {
-                'directiveDefinition' => [
-                  'skip',
-                  {
-                    'args' => {
-                      'if' => {
-                        'type' => {
-                          'nonNullType' => [
-                            'Boolean'
-                          ]
-                        }
+                'directive' => {
+                  'args' => {
+                    'if' => {
+                      'type' => {
+                        'nonNullType' => [
+                          'Boolean'
+                        ]
                       }
                     }
                   },
-                  {
-                    'directiveLocations' => [
-                      'FIELD',
-                      'FRAGMENT_SPREAD',
-                      'INLINE_FRAGMENT'
-                    ]
-                  }
-                ]
+                  'directiveLocations' => [
+                    'FIELD',
+                    'FRAGMENT_SPREAD',
+                    'INLINE_FRAGMENT'
+                  ],
+                  'name' => 'skip'
+                }
               }
             ]
           }
@@ -604,27 +600,23 @@ __DATA__
           {
             'typeSystemDefinition' => [
               {
-                'directiveDefinition' => [
-                  'include',
-                  {
-                    'args' => {
-                      'if' => {
-                        'type' => {
-                          'nonNullType' => [
-                            'Boolean'
-                          ]
-                        }
+                'directive' => {
+                  'args' => {
+                    'if' => {
+                      'type' => {
+                        'nonNullType' => [
+                          'Boolean'
+                        ]
                       }
                     }
                   },
-                  {
-                    'directiveLocations' => [
-                      'FIELD',
-                      'FRAGMENT_SPREAD',
-                      'INLINE_FRAGMENT'
-                    ]
-                  }
-                ]
+                  'directiveLocations' => [
+                    'FIELD',
+                    'FRAGMENT_SPREAD',
+                    'INLINE_FRAGMENT'
+                  ],
+                  'name' => 'include'
+                }
               }
             ]
           }
