@@ -211,9 +211,9 @@ __DATA__
                                                 'name' => 'id'
                                               },
                                               {
-                                                'fragmentSpread' => [
-                                                  'frag'
-                                                ]
+                                                'fragment_spread' => {
+                                                  'name' => 'frag'
+                                                }
                                               }
                                             ]
                                           ]

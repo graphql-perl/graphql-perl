@@ -342,4 +342,12 @@ method got_fragmentName (Any $param = undef) {
   return $param;
 }
 
+method got_fragmentSpread (Any $param = undef) {
+  return unless defined $param;
+  my %def;
+  $def{name} = shift @$param;
+  %def = (%def, %{shift @$param}) while @$param;
+  return {fragment_spread => \%def};
+}
+
 1;
