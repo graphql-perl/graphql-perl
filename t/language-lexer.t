@@ -154,21 +154,13 @@ __DATA__
                             'field1' => {
                               'alias' => 'alias',
                               'arguments' => {
-                                'after' => {
-                                  'variable' => [
-                                    'foo'
-                                  ]
-                                },
+                                'after' => \'foo',
                                 'first' => '10'
                               },
                               'directives' => [
                                 {
                                   'arguments' => {
-                                    'if' => {
-                                      'variable' => [
-                                        'foo'
-                                      ]
-                                    }
+                                    'if' => \'foo'
                                   },
                                   'name' => 'include'
                                 }
@@ -196,11 +188,7 @@ __DATA__
                   'directives' => [
                     {
                       'arguments' => {
-                        'unless' => {
-                          'variable' => [
-                            'foo'
-                          ]
-                        }
+                        'unless' => \'foo'
                       },
                       'name' => 'skip'
                     }
@@ -273,11 +261,7 @@ __DATA__
         'actual' => {
           'storyLikeSubscribe' => {
             'arguments' => {
-              'input' => {
-                'variable' => [
-                  'input'
-                ]
-              }
+              'input' => \'input'
             },
             'fields' => {
               'actual' => {
@@ -321,19 +305,11 @@ __DATA__
         'actual' => {
           'foo' => {
             'arguments' => {
-              'bar' => {
-                'variable' => [
-                  'b'
-                ]
-              },
+              'bar' => \'b',
               'obj' => {
                 'key' => 'value'
               },
-              'size' => {
-                'variable' => [
-                  'size'
-                ]
-              }
+              'size' => \'size'
             }
           }
         }

@@ -301,7 +301,7 @@ method got_variableDefinitions (Any $param = undef) {
   $param = $param->[0]; # zap first useless layer
   my %def;
   map {
-    my $name = shift(@$_)->{variable}[0];
+    my $name = ${ shift @$_ };
     $def{$name} = { map %$_, @$_ }; # merge
   } map $_->{variableDefinition}, @$param;
   return {variables => \%def};
@@ -435,6 +435,12 @@ method got_typeSystemDefinition (Any $param = undef) {
 method got_typeDefinition (Any $param = undef) {
   return unless defined $param;
   return $param;
+}
+
+method got_variable (Any $param = undef) {
+  return unless defined $param;
+  my $varname = shift @$param;
+  return \$varname;
 }
 
 1;
