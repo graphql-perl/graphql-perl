@@ -432,4 +432,9 @@ method got_typeSystemDefinition (Any $param = undef) {
   return @$param;
 }
 
+method got_typeDefinition (Any $param = undef) {
+  return unless defined $param;
+  return $param;
+}
+
 1;
