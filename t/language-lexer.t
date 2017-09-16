@@ -112,7 +112,7 @@ sub string_lookup {
 
 sub query_lookup {
   my ($got, $type) = @_;
-  return $got->[0]{operation}{fields}{actual}{foo}{arguments}{name};
+  return $got->[0]{node}{fields}{actual}{foo}{arguments}{name};
 }
 
 sub do_lex {
@@ -124,7 +124,8 @@ sub do_lex {
 __DATA__
 [
   {
-    'operation' => {
+    'kind' => 'operation',
+    'node' => {
       'fields' => {
         'actual' => {
           'node' => {
@@ -225,7 +226,8 @@ __DATA__
     }
   },
   {
-    'operation' => {
+    'kind' => 'operation',
+    'node' => {
       'fields' => {
         'actual' => {
           'like' => {
@@ -256,7 +258,8 @@ __DATA__
     }
   },
   {
-    'operation' => {
+    'kind' => 'operation',
+    'node' => {
       'fields' => {
         'actual' => {
           'storyLikeSubscribe' => {
@@ -300,7 +303,8 @@ __DATA__
     }
   },
   {
-    'fragment' => {
+    'kind' => 'fragment',
+    'node' => {
       'fields' => {
         'actual' => {
           'foo' => {
@@ -319,7 +323,8 @@ __DATA__
     }
   },
   {
-    'operation' => {
+    'kind' => 'operation',
+    'node' => {
       'fields' => {
         'actual' => {
           'query' => {},

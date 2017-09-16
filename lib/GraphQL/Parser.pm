@@ -373,7 +373,7 @@ method got_fragmentDefinition (Any $param = undef) {
   my %def;
   $def{name} = shift @$param;
   %def = (%def, %{shift @$param}) while @$param;
-  return {fragment => \%def};
+  return {kind => 'fragment', node => \%def};
 }
 
 method got_operationDefinition (Any $param = undef) {
@@ -384,7 +384,7 @@ method got_operationDefinition (Any $param = undef) {
     $_ = { name => $_ } if !ref $_;
     %def = (%def, %$_);
   } @$param;
-  return {operation => \%def};
+  return {kind => 'operation', node => \%def};
 }
 
 method got_directiveDefinition (Any $param = undef) {
