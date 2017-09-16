@@ -376,4 +376,15 @@ method got_fragmentDefinition (Any $param = undef) {
   return {fragment => \%def};
 }
 
+method got_operationDefinition (Any $param = undef) {
+  return unless defined $param;
+  $param = [ $param ] unless ref $param eq 'ARRAY'; # bare selectionSet
+  my %def;
+  map {
+    $_ = { name => $_ } if !ref $_;
+    %def = (%def, %$_);
+  } @$param;
+  return {operation => \%def};
+}
+
 1;

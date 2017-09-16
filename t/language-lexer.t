@@ -112,7 +112,7 @@ sub string_lookup {
 
 sub query_lookup {
   my ($got, $type) = @_;
-  return $got->{graphql}[0][0]{definition}[0]{operationDefinition}[2]{fields}{actual}{foo}{arguments}{name};
+  return $got->{graphql}[0][0]{definition}[0]{operation}{fields}{actual}{foo}{arguments}{name};
 }
 
 sub do_lex {
@@ -128,216 +128,193 @@ __DATA__
       {
         'definition' => [
           {
-            'operationDefinition' => [
-              {
-                'operationType' => 'query'
-              },
-              'queryName',
-              {
-                'variables' => {
-                  'foo' => {
-                    'type' => 'ComplexType'
-                  },
-                  'site' => {
-                    'default_value' => 'MOBILE',
-                    'type' => 'Site'
-                  }
-                }
-              },
-              {
-                'fields' => {
-                  'actual' => {
-                    'node' => {
-                      'alias' => 'whoever123is',
-                      'arguments' => {
-                        'id' => [
-                          '123',
-                          '456'
-                        ]
+            'operation' => {
+              'fields' => {
+                'actual' => {
+                  'node' => {
+                    'alias' => 'whoever123is',
+                    'arguments' => {
+                      'id' => [
+                        '123',
+                        '456'
+                      ]
+                    },
+                    'fields' => {
+                      'actual' => {
+                        'id' => {}
                       },
-                      'fields' => {
-                        'actual' => {
-                          'id' => {}
-                        },
-                        'inline_fragments' => [
-                          {
-                            'directives' => [
-                              {
-                                'directive' => {
-                                  'name' => 'defer'
-                                }
+                      'inline_fragments' => [
+                        {
+                          'directives' => [
+                            {
+                              'directive' => {
+                                'name' => 'defer'
                               }
-                            ],
-                            'fields' => {
-                              'actual' => {
-                                'field2' => {
-                                  'fields' => {
-                                    'actual' => {
-                                      'field1' => {
-                                        'alias' => 'alias',
-                                        'arguments' => {
-                                          'after' => {
-                                            'variable' => [
-                                              'foo'
-                                            ]
-                                          },
-                                          'first' => '10'
-                                        },
-                                        'directives' => [
-                                          {
-                                            'directive' => {
-                                              'arguments' => {
-                                                'if' => {
-                                                  'variable' => [
-                                                    'foo'
-                                                  ]
-                                                }
-                                              },
-                                              'name' => 'include'
-                                            }
-                                          }
-                                        ],
-                                        'fields' => {
-                                          'actual' => {
-                                            'id' => {}
-                                          },
-                                          'fragment_spreads' => [
-                                            {
-                                              'name' => 'frag'
-                                            }
+                            }
+                          ],
+                          'fields' => {
+                            'actual' => {
+                              'field2' => {
+                                'fields' => {
+                                  'actual' => {
+                                    'field1' => {
+                                      'alias' => 'alias',
+                                      'arguments' => {
+                                        'after' => {
+                                          'variable' => [
+                                            'foo'
                                           ]
-                                        }
+                                        },
+                                        'first' => '10'
                                       },
-                                      'id' => {}
-                                    }
+                                      'directives' => [
+                                        {
+                                          'directive' => {
+                                            'arguments' => {
+                                              'if' => {
+                                                'variable' => [
+                                                  'foo'
+                                                ]
+                                              }
+                                            },
+                                            'name' => 'include'
+                                          }
+                                        }
+                                      ],
+                                      'fields' => {
+                                        'actual' => {
+                                          'id' => {}
+                                        },
+                                        'fragment_spreads' => [
+                                          {
+                                            'name' => 'frag'
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    'id' => {}
                                   }
                                 }
                               }
-                            },
-                            'on' => 'User'
-                          },
-                          {
-                            'directives' => [
-                              {
-                                'directive' => {
-                                  'arguments' => {
-                                    'unless' => {
-                                      'variable' => [
-                                        'foo'
-                                      ]
-                                    }
-                                  },
-                                  'name' => 'skip'
-                                }
-                              }
-                            ],
-                            'fields' => {
-                              'actual' => {
-                                'id' => {}
-                              }
                             }
                           },
-                          {
-                            'fields' => {
-                              'actual' => {
-                                'id' => {}
-                              }
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  }
-                }
-              }
-            ]
-          }
-        ]
-      },
-      {
-        'definition' => [
-          {
-            'operationDefinition' => [
-              {
-                'operationType' => 'mutation'
-              },
-              'likeStory',
-              {
-                'fields' => {
-                  'actual' => {
-                    'like' => {
-                      'arguments' => {
-                        'story' => '123'
-                      },
-                      'directives' => [
+                          'on' => 'User'
+                        },
                         {
-                          'directive' => {
-                            'name' => 'defer'
-                          }
-                        }
-                      ],
-                      'fields' => {
-                        'actual' => {
-                          'story' => {
-                            'fields' => {
-                              'actual' => {
-                                'id' => {}
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            ]
-          }
-        ]
-      },
-      {
-        'definition' => [
-          {
-            'operationDefinition' => [
-              {
-                'operationType' => 'subscription'
-              },
-              'StoryLikeSubscription',
-              {
-                'variables' => {
-                  'input' => {
-                    'type' => 'StoryLikeSubscribeInput'
-                  }
-                }
-              },
-              {
-                'fields' => {
-                  'actual' => {
-                    'storyLikeSubscribe' => {
-                      'arguments' => {
-                        'input' => {
-                          'variable' => [
-                            'input'
-                          ]
-                        }
-                      },
-                      'fields' => {
-                        'actual' => {
-                          'story' => {
-                            'fields' => {
-                              'actual' => {
-                                'likeSentence' => {
-                                  'fields' => {
-                                    'actual' => {
-                                      'text' => {}
-                                    }
+                          'directives' => [
+                            {
+                              'directive' => {
+                                'arguments' => {
+                                  'unless' => {
+                                    'variable' => [
+                                      'foo'
+                                    ]
                                   }
                                 },
-                                'likers' => {
-                                  'fields' => {
-                                    'actual' => {
-                                      'count' => {}
-                                    }
+                                'name' => 'skip'
+                              }
+                            }
+                          ],
+                          'fields' => {
+                            'actual' => {
+                              'id' => {}
+                            }
+                          }
+                        },
+                        {
+                          'fields' => {
+                            'actual' => {
+                              'id' => {}
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              },
+              'name' => 'queryName',
+              'operationType' => 'query',
+              'variables' => {
+                'foo' => {
+                  'type' => 'ComplexType'
+                },
+                'site' => {
+                  'default_value' => 'MOBILE',
+                  'type' => 'Site'
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        'definition' => [
+          {
+            'operation' => {
+              'fields' => {
+                'actual' => {
+                  'like' => {
+                    'arguments' => {
+                      'story' => '123'
+                    },
+                    'directives' => [
+                      {
+                        'directive' => {
+                          'name' => 'defer'
+                        }
+                      }
+                    ],
+                    'fields' => {
+                      'actual' => {
+                        'story' => {
+                          'fields' => {
+                            'actual' => {
+                              'id' => {}
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              'name' => 'likeStory',
+              'operationType' => 'mutation'
+            }
+          }
+        ]
+      },
+      {
+        'definition' => [
+          {
+            'operation' => {
+              'fields' => {
+                'actual' => {
+                  'storyLikeSubscribe' => {
+                    'arguments' => {
+                      'input' => {
+                        'variable' => [
+                          'input'
+                        ]
+                      }
+                    },
+                    'fields' => {
+                      'actual' => {
+                        'story' => {
+                          'fields' => {
+                            'actual' => {
+                              'likeSentence' => {
+                                'fields' => {
+                                  'actual' => {
+                                    'text' => {}
+                                  }
+                                }
+                              },
+                              'likers' => {
+                                'fields' => {
+                                  'actual' => {
+                                    'count' => {}
                                   }
                                 }
                               }
@@ -348,8 +325,15 @@ __DATA__
                     }
                   }
                 }
+              },
+              'name' => 'StoryLikeSubscription',
+              'operationType' => 'subscription',
+              'variables' => {
+                'input' => {
+                  'type' => 'StoryLikeSubscribeInput'
+                }
               }
-            ]
+            }
           }
         ]
       },
@@ -387,7 +371,7 @@ __DATA__
       {
         'definition' => [
           {
-            'operationDefinition' => {
+            'operation' => {
               'fields' => {
                 'actual' => {
                   'query' => {},
