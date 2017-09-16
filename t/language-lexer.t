@@ -356,35 +356,31 @@ __DATA__
       {
         'definition' => [
           {
-            'fragmentDefinition' => [
-              'frag',
-              {
-                'on' => 'Friend'
-              },
-              {
-                'fields' => {
-                  'actual' => {
-                    'foo' => {
-                      'arguments' => {
-                        'bar' => {
-                          'variable' => [
-                            'b'
-                          ]
-                        },
-                        'obj' => {
-                          'key' => 'value'
-                        },
-                        'size' => {
-                          'variable' => [
-                            'size'
-                          ]
-                        }
+            'fragment' => {
+              'fields' => {
+                'actual' => {
+                  'foo' => {
+                    'arguments' => {
+                      'bar' => {
+                        'variable' => [
+                          'b'
+                        ]
+                      },
+                      'obj' => {
+                        'key' => 'value'
+                      },
+                      'size' => {
+                        'variable' => [
+                          'size'
+                        ]
                       }
                     }
                   }
                 }
-              }
-            ]
+              },
+              'name' => 'frag',
+              'on' => 'Friend'
+            }
           }
         ]
       },

@@ -368,4 +368,12 @@ method got_selectionSet (Any $param = undef) {
   return {fields => \%def};
 }
 
+method got_fragmentDefinition (Any $param = undef) {
+  return unless defined $param;
+  my %def;
+  $def{name} = shift @$param;
+  %def = (%def, %{shift @$param}) while @$param;
+  return {fragment => \%def};
+}
+
 1;
