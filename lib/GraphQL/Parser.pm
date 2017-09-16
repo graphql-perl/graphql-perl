@@ -149,13 +149,13 @@ method got_namedType (Any $param = undef) {
 
 method got_scalarTypeDefinition (Any $param = undef) {
   return unless defined $param;
-  my %value;
+  my %def;
   my $arg = shift @$param;
-  $value{name} = $arg;
+  $def{name} = $arg;
   while ($arg = shift @$param) {
-    %value = (%value, %$arg);
+    %def = (%def, %$arg);
   }
-  return {$self->{parser}{rule} => \%value};
+  return {kind => 'scalar', node => \%def};
 }
 
 method got_enumValueDefinition (Any $param = undef) {
@@ -204,7 +204,7 @@ method got_objectTypeDefinition (Any $param = undef) {
     $fields{$name} = \%field_def;
   } map $_->{fieldDefinition}, @{shift @$param};
   $def{fields} = \%fields;
-  return {$self->{parser}{rule} => \%def};
+  return {kind => 'type', node => \%def};
 }
 
 method got_inputObjectTypeDefinition (Any $param = undef) {
@@ -218,7 +218,7 @@ method got_inputObjectTypeDefinition (Any $param = undef) {
     $fields{$name} = $_;
   } map $_->{inputValueDefinition}, @{shift @$param};
   $def{fields} = \%fields;
-  return {$self->{parser}{rule} => \%def};
+  return {kind => 'input', node => \%def};
 }
 
 method got_enumTypeDefinition (Any $param = undef) {
@@ -232,7 +232,7 @@ method got_enumTypeDefinition (Any $param = undef) {
     $values{$name} = $_;
   } map $_->{enumValueDefinition}, @{shift @$param};
   $def{values} = \%values;
-  return {$self->{parser}{rule} => \%def};
+  return {kind => 'enum', node => \%def};
 }
 
 method got_interfaceTypeDefinition (Any $param = undef) {
@@ -248,7 +248,7 @@ method got_interfaceTypeDefinition (Any $param = undef) {
     $fields{$name} = \%field_def;
   } map $_->{fieldDefinition}, @{shift @$param};
   $def{fields} = \%fields;
-  return {$self->{parser}{rule} => \%def};
+  return {kind => 'interface', node => \%def};
 }
 
 method got_unionTypeDefinition (Any $param = undef) {
@@ -257,7 +257,7 @@ method got_unionTypeDefinition (Any $param = undef) {
   $def{name} = shift @$param;
   %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
   $def{types} = delete $def{unionMembers};
-  return {$self->{parser}{rule} => \%def};
+  return {kind => 'union', node => \%def};
 }
 
 method got_boolean (Any $param = undef) {
@@ -394,7 +394,7 @@ method got_directiveDefinition (Any $param = undef) {
     $_ = { name => $_ } if !ref $_;
     %def = (%def, %$_);
   } @$param;
-  return {directive => \%def};
+  return {kind => 'directive', node => \%def};
 }
 
 method got_directives (Any $param = undef) {
@@ -424,7 +424,7 @@ method got_schemaDefinition (Any $param = undef) {
   map {
     %def = (%def, %$_);
   } @$param;
-  return {schema => \%def};
+  return {kind => 'schema', node => \%def};
 }
 
 method got_typeSystemDefinition (Any $param = undef) {

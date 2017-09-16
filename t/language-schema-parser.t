@@ -47,13 +47,15 @@ done_testing;
 __DATA__
 [
   {
-    'schema' => {
+    'kind' => 'schema',
+    'node' => {
       'mutation' => 'MutationType',
       'query' => 'QueryType'
     }
   },
   {
-    'objectTypeDefinition' => {
+    'kind' => 'type',
+    'node' => {
       'fields' => {
         'five' => {
           'args' => {
@@ -136,7 +138,8 @@ __DATA__
     }
   },
   {
-    'objectTypeDefinition' => {
+    'kind' => 'type',
+    'node' => {
       'directives' => [
         {
           'arguments' => {
@@ -170,7 +173,8 @@ __DATA__
     }
   },
   {
-    'interfaceTypeDefinition' => {
+    'kind' => 'interface',
+    'node' => {
       'fields' => {
         'four' => {
           'args' => {
@@ -189,7 +193,8 @@ __DATA__
     }
   },
   {
-    'interfaceTypeDefinition' => {
+    'kind' => 'interface',
+    'node' => {
       'directives' => [
         {
           'name' => 'onInterface'
@@ -219,7 +224,8 @@ __DATA__
     }
   },
   {
-    'unionTypeDefinition' => {
+    'kind' => 'union',
+    'node' => {
       'name' => 'Feed',
       'types' => [
         'Story',
@@ -229,7 +235,8 @@ __DATA__
     }
   },
   {
-    'unionTypeDefinition' => {
+    'kind' => 'union',
+    'node' => {
       'directives' => [
         {
           'name' => 'onUnion'
@@ -243,12 +250,14 @@ __DATA__
     }
   },
   {
-    'scalarTypeDefinition' => {
+    'kind' => 'scalar',
+    'node' => {
       'name' => 'CustomScalar'
     }
   },
   {
-    'scalarTypeDefinition' => {
+    'kind' => 'scalar',
+    'node' => {
       'directives' => [
         {
           'name' => 'onScalar'
@@ -258,7 +267,8 @@ __DATA__
     }
   },
   {
-    'enumTypeDefinition' => {
+    'kind' => 'enum',
+    'node' => {
       'name' => 'Site',
       'values' => {
         'DESKTOP' => {},
@@ -267,7 +277,8 @@ __DATA__
     }
   },
   {
-    'enumTypeDefinition' => {
+    'kind' => 'enum',
+    'node' => {
       'directives' => [
         {
           'name' => 'onEnum'
@@ -287,7 +298,8 @@ __DATA__
     }
   },
   {
-    'inputObjectTypeDefinition' => {
+    'kind' => 'input',
+    'node' => {
       'fields' => {
         'answer' => {
           'default_value' => '42',
@@ -305,7 +317,8 @@ __DATA__
     }
   },
   {
-    'inputObjectTypeDefinition' => {
+    'kind' => 'input',
+    'node' => {
       'directives' => [
         {
           'name' => 'onInputObjectType'
@@ -327,7 +340,8 @@ __DATA__
   {
     'typeExtensionDefinition' => [
       {
-        'objectTypeDefinition' => {
+        'kind' => 'type',
+        'node' => {
           'fields' => {
             'seven' => {
               'args' => {
@@ -352,7 +366,8 @@ __DATA__
   {
     'typeExtensionDefinition' => [
       {
-        'objectTypeDefinition' => {
+        'kind' => 'type',
+        'node' => {
           'directives' => [
             {
               'name' => 'onType'
@@ -365,13 +380,15 @@ __DATA__
     ]
   },
   {
-    'objectTypeDefinition' => {
+    'kind' => 'type',
+    'node' => {
       'fields' => {},
       'name' => 'NoFields'
     }
   },
   {
-    'directive' => {
+    'kind' => 'directive',
+    'node' => {
       'args' => {
         'if' => {
           'type' => {
@@ -390,7 +407,8 @@ __DATA__
     }
   },
   {
-    'directive' => {
+    'kind' => 'directive',
+    'node' => {
       'args' => {
         'if' => {
           'type' => {
