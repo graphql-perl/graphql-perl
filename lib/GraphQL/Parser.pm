@@ -44,7 +44,7 @@ parsing events into data usable by GraphQL.
 
 =cut
 
-method parse(Str $source, Bool $noLocation = undef) :ReturnType(HashRef) {
+method parse(Str $source, Bool $noLocation = undef) :ReturnType(ArrayRef) {
   my $parser = Pegex::Parser->new(
     grammar => GraphQL::Grammar->new,
     receiver => __PACKAGE__->new,
@@ -400,6 +400,11 @@ method got_directiveDefinition (Any $param = undef) {
 method got_directives (Any $param = undef) {
   return unless defined $param;
   return {$self->{parser}{rule} => [ map $_->{directive}, @$param ]};
+}
+
+method got_graphql (Any $param = undef) {
+  return unless defined $param;
+  return @$param;
 }
 
 1;
