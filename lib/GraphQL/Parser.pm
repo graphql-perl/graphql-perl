@@ -412,4 +412,9 @@ method got_definition (Any $param = undef) {
   return @$param;
 }
 
+method got_operationTypeDefinition (Any $param = undef) {
+  return unless defined $param;
+  return { map { ref($_) ? values %$_ : $_ } @$param };
+}
+
 1;

@@ -52,20 +52,10 @@ __DATA__
         'schemaDefinition' => [
           [
             {
-              'operationTypeDefinition' => [
-                {
-                  'operationType' => 'query'
-                },
-                'QueryType'
-              ]
+              'query' => 'QueryType'
             },
             {
-              'operationTypeDefinition' => [
-                {
-                  'operationType' => 'mutation'
-                },
-                'MutationType'
-              ]
+              'mutation' => 'MutationType'
             }
           ]
         ]
