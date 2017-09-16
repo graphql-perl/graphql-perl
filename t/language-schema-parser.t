@@ -583,7 +583,7 @@ __DATA__
                       }
                     }
                   },
-                  'directiveLocations' => [
+                  'locations' => [
                     'FIELD',
                     'FRAGMENT_SPREAD',
                     'INLINE_FRAGMENT'
@@ -610,7 +610,7 @@ __DATA__
                       }
                     }
                   },
-                  'directiveLocations' => [
+                  'locations' => [
                     'FIELD',
                     'FRAGMENT_SPREAD',
                     'INLINE_FRAGMENT'
