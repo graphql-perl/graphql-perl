@@ -212,9 +212,7 @@ __DATA__
                                               },
                                               {
                                                 'fragmentSpread' => [
-                                                  {
-                                                    'fragmentName' => 'frag'
-                                                  }
+                                                  'frag'
                                                 ]
                                               }
                                             ]
@@ -388,9 +386,7 @@ __DATA__
         'definition' => [
           {
             'fragmentDefinition' => [
-              {
-                'fragmentName' => 'frag'
-              },
+              'frag',
               {
                 'on' => 'Friend'
               },

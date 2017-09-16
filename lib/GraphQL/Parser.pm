@@ -337,4 +337,9 @@ method got_inlineFragment (Any $param = undef) {
   return {inline_fragment => \%def};
 }
 
+method got_fragmentName (Any $param = undef) {
+  return unless defined $param;
+  return $param;
+}
+
 1;
