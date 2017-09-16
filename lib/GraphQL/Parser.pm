@@ -330,4 +330,11 @@ method got_typeCondition (Any $param = undef) {
   return {on => @$param};
 }
 
+method got_inlineFragment (Any $param = undef) {
+  return unless defined $param;
+  my %def;
+  %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
+  return {inline_fragment => \%def};
+}
+
 1;

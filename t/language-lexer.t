@@ -162,118 +162,106 @@ __DATA__
                             'name' => 'id'
                           },
                           {
-                            'inlineFragment' => [
-                              {
-                                'on' => 'User'
-                              },
-                              {
-                                'directives' => [
-                                  {
-                                    'directive' => {
-                                      'name' => 'defer'
-                                    }
+                            'inline_fragment' => {
+                              'directives' => [
+                                {
+                                  'directive' => {
+                                    'name' => 'defer'
                                   }
-                                ]
-                              },
-                              {
-                                'selectionSet' => [
-                                  [
-                                    {
-                                      'name' => 'field2',
-                                      'selectionSet' => [
-                                        [
-                                          {
-                                            'name' => 'id'
-                                          },
-                                          {
-                                            'alias' => 'alias',
-                                            'arguments' => {
-                                              'after' => {
-                                                'variable' => [
-                                                  'foo'
-                                                ]
-                                              },
-                                              'first' => '10'
-                                            },
-                                            'directives' => [
-                                              {
-                                                'directive' => {
-                                                  'arguments' => {
-                                                    'if' => {
-                                                      'variable' => [
-                                                        'foo'
-                                                      ]
-                                                    }
-                                                  },
-                                                  'name' => 'include'
-                                                }
-                                              }
-                                            ],
-                                            'name' => 'field1',
-                                            'selectionSet' => [
-                                              [
-                                                {
-                                                  'name' => 'id'
-                                                },
-                                                {
-                                                  'fragmentSpread' => [
-                                                    {
-                                                      'fragmentName' => 'frag'
-                                                    }
-                                                  ]
-                                                }
-                                              ]
-                                            ]
-                                          }
-                                        ]
-                                      ]
-                                    }
-                                  ]
-                                ]
-                              }
-                            ]
-                          },
-                          {
-                            'inlineFragment' => [
-                              {
-                                'directives' => [
+                                }
+                              ],
+                              'on' => 'User',
+                              'selectionSet' => [
+                                [
                                   {
-                                    'directive' => {
-                                      'arguments' => {
-                                        'unless' => {
-                                          'variable' => [
-                                            'foo'
+                                    'name' => 'field2',
+                                    'selectionSet' => [
+                                      [
+                                        {
+                                          'name' => 'id'
+                                        },
+                                        {
+                                          'alias' => 'alias',
+                                          'arguments' => {
+                                            'after' => {
+                                              'variable' => [
+                                                'foo'
+                                              ]
+                                            },
+                                            'first' => '10'
+                                          },
+                                          'directives' => [
+                                            {
+                                              'directive' => {
+                                                'arguments' => {
+                                                  'if' => {
+                                                    'variable' => [
+                                                      'foo'
+                                                    ]
+                                                  }
+                                                },
+                                                'name' => 'include'
+                                              }
+                                            }
+                                          ],
+                                          'name' => 'field1',
+                                          'selectionSet' => [
+                                            [
+                                              {
+                                                'name' => 'id'
+                                              },
+                                              {
+                                                'fragmentSpread' => [
+                                                  {
+                                                    'fragmentName' => 'frag'
+                                                  }
+                                                ]
+                                              }
+                                            ]
                                           ]
                                         }
-                                      },
-                                      'name' => 'skip'
-                                    }
+                                      ]
+                                    ]
                                   }
                                 ]
-                              },
-                              {
-                                'selectionSet' => [
-                                  [
-                                    {
-                                      'name' => 'id'
-                                    }
-                                  ]
-                                ]
-                              }
-                            ]
+                              ]
+                            }
                           },
                           {
-                            'inlineFragment' => [
-                              {
-                                'selectionSet' => [
-                                  [
-                                    {
-                                      'name' => 'id'
-                                    }
-                                  ]
+                            'inline_fragment' => {
+                              'directives' => [
+                                {
+                                  'directive' => {
+                                    'arguments' => {
+                                      'unless' => {
+                                        'variable' => [
+                                          'foo'
+                                        ]
+                                      }
+                                    },
+                                    'name' => 'skip'
+                                  }
+                                }
+                              ],
+                              'selectionSet' => [
+                                [
+                                  {
+                                    'name' => 'id'
+                                  }
                                 ]
-                              }
-                            ]
+                              ]
+                            }
+                          },
+                          {
+                            'inline_fragment' => {
+                              'selectionSet' => [
+                                [
+                                  {
+                                    'name' => 'id'
+                                  }
+                                ]
+                              ]
+                            }
                           }
                         ]
                       ]
