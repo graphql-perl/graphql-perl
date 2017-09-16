@@ -407,4 +407,9 @@ method got_graphql (Any $param = undef) {
   return @$param;
 }
 
+method got_definition (Any $param = undef) {
+  return unless defined $param;
+  return @$param;
+}
+
 1;
