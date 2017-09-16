@@ -417,4 +417,14 @@ method got_operationTypeDefinition (Any $param = undef) {
   return { map { ref($_) ? values %$_ : $_ } @$param };
 }
 
+method got_schemaDefinition (Any $param = undef) {
+  return unless defined $param;
+  $param = $param->[0]; # zap first useless layer
+  my %def;
+  map {
+    %def = (%def, %$_);
+  } @$param;
+  return {schema => \%def};
+}
+
 1;

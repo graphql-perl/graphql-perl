@@ -49,16 +49,10 @@ __DATA__
   {
     'typeSystemDefinition' => [
       {
-        'schemaDefinition' => [
-          [
-            {
-              'query' => 'QueryType'
-            },
-            {
-              'mutation' => 'MutationType'
-            }
-          ]
-        ]
+        'schema' => {
+          'mutation' => 'MutationType',
+          'query' => 'QueryType'
+        }
       }
     ]
   },
