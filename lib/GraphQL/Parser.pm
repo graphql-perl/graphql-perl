@@ -314,15 +314,6 @@ method got_variableDefinitions (Any $param = undef) {
   return {variables => \%def};
 }
 
-method got_field (Any $param = undef) {
-  return unless defined $param;
-  my %def;
-  %def = (%def, %{shift @$param}) if ref($param->[0]) eq 'HASH'; # alias
-  $def{name} = shift @$param;
-  %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
-  return \%def;
-}
-
 method got_selection (Any $param = undef) {
   unshift @_, $self; goto &got_value_const;
 }
@@ -337,16 +328,25 @@ method got_typeCondition (Any $param = undef) {
   return {on => @$param};
 }
 
+method got_fragmentName (Any $param = undef) {
+  return unless defined $param;
+  return $param;
+}
+
+method got_field (Any $param = undef) {
+  return unless defined $param;
+  my %def;
+  %def = (%def, %{shift @$param}) if ref($param->[0]) eq 'HASH'; # alias
+  $def{name} = shift @$param;
+  %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
+  return {kind => 'field', node => \%def};
+}
+
 method got_inlineFragment (Any $param = undef) {
   return unless defined $param;
   my %def;
   %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
-  return {inline_fragment => \%def};
-}
-
-method got_fragmentName (Any $param = undef) {
-  return unless defined $param;
-  return $param;
+  return {kind => 'inline_fragment', node => \%def};
 }
 
 method got_fragmentSpread (Any $param = undef) {
@@ -354,25 +354,13 @@ method got_fragmentSpread (Any $param = undef) {
   my %def;
   $def{name} = shift @$param;
   %def = (%def, %{shift @$param}) while @$param;
-  return {fragment_spread => \%def};
+  return {kind => 'fragment_spread', node => \%def};
 }
 
 method got_selectionSet (Any $param = undef) {
   return unless defined $param;
   $param = $param->[0]; # zap first useless layer
-  my (%def, %fields);
-  map {
-    if ($_->{inline_fragment}) {
-      push @{$def{inline_fragments}}, $_->{inline_fragment};
-    } elsif ($_->{fragment_spread}) {
-      push @{$def{fragment_spreads}}, $_->{fragment_spread};
-    } else {
-      my $name = delete $_->{name};
-      $fields{$name} = $_;
-    }
-  } @$param;
-  $def{fields} = \%fields if %fields;
-  return {selections => \%def};
+  return {selections => $param};
 }
 
 method got_fragmentDefinition (Any $param = undef) {

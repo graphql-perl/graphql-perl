@@ -112,7 +112,7 @@ sub string_lookup {
 
 sub query_lookup {
   my ($got, $type) = @_;
-  return $got->[0]{node}{selections}{fields}{foo}{arguments}{name};
+  return $got->[0]{node}{selections}[0]{node}{arguments}{name};
 }
 
 sub do_lex {
@@ -128,8 +128,9 @@ __DATA__
     'node' => {
       'name' => 'queryName',
       'operationType' => 'query',
-      'selections' => {
-        'fields' => {
+      'selections' => [
+        {
+          'kind' => 'field',
           'node' => {
             'alias' => 'whoever123is',
             'arguments' => {
@@ -138,24 +139,38 @@ __DATA__
                 '456'
               ]
             },
-            'selections' => {
-              'fields' => {
-                'id' => {}
+            'name' => 'node',
+            'selections' => [
+              {
+                'kind' => 'field',
+                'node' => {
+                  'name' => 'id'
+                }
               },
-              'inline_fragments' => [
-                {
+              {
+                'kind' => 'inline_fragment',
+                'node' => {
                   'directives' => [
                     {
                       'name' => 'defer'
                     }
                   ],
                   'on' => 'User',
-                  'selections' => {
-                    'fields' => {
-                      'field2' => {
-                        'selections' => {
-                          'fields' => {
-                            'field1' => {
+                  'selections' => [
+                    {
+                      'kind' => 'field',
+                      'node' => {
+                        'name' => 'field2',
+                        'selections' => [
+                          {
+                            'kind' => 'field',
+                            'node' => {
+                              'name' => 'id'
+                            }
+                          },
+                          {
+                            'kind' => 'field',
+                            'node' => {
                               'alias' => 'alias',
                               'arguments' => {
                                 'after' => \'foo',
@@ -169,25 +184,32 @@ __DATA__
                                   'name' => 'include'
                                 }
                               ],
-                              'selections' => {
-                                'fields' => {
-                                  'id' => {}
+                              'name' => 'field1',
+                              'selections' => [
+                                {
+                                  'kind' => 'field',
+                                  'node' => {
+                                    'name' => 'id'
+                                  }
                                 },
-                                'fragment_spreads' => [
-                                  {
+                                {
+                                  'kind' => 'fragment_spread',
+                                  'node' => {
                                     'name' => 'frag'
                                   }
-                                ]
-                              }
-                            },
-                            'id' => {}
+                                }
+                              ]
+                            }
                           }
-                        }
+                        ]
                       }
                     }
-                  }
-                },
-                {
+                  ]
+                }
+              },
+              {
+                'kind' => 'inline_fragment',
+                'node' => {
                   'directives' => [
                     {
                       'arguments' => {
@@ -196,24 +218,33 @@ __DATA__
                       'name' => 'skip'
                     }
                   ],
-                  'selections' => {
-                    'fields' => {
-                      'id' => {}
+                  'selections' => [
+                    {
+                      'kind' => 'field',
+                      'node' => {
+                        'name' => 'id'
+                      }
                     }
-                  }
-                },
-                {
-                  'selections' => {
-                    'fields' => {
-                      'id' => {}
-                    }
-                  }
+                  ]
                 }
-              ]
-            }
+              },
+              {
+                'kind' => 'inline_fragment',
+                'node' => {
+                  'selections' => [
+                    {
+                      'kind' => 'field',
+                      'node' => {
+                        'name' => 'id'
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         }
-      },
+      ],
       'variables' => {
         'foo' => {
           'type' => 'ComplexType'
@@ -230,9 +261,10 @@ __DATA__
     'node' => {
       'name' => 'likeStory',
       'operationType' => 'mutation',
-      'selections' => {
-        'fields' => {
-          'like' => {
+      'selections' => [
+        {
+          'kind' => 'field',
+          'node' => {
             'arguments' => {
               'story' => '123'
             },
@@ -241,20 +273,26 @@ __DATA__
                 'name' => 'defer'
               }
             ],
-            'selections' => {
-              'fields' => {
-                'story' => {
-                  'selections' => {
-                    'fields' => {
-                      'id' => {}
+            'name' => 'like',
+            'selections' => [
+              {
+                'kind' => 'field',
+                'node' => {
+                  'name' => 'story',
+                  'selections' => [
+                    {
+                      'kind' => 'field',
+                      'node' => {
+                        'name' => 'id'
+                      }
                     }
-                  }
+                  ]
                 }
               }
-            }
+            ]
           }
         }
-      }
+      ]
     }
   },
   {
@@ -262,39 +300,55 @@ __DATA__
     'node' => {
       'name' => 'StoryLikeSubscription',
       'operationType' => 'subscription',
-      'selections' => {
-        'fields' => {
-          'storyLikeSubscribe' => {
+      'selections' => [
+        {
+          'kind' => 'field',
+          'node' => {
             'arguments' => {
               'input' => \'input'
             },
-            'selections' => {
-              'fields' => {
-                'story' => {
-                  'selections' => {
-                    'fields' => {
-                      'likeSentence' => {
-                        'selections' => {
-                          'fields' => {
-                            'text' => {}
+            'name' => 'storyLikeSubscribe',
+            'selections' => [
+              {
+                'kind' => 'field',
+                'node' => {
+                  'name' => 'story',
+                  'selections' => [
+                    {
+                      'kind' => 'field',
+                      'node' => {
+                        'name' => 'likers',
+                        'selections' => [
+                          {
+                            'kind' => 'field',
+                            'node' => {
+                              'name' => 'count'
+                            }
                           }
-                        }
-                      },
-                      'likers' => {
-                        'selections' => {
-                          'fields' => {
-                            'count' => {}
+                        ]
+                      }
+                    },
+                    {
+                      'kind' => 'field',
+                      'node' => {
+                        'name' => 'likeSentence',
+                        'selections' => [
+                          {
+                            'kind' => 'field',
+                            'node' => {
+                              'name' => 'text'
+                            }
                           }
-                        }
+                        ]
                       }
                     }
-                  }
+                  ]
                 }
               }
-            }
+            ]
           }
         }
-      },
+      ],
       'variables' => {
         'input' => {
           'type' => 'StoryLikeSubscribeInput'
@@ -307,36 +361,45 @@ __DATA__
     'node' => {
       'name' => 'frag',
       'on' => 'Friend',
-      'selections' => {
-        'fields' => {
-          'foo' => {
+      'selections' => [
+        {
+          'kind' => 'field',
+          'node' => {
             'arguments' => {
               'bar' => \'b',
               'obj' => {
                 'key' => 'value'
               },
               'size' => \'size'
-            }
+            },
+            'name' => 'foo'
           }
         }
-      }
+      ]
     }
   },
   {
     'kind' => 'operation',
     'node' => {
-      'selections' => {
-        'fields' => {
-          'query' => {},
-          'unnamed' => {
+      'selections' => [
+        {
+          'kind' => 'field',
+          'node' => {
             'arguments' => {
               'falsey' => '',
               'nullish' => undef,
               'truthy' => 1
-            }
+            },
+            'name' => 'unnamed'
+          }
+        },
+        {
+          'kind' => 'field',
+          'node' => {
+            'name' => 'query'
           }
         }
-      }
+      ]
     }
   }
 ]
