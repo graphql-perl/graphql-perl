@@ -350,4 +350,22 @@ method got_fragmentSpread (Any $param = undef) {
   return {fragment_spread => \%def};
 }
 
+method got_selectionSet (Any $param = undef) {
+  return unless defined $param;
+  $param = $param->[0]; # zap first useless layer
+  my (%def, %fields);
+  map {
+    if ($_->{inline_fragment}) {
+      push @{$def{inline_fragments}}, $_->{inline_fragment};
+    } elsif ($_->{fragment_spread}) {
+      push @{$def{fragment_spreads}}, $_->{fragment_spread};
+    } else {
+      my $name = delete $_->{name};
+      $fields{$name} = $_;
+    }
+  } @$param;
+  $def{actual} = \%fields if %fields;
+  return {fields => \%def};
+}
+
 1;

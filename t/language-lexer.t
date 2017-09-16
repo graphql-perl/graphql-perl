@@ -112,7 +112,7 @@ sub string_lookup {
 
 sub query_lookup {
   my ($got, $type) = @_;
-  return $got->{graphql}[0][0]{definition}[0]{operationDefinition}[2]{selectionSet}[0][0]{arguments}{name};
+  return $got->{graphql}[0][0]{definition}[0]{operationDefinition}[2]{fields}{actual}{foo}{arguments}{name};
 }
 
 sub do_lex {
@@ -145,9 +145,9 @@ __DATA__
                 }
               },
               {
-                'selectionSet' => [
-                  [
-                    {
+                'fields' => {
+                  'actual' => {
+                    'node' => {
                       'alias' => 'whoever123is',
                       'arguments' => {
                         'id' => [
@@ -155,117 +155,100 @@ __DATA__
                           '456'
                         ]
                       },
-                      'name' => 'node',
-                      'selectionSet' => [
-                        [
+                      'fields' => {
+                        'actual' => {
+                          'id' => {}
+                        },
+                        'inline_fragments' => [
                           {
-                            'name' => 'id'
-                          },
-                          {
-                            'inline_fragment' => {
-                              'directives' => [
-                                {
-                                  'directive' => {
-                                    'name' => 'defer'
-                                  }
+                            'directives' => [
+                              {
+                                'directive' => {
+                                  'name' => 'defer'
                                 }
-                              ],
-                              'on' => 'User',
-                              'selectionSet' => [
-                                [
-                                  {
-                                    'name' => 'field2',
-                                    'selectionSet' => [
-                                      [
-                                        {
-                                          'name' => 'id'
-                                        },
-                                        {
-                                          'alias' => 'alias',
-                                          'arguments' => {
-                                            'after' => {
-                                              'variable' => [
-                                                'foo'
-                                              ]
-                                            },
-                                            'first' => '10'
-                                          },
-                                          'directives' => [
-                                            {
-                                              'directive' => {
-                                                'arguments' => {
-                                                  'if' => {
-                                                    'variable' => [
-                                                      'foo'
-                                                    ]
-                                                  }
-                                                },
-                                                'name' => 'include'
-                                              }
-                                            }
-                                          ],
-                                          'name' => 'field1',
-                                          'selectionSet' => [
-                                            [
-                                              {
-                                                'name' => 'id'
-                                              },
-                                              {
-                                                'fragment_spread' => {
-                                                  'name' => 'frag'
-                                                }
-                                              }
+                              }
+                            ],
+                            'fields' => {
+                              'actual' => {
+                                'field2' => {
+                                  'fields' => {
+                                    'actual' => {
+                                      'field1' => {
+                                        'alias' => 'alias',
+                                        'arguments' => {
+                                          'after' => {
+                                            'variable' => [
+                                              'foo'
                                             ]
+                                          },
+                                          'first' => '10'
+                                        },
+                                        'directives' => [
+                                          {
+                                            'directive' => {
+                                              'arguments' => {
+                                                'if' => {
+                                                  'variable' => [
+                                                    'foo'
+                                                  ]
+                                                }
+                                              },
+                                              'name' => 'include'
+                                            }
+                                          }
+                                        ],
+                                        'fields' => {
+                                          'actual' => {
+                                            'id' => {}
+                                          },
+                                          'fragment_spreads' => [
+                                            {
+                                              'name' => 'frag'
+                                            }
                                           ]
                                         }
-                                      ]
-                                    ]
-                                  }
-                                ]
-                              ]
-                            }
-                          },
-                          {
-                            'inline_fragment' => {
-                              'directives' => [
-                                {
-                                  'directive' => {
-                                    'arguments' => {
-                                      'unless' => {
-                                        'variable' => [
-                                          'foo'
-                                        ]
-                                      }
-                                    },
-                                    'name' => 'skip'
+                                      },
+                                      'id' => {}
+                                    }
                                   }
                                 }
-                              ],
-                              'selectionSet' => [
-                                [
-                                  {
-                                    'name' => 'id'
-                                  }
-                                ]
-                              ]
+                              }
+                            },
+                            'on' => 'User'
+                          },
+                          {
+                            'directives' => [
+                              {
+                                'directive' => {
+                                  'arguments' => {
+                                    'unless' => {
+                                      'variable' => [
+                                        'foo'
+                                      ]
+                                    }
+                                  },
+                                  'name' => 'skip'
+                                }
+                              }
+                            ],
+                            'fields' => {
+                              'actual' => {
+                                'id' => {}
+                              }
                             }
                           },
                           {
-                            'inline_fragment' => {
-                              'selectionSet' => [
-                                [
-                                  {
-                                    'name' => 'id'
-                                  }
-                                ]
-                              ]
+                            'fields' => {
+                              'actual' => {
+                                'id' => {}
+                              }
                             }
                           }
                         ]
-                      ]
+                      }
                     }
-                  ]
-                ]
+                  }
+                }
               }
             ]
           }
@@ -280,9 +263,9 @@ __DATA__
               },
               'likeStory',
               {
-                'selectionSet' => [
-                  [
-                    {
+                'fields' => {
+                  'actual' => {
+                    'like' => {
                       'arguments' => {
                         'story' => '123'
                       },
@@ -293,24 +276,20 @@ __DATA__
                           }
                         }
                       ],
-                      'name' => 'like',
-                      'selectionSet' => [
-                        [
-                          {
-                            'name' => 'story',
-                            'selectionSet' => [
-                              [
-                                {
-                                  'name' => 'id'
-                                }
-                              ]
-                            ]
+                      'fields' => {
+                        'actual' => {
+                          'story' => {
+                            'fields' => {
+                              'actual' => {
+                                'id' => {}
+                              }
+                            }
                           }
-                        ]
-                      ]
+                        }
+                      }
                     }
-                  ]
-                ]
+                  }
+                }
               }
             ]
           }
@@ -332,9 +311,9 @@ __DATA__
                 }
               },
               {
-                'selectionSet' => [
-                  [
-                    {
+                'fields' => {
+                  'actual' => {
+                    'storyLikeSubscribe' => {
                       'arguments' => {
                         'input' => {
                           'variable' => [
@@ -342,41 +321,33 @@ __DATA__
                           ]
                         }
                       },
-                      'name' => 'storyLikeSubscribe',
-                      'selectionSet' => [
-                        [
-                          {
-                            'name' => 'story',
-                            'selectionSet' => [
-                              [
-                                {
-                                  'name' => 'likers',
-                                  'selectionSet' => [
-                                    [
-                                      {
-                                        'name' => 'count'
-                                      }
-                                    ]
-                                  ]
+                      'fields' => {
+                        'actual' => {
+                          'story' => {
+                            'fields' => {
+                              'actual' => {
+                                'likeSentence' => {
+                                  'fields' => {
+                                    'actual' => {
+                                      'text' => {}
+                                    }
+                                  }
                                 },
-                                {
-                                  'name' => 'likeSentence',
-                                  'selectionSet' => [
-                                    [
-                                      {
-                                        'name' => 'text'
-                                      }
-                                    ]
-                                  ]
+                                'likers' => {
+                                  'fields' => {
+                                    'actual' => {
+                                      'count' => {}
+                                    }
+                                  }
                                 }
-                              ]
-                            ]
+                              }
+                            }
                           }
-                        ]
-                      ]
+                        }
+                      }
                     }
-                  ]
-                ]
+                  }
+                }
               }
             ]
           }
@@ -391,9 +362,9 @@ __DATA__
                 'on' => 'Friend'
               },
               {
-                'selectionSet' => [
-                  [
-                    {
+                'fields' => {
+                  'actual' => {
+                    'foo' => {
                       'arguments' => {
                         'bar' => {
                           'variable' => [
@@ -408,11 +379,10 @@ __DATA__
                             'size'
                           ]
                         }
-                      },
-                      'name' => 'foo'
+                      }
                     }
-                  ]
-                ]
+                  }
+                }
               }
             ]
           }
@@ -422,21 +392,18 @@ __DATA__
         'definition' => [
           {
             'operationDefinition' => {
-              'selectionSet' => [
-                [
-                  {
+              'fields' => {
+                'actual' => {
+                  'query' => {},
+                  'unnamed' => {
                     'arguments' => {
                       'falsey' => '',
                       'nullish' => undef,
                       'truthy' => 1
-                    },
-                    'name' => 'unnamed'
-                  },
-                  {
-                    'name' => 'query'
+                    }
                   }
-                ]
-              ]
+                }
+              }
             }
           }
         ]
