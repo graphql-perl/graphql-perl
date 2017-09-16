@@ -134,7 +134,7 @@ __DATA__
               },
               'queryName',
               {
-                'variableDefinitions' => {
+                'variables' => {
                   'foo' => {
                     'type' => 'ComplexType'
                   },
@@ -304,7 +304,7 @@ __DATA__
               },
               'StoryLikeSubscription',
               {
-                'variableDefinitions' => {
+                'variables' => {
                   'input' => {
                     'type' => 'StoryLikeSubscribeInput'
                   }

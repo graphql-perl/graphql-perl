@@ -299,12 +299,12 @@ method got_value (Any $param = undef) {
 method got_variableDefinitions (Any $param = undef) {
   return unless defined $param;
   $param = $param->[0]; # zap first useless layer
-  my %args;
+  my %def;
   map {
     my $name = shift(@$_)->{variable}[0];
-    $args{$name} = { map %$_, @$_ }; # merge
+    $def{$name} = { map %$_, @$_ }; # merge
   } map $_->{variableDefinition}, @$param;
-  return {$self->{parser}{rule} => \%args};
+  return {variables => \%def};
 }
 
 method got_field (Any $param = undef) {
