@@ -397,4 +397,9 @@ method got_directiveDefinition (Any $param = undef) {
   return {directive => \%def};
 }
 
+method got_directives (Any $param = undef) {
+  return unless defined $param;
+  return {$self->{parser}{rule} => [ map $_->{directive}, @$param ]};
+}
+
 1;

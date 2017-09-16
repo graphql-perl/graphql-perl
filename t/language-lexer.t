@@ -147,9 +147,7 @@ __DATA__
                         {
                           'directives' => [
                             {
-                              'directive' => {
-                                'name' => 'defer'
-                              }
+                              'name' => 'defer'
                             }
                           ],
                           'fields' => {
@@ -169,16 +167,14 @@ __DATA__
                                       },
                                       'directives' => [
                                         {
-                                          'directive' => {
-                                            'arguments' => {
-                                              'if' => {
-                                                'variable' => [
-                                                  'foo'
-                                                ]
-                                              }
-                                            },
-                                            'name' => 'include'
-                                          }
+                                          'arguments' => {
+                                            'if' => {
+                                              'variable' => [
+                                                'foo'
+                                              ]
+                                            }
+                                          },
+                                          'name' => 'include'
                                         }
                                       ],
                                       'fields' => {
@@ -203,16 +199,14 @@ __DATA__
                         {
                           'directives' => [
                             {
-                              'directive' => {
-                                'arguments' => {
-                                  'unless' => {
-                                    'variable' => [
-                                      'foo'
-                                    ]
-                                  }
-                                },
-                                'name' => 'skip'
-                              }
+                              'arguments' => {
+                                'unless' => {
+                                  'variable' => [
+                                    'foo'
+                                  ]
+                                }
+                              },
+                              'name' => 'skip'
                             }
                           ],
                           'fields' => {
@@ -260,9 +254,7 @@ __DATA__
                     },
                     'directives' => [
                       {
-                        'directive' => {
-                          'name' => 'defer'
-                        }
+                        'name' => 'defer'
                       }
                     ],
                     'fields' => {

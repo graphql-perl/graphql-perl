@@ -180,12 +180,10 @@ __DATA__
                   'objectTypeDefinition' => {
                     'directives' => [
                       {
-                        'directive' => {
-                          'arguments' => {
-                            'arg' => 'value'
-                          },
-                          'name' => 'onObject'
-                        }
+                        'arguments' => {
+                          'arg' => 'value'
+                        },
+                        'name' => 'onObject'
                       }
                     ],
                     'fields' => {
@@ -195,9 +193,7 @@ __DATA__
                             'default_value' => 'default',
                             'directives' => [
                               {
-                                'directive' => {
-                                  'name' => 'onArg'
-                                }
+                                'name' => 'onArg'
                               }
                             ],
                             'type' => 'Type'
@@ -205,9 +201,7 @@ __DATA__
                         },
                         'directives' => [
                           {
-                            'directive' => {
-                              'name' => 'onField'
-                            }
+                            'name' => 'onField'
                           }
                         ],
                         'type' => 'Type'
@@ -259,9 +253,7 @@ __DATA__
                   'interfaceTypeDefinition' => {
                     'directives' => [
                       {
-                        'directive' => {
-                          'name' => 'onInterface'
-                        }
+                        'name' => 'onInterface'
                       }
                     ],
                     'fields' => {
@@ -270,9 +262,7 @@ __DATA__
                           'arg' => {
                             'directives' => [
                               {
-                                'directive' => {
-                                  'name' => 'onArg'
-                                }
+                                'name' => 'onArg'
                               }
                             ],
                             'type' => 'Type'
@@ -280,9 +270,7 @@ __DATA__
                         },
                         'directives' => [
                           {
-                            'directive' => {
-                              'name' => 'onField'
-                            }
+                            'name' => 'onField'
                           }
                         ],
                         'type' => 'Type'
@@ -325,9 +313,7 @@ __DATA__
                   'unionTypeDefinition' => {
                     'directives' => [
                       {
-                        'directive' => {
-                          'name' => 'onUnion'
-                        }
+                        'name' => 'onUnion'
                       }
                     ],
                     'name' => 'AnnotatedUnion',
@@ -366,9 +352,7 @@ __DATA__
                   'scalarTypeDefinition' => {
                     'directives' => [
                       {
-                        'directive' => {
-                          'name' => 'onScalar'
-                        }
+                        'name' => 'onScalar'
                       }
                     ],
                     'name' => 'AnnotatedScalar'
@@ -407,9 +391,7 @@ __DATA__
                   'enumTypeDefinition' => {
                     'directives' => [
                       {
-                        'directive' => {
-                          'name' => 'onEnum'
-                        }
+                        'name' => 'onEnum'
                       }
                     ],
                     'name' => 'AnnotatedEnum',
@@ -417,9 +399,7 @@ __DATA__
                       'ANNOTATED_VALUE' => {
                         'directives' => [
                           {
-                            'directive' => {
-                              'name' => 'onEnumValue'
-                            }
+                            'name' => 'onEnumValue'
                           }
                         ]
                       },
@@ -469,18 +449,14 @@ __DATA__
                   'inputObjectTypeDefinition' => {
                     'directives' => [
                       {
-                        'directive' => {
-                          'name' => 'onInputObjectType'
-                        }
+                        'name' => 'onInputObjectType'
                       }
                     ],
                     'fields' => {
                       'annotatedField' => {
                         'directives' => [
                           {
-                            'directive' => {
-                              'name' => 'onField'
-                            }
+                            'name' => 'onField'
                           }
                         ],
                         'type' => 'Type'
@@ -537,9 +513,7 @@ __DATA__
                     'objectTypeDefinition' => {
                       'directives' => [
                         {
-                          'directive' => {
-                            'name' => 'onType'
-                          }
+                          'name' => 'onType'
                         }
                       ],
                       'fields' => {},
