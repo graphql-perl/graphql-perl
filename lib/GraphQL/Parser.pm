@@ -427,4 +427,9 @@ method got_schemaDefinition (Any $param = undef) {
   return {schema => \%def};
 }
 
+method got_typeSystemDefinition (Any $param = undef) {
+  return unless defined $param;
+  return @$param;
+}
+
 1;

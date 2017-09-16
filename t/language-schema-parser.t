@@ -47,463 +47,391 @@ done_testing;
 __DATA__
 [
   {
-    'typeSystemDefinition' => [
-      {
-        'schema' => {
-          'mutation' => 'MutationType',
-          'query' => 'QueryType'
-        }
-      }
-    ]
+    'schema' => {
+      'mutation' => 'MutationType',
+      'query' => 'QueryType'
+    }
   },
   {
-    'typeSystemDefinition' => [
-      {
-        'typeDefinition' => {
-          'objectTypeDefinition' => {
-            'fields' => {
-              'five' => {
-                'args' => {
-                  'argument' => {
-                    'default_value' => [
-                      'string',
-                      'string'
-                    ],
-                    'type' => {
-                      'listType' => [
-                        {
-                          'type' => 'String'
-                        }
-                      ]
-                    }
-                  }
-                },
-                'type' => 'String'
-              },
-              'four' => {
-                'args' => {
-                  'argument' => {
-                    'default_value' => 'string',
-                    'type' => 'String'
-                  }
-                },
-                'type' => 'String'
-              },
-              'one' => {
-                'type' => 'Type'
-              },
-              'seven' => {
-                'args' => {
-                  'argument' => {
-                    'default_value' => undef,
-                    'type' => 'Int'
-                  }
-                },
-                'type' => 'Type'
-              },
-              'six' => {
-                'args' => {
-                  'argument' => {
-                    'default_value' => {
-                      'key' => 'value'
-                    },
-                    'type' => 'InputType'
-                  }
-                },
-                'type' => 'Type'
-              },
-              'three' => {
-                'args' => {
-                  'argument' => {
-                    'type' => 'InputType'
-                  },
-                  'other' => {
-                    'type' => 'String'
-                  }
-                },
-                'type' => 'Int'
-              },
-              'two' => {
-                'args' => {
-                  'argument' => {
-                    'type' => {
-                      'nonNullType' => [
-                        'InputType'
-                      ]
-                    }
-                  }
-                },
-                'type' => 'Type'
-              }
-            },
-            'interfaces' => [
-              'Bar'
-            ],
-            'name' => 'Foo'
-          }
-        }
-      }
-    ]
-  },
-  {
-    'typeSystemDefinition' => [
-      {
-        'typeDefinition' => {
-          'objectTypeDefinition' => {
-            'directives' => [
-              {
-                'arguments' => {
-                  'arg' => 'value'
-                },
-                'name' => 'onObject'
-              }
-            ],
-            'fields' => {
-              'annotatedField' => {
-                'args' => {
-                  'arg' => {
-                    'default_value' => 'default',
-                    'directives' => [
-                      {
-                        'name' => 'onArg'
-                      }
-                    ],
-                    'type' => 'Type'
-                  }
-                },
-                'directives' => [
-                  {
-                    'name' => 'onField'
-                  }
+    'typeDefinition' => {
+      'objectTypeDefinition' => {
+        'fields' => {
+          'five' => {
+            'args' => {
+              'argument' => {
+                'default_value' => [
+                  'string',
+                  'string'
                 ],
-                'type' => 'Type'
-              }
-            },
-            'name' => 'AnnotatedObject'
-          }
-        }
-      }
-    ]
-  },
-  {
-    'typeSystemDefinition' => [
-      {
-        'typeDefinition' => {
-          'interfaceTypeDefinition' => {
-            'fields' => {
-              'four' => {
-                'args' => {
-                  'argument' => {
-                    'default_value' => 'string',
-                    'type' => 'String'
-                  }
-                },
-                'type' => 'String'
-              },
-              'one' => {
-                'type' => 'Type'
-              }
-            },
-            'name' => 'Bar'
-          }
-        }
-      }
-    ]
-  },
-  {
-    'typeSystemDefinition' => [
-      {
-        'typeDefinition' => {
-          'interfaceTypeDefinition' => {
-            'directives' => [
-              {
-                'name' => 'onInterface'
-              }
-            ],
-            'fields' => {
-              'annotatedField' => {
-                'args' => {
-                  'arg' => {
-                    'directives' => [
-                      {
-                        'name' => 'onArg'
-                      }
-                    ],
-                    'type' => 'Type'
-                  }
-                },
-                'directives' => [
-                  {
-                    'name' => 'onField'
-                  }
-                ],
-                'type' => 'Type'
-              }
-            },
-            'name' => 'AnnotatedInterface'
-          }
-        }
-      }
-    ]
-  },
-  {
-    'typeSystemDefinition' => [
-      {
-        'typeDefinition' => {
-          'unionTypeDefinition' => {
-            'name' => 'Feed',
-            'types' => [
-              'Story',
-              'Article',
-              'Advert'
-            ]
-          }
-        }
-      }
-    ]
-  },
-  {
-    'typeSystemDefinition' => [
-      {
-        'typeDefinition' => {
-          'unionTypeDefinition' => {
-            'directives' => [
-              {
-                'name' => 'onUnion'
-              }
-            ],
-            'name' => 'AnnotatedUnion',
-            'types' => [
-              'A',
-              'B'
-            ]
-          }
-        }
-      }
-    ]
-  },
-  {
-    'typeSystemDefinition' => [
-      {
-        'typeDefinition' => {
-          'scalarTypeDefinition' => {
-            'name' => 'CustomScalar'
-          }
-        }
-      }
-    ]
-  },
-  {
-    'typeSystemDefinition' => [
-      {
-        'typeDefinition' => {
-          'scalarTypeDefinition' => {
-            'directives' => [
-              {
-                'name' => 'onScalar'
-              }
-            ],
-            'name' => 'AnnotatedScalar'
-          }
-        }
-      }
-    ]
-  },
-  {
-    'typeSystemDefinition' => [
-      {
-        'typeDefinition' => {
-          'enumTypeDefinition' => {
-            'name' => 'Site',
-            'values' => {
-              'DESKTOP' => {},
-              'MOBILE' => {}
-            }
-          }
-        }
-      }
-    ]
-  },
-  {
-    'typeSystemDefinition' => [
-      {
-        'typeDefinition' => {
-          'enumTypeDefinition' => {
-            'directives' => [
-              {
-                'name' => 'onEnum'
-              }
-            ],
-            'name' => 'AnnotatedEnum',
-            'values' => {
-              'ANNOTATED_VALUE' => {
-                'directives' => [
-                  {
-                    'name' => 'onEnumValue'
-                  }
-                ]
-              },
-              'OTHER_VALUE' => {}
-            }
-          }
-        }
-      }
-    ]
-  },
-  {
-    'typeSystemDefinition' => [
-      {
-        'typeDefinition' => {
-          'inputObjectTypeDefinition' => {
-            'fields' => {
-              'answer' => {
-                'default_value' => '42',
-                'type' => 'Int'
-              },
-              'key' => {
                 'type' => {
-                  'nonNullType' => [
-                    'String'
+                  'listType' => [
+                    {
+                      'type' => 'String'
+                    }
                   ]
                 }
               }
             },
-            'name' => 'InputType'
+            'type' => 'String'
+          },
+          'four' => {
+            'args' => {
+              'argument' => {
+                'default_value' => 'string',
+                'type' => 'String'
+              }
+            },
+            'type' => 'String'
+          },
+          'one' => {
+            'type' => 'Type'
+          },
+          'seven' => {
+            'args' => {
+              'argument' => {
+                'default_value' => undef,
+                'type' => 'Int'
+              }
+            },
+            'type' => 'Type'
+          },
+          'six' => {
+            'args' => {
+              'argument' => {
+                'default_value' => {
+                  'key' => 'value'
+                },
+                'type' => 'InputType'
+              }
+            },
+            'type' => 'Type'
+          },
+          'three' => {
+            'args' => {
+              'argument' => {
+                'type' => 'InputType'
+              },
+              'other' => {
+                'type' => 'String'
+              }
+            },
+            'type' => 'Int'
+          },
+          'two' => {
+            'args' => {
+              'argument' => {
+                'type' => {
+                  'nonNullType' => [
+                    'InputType'
+                  ]
+                }
+              }
+            },
+            'type' => 'Type'
           }
-        }
+        },
+        'interfaces' => [
+          'Bar'
+        ],
+        'name' => 'Foo'
       }
-    ]
+    }
   },
   {
-    'typeSystemDefinition' => [
-      {
-        'typeDefinition' => {
-          'inputObjectTypeDefinition' => {
-            'directives' => [
-              {
-                'name' => 'onInputObjectType'
-              }
-            ],
-            'fields' => {
-              'annotatedField' => {
+    'typeDefinition' => {
+      'objectTypeDefinition' => {
+        'directives' => [
+          {
+            'arguments' => {
+              'arg' => 'value'
+            },
+            'name' => 'onObject'
+          }
+        ],
+        'fields' => {
+          'annotatedField' => {
+            'args' => {
+              'arg' => {
+                'default_value' => 'default',
                 'directives' => [
                   {
-                    'name' => 'onField'
+                    'name' => 'onArg'
                   }
                 ],
                 'type' => 'Type'
               }
             },
-            'name' => 'AnnotatedInput'
+            'directives' => [
+              {
+                'name' => 'onField'
+              }
+            ],
+            'type' => 'Type'
           }
-        }
+        },
+        'name' => 'AnnotatedObject'
       }
-    ]
+    }
   },
   {
-    'typeSystemDefinition' => [
-      {
-        'typeExtensionDefinition' => [
+    'typeDefinition' => {
+      'interfaceTypeDefinition' => {
+        'fields' => {
+          'four' => {
+            'args' => {
+              'argument' => {
+                'default_value' => 'string',
+                'type' => 'String'
+              }
+            },
+            'type' => 'String'
+          },
+          'one' => {
+            'type' => 'Type'
+          }
+        },
+        'name' => 'Bar'
+      }
+    }
+  },
+  {
+    'typeDefinition' => {
+      'interfaceTypeDefinition' => {
+        'directives' => [
           {
-            'objectTypeDefinition' => {
-              'fields' => {
-                'seven' => {
-                  'args' => {
-                    'argument' => {
-                      'type' => {
-                        'listType' => [
-                          {
-                            'type' => 'String'
-                          }
-                        ]
+            'name' => 'onInterface'
+          }
+        ],
+        'fields' => {
+          'annotatedField' => {
+            'args' => {
+              'arg' => {
+                'directives' => [
+                  {
+                    'name' => 'onArg'
+                  }
+                ],
+                'type' => 'Type'
+              }
+            },
+            'directives' => [
+              {
+                'name' => 'onField'
+              }
+            ],
+            'type' => 'Type'
+          }
+        },
+        'name' => 'AnnotatedInterface'
+      }
+    }
+  },
+  {
+    'typeDefinition' => {
+      'unionTypeDefinition' => {
+        'name' => 'Feed',
+        'types' => [
+          'Story',
+          'Article',
+          'Advert'
+        ]
+      }
+    }
+  },
+  {
+    'typeDefinition' => {
+      'unionTypeDefinition' => {
+        'directives' => [
+          {
+            'name' => 'onUnion'
+          }
+        ],
+        'name' => 'AnnotatedUnion',
+        'types' => [
+          'A',
+          'B'
+        ]
+      }
+    }
+  },
+  {
+    'typeDefinition' => {
+      'scalarTypeDefinition' => {
+        'name' => 'CustomScalar'
+      }
+    }
+  },
+  {
+    'typeDefinition' => {
+      'scalarTypeDefinition' => {
+        'directives' => [
+          {
+            'name' => 'onScalar'
+          }
+        ],
+        'name' => 'AnnotatedScalar'
+      }
+    }
+  },
+  {
+    'typeDefinition' => {
+      'enumTypeDefinition' => {
+        'name' => 'Site',
+        'values' => {
+          'DESKTOP' => {},
+          'MOBILE' => {}
+        }
+      }
+    }
+  },
+  {
+    'typeDefinition' => {
+      'enumTypeDefinition' => {
+        'directives' => [
+          {
+            'name' => 'onEnum'
+          }
+        ],
+        'name' => 'AnnotatedEnum',
+        'values' => {
+          'ANNOTATED_VALUE' => {
+            'directives' => [
+              {
+                'name' => 'onEnumValue'
+              }
+            ]
+          },
+          'OTHER_VALUE' => {}
+        }
+      }
+    }
+  },
+  {
+    'typeDefinition' => {
+      'inputObjectTypeDefinition' => {
+        'fields' => {
+          'answer' => {
+            'default_value' => '42',
+            'type' => 'Int'
+          },
+          'key' => {
+            'type' => {
+              'nonNullType' => [
+                'String'
+              ]
+            }
+          }
+        },
+        'name' => 'InputType'
+      }
+    }
+  },
+  {
+    'typeDefinition' => {
+      'inputObjectTypeDefinition' => {
+        'directives' => [
+          {
+            'name' => 'onInputObjectType'
+          }
+        ],
+        'fields' => {
+          'annotatedField' => {
+            'directives' => [
+              {
+                'name' => 'onField'
+              }
+            ],
+            'type' => 'Type'
+          }
+        },
+        'name' => 'AnnotatedInput'
+      }
+    }
+  },
+  {
+    'typeExtensionDefinition' => [
+      {
+        'objectTypeDefinition' => {
+          'fields' => {
+            'seven' => {
+              'args' => {
+                'argument' => {
+                  'type' => {
+                    'listType' => [
+                      {
+                        'type' => 'String'
                       }
-                    }
-                  },
-                  'type' => 'Type'
+                    ]
+                  }
                 }
               },
-              'name' => 'Foo'
-            }
-          }
-        ]
-      }
-    ]
-  },
-  {
-    'typeSystemDefinition' => [
-      {
-        'typeExtensionDefinition' => [
-          {
-            'objectTypeDefinition' => {
-              'directives' => [
-                {
-                  'name' => 'onType'
-                }
-              ],
-              'fields' => {},
-              'name' => 'Foo'
-            }
-          }
-        ]
-      }
-    ]
-  },
-  {
-    'typeSystemDefinition' => [
-      {
-        'typeDefinition' => {
-          'objectTypeDefinition' => {
-            'fields' => {},
-            'name' => 'NoFields'
-          }
-        }
-      }
-    ]
-  },
-  {
-    'typeSystemDefinition' => [
-      {
-        'directive' => {
-          'args' => {
-            'if' => {
-              'type' => {
-                'nonNullType' => [
-                  'Boolean'
-                ]
-              }
+              'type' => 'Type'
             }
           },
-          'locations' => [
-            'FIELD',
-            'FRAGMENT_SPREAD',
-            'INLINE_FRAGMENT'
-          ],
-          'name' => 'skip'
+          'name' => 'Foo'
         }
       }
     ]
   },
   {
-    'typeSystemDefinition' => [
+    'typeExtensionDefinition' => [
       {
-        'directive' => {
-          'args' => {
-            'if' => {
-              'type' => {
-                'nonNullType' => [
-                  'Boolean'
-                ]
-              }
+        'objectTypeDefinition' => {
+          'directives' => [
+            {
+              'name' => 'onType'
             }
-          },
-          'locations' => [
-            'FIELD',
-            'FRAGMENT_SPREAD',
-            'INLINE_FRAGMENT'
           ],
-          'name' => 'include'
+          'fields' => {},
+          'name' => 'Foo'
         }
       }
     ]
+  },
+  {
+    'typeDefinition' => {
+      'objectTypeDefinition' => {
+        'fields' => {},
+        'name' => 'NoFields'
+      }
+    }
+  },
+  {
+    'directive' => {
+      'args' => {
+        'if' => {
+          'type' => {
+            'nonNullType' => [
+              'Boolean'
+            ]
+          }
+        }
+      },
+      'locations' => [
+        'FIELD',
+        'FRAGMENT_SPREAD',
+        'INLINE_FRAGMENT'
+      ],
+      'name' => 'skip'
+    }
+  },
+  {
+    'directive' => {
+      'args' => {
+        'if' => {
+          'type' => {
+            'nonNullType' => [
+              'Boolean'
+            ]
+          }
+        }
+      },
+      'locations' => [
+        'FIELD',
+        'FRAGMENT_SPREAD',
+        'INLINE_FRAGMENT'
+      ],
+      'name' => 'include'
+    }
   }
 ]
