@@ -371,8 +371,8 @@ method got_selectionSet (Any $param = undef) {
       $fields{$name} = $_;
     }
   } @$param;
-  $def{actual} = \%fields if %fields;
-  return {fields => \%def};
+  $def{fields} = \%fields if %fields;
+  return {selections => \%def};
 }
 
 method got_fragmentDefinition (Any $param = undef) {

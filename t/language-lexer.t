@@ -112,7 +112,7 @@ sub string_lookup {
 
 sub query_lookup {
   my ($got, $type) = @_;
-  return $got->[0]{node}{fields}{actual}{foo}{arguments}{name};
+  return $got->[0]{node}{selections}{fields}{foo}{arguments}{name};
 }
 
 sub do_lex {
@@ -126,8 +126,10 @@ __DATA__
   {
     'kind' => 'operation',
     'node' => {
-      'fields' => {
-        'actual' => {
+      'name' => 'queryName',
+      'operationType' => 'query',
+      'selections' => {
+        'fields' => {
           'node' => {
             'alias' => 'whoever123is',
             'arguments' => {
@@ -136,8 +138,8 @@ __DATA__
                 '456'
               ]
             },
-            'fields' => {
-              'actual' => {
+            'selections' => {
+              'fields' => {
                 'id' => {}
               },
               'inline_fragments' => [
@@ -147,11 +149,12 @@ __DATA__
                       'name' => 'defer'
                     }
                   ],
-                  'fields' => {
-                    'actual' => {
+                  'on' => 'User',
+                  'selections' => {
+                    'fields' => {
                       'field2' => {
-                        'fields' => {
-                          'actual' => {
+                        'selections' => {
+                          'fields' => {
                             'field1' => {
                               'alias' => 'alias',
                               'arguments' => {
@@ -166,8 +169,8 @@ __DATA__
                                   'name' => 'include'
                                 }
                               ],
-                              'fields' => {
-                                'actual' => {
+                              'selections' => {
+                                'fields' => {
                                   'id' => {}
                                 },
                                 'fragment_spreads' => [
@@ -182,8 +185,7 @@ __DATA__
                         }
                       }
                     }
-                  },
-                  'on' => 'User'
+                  }
                 },
                 {
                   'directives' => [
@@ -194,15 +196,15 @@ __DATA__
                       'name' => 'skip'
                     }
                   ],
-                  'fields' => {
-                    'actual' => {
+                  'selections' => {
+                    'fields' => {
                       'id' => {}
                     }
                   }
                 },
                 {
-                  'fields' => {
-                    'actual' => {
+                  'selections' => {
+                    'fields' => {
                       'id' => {}
                     }
                   }
@@ -212,8 +214,6 @@ __DATA__
           }
         }
       },
-      'name' => 'queryName',
-      'operationType' => 'query',
       'variables' => {
         'foo' => {
           'type' => 'ComplexType'
@@ -228,8 +228,10 @@ __DATA__
   {
     'kind' => 'operation',
     'node' => {
-      'fields' => {
-        'actual' => {
+      'name' => 'likeStory',
+      'operationType' => 'mutation',
+      'selections' => {
+        'fields' => {
           'like' => {
             'arguments' => {
               'story' => '123'
@@ -239,11 +241,11 @@ __DATA__
                 'name' => 'defer'
               }
             ],
-            'fields' => {
-              'actual' => {
+            'selections' => {
+              'fields' => {
                 'story' => {
-                  'fields' => {
-                    'actual' => {
+                  'selections' => {
+                    'fields' => {
                       'id' => {}
                     }
                   }
@@ -252,35 +254,35 @@ __DATA__
             }
           }
         }
-      },
-      'name' => 'likeStory',
-      'operationType' => 'mutation'
+      }
     }
   },
   {
     'kind' => 'operation',
     'node' => {
-      'fields' => {
-        'actual' => {
+      'name' => 'StoryLikeSubscription',
+      'operationType' => 'subscription',
+      'selections' => {
+        'fields' => {
           'storyLikeSubscribe' => {
             'arguments' => {
               'input' => \'input'
             },
-            'fields' => {
-              'actual' => {
+            'selections' => {
+              'fields' => {
                 'story' => {
-                  'fields' => {
-                    'actual' => {
+                  'selections' => {
+                    'fields' => {
                       'likeSentence' => {
-                        'fields' => {
-                          'actual' => {
+                        'selections' => {
+                          'fields' => {
                             'text' => {}
                           }
                         }
                       },
                       'likers' => {
-                        'fields' => {
-                          'actual' => {
+                        'selections' => {
+                          'fields' => {
                             'count' => {}
                           }
                         }
@@ -293,8 +295,6 @@ __DATA__
           }
         }
       },
-      'name' => 'StoryLikeSubscription',
-      'operationType' => 'subscription',
       'variables' => {
         'input' => {
           'type' => 'StoryLikeSubscribeInput'
@@ -305,8 +305,10 @@ __DATA__
   {
     'kind' => 'fragment',
     'node' => {
-      'fields' => {
-        'actual' => {
+      'name' => 'frag',
+      'on' => 'Friend',
+      'selections' => {
+        'fields' => {
           'foo' => {
             'arguments' => {
               'bar' => \'b',
@@ -317,16 +319,14 @@ __DATA__
             }
           }
         }
-      },
-      'name' => 'frag',
-      'on' => 'Friend'
+      }
     }
   },
   {
     'kind' => 'operation',
     'node' => {
-      'fields' => {
-        'actual' => {
+      'selections' => {
+        'fields' => {
           'query' => {},
           'unnamed' => {
             'arguments' => {
