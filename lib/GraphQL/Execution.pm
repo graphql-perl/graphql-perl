@@ -414,7 +414,7 @@ fun _get_argument_values(
     my $default_value = $arg_def->{default_value};
     if (!$argument_node) {
       $coerced_values{$name} = $default_value if defined $default_value;
-    } elsif (ref $argument_node) {
+    } elsif (ref($argument_node) eq 'SCALAR') {
       # scalar ref means it's a variable
       # assume query validation already checked variable has valid value
       my $varname = $$argument_node;
