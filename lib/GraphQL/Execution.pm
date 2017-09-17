@@ -47,7 +47,7 @@ Executes a GraphQL query, returns results.
 method execute(
   (InstanceOf['GraphQL::Schema']) $schema,
   Str $doc,
-  Any $root_value,
+  Any $root_value = undef,
   Any $context_value = undef,
   Maybe[HashRef] $variable_values = undef,
   Maybe[Str] $operation_name = undef,
