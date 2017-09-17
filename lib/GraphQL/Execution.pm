@@ -423,18 +423,23 @@ fun _get_argument_values(
 # $root_value is either a hash with fieldnames as keys and either data
 #   or coderefs as values
 # OR it's just a coderef itself
-# any coderef gets called with obvious args
+# OR it's an object which gets tried for fieldname as method
+# any code gets called with obvious args
 fun _default_field_resolver(
-  CodeLike | HashRef $root_value,
+  CodeLike | HashRef | InstanceOf $root_value,
   HashRef $args,
   Maybe[HashRef] $context,
   HashRef $info,
 ) {
+  my $field_name = $info->{field_name};
   my $property = is_HashRef($root_value)
-    ? $root_value->{$info->{field_name}}
+    ? $root_value->{$field_name}
     : $root_value;
   if (eval { CodeLike->($property); 1 }) {
     return $property->($args, $context, $info);
+  }
+  if (is_InstanceOf($root_value) and $root_value->can($field_name)) {
+    return $root_value->$field_name($args, $context, $info);
   }
   $property;
 }
