@@ -55,4 +55,25 @@ subtest 'default function calls methods', sub {
   done_testing;
 };
 
+subtest 'default function passes args and context', sub {
+  my $schema = make_schema({
+    type => $Int,
+    args => { addend1 => { type => $Int } },
+  });
+  {
+    package Adder;
+    sub new { bless { _num => $_[1] }, $_[0]; }
+    sub test { shift->{_num} + shift->{addend1} + shift->{addend2} }
+  }
+  my $root_value = Adder->new(700);
+  is $root_value->test({ addend1 => 80 }, { addend2 => 9 }), 789;
+  my $got = GraphQL::Execution->execute(
+    $schema, '{ test(addend1: 80) }', $root_value, { addend2 => 9 },
+  );
+  is_deeply $got, {
+    data => { test => 789 },
+  } or diag Dumper $got;
+  done_testing;
+};
+
 done_testing;

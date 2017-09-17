@@ -403,21 +403,42 @@ fun _get_argument_values(
   HashRef $node,
   Maybe[HashRef] $variable_values = {},
 ) {
-  return {};
   my $arg_defs = $def->{args};
   my $arg_nodes = $node->{arguments};
   return {} if !$arg_defs or !$arg_nodes;
-  my $coerced_values = {};
-  my $arg_node_map = map { ($_ => $arg_nodes->{$_}) } keys %$arg_nodes;
+  my %coerced_values;
   for my $name (keys %$arg_defs) {
     my $arg_def = $arg_defs->{$name};
     my $arg_type = $arg_def->{type};
-    my $argument_node = $arg_node_map->{$name};
+    my $argument_node = $arg_nodes->{$name};
     my $default_value = $arg_def->{default_value};
     if (!$argument_node) {
-    } elsif (ref $argument_node->{x}) { # TODO implement
+      $coerced_values{$name} = $default_value;
+    } elsif (ref $argument_node) {
+      # scalar ref means it's a variable
+      # assume query validation already checked variable has valid value
+      my $varname = $$argument_node;
+      $coerced_values{$name} = ($variable_values && $variable_values->{$name})
+        || $default_value;
+      if (!defined $coerced_values{$name} and $arg_type->DOES('GraphQL::Role::NonNull')) {
+        die GraphQL::Error->new(
+          message => "Argument '$name' of type '@{[$arg_type->to_string]}'"
+            . " was given variable '\$$varname' but no runtime value.",
+          nodes => [ $node ],
+        );
+      }
+    } else {
+      if (!eval { $arg_type->serialize->($argument_node); 1 }) {
+        die GraphQL::Error->new(
+          message => "Argument '$name' got invalid value"
+            . " '\$$argument_node'.\n$@",
+          nodes => [ $node ],
+        );
+      }
+      $coerced_values{$name} = $argument_node;
     }
   }
+  \%coerced_values;
 }
 
 # $root_value is either a hash with fieldnames as keys and either data
