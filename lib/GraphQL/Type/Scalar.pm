@@ -36,7 +36,6 @@ GraphQL::Type::Scalar - GraphQL scalar type
       'values. Int can represent values between -(2^31) and 2^31 - 1. ',
     serialize => \&coerce_int,
     parse_value => \&coerce_int,
-    parse_literal => \&parse_literal,
   );
 
 =head1 ATTRIBUTES
@@ -61,17 +60,6 @@ one of the required type, or throws an exception.
 
 has parse_value => (is => 'ro', isa => CodeRef);
 
-# TODO does not take AST node yet
-
-=head2 parse_literal
-
-Code-ref. Required if is for an input type. Coerces an AST node into
-a Perl entity of the required type, or throws an exception.
-
-=cut
-
-has parse_literal => (is => 'ro', isa => CodeRef);
-
 =head1 EXPORTED VARIABLES
 
 =head2 $Int
@@ -85,7 +73,6 @@ our $Int = GraphQL::Type::Scalar->new(
     'values. Int can represent values between -(2^31) and 2^31 - 1.',
   serialize => sub { Int32Signed->(@_); $JSON->encode($_[0]) },
   parse_value => sub { Int32Signed->(@_); $JSON->encode($_[0]) },
-#  parse_literal => $parse_literal,
 );
 
 =head2 $Float
@@ -100,7 +87,6 @@ our $Float = GraphQL::Type::Scalar->new(
     '[IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point).',
   serialize => sub { Num->(@_); $JSON->encode($_[0]) },
   parse_value => sub { Num->(@_); $JSON->encode($_[0]) },
-#  parse_literal => $parse_literal,
 );
 
 =head2 $String
@@ -115,7 +101,6 @@ our $String = GraphQL::Type::Scalar->new(
     'represent free-form human-readable text.',
   serialize => sub { Str->(@_); $JSON->encode($_[0]) },
   parse_value => sub { Str->(@_); $JSON->encode($_[0]) },
-#  parse_literal => $parse_literal,
 );
 
 =head2 $Boolean
@@ -128,7 +113,6 @@ our $Boolean = GraphQL::Type::Scalar->new(
     'The `Boolean` scalar type represents `true` or `false`.',
   serialize => sub { Bool->(@_); $_[0] ? 'true' : 'false' },
   parse_value => sub { Bool->(@_); $_[0] ? 'true' : 'false' },
-#  parse_literal => $parse_literal,
 );
 
 =head2 $ID
@@ -145,7 +129,6 @@ our $ID = GraphQL::Type::Scalar->new(
     '(such as `4`) input value will be accepted as an ID.',
   serialize => sub { Str->(@_); $JSON->encode($_[0]) },
   parse_value => sub { Str->(@_); $JSON->encode($_[0]) },
-#  parse_literal => $parse_literal,
 );
 
 __PACKAGE__->meta->make_immutable();
