@@ -6,7 +6,7 @@ use warnings;
 use Moo;
 use Types::Standard qw(CodeRef Num Str Bool);
 use GraphQL::Type::Library qw(Int32Signed);
-use JSON;
+use JSON::MaybeXS;
 use Exporter qw(import);
 extends qw(GraphQL::Type);
 with qw(
@@ -20,7 +20,7 @@ with qw(
 our $VERSION = '0.02';
 our @EXPORT_OK = qw($Int $Float $String $Boolean $ID);
 
-my $JSON = JSON->new->allow_nonref;
+my $JSON = JSON::MaybeXS->new->allow_nonref;
 
 =head1 NAME
 

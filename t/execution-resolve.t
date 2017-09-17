@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Test::More;
 use Test::Exception;
-use JSON;
+use JSON::MaybeXS;
 use Data::Dumper;
 
 BEGIN {
@@ -15,7 +15,7 @@ BEGIN {
 }
 
 $Data::Dumper::Sortkeys = $Data::Dumper::Indent = $Data::Dumper::Terse = 1;
-my $JSON = JSON->new->allow_nonref->canonical;
+my $JSON = JSON::MaybeXS->new->allow_nonref->canonical;
 
 sub make_schema {
   my ($field) = @_;
