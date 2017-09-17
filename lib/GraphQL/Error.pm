@@ -54,6 +54,16 @@ method coerce(Any $item) :ReturnType(InstanceOf[__PACKAGE__]) {
   $self->new(message => $item);
 }
 
+=head2 to_string
+
+Converts to string.
+
+=cut
+
+method to_string() :ReturnType(Str) {
+  $self->message;
+}
+
 __PACKAGE__->meta->make_immutable();
 
 1;
