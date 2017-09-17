@@ -15,7 +15,7 @@ BEGIN {
 }
 
 $Data::Dumper::Sortkeys = $Data::Dumper::Indent = $Data::Dumper::Terse = 1;
-my $JSON = JSON->new->allow_nonref;
+my $JSON = JSON->new->allow_nonref->canonical;
 
 sub make_schema {
   my ($field) = @_;
@@ -70,6 +70,28 @@ subtest 'default function passes args and context', sub {
   run_test(
     [$schema, '{ test(addend1: 80) }', $root_value, { addend2 => 9 }],
     { data => { test => 789 } },
+  );
+  done_testing;
+};
+
+subtest 'uses provided resolve function', sub {
+  my $schema = make_schema({
+    type => $Int,
+    args => { aStr => { type => $String }, aInt => { type => $Int } },
+    resolve => sub {
+      my ($root_value, $args, $context, $info) = @_;
+      $JSON->encode([$root_value, $args]);
+    },
+  });
+  run_test([$schema, '{ test }'], { data => { test => '[null,{}]' } });
+  run_test([$schema, '{ test }', '!'], { data => { test => '["!",{}]' } });
+  run_test(
+    [$schema, '{ test(aStr: "String!") }', 'Info'],
+    { data => { test => '["Info",{"aStr":"String!"}]' } },
+  );
+  run_test(
+    [$schema, '{ test(aStr: "String!", aInt: -123) }', 'Info'],
+    { data => { test => '["Info",{"aInt":-123,"aStr":"String!"}]' } },
   );
   done_testing;
 };
