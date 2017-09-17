@@ -9,6 +9,7 @@ use Types::TypeTiny -all;
 use GraphQL::Type::Library -all;
 use Function::Parameters;
 use GraphQL::Parser;
+use GraphQL::Error;
 
 =head1 NAME
 
@@ -73,10 +74,10 @@ method execute(
     );
   };
   if ($@) {
-    push @{ $context->{errors} }, $@; # TODO no mutate $context
+    push @{ $context->{errors} }, GraphQL::Error->coerce($@); # TODO no mutate $context
   }
   if (@{ $context->{errors} }) {
-    return { errors => $context->{errors} };
+    return { errors => [ map $_->to_string, @{$context->{errors}} ] };
   } else {
     return { data => $result };
   }
@@ -145,7 +146,7 @@ fun _execute_operation(
     $execute->($context, $type, $root_value, $path, $fields);
   };
   if ($@) {
-    push @{ $context->{errors} }, $@; # TODO no mutate $context
+    push @{ $context->{errors} }, GraphQL::Error->coerce($@); # TODO no mutate $context
     return {};
   }
   $result;
@@ -322,7 +323,7 @@ fun _resolve_field_value_or_error(
     my $args = _get_argument_values($field_def, $nodes->[0], $context->{variable_values});
     $resolve->($root_value, $args, $context->{context_value}, $info);
   };
-  return $@ if $@;
+  return GraphQL::Error->coerce($@) if $@;
   $result;
 }
 
@@ -343,7 +344,7 @@ fun _complete_value_catching_error(
     $completed;
   };
   if ($@) {
-    push @{ $context->{errors} }, $@;
+    push @{ $context->{errors} }, GraphQL::Error->coerce($@);
     return;
   }
   $result;
@@ -377,7 +378,7 @@ fun _complete_value(
   Any $result,
 ) {
   # TODO promise stuff
-  # TODO handle errors, spot with error objects then rethrow
+  die $result if GraphQL::Error->is($result);
   return $result if !defined $result;
   # TODO handle list
   # TODO handle leaf
@@ -394,7 +395,7 @@ fun _located_error(
   ArrayRef $path,
 ) {
   # TODO implement
-  $error;
+  GraphQL::Error->coerce($error);
 }
 
 fun _get_argument_values(
