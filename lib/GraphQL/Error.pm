@@ -32,6 +32,14 @@ Class implementing GraphQL error object.
 
 has message => (is => 'ro', isa => Str, required => 1);
 
+=head2 original_error
+
+If there is an original error to be preserved.
+
+=cut
+
+has original_error => (is => 'ro', isa => Any);
+
 =head1 METHODS
 
 =head2 is
@@ -45,13 +53,16 @@ method is(Any $item) :ReturnType(Bool) { ref $item eq __PACKAGE__ }
 =head2 coerce
 
 If supplied scalar is an error object, return. If not, return one with
-it as message.
+it as message. If an object, message will be stringified version of that,
+it will be preserved as C<original_error>.
 
 =cut
 
 method coerce(Any $item) :ReturnType(InstanceOf[__PACKAGE__]) {
   return $item if $self->is($item);
-  $self->new(message => $item);
+  is_InstanceOf($item)
+    ? $self->new(message => $item.'', original_error => $item)
+    : $self->new(message => $item);
 }
 
 =head2 to_string
