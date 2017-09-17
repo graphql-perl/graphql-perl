@@ -27,14 +27,17 @@ sub make_schema {
   );
 }
 
+sub run_test {
+  my ($args, $expected) = @_;
+  my $got = GraphQL::Execution->execute(@$args);
+  is_deeply $got, $expected or diag Dumper $got;
+}
+
 subtest 'default function accesses properties', sub {
   my $schema = make_schema({ type => $String });
   my $root_value = { test => 'testvalue' };
   my $expected = { %$root_value }; # copy in case of mutations
-  my $got = GraphQL::Execution->execute($schema, '{ test }', $root_value);
-  is_deeply $got, {
-    data => $expected,
-  } or diag Dumper $got;
+  run_test([$schema, '{ test }', $root_value], { data => $expected });
   done_testing;
 };
 
@@ -48,10 +51,7 @@ subtest 'default function calls methods', sub {
   }
   my $root_value = MyTest1->new;
   is $root_value->test, SECRETVAL; # fingers and toes
-  my $got = GraphQL::Execution->execute($schema, '{ test }', $root_value);
-  is_deeply $got, {
-    data => { test => SECRETVAL },
-  } or diag Dumper $got;
+  run_test([$schema, '{ test }', $root_value], { data => { test => SECRETVAL } });
   done_testing;
 };
 
@@ -67,12 +67,10 @@ subtest 'default function passes args and context', sub {
   }
   my $root_value = Adder->new(700);
   is $root_value->test({ addend1 => 80 }, { addend2 => 9 }), 789;
-  my $got = GraphQL::Execution->execute(
-    $schema, '{ test(addend1: 80) }', $root_value, { addend2 => 9 },
+  run_test(
+    [$schema, '{ test(addend1: 80) }', $root_value, { addend2 => 9 }],
+    { data => { test => 789 } },
   );
-  is_deeply $got, {
-    data => { test => 789 },
-  } or diag Dumper $got;
   done_testing;
 };
 
