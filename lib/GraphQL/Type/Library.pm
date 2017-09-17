@@ -66,14 +66,12 @@ declare "ValuesMatchTypes",
       slurpy Any,
     ]], where {
       !grep {
-        $_->{$value_key} and
-          !eval { $_->{$type_key}->serialize->($_->{$value_key}); 1 }
+        $_->{$value_key} and !$_->{$type_key}->is_valid($_->{$value_key})
       } values %$_
     }, inline_as {
       (undef, <<EOF);
         !grep {
-          \$_->{$value_key} and
-            !eval { \$_->{$type_key}->serialize->(\$_->{$value_key}); 1 }
+          \$_->{$value_key} and !\$_->{$type_key}->is_valid(\$_->{$value_key})
         } values %{$_[1]}
 EOF
     };

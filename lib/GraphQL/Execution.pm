@@ -429,7 +429,7 @@ fun _get_argument_values(
         );
       }
     } else {
-      if (!eval { $arg_type->serialize->($argument_node); 1 }) {
+      if (!$arg_type->is_valid($argument_node)) {
         die GraphQL::Error->new(
           message => "Argument '$name' got invalid value"
             . " '\$$argument_node'.\n$@",

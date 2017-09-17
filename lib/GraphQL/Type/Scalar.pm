@@ -6,6 +6,7 @@ use warnings;
 use Moo;
 use Types::Standard qw(CodeRef Num Str Bool);
 use GraphQL::Type::Library qw(Int32Signed);
+use Types::Standard -all;
 use JSON::MaybeXS;
 use Exporter qw(import);
 extends qw(GraphQL::Type);
@@ -16,6 +17,8 @@ with qw(
   GraphQL::Role::Nullable
   GraphQL::Role::Named
 );
+use Function::Parameters;
+use Return::Type;
 
 our $VERSION = '0.02';
 our @EXPORT_OK = qw($Int $Float $String $Boolean $ID);
@@ -59,6 +62,19 @@ one of the required type, or throws an exception.
 =cut
 
 has parse_value => (is => 'ro', isa => CodeRef);
+
+=head1 METHODS
+
+=head2 is_valid
+
+True if given Perl entity is valid value for this type. Uses L</serialize>
+attribute.
+
+=cut
+
+method is_valid(Any $item) :ReturnType(Bool) {
+  eval { $self->serialize->($item); 1 };
+}
 
 =head1 EXPORTED VARIABLES
 
