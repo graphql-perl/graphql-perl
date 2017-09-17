@@ -283,10 +283,12 @@ method got_string (Any $param = undef) {
 }
 
 method got_int (Any $param = undef) {
+  $_[0] += 0; # numify. if modify $param gets dropped as is local copy
   unshift @_, $self; goto &got_string;
 }
 
 method got_float (Any $param = undef) {
+  $_[0] += 0; # numify. if modify $param gets dropped as is local copy
   unshift @_, $self; goto &got_string;
 }
 

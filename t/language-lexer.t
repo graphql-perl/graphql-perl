@@ -87,7 +87,7 @@ done_testing;
 sub number_test {
   my ($text, $type, $label) = @_;
   my $got = do_lex(number_make($text));
-  is query_lookup($got, $type), $text, $label or diag Dumper $got;
+  cmp_ok query_lookup($got, $type), '==', $text, $label or diag Dumper $got;
 }
 
 sub number_make {
@@ -135,8 +135,8 @@ __DATA__
             'alias' => 'whoever123is',
             'arguments' => {
               'id' => [
-                '123',
-                '456'
+                123,
+                456
               ]
             },
             'name' => 'node',
@@ -174,7 +174,7 @@ __DATA__
                               'alias' => 'alias',
                               'arguments' => {
                                 'after' => \'foo',
-                                'first' => '10'
+                                'first' => 10
                               },
                               'directives' => [
                                 {
@@ -266,7 +266,7 @@ __DATA__
           'kind' => 'field',
           'node' => {
             'arguments' => {
-              'story' => '123'
+              'story' => 123
             },
             'directives' => [
               {
