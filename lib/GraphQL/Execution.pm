@@ -3,132 +3,439 @@ package GraphQL::Execution;
 use 5.014;
 use strict;
 use warnings;
+use Return::Type;
+use Types::Standard -all;
+use Types::TypeTiny -all;
+use GraphQL::Type::Library -all;
+use Function::Parameters;
+use GraphQL::Parser;
 
 =head1 NAME
 
-GraphQL::Execution - Perl implementation
-
-=head1 VERSION
-
-Version 0.02
+GraphQL::Execution - Execute GraphQL queries
 
 =cut
 
 our $VERSION = '0.02';
 
-
 =head1 SYNOPSIS
 
-Perhaps a little code snippet.
+  use GraphQL::Execution;
+  my $result = GraphQL::Execution->execute($schema, $doc, $root_value);
 
-    use GraphQL;
+=head1 DESCRIPTION
 
-    my $foo = GraphQL->new();
-    ...
+Executes a GraphQL query, returns results.
 
-=head1 EXPORT
+=head1 METHODS
 
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
+=head2 execute
 
-=head1 SUBROUTINES/METHODS
-
-=head2 function1
+  my $result = GraphQL::Execution->execute(
+    $schema,
+    $doc,
+    $root_value,
+    $context_value,
+    $variable_values,
+    $operation_name,
+    $field_resolver,
+  );
 
 =cut
 
-sub function1 {
+method execute(
+  (InstanceOf['GraphQL::Schema']) $schema,
+  Str $doc,
+  Any $root_value,
+  Any $context_value = undef,
+  Maybe[HashRef] $variable_values = undef,
+  Maybe[Str] $operation_name = undef,
+  Maybe[CodeLike] $field_resolver = undef,
+) :ReturnType(HashRef) {
+  my $ast = GraphQL::Parser->parse($doc);
+  my $context = eval {
+    _build_context(
+      $schema,
+      $ast,
+      $root_value,
+      $context_value,
+      $variable_values,
+      $operation_name,
+      $field_resolver,
+    );
+  };
+  return { errors => [ $@ ] } if $@;
+  my $result = eval {
+    scalar _execute_operation(
+      $context,
+      $context->{operation},
+      $root_value,
+    );
+  };
+  if ($@) {
+    push @{ $context->{errors} }, $@; # TODO no mutate $context
+  }
+  if (@{ $context->{errors} }) {
+    return { errors => $context->{errors} };
+  } else {
+    return { data => $result };
+  }
 }
 
-=head2 function2
-
-=cut
-
-sub function2 {
+fun _build_context(
+  (InstanceOf['GraphQL::Schema']) $schema,
+  ArrayRef[HashRef] $ast,
+  Any $root_value,
+  Any $context_value,
+  Maybe[HashRef] $variable_values,
+  Maybe[Str] $operation_name,
+  Maybe[CodeLike] $field_resolver,
+) :ReturnType(HashRef) {
+  my %fragments = map {
+    ($_->{name} => $_)
+  } map $_->{node}, grep $_->{kind} eq 'fragment', @$ast;
+  my @operations = grep $_->{kind} eq 'operation', @$ast;
+  die "No operations supplied." if !@operations;
+  die "Can only execute document containing fragments or operations"
+    if @$ast != keys(%fragments) + @operations;
+  my $operation = _get_operation($operation_name, \@operations);
+  {
+    schema => $schema,
+    fragments => \%fragments,
+    root_value => $root_value,
+    context_value => $context_value,
+    operation => $operation->{node},
+    variable_values => $variable_values,
+    field_resolver => $field_resolver || \&_default_field_resolver,
+    errors => [],
+  };
 }
 
-=head1 AUTHOR
+sub _get_operation {
+  my ($operation_name, $operations) = @_;
+  my $operation;
+  if (!$operation_name) {
+    die "Must provide operation name if query contains multiple operations."
+      if @$operations > 1;
+    return $operations->[0];
+  }
+  my @matching = grep $_->{name} eq $operation_name, @$operations;
+  return $matching[0] if @matching == 1;
+  die "No operations matching '$operation_name' found.";
+}
 
-Ed J, C<< <etj at cpan.org> >>
+fun _execute_operation(
+  HashRef $context,
+  HashRef $operation,
+  Any $root_value,
+) :ReturnType(HashRef) {
+  my $op_type = $operation->{operationType} || 'query';
+  my $type = $context->{schema}->$op_type;
+  my $fields = _collect_fields(
+    $context,
+    $type,
+    $operation->{selections},
+    {},
+    {},
+  );
+  my $path = [];
+  my $execute = $op_type eq 'mutation'
+    ? \&_execute_fields_serially : \&_execute_fields;
+  my $result = eval {
+    $execute->($context, $type, $root_value, $path, $fields);
+  };
+  if ($@) {
+    push @{ $context->{errors} }, $@; # TODO no mutate $context
+    return {};
+  }
+  $result;
+}
 
-=head1 BUGS
+fun _collect_fields(
+  HashRef $context,
+  (InstanceOf['GraphQL::Type']) $runtime_type,
+  ArrayRef $selections,
+  Map[StrNameValid,ArrayRef[HashRef]] $fields_got,
+  Map[StrNameValid,Bool] $visited_fragments,
+) :ReturnType(Map[StrNameValid,ArrayRef[HashRef]]) {
+  for my $selection (@$selections) {
+    my $node = $selection->{node};
+    next if !_should_include_node($context, $node);
+    if ($selection->{kind} eq 'field') {
+      # TODO no mutate $fields_got
+      my $use_name = $node->{alias} || $node->{name};
+      push @{ $fields_got->{$use_name} }, $node;
+    } elsif ($selection->{kind} eq 'inline_fragment') {
+      next if !_fragment_condition_match($context, $node, $runtime_type);
+      _collect_fields(
+        $context,
+        $runtime_type,
+        $node->{selections},
+        $fields_got,
+        $visited_fragments,
+      );
+    } elsif ($selection->{kind} eq 'fragment_spread') {
+      my $frag_name = $node->{name};
+      next if $visited_fragments->{$frag_name};
+      $visited_fragments->{$frag_name} = 1;
+      my $fragment = $context->{fragments}{$frag_name};
+      next if !$fragment;
+      next if !_fragment_condition_match($context, $fragment, $runtime_type);
+      _collect_fields(
+        $context,
+        $runtime_type,
+        $node->{selections},
+        $fields_got,
+        $visited_fragments,
+      );
+    }
+  }
+  $fields_got;
+}
 
-Please report any bugs or feature requests to C<bug-graphql at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=GraphQL>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
+fun _should_include_node(
+  HashRef $context,
+  HashRef $node,
+) :ReturnType(Bool) {
+  # TODO implement
+  1;
+}
 
-=head1 SUPPORT
+fun _fragment_condition_match(
+  HashRef $context,
+  HashRef $node,
+  (InstanceOf['GraphQL::Type']) $runtime_type,
+) :ReturnType(Bool) {
+  # TODO implement
+  1;
+}
 
-You can find documentation for this module with the perldoc command.
+fun _execute_fields(
+  HashRef $context,
+  (InstanceOf['GraphQL::Type']) $parent_type,
+  Any $root_value,
+  ArrayRef $path,
+  Map[StrNameValid,ArrayRef[HashRef]] $fields,
+) :ReturnType(Map[StrNameValid,Any]){
+  my %results;
+  map {
+    my $result_name = $_;
+    my $result = _resolve_field(
+      $context,
+      $parent_type,
+      $root_value,
+      [ @$path, $result_name ],
+      $fields->{$_},
+    );
+    $results{$result_name} = $result if $result;
+  } keys %$fields; # TODO ordering of fields
+  \%results;
+}
 
-    perldoc GraphQL
+fun _execute_fields_serially(
+  HashRef $context,
+  (InstanceOf['GraphQL::Type']) $parent_type,
+  Any $root_value,
+  ArrayRef $path,
+  Map[StrNameValid,ArrayRef[HashRef]] $fields,
+) {
+}
 
-You can also look for information at:
+# NB same ordering as _execute_fields - graphql-js switches last 2
+fun _resolve_field(
+  HashRef $context,
+  (InstanceOf['GraphQL::Type']) $parent_type,
+  Any $root_value,
+  ArrayRef $path,
+  ArrayRef[HashRef] $nodes,
+) {
+  my $field_node = $nodes->[0];
+  my $field_name = $field_node->{name};
+  my $field_def = _get_field_def($context->{schema}, $parent_type, $field_name);
+  return if !$field_def;
+  my $resolve = $field_def->{resolve} || $context->{field_resolver};
+  my $info = _build_resolve_info(
+    $context,
+    $parent_type,
+    $field_def,
+    $path,
+    $nodes,
+  );
+  my $result = _resolve_field_value_or_error(
+    $context,
+    $field_def,
+    $nodes,
+    $resolve,
+    $root_value,
+    $info,
+  );
+  _complete_value_catching_error(
+    $context,
+    $field_def->{type},
+    $nodes,
+    $info,
+    $path,
+    $result,
+  );
+}
 
-=over 4
+fun _get_field_def(
+  (InstanceOf['GraphQL::Schema']) $schema,
+  (InstanceOf['GraphQL::Type']) $parent_type,
+  StrNameValid $field_name,
+) :ReturnType(HashRef) {
+  # TODO __schema and __typename and __type
+  $parent_type->fields->{$field_name};
+}
 
-=item * RT: CPAN's request tracker (report bugs here)
+# NB similar ordering as _execute_fields - graphql-js switches
+fun _build_resolve_info(
+  HashRef $context,
+  (InstanceOf['GraphQL::Type']) $parent_type,
+  HashRef $field_def,
+  ArrayRef $path,
+  ArrayRef[HashRef] $nodes,
+) {
+  {
+    field_name => $nodes->[0]{name},
+    field_nodes => $nodes,
+    return_type => $field_def->{type},
+    parent_type => $parent_type,
+    path => $path,
+    schema => $context->{schema},
+    fragments => $context->{fragments},
+    root_value => $context->{root_value},
+    operation => $context->{operation},
+    variable_values => $context->{variable_values},
+  };
+}
 
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=GraphQL>
+fun _resolve_field_value_or_error(
+  HashRef $context,
+  HashRef $field_def,
+  ArrayRef[HashRef] $nodes,
+  Maybe[CodeLike] $resolve,
+  Maybe[Any] $root_value,
+  HashRef $info,
+) {
+  my $result = eval {
+    my $args = _get_argument_values($field_def, $nodes->[0], $context->{variable_values});
+    $resolve->($root_value, $args, $context->{context_value}, $info);
+  };
+  return $@ if $@;
+  $result;
+}
 
-=item * AnnoCPAN: Annotated CPAN documentation
+fun _complete_value_catching_error(
+  HashRef $context,
+  (InstanceOf['GraphQL::Type']) $return_type,
+  ArrayRef[HashRef] $nodes,
+  HashRef $info,
+  ArrayRef $path,
+  Any $result,
+) {
+  if ($return_type->DOES('GraphQL::Role::NonNull')) {
+    return _complete_value_with_located_error(@_);
+  }
+  my $result = eval {
+    my $completed = _complete_value_with_located_error(@_);
+    # TODO promise stuff
+    $completed;
+  };
+  if ($@) {
+    push @{ $context->{errors} }, $@;
+    return;
+  }
+  $result;
+}
 
-L<http://annocpan.org/dist/GraphQL>
+fun _complete_value_with_located_error(
+  HashRef $context,
+  (InstanceOf['GraphQL::Type']) $return_type,
+  ArrayRef[HashRef] $nodes,
+  HashRef $info,
+  ArrayRef $path,
+  Any $result,
+) {
+  my $result = eval {
+    my $completed = _complete_value(@_);
+    # TODO promise stuff
+    $completed;
+  };
+  if ($@) {
+    die _located_error($@, $nodes, $path);
+  }
+  $result;
+}
 
-=item * CPAN Ratings
+fun _complete_value(
+  HashRef $context,
+  (InstanceOf['GraphQL::Type']) $return_type,
+  ArrayRef[HashRef] $nodes,
+  HashRef $info,
+  ArrayRef $path,
+  Any $result,
+) {
+  # TODO promise stuff
+  # TODO handle errors, spot with error objects then rethrow
+  return $result if !defined $result;
+  # TODO handle list
+  # TODO handle leaf
+  # TODO handle abstract
+  # TODO handle object
+  if ($return_type->DOES('GraphQL::Role::NonNull')) {
+  }
+  $result;
+}
 
-L<http://cpanratings.perl.org/d/GraphQL>
+fun _located_error(
+  Any $error,
+  ArrayRef[HashRef] $nodes,
+  ArrayRef $path,
+) {
+  # TODO implement
+  $error;
+}
 
-=item * Search CPAN
+fun _get_argument_values(
+  HashRef $def,
+  HashRef $node,
+  Maybe[HashRef] $variable_values = {},
+) {
+  return {};
+  my $arg_defs = $def->{args};
+  my $arg_nodes = $node->{arguments};
+  return {} if !$arg_defs or !$arg_nodes;
+  my $coerced_values = {};
+  my $arg_node_map = map { ($_ => $arg_nodes->{$_}) } keys %$arg_nodes;
+  for my $name (keys %$arg_defs) {
+    my $arg_def = $arg_defs->{$name};
+    my $arg_type = $arg_def->{type};
+    my $argument_node = $arg_node_map->{$name};
+    my $default_value = $arg_def->{default_value};
+    if (!$argument_node) {
+    } elsif (ref $argument_node->{x}) { # TODO implement
+    }
+  }
+}
 
-L<http://search.cpan.org/dist/GraphQL/>
-
-=back
-
-
-=head1 ACKNOWLEDGEMENTS
-
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright 2017 Ed J.
-
-This program is free software; you can redistribute it and/or modify it
-under the terms of the the Artistic License (2.0). You may obtain a
-copy of the full license at:
-
-L<http://www.perlfoundation.org/artistic_license_2_0>
-
-Any use, modification, and distribution of the Standard or Modified
-Versions is governed by this Artistic License. By using, modifying or
-distributing the Package, you accept this license. Do not use, modify,
-or distribute the Package, if you do not accept this license.
-
-If your Modified Version has been derived from a Modified Version made
-by someone other than you, you are nevertheless required to ensure that
-your Modified Version complies with the requirements of this license.
-
-This license does not grant you the right to use any trademark, service
-mark, tradename, or logo of the Copyright Holder.
-
-This license includes the non-exclusive, worldwide, free-of-charge
-patent license to make, have made, use, offer to sell, sell, import and
-otherwise transfer the Package with respect to any patent claims
-licensable by the Copyright Holder that are necessarily infringed by the
-Package. If you institute patent litigation (including a cross-claim or
-counterclaim) against any party alleging that the Package constitutes
-direct or contributory patent infringement, then this Artistic License
-to you shall terminate on the date that such litigation is filed.
-
-Disclaimer of Warranty: THE PACKAGE IS PROVIDED BY THE COPYRIGHT HOLDER
-AND CONTRIBUTORS "AS IS' AND WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES.
-THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-PURPOSE, OR NON-INFRINGEMENT ARE DISCLAIMED TO THE EXTENT PERMITTED BY
-YOUR LOCAL LAW. UNLESS REQUIRED BY LAW, NO COPYRIGHT HOLDER OR
-CONTRIBUTOR WILL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, OR
-CONSEQUENTIAL DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THE PACKAGE,
-EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-=cut
+# $root_value is either a hash with fieldnames as keys and either data
+#   or coderefs as values
+# OR it's just a coderef itself
+# any coderef gets called with obvious args
+fun _default_field_resolver(
+  CodeLike | HashRef $root_value,
+  HashRef $args,
+  Maybe[HashRef] $context,
+  HashRef $info,
+) {
+  my $property = is_HashRef($root_value)
+    ? $root_value->{$info->{field_name}}
+    : $root_value;
+  if (eval { CodeLike->($property); 1 }) {
+    return $property->($args, $context, $info);
+  }
+  $property;
+}
 
 1;

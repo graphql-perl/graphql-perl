@@ -34,6 +34,7 @@ Makefile.PL
 MANIFEST			This list of files
 README.md
 t/00-load.t
+t/execution-resolve.t
 t/kitchen-sink.graphql
 t/language-lexer.t
 t/language-parser.t
