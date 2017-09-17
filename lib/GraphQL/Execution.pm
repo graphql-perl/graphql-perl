@@ -413,13 +413,14 @@ fun _get_argument_values(
     my $argument_node = $arg_nodes->{$name};
     my $default_value = $arg_def->{default_value};
     if (!$argument_node) {
-      $coerced_values{$name} = $default_value;
+      $coerced_values{$name} = $default_value if defined $default_value;
     } elsif (ref $argument_node) {
       # scalar ref means it's a variable
       # assume query validation already checked variable has valid value
       my $varname = $$argument_node;
-      $coerced_values{$name} = ($variable_values && $variable_values->{$name})
+      my $value = ($variable_values && $variable_values->{$name})
         || $default_value;
+      $coerced_values{$name} = $value if defined $value;
       if (!defined $coerced_values{$name} and $arg_type->DOES('GraphQL::Role::NonNull')) {
         die GraphQL::Error->new(
           message => "Argument '$name' of type '@{[$arg_type->to_string]}'"
