@@ -134,6 +134,28 @@ subtest 'Handles objects and nullability', sub {
         { data => { fieldWithObjectInput => '{"a":null,"b":null,"c":"C","d":null}' } },
       );
     };
+
+    subtest 'properly parses null value in list', sub {
+      my $doc = '{
+        fieldWithObjectInput(input: {b: ["A",null,"C"], c: "C"})
+      }';
+      run_test(
+        [$schema, $doc],
+        { data => { fieldWithObjectInput => '{"b":["A",null,"C"],"c":"C"}' } },
+      );
+    };
+
+    subtest 'does not use incorrect value', sub {
+      my $doc = '{
+        fieldWithObjectInput(input: ["foo", "bar", "baz"])
+      }';
+      run_test(
+        [$schema, $doc],
+        { 'errors' => [
+          'Argument \'input\' got invalid value ["foo","bar","baz"].'
+        ] },
+      );
+    };
     done_testing;
   };
   done_testing;

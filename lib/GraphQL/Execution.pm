@@ -440,11 +440,11 @@ fun _get_argument_values(
         );
       }
     } else {
-      $argument_node = $arg_type->uplift($argument_node);
-      if (!$arg_type->is_valid($argument_node)) {
+      eval { $argument_node = $arg_type->uplift($argument_node) }; # uplift one-element lists
+      if ($@ or !$arg_type->is_valid($argument_node)) {
         die GraphQL::Error->new(
           message => "Argument '$name' got invalid value"
-            . " " . $JSON->encode($argument_node) . ".\n$@",
+            . " " . $JSON->encode($argument_node) . ".",
           nodes => [ $node ],
         );
       }
