@@ -73,6 +73,7 @@ attribute.
 =cut
 
 method is_valid(Any $item) :ReturnType(Bool) {
+  return if !defined $item and $self->DOES('GraphQL::Role::NonNull');
   eval { $self->serialize->($item); 1 };
 }
 

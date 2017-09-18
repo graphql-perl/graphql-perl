@@ -5,6 +5,8 @@ use strict;
 use warnings;
 use Moo;
 use Types::Standard -all;
+use Function::Parameters;
+use Return::Type;
 extends qw(GraphQL::Type);
 
 # A-ha
@@ -65,6 +67,19 @@ has to_string => (is => 'lazy', isa => Str, init_arg => undef, builder => sub {
   my ($self) = @_;
   '[' . $self->of->to_string . ']' . ($self->does('GraphQL::Role::NonNull') ? '!' : '');
 });
+
+=head2 is_valid
+
+True if given Perl array-ref is a valid value for this type.
+
+=cut
+
+method is_valid(Maybe[ArrayRef] $item) :ReturnType(Bool) {
+  return if !defined $item and $self->DOES('GraphQL::Role::NonNull');
+  my $of = $self->of;
+  return if grep !$of->is_valid($_), @$item;
+  1;
+}
 
 __PACKAGE__->meta->make_immutable();
 
