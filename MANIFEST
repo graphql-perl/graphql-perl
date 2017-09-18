@@ -15,7 +15,6 @@ lib/GraphQL/Role/FieldsOutput.pm
 lib/GraphQL/Role/Input.pm
 lib/GraphQL/Role/Leaf.pm
 lib/GraphQL/Role/Named.pm
-lib/GraphQL/Role/NonNull.pm
 lib/GraphQL/Role/Nullable.pm
 lib/GraphQL/Role/Output.pm
 lib/GraphQL/Schema.pm
@@ -26,6 +25,7 @@ lib/GraphQL/Type/InputObject.pm
 lib/GraphQL/Type/Interface.pm
 lib/GraphQL/Type/Library.pm
 lib/GraphQL/Type/List.pm
+lib/GraphQL/Type/NonNull.pm
 lib/GraphQL/Type/Object.pm
 lib/GraphQL/Type/Scalar.pm
 lib/GraphQL/Type/Union.pm

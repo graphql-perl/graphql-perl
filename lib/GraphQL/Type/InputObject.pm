@@ -52,7 +52,7 @@ True if given Perl hash-ref is a valid value for this type.
 =cut
 
 method is_valid(Maybe[HashRef] $item) :ReturnType(Bool) {
-  return if !defined $item and $self->DOES('GraphQL::Role::NonNull');
+  return 1 if !defined $item;
   my $fields = $self->fields;
   return if grep !$fields->{$_}{type}->is_valid(
     $item->{$_} // $fields->{$_}{default_value}

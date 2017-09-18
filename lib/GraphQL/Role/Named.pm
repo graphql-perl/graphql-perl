@@ -48,7 +48,7 @@ Part of serialisation.
 
 has to_string => (is => 'lazy', isa => Str, init_arg => undef, builder => sub {
   my ($self) = @_;
-  $self->name . ($self->does('GraphQL::Role::NonNull') ? '!' : '');
+  $self->name;
 });
 
 __PACKAGE__->meta->make_immutable();

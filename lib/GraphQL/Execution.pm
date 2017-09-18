@@ -338,7 +338,7 @@ fun _complete_value_catching_error(
   ArrayRef $path,
   Any $result,
 ) {
-  if ($return_type->DOES('GraphQL::Role::NonNull')) {
+  if ($return_type->isa('GraphQL::Type::NonNull')) {
     return _complete_value_with_located_error(@_);
   }
   my $result = eval {
@@ -387,7 +387,7 @@ fun _complete_value(
   # TODO handle leaf
   # TODO handle abstract
   # TODO handle object
-  if ($return_type->DOES('GraphQL::Role::NonNull')) {
+  if ($return_type->isa('GraphQL::Type::NonNull')) {
   }
   $result;
 }
@@ -415,8 +415,16 @@ fun _get_argument_values(
     my $arg_type = $arg_def->{type};
     my $argument_node = $arg_nodes->{$name};
     my $default_value = $arg_def->{default_value};
-    if (!$argument_node) {
-      $coerced_values{$name} = $default_value if defined $default_value;
+    if (!exists $arg_nodes->{$name}) {
+      if (defined $default_value) {
+        $coerced_values{$name} = $default_value;
+      } elsif ($arg_type->isa('GraphQL::Type::NonNull')) {
+        die GraphQL::Error->new(
+          message => "Argument '$name' of type '@{[$arg_type->to_string]}'"
+            . " not given.",
+          nodes => [ $node ],
+        );
+      }
     } elsif (ref($argument_node) eq 'SCALAR') {
       # scalar ref means it's a variable
       # assume query validation already checked variable has valid value
@@ -424,7 +432,7 @@ fun _get_argument_values(
       my $value = ($variable_values && $variable_values->{$name})
         || $default_value;
       $coerced_values{$name} = $value if defined $value;
-      if (!defined $coerced_values{$name} and $arg_type->DOES('GraphQL::Role::NonNull')) {
+      if (!defined $coerced_values{$name} and $arg_type->isa('GraphQL::Type::NonNull')) {
         die GraphQL::Error->new(
           message => "Argument '$name' of type '@{[$arg_type->to_string]}'"
             . " was given variable '\$$varname' but no runtime value.",

@@ -38,6 +38,8 @@ used to implement a GraphQL API.
 
 =item L<GraphQL::Type::List>
 
+=item L<GraphQL::Type::NonNull>
+
 =item L<GraphQL::Type::Object>
 
 =item L<GraphQL::Type::Scalar> - also implements example types such as C<String>
@@ -67,8 +69,6 @@ either to facilitate type constrants, or as noted below.
 =item L<GraphQL::Role::Leaf> - simple type - enum or scalar
 
 =item L<GraphQL::Role::Named> - has a C<name> and C<description>, provided by this role
-
-=item L<GraphQL::Role::NonNull> - must not be null-valued
 
 =item L<GraphQL::Role::Nullable> - can be null-valued
 

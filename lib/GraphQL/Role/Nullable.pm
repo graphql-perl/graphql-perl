@@ -5,6 +5,7 @@ use strict;
 use warnings;
 use Types::Standard -all;
 use Moo::Role;
+use GraphQL::Type::NonNull;
 
 our $VERSION = '0.02';
 
@@ -27,15 +28,15 @@ Allows type constraints for nullable objects.
 
 =head2 non_null
 
-Returns a version of the type with the role L<GraphQL::Role::NonNull>,
+Returns a wrapped version of the type using L<GraphQL::Type::NonNull>,
 i.e. that may not be null.
 
 =cut
 
 has non_null => (
   is => 'lazy',
-  isa => ConsumerOf['GraphQL::Role::NonNull'],
-  builder => sub { Role::Tiny->apply_roles_to_object(shift->clone, qw(GraphQL::Role::NonNull)) },
+  isa => InstanceOf['GraphQL::Type::NonNull'],
+  builder => sub { GraphQL::Type::NonNull->new(of => $_[0]) },
 );
 
 __PACKAGE__->meta->make_immutable();
