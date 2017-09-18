@@ -10,6 +10,7 @@ use GraphQL::Type::Library -all;
 use Function::Parameters;
 use GraphQL::Parser;
 use GraphQL::Error;
+use JSON::MaybeXS;
 
 =head1 NAME
 
@@ -18,6 +19,8 @@ GraphQL::Execution - Execute GraphQL queries
 =cut
 
 our $VERSION = '0.02';
+
+my $JSON = JSON::MaybeXS->new->allow_nonref;
 
 =head1 SYNOPSIS
 
@@ -432,7 +435,7 @@ fun _get_argument_values(
       if (!$arg_type->is_valid($argument_node)) {
         die GraphQL::Error->new(
           message => "Argument '$name' got invalid value"
-            . " '\$$argument_node'.\n$@",
+            . " " . $JSON->encode($argument_node) . ".\n$@",
           nodes => [ $node ],
         );
       }
