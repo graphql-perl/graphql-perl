@@ -3,10 +3,10 @@ package GraphQL::Type;
 use 5.014;
 use strict;
 use warnings;
-use Types::Standard qw(InstanceOf); # if -all causes objects to be class 'Object'!
+use Moo;
 use Return::Type;
 use Function::Parameters;
-use Moo;
+use Types::Standard qw(InstanceOf Any); # if -all causes objects to be class 'Object'!
 
 our $VERSION = '0.02';
 
@@ -94,6 +94,14 @@ the original object.
 method clone() :ReturnType(InstanceOf['GraphQL::Type']) {
   ref($self)->new(%$self)
 }
+
+=head2 uplift
+
+Turn given Perl entity into valid value for this type if possible.
+
+=cut
+
+method uplift(Any $item) :ReturnType(Any) { $item; }
 
 __PACKAGE__->meta->make_immutable();
 

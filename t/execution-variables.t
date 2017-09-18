@@ -114,6 +114,26 @@ subtest 'Handles objects and nullability', sub {
         { data => { fieldWithObjectInput => '{"a":"foo","b":["bar"],"c":"baz"}' } },
       );
     };
+
+    subtest 'properly parses single value to list', sub {
+      my $doc = '{
+        fieldWithObjectInput(input: {a: "foo", b: "bar", c: "baz"})
+      }';
+      run_test(
+        [$schema, $doc],
+        { data => { fieldWithObjectInput => '{"a":"foo","b":["bar"],"c":"baz"}' } },
+      );
+    };
+
+    subtest 'properly parses null value to null', sub {
+      my $doc = '{
+        fieldWithObjectInput(input: {a: null, b: null, c: "C", d: null})
+      }';
+      run_test(
+        [$schema, $doc],
+        { data => { fieldWithObjectInput => '{"a":null,"b":null,"c":"C","d":null}' } },
+      );
+    };
     done_testing;
   };
   done_testing;

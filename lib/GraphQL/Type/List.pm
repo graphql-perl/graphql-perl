@@ -81,6 +81,19 @@ method is_valid(Maybe[ArrayRef] $item) :ReturnType(Bool) {
   1;
 }
 
+=head2 uplift
+
+Turn given Perl entity into valid value for this type if possible.
+Mainly to promote single value into a list if type dictates.
+
+=cut
+
+# This is a crime against God. graphql-js does it however.
+method uplift(Any $item) :ReturnType(Any) {
+  return $item if ref($item) eq 'ARRAY' or !defined $item;
+  [ $item ];
+}
+
 __PACKAGE__->meta->make_immutable();
 
 1;
