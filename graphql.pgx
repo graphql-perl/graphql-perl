@@ -32,11 +32,11 @@ fragmentSpread: .spread fragmentName /-/ directives?
 
 inlineFragment: .spread typeCondition? /-/ directives? /-/ selectionSet
 
-fragmentDefinition: 'fragment' /-/ fragmentName /-/ (typeCondition | `Expected "on"`) /-/ directives? /-/ selectionSet
+fragmentDefinition: /'fragment' -/ fragmentName /-/ (typeCondition | `Expected "on"`) /-/ directives? /-/ selectionSet
 
 fragmentName: ('on' `Unexpected Name "on"` | name)
 
-typeCondition: 'on' /-/ namedType
+typeCondition: /'on' -/ namedType
 
 value: variable | float | int | string | boolean | null | enumValue | listValue | objectValue
 
@@ -74,7 +74,7 @@ namedType: name
 
 listType: LSQUARE type RSQUARE
 
-nonNullType: namedType /-/ BANG | listType /-/ BANG
+nonNullType: namedType /- BANG/ | listType /- BANG/
 
 directives: directive+
 
@@ -131,18 +131,18 @@ comment: / HASH [^\r\n]* (: EOL | CR !NL | EOS ) / # CR is because MacOS 9
 
 typeSystemDefinition: /-/ (schemaDefinition | typeDefinition | typeExtensionDefinition | directiveDefinition) /-/
 
-schemaDefinition: 'schema' /-/ directives? /- LCURLY -/ operationTypeDefinition+ /- RCURLY -/
+schemaDefinition: /'schema' -/ directives? /- LCURLY -/ operationTypeDefinition+ /- RCURLY -/
 
 operationTypeDefinition: operationType /- COLON -/ namedType /-/
 
 typeDefinition: scalarTypeDefinition | objectTypeDefinition | interfaceTypeDefinition | unionTypeDefinition | enumTypeDefinition | inputObjectTypeDefinition
 
-scalarTypeDefinition: 'scalar' /-/ name /-/ directives?
+scalarTypeDefinition: /'scalar' -/ name /-/ directives?
 
 # fieldDefinition is "*" not "+" because JS implementation test allows
-objectTypeDefinition: 'type' /-/ name /-/ implementsInterfaces? /-/ directives? /- LCURLY -/ fieldDefinition* /- RCURLY -/
+objectTypeDefinition: /'type' -/ name /-/ implementsInterfaces? /-/ directives? /- LCURLY -/ fieldDefinition* /- RCURLY -/
 
-implementsInterfaces: 'implements' /-/ (namedType+ % /- COMMA? -/)
+implementsInterfaces: /'implements' -/ (namedType+ % /- COMMA? -/)
 
 fieldDefinition: name /-/ argumentsDefinition? /- COLON -/ type /-/ directives?
 
@@ -150,20 +150,20 @@ argumentsDefinition: /- LPAREN -/ (inputValueDefinition+ % /- COMMA? -/) /- RPAR
 
 inputValueDefinition: name /- COLON -/ type /-/ defaultValue? /-/ directives?
 
-interfaceTypeDefinition: 'interface' /-/ name /-/ directives? /- LCURLY -/ fieldDefinition+ /- RCURLY -/
+interfaceTypeDefinition: /'interface' -/ name /-/ directives? /- LCURLY -/ fieldDefinition+ /- RCURLY -/
 
-unionTypeDefinition: 'union' /-/ name /-/ directives? /- EQUAL -/ unionMembers
+unionTypeDefinition: /'union' -/ name /-/ directives? /- EQUAL -/ unionMembers
 
 unionMembers: namedType+ % /- PIPE -/
 
-enumTypeDefinition: 'enum' /-/ name /-/ directives? /- LCURLY -/ (enumValueDefinition+ % /- COMMA? -/) /- RCURLY -/
+enumTypeDefinition: /'enum' -/ name /-/ directives? /- LCURLY -/ (enumValueDefinition+ % /- COMMA? -/) /- RCURLY -/
 
 enumValueDefinition: enumValue /-/ directives?
 
-inputObjectTypeDefinition: 'input' /-/ name /-/ directives? /- LCURLY -/ inputValueDefinition+ /- RCURLY -/
+inputObjectTypeDefinition: /'input' -/ name /-/ directives? /- LCURLY -/ inputValueDefinition+ /- RCURLY -/
 
-typeExtensionDefinition: 'extend' /-/ objectTypeDefinition
+typeExtensionDefinition: /'extend' -/ objectTypeDefinition
 
-directiveDefinition: 'directive' /- AT -/ name /-/ argumentsDefinition? /-/ 'on' /-/ directiveLocations
+directiveDefinition: /'directive' - AT -/ name /-/ argumentsDefinition? /- 'on' -/ directiveLocations
 
 directiveLocations: name+ % /- PIPE -/
