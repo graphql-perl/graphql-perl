@@ -79,10 +79,11 @@ method execute(
   if ($@) {
     push @{ $context->{errors} }, GraphQL::Error->coerce($@); # TODO no mutate $context
   }
+  my $wrapped = { data => $result };
   if (@{ $context->{errors} }) {
-    return { errors => [ map $_->to_string, @{$context->{errors}} ] };
+    return { errors => [ map $_->to_string, @{$context->{errors}} ], %$wrapped };
   } else {
-    return { data => $result };
+    return $wrapped;
   }
 }
 
@@ -231,7 +232,8 @@ fun _execute_fields(
       [ @$path, $result_name ],
       $fields->{$_},
     );
-    $results{$result_name} = $result if $result;
+    $results{$result_name} = $result;
+    # TODO promise stuff
   } keys %$fields; # TODO ordering of fields
   \%results;
 }
@@ -348,7 +350,7 @@ fun _complete_value_catching_error(
   };
   if ($@) {
     push @{ $context->{errors} }, GraphQL::Error->coerce($@);
-    return;
+    return undef; # null value
   }
   $result;
 }
@@ -444,7 +446,8 @@ fun _get_argument_values(
       if ($@ or !$arg_type->is_valid($argument_node)) {
         die GraphQL::Error->new(
           message => "Argument '$name' got invalid value"
-            . " " . $JSON->encode($argument_node) . ".",
+            . " " . $JSON->encode($argument_node) . ".\nExpected '"
+            . $arg_type->to_string . "'.",
           nodes => [ $node ],
         );
       }

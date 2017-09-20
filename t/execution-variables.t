@@ -151,9 +151,12 @@ subtest 'Handles objects and nullability', sub {
       }';
       run_test(
         [$schema, $doc],
-        { 'errors' => [
-          'Argument \'input\' got invalid value ["foo","bar","baz"].'
-        ] },
+        {
+          data => { fieldWithObjectInput => undef },
+          errors => [
+            qq{Argument 'input' got invalid value ["foo","bar","baz"].\nExpected 'TestInputObject'.},
+          ],
+        },
       );
     };
     done_testing;
