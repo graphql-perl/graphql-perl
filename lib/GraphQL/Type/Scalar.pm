@@ -47,9 +47,15 @@ Has C<name>, C<description> from L<GraphQL::Role::Named>.
 
 =head2 serialize
 
-Code-ref. Should throw an exception if passed a defined Perl object of the
-relevant type. C<undef> must always be valid. Returns that object turned
-into JSON.
+Code-ref. Required.
+
+Coerces
+B<from> a Perl entity of the required type,
+B<to> a GraphQL entity,
+or throws an exception.
+
+Must throw an exception if passed a defined (i.e. non-null) but invalid
+Perl object of the relevant type. C<undef> must always be valid.
 
 =cut
 
@@ -57,8 +63,12 @@ has serialize => (is => 'ro', isa => CodeRef, required => 1);
 
 =head2 parse_value
 
-Code-ref. Required if is for an input type. Coerces a Perl entity into
-one of the required type, or throws an exception.
+Code-ref. Required if is for an input type.
+
+Coerces
+B<from> a GraphQL entity,
+B<to> a Perl entity of the required type,
+or throws an exception.
 
 =cut
 
