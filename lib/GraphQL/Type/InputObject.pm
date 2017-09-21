@@ -66,7 +66,7 @@ Turn given Perl entity into valid value for this type if possible.
 
 =cut
 
-method uplift(HashRef $item) :ReturnType(HashRef) {
+method uplift(Maybe[HashRef] $item) :ReturnType(Maybe[HashRef]) {
   return $item if !defined $item;
   my $fields = $self->fields;
   # if just return { map ... }, fails bizarrely
