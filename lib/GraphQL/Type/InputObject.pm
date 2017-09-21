@@ -63,7 +63,8 @@ method is_valid(Maybe[HashRef] $item) :ReturnType(Bool) {
 
 =head2 uplift
 
-Turn given Perl entity into valid value for this type if possible.
+Turn given Perl entity into valid value for this type if possible. Applies
+default values.
 
 =cut
 
@@ -80,12 +81,10 @@ method uplift(Maybe[HashRef] $item) :ReturnType(Maybe[HashRef]) {
 
 method graphql_to_perl(Maybe[HashRef] $item) :ReturnType(Maybe[HashRef]) {
   return $item if !defined $item;
+  $item = $self->uplift($item);
   my $fields = $self->fields;
   $self->hashmap($item, [ keys %$fields ], sub {
-    my ($key, $value) = @_;
-    $fields->{$key}{type}->graphql_to_perl(
-      $value // $fields->{$key}{default_value}
-    );
+    $fields->{$_[0]}{type}->graphql_to_perl($_[1]);
   });
 }
 

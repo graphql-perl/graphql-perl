@@ -50,6 +50,7 @@ has interfaces => (is => 'thunked', isa => ArrayRef[InstanceOf['GraphQL::Type::I
 
 method graphql_to_perl(Maybe[HashRef] $item) :ReturnType(Maybe[HashRef]) {
   return $item if !defined $item;
+  $item = $self->uplift($item);
   my $fields = $self->fields;
   $self->hashmap($item, [ keys %$fields ], sub {
     my ($key, $value) = @_;

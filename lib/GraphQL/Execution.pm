@@ -131,7 +131,7 @@ fun _variables_apply_defaults(
     my $opvar_type = $schema->name2type->{$opvar->{type}};
     my $parsed_value;
     my $maybe_value = $variable_values->{$_} // $opvar->{default_value};
-    eval { $parsed_value = $opvar_type->graphql_to_perl($opvar_type->uplift($maybe_value)) };
+    eval { $parsed_value = $opvar_type->graphql_to_perl($maybe_value) };
     die "Variable '\$$_' got invalid value @{[$JSON->canonical->encode($maybe_value)]}.\n$@"
       if $@;
     $new_values{$_} = $parsed_value;
@@ -464,7 +464,6 @@ fun _get_argument_values(
         );
       }
     } else {
-      eval { $argument_node = $arg_type->uplift($argument_node) }; # uplift one-element lists
       my $parsed_value;
       eval { $parsed_value = $arg_type->graphql_to_perl($argument_node) } if !$@;
       if ($@) {
