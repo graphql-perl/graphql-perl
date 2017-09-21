@@ -60,7 +60,9 @@ method hashmap(Maybe[HashRef] $item, ArrayRef $keys, CodeRef $code) :ReturnType(
   return $item if !defined $item;
   # if just return { map ... }, fails bizarrely
   my %newvalue = map {
-    ($_ => scalar $code->($_, $item->{$_}))
+    my @pair = eval { ($_ => scalar $code->($_, $item->{$_})) };
+    die qq{In field "$_": $@} if $@;
+    @pair;
   } grep exists($item->{$_}), @$keys;
   \%newvalue;
 }
