@@ -186,6 +186,26 @@ subtest 'Handles objects and nullability', sub {
         { data => { fieldWithObjectInput => '{"a":"foo","b":["bar"],"c":"baz"}' } },
       );
     };
+
+    subtest 'uses default value when not provided', sub {
+      my $doc_with_default = '
+        query q($input: TestInputObject = {a: "foo", b: ["bar"], c: "baz"}) {
+          fieldWithObjectInput(input: $input)
+        }
+      ';
+      run_test(
+        [$schema, $doc_with_default],
+        { data => { fieldWithObjectInput => '{"a":"foo","b":["bar"],"c":"baz"}' } },
+      );
+    };
+
+    subtest 'properly parses single value to list', sub {
+      my $vars = { input => { a => 'foo', b => 'bar', c => 'baz' } };
+      run_test(
+        [$schema, $doc, undef, undef, $vars],
+        { data => { fieldWithObjectInput => '{"a":"foo","b":["bar"],"c":"baz"}' } },
+      );
+    };
   };
   done_testing;
 };

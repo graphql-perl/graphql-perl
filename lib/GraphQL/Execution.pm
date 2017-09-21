@@ -110,10 +110,28 @@ fun _build_context(
     root_value => $root_value,
     context_value => $context_value,
     operation => $operation->{node},
-    variable_values => $variable_values,
+    variable_values => _variables_apply_defaults(
+      $schema,
+      $operation->{node}{variables} || {},
+      $variable_values || {},
+    ),
     field_resolver => $field_resolver || \&_default_field_resolver,
     errors => [],
   };
+}
+
+fun _variables_apply_defaults(
+  (InstanceOf['GraphQL::Schema']) $schema,
+  HashRef $operation_variables,
+  HashRef $variable_values,
+) :ReturnType(HashRef) {
+  my %new_values;
+  map {
+    my $opvar = $operation_variables->{$_};
+    my $opvar_type = $schema->name2type->{$opvar->{type}};
+    $new_values{$_} = $opvar_type->graphql_to_perl($opvar_type->uplift($variable_values->{$_} // $opvar->{default_value}));
+  } keys %$operation_variables;
+  \%new_values;
 }
 
 sub _get_operation {
@@ -429,10 +447,9 @@ fun _get_argument_values(
       }
     } elsif (ref($argument_node) eq 'SCALAR') {
       # scalar ref means it's a variable
-      # assume query validation already checked variable has valid value
       my $varname = $$argument_node;
-      my $value = ($variable_values && $variable_values->{$name})
-        || $default_value;
+      my $value = ($variable_values && $variable_values->{$varname})
+        // $default_value;
       $coerced_values{$name} = $value if defined $value;
       if (!defined $coerced_values{$name} and $arg_type->isa('GraphQL::Type::NonNull')) {
         die GraphQL::Error->new(
