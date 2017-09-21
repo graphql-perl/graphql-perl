@@ -124,6 +124,16 @@ Turn given Perl entity into valid Perl value for this type if possible.
 
 method uplift(Any $item) :ReturnType(Any) { $item; }
 
+=head2 graphql_to_perl
+
+Turn given GraphQL entity into Perl entity.
+
+=head2 perl_to_graphql
+
+Turn given Perl entity into GraphQL entity.
+
+=cut
+
 __PACKAGE__->meta->make_immutable();
 
 1;

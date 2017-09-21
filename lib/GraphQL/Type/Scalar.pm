@@ -23,8 +23,6 @@ use Return::Type;
 our $VERSION = '0.02';
 our @EXPORT_OK = qw($Int $Float $String $Boolean $ID);
 
-my $JSON = JSON::MaybeXS->new->allow_nonref;
-
 =head1 NAME
 
 GraphQL::Type::Scalar - GraphQL scalar type
@@ -88,6 +86,10 @@ method is_valid(Any $item) :ReturnType(Bool) {
   eval { $self->serialize->($item); 1 };
 }
 
+method graphql_to_perl(Any $item) :ReturnType(Any) {
+  $self->parse_value->($item);
+}
+
 =head1 EXPORTED VARIABLES
 
 =head2 $Int
@@ -99,8 +101,8 @@ our $Int = GraphQL::Type::Scalar->new(
   description =>
     'The `Int` scalar type represents non-fractional signed whole numeric ' .
     'values. Int can represent values between -(2^31) and 2^31 - 1.',
-  serialize => sub { defined $_[0] and Int32Signed->(@_); $JSON->encode($_[0]) },
-  parse_value => sub { defined $_[0] and Int32Signed->(@_); $JSON->encode($_[0]) },
+  serialize => sub { defined $_[0] and Int32Signed->(@_); $_[0] },
+  parse_value => sub { defined $_[0] and Int32Signed->(@_); $_[0] },
 );
 
 =head2 $Float
@@ -113,8 +115,8 @@ our $Float = GraphQL::Type::Scalar->new(
     'The `Float` scalar type represents signed double-precision fractional ' .
     'values as specified by ' .
     '[IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point).',
-  serialize => sub { defined $_[0] and Num->(@_); $JSON->encode($_[0]) },
-  parse_value => sub { defined $_[0] and Num->(@_); $JSON->encode($_[0]) },
+  serialize => sub { defined $_[0] and Num->(@_); $_[0] },
+  parse_value => sub { defined $_[0] and Num->(@_); $_[0] },
 );
 
 =head2 $String
@@ -127,8 +129,8 @@ our $String = GraphQL::Type::Scalar->new(
     'The `String` scalar type represents textual data, represented as UTF-8 ' .
     'character sequences. The String type is most often used by GraphQL to ' .
     'represent free-form human-readable text.',
-  serialize => sub { defined $_[0] and Str->(@_); $JSON->encode($_[0]) },
-  parse_value => sub { defined $_[0] and Str->(@_); $JSON->encode($_[0]) },
+  serialize => sub { defined $_[0] and Str->(@_); $_[0] },
+  parse_value => sub { defined $_[0] and Str->(@_); $_[0] },
 );
 
 =head2 $Boolean
@@ -139,8 +141,8 @@ our $Boolean = GraphQL::Type::Scalar->new(
   name => 'Boolean',
   description =>
     'The `Boolean` scalar type represents `true` or `false`.',
-  serialize => sub { defined $_[0] and Bool->(@_); $_[0] ? 'true' : 'false' },
-  parse_value => sub { defined $_[0] and Bool->(@_); $_[0] ? 'true' : 'false' },
+  serialize => sub { defined $_[0] and Bool->(@_); $_[0] ? JSON->true : JSON->false },
+  parse_value => sub { defined $_[0] and Bool->(@_); $_[0] },
 );
 
 =head2 $ID
@@ -155,8 +157,8 @@ our $ID = GraphQL::Type::Scalar->new(
     'response as a String; however, it is not intended to be human-readable. ' .
     'When expected as an input type, any string (such as `"4"`) or integer ' .
     '(such as `4`) input value will be accepted as an ID.',
-  serialize => sub { defined $_[0] and Str->(@_); $JSON->encode($_[0]) },
-  parse_value => sub { defined $_[0] and Str->(@_); $JSON->encode($_[0]) },
+  serialize => sub { defined $_[0] and Str->(@_); $_[0] },
+  parse_value => sub { defined $_[0] and Str->(@_); $_[0] },
 );
 
 __PACKAGE__->meta->make_immutable();

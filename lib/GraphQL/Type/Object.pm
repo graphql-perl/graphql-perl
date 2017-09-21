@@ -7,6 +7,8 @@ use Moo;
 use Types::Standard -all;
 use GraphQL::Type::Library -all;
 use MooX::Thunking;
+use Function::Parameters;
+use Return::Type;
 extends qw(GraphQL::Type);
 with qw(
   GraphQL::Role::Output
@@ -44,6 +46,17 @@ Optional, thunked array-ref of interface type objects implemented.
 =cut
 
 has interfaces => (is => 'thunked', isa => ArrayRef[InstanceOf['GraphQL::Type::Interface']]);
+
+method graphql_to_perl(Maybe[HashRef] $item) :ReturnType(Maybe[HashRef]) {
+  return $item if !defined $item;
+  my $fields = $self->fields;
+  # if just return { map ... }, fails bizarrely
+  my %newvalue = map {
+    my $maybe = $item->{$_} // $fields->{$_}{default_value};
+    exists($item->{$_}) ? ($_ => scalar $fields->{$_}{type}->graphql_to_perl($maybe)) : ()
+  } keys %$fields;
+  \%newvalue;
+}
 
 __PACKAGE__->meta->make_immutable();
 

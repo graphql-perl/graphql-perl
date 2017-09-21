@@ -76,6 +76,11 @@ method is_valid(Any $item) :ReturnType(Bool) {
   1;
 }
 
+method graphql_to_perl(Any $item) :ReturnType(Any) {
+  my $of = $self->of;
+  $of->graphql_to_perl($item) // die $of->to_string . " given null value.\n";
+}
+
 __PACKAGE__->meta->make_immutable();
 
 1;

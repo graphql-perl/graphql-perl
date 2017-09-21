@@ -443,7 +443,9 @@ fun _get_argument_values(
       }
     } else {
       eval { $argument_node = $arg_type->uplift($argument_node) }; # uplift one-element lists
-      if ($@ or !$arg_type->is_valid($argument_node)) {
+      my $parsed_value;
+      eval { $parsed_value = $arg_type->graphql_to_perl($argument_node) } if !$@;
+      if ($@) {
         die GraphQL::Error->new(
           message => "Argument '$name' got invalid value"
             . " " . $JSON->encode($argument_node) . ".\nExpected '"
@@ -451,7 +453,7 @@ fun _get_argument_values(
           nodes => [ $node ],
         );
       }
-      $coerced_values{$name} = $argument_node;
+      $coerced_values{$name} = $parsed_value;
     }
   }
   \%coerced_values;

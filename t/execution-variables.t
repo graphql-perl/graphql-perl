@@ -158,6 +158,18 @@ subtest 'Handles objects and nullability', sub {
         },
       );
     };
+
+    subtest 'properly runs parseLiteral on complex scalar types', sub {
+      my $doc = '{
+        fieldWithObjectInput(input: {c: "foo", d: "SerializedValue"})
+      }';
+      run_test(
+        [$schema, $doc],
+        { data => {
+          fieldWithObjectInput => '{"c":"foo","d":"DeserializedValue"}'
+        } },
+      );
+    };
     done_testing;
   };
   done_testing;

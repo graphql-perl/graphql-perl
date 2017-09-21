@@ -94,6 +94,12 @@ method uplift(Any $item) :ReturnType(Any) {
   [ $item ];
 }
 
+method graphql_to_perl(Maybe[ArrayRef] $item) :ReturnType(Maybe[ArrayRef]) {
+  return $item if !defined $item;
+  my $of = $self->of;
+  [ map $of->graphql_to_perl($_), @$item ];
+}
+
 __PACKAGE__->meta->make_immutable();
 
 1;
