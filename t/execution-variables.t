@@ -172,6 +172,21 @@ subtest 'Handles objects and nullability', sub {
     };
     done_testing;
   };
+
+  subtest 'using variables', sub {
+    my $doc = '
+      query q($input: TestInputObject) {
+        fieldWithObjectInput(input: $input)
+      }
+    ';
+    subtest 'executes with complex input', sub {
+      my $vars = { input => { a => 'foo', b => [ 'bar' ], c => 'baz' } };
+      run_test(
+        [$schema, $doc, undef, undef, $vars],
+        { data => { fieldWithObjectInput => '{"a":"foo","b":["bar"],"c":"baz"}' } },
+      );
+    };
+  };
   done_testing;
 };
 
