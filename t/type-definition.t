@@ -8,7 +8,6 @@ use Test::Exception;
 BEGIN {
   use_ok( 'GraphQL::Type::Interface' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::Object' ) || print "Bail out!\n";
-  use_ok( 'GraphQL::Type::List' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::Enum' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::Union' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::InputObject' ) || print "Bail out!\n";
@@ -57,7 +56,7 @@ my $BlogQuery = GraphQL::Type::Object->new(
       args => { width => { type => $Int }, height => { type => $Int } },
       type => $BlogArticle,
     },
-    feed => { type => GraphQL::Type::List->new(of => $BlogArticle) },
+    feed => { type => $BlogArticle->list },
   },
 );
 
@@ -287,10 +286,10 @@ subtest 'stringifies simple types', sub {
   is $EnumType->to_string, 'Enum';
   is $InputObjectType->to_string, 'InputObject';
   is($Int->non_null->to_string, 'Int!');
-  is(GraphQL::Type::List->new(of => $Int)->to_string, '[Int]');
-  is(GraphQL::Type::List->new(of => $Int)->non_null->to_string, '[Int]!');
-  is(GraphQL::Type::List->new(of => $Int->non_null)->to_string, '[Int!]');
-  is(GraphQL::Type::List->new(of => GraphQL::Type::List->new(of => $Int))->to_string, '[[Int]]');
+  is($Int->list->to_string, '[Int]');
+  is($Int->list->non_null->to_string, '[Int]!');
+  is($Int->non_null->list->to_string, '[Int!]');
+  is($Int->list->list->to_string, '[[Int]]');
 };
 
 sub test_as_type {
@@ -299,7 +298,7 @@ sub test_as_type {
   map {
     my $got = !!$_->does("GraphQL::Role::$as");
     is $got, $should, "$_ $as ($should)";
-  } $type, GraphQL::Type::List->new(of => $type), $type->non_null;
+  } $type, $type->list, $type->non_null;
 }
 subtest 'identifies input types', sub {
   test_as_type($Int, 'Input', 1);
@@ -326,7 +325,7 @@ subtest 'prohibits putting non-Object types in unions', sub {
   )} qr/did not pass type constraint/ } (
     $Int,
     $Int->non_null,
-    GraphQL::Type::List->new(of => $Int),
+    $Int->list,
     $InterfaceType,
     $UnionType,
     $EnumType,

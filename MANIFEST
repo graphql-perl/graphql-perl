@@ -14,6 +14,7 @@ lib/GraphQL/Role/FieldsInput.pm
 lib/GraphQL/Role/FieldsOutput.pm
 lib/GraphQL/Role/Input.pm
 lib/GraphQL/Role/Leaf.pm
+lib/GraphQL/Role/Listable.pm
 lib/GraphQL/Role/Named.pm
 lib/GraphQL/Role/Nullable.pm
 lib/GraphQL/Role/Output.pm

@@ -12,7 +12,6 @@ BEGIN {
   use_ok( 'GraphQL::Type::InputObject' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::Object' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Schema' ) || print "Bail out!\n";
-  use_ok( 'GraphQL::Type::List' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Execution' ) || print "Bail out!\n";
 }
 
@@ -35,7 +34,7 @@ my $TestInputObject = GraphQL::Type::InputObject->new(
   name => 'TestInputObject',
   fields => {
     a => { type => $String },
-    b => { type => GraphQL::Type::List->new(of => $String) },
+    b => { type => $String->list },
     c => { type => $String->non_null },
     d => { type => $TestComplexScalar },
   },
@@ -85,17 +84,17 @@ my $TestType = GraphQL::Type::Object->new(
     },
     nnList => {
       type => $String,
-      args => { input => { type => GraphQL::Type::List->new(of => $String)->non_null } },
+      args => { input => { type => $String->list->non_null } },
       resolve => sub { $JSON->encode($_[1]->{input}) },
     },
     listNN => {
       type => $String,
-      args => { input => { type => GraphQL::Type::List->new(of => $String->non_null) } },
+      args => { input => { type => $String->non_null->list } },
       resolve => sub { $JSON->encode($_[1]->{input}) },
     },
     nnListNN => {
       type => $String,
-      args => { input => { type => GraphQL::Type::List->new(of => $String->non_null)->non_null } },
+      args => { input => { type => $String->non_null->list->non_null } },
       resolve => sub { $JSON->encode($_[1]->{input}) },
     },
   },

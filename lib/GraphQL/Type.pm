@@ -7,6 +7,7 @@ use Moo;
 use Return::Type;
 use Function::Parameters;
 use Types::Standard qw(InstanceOf Any); # if -all causes objects to be class 'Object'!
+with 'GraphQL::Role::Listable';
 
 our $VERSION = '0.02';
 
@@ -67,6 +68,8 @@ either to facilitate type constrants, or as noted below.
 =item L<GraphQL::Role::Input> - type can be an input
 
 =item L<GraphQL::Role::Leaf> - simple type - enum or scalar
+
+=item L<GraphQL::Role::Listable> - can be list-wrapped; provides convenience method
 
 =item L<GraphQL::Role::Named> - has a C<name> and C<description>, provided by this role
 
