@@ -206,6 +206,16 @@ subtest 'Handles objects and nullability', sub {
         { data => { fieldWithObjectInput => '{"a":"foo","b":["bar"],"c":"baz"}' } },
       );
     };
+
+    subtest 'executes with complex scalar input', sub {
+      my $vars = { input => { c => 'foo', d => 'SerializedValue' } };
+      run_test(
+        [$schema, $doc, undef, undef, $vars],
+        { data => {
+          fieldWithObjectInput => '{"c":"foo","d":"DeserializedValue"}'
+        } },
+      );
+    };
   };
   done_testing;
 };
