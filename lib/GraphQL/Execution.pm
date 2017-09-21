@@ -440,6 +440,17 @@ fun _get_argument_values(
       "'@{[$arg_defs->{$bad[0]}{type}->to_string]}' not given.",
     nodes => [ $node ],
   ) if @bad;
+  my @novar = grep
+    ref($arg_nodes->{$_}||'') eq 'SCALAR' and
+    (!$variable_values or !exists $variable_values->{${$arg_nodes->{$_}}}) and
+    !defined $arg_defs->{$_}{default_value} and
+    $arg_defs->{$_}{type}->isa('GraphQL::Type::NonNull'), keys %$arg_defs;
+  die GraphQL::Error->new(
+    message => "Argument '$novar[0]' of type ".
+      "'@{[$arg_defs->{$bad[0]}{type}->to_string]}'".
+      " was given variable '\$${$arg_nodes->{$novar[0]}}' but no runtime value.",
+    nodes => [ $node ],
+  ) if @novar;
   my %coerced_values;
   for my $name (keys %$arg_defs) {
     my $arg_def = $arg_defs->{$name};
@@ -450,17 +461,9 @@ fun _get_argument_values(
       $coerced_values{$name} = $default_value if exists $arg_def->{default_value};
     } elsif (ref($argument_node) eq 'SCALAR') {
       # scalar ref means it's a variable
-      my $varname = $$argument_node;
-      my $value = ($variable_values && $variable_values->{$varname})
+      $coerced_values{$name} =
+        ($variable_values && $variable_values->{$$argument_node})
         // $default_value;
-      $coerced_values{$name} = $value if defined $value;
-      if (!defined $coerced_values{$name} and $arg_type->isa('GraphQL::Type::NonNull')) {
-        die GraphQL::Error->new(
-          message => "Argument '$name' of type '@{[$arg_type->to_string]}'"
-            . " was given variable '\$$varname' but no runtime value.",
-          nodes => [ $node ],
-        );
-      }
     } else {
       my $parsed_value;
       eval { $parsed_value = $arg_type->graphql_to_perl($argument_node) } if !$@;
