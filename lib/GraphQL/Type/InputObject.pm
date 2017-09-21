@@ -14,6 +14,7 @@ with qw(
   GraphQL::Role::Nullable
   GraphQL::Role::Named
   GraphQL::Role::FieldsInput
+  GraphQL::Role::HashMappable
 );
 
 our $VERSION = '0.02';
@@ -69,23 +70,23 @@ Turn given Perl entity into valid value for this type if possible.
 method uplift(Maybe[HashRef] $item) :ReturnType(Maybe[HashRef]) {
   return $item if !defined $item;
   my $fields = $self->fields;
-  # if just return { map ... }, fails bizarrely
-  my %newvalue = map {
-    my $maybe = $item->{$_} // $fields->{$_}{default_value};
-    exists($item->{$_}) ? ($_ => scalar $fields->{$_}{type}->uplift($maybe)) : ()
-  } keys %$fields;
-  \%newvalue;
+  $self->hashmap($item, [ keys %$fields ], sub {
+    my ($key, $value) = @_;
+    $fields->{$key}{type}->uplift(
+      $value // $fields->{$key}{default_value}
+    );
+  });
 }
 
 method graphql_to_perl(Maybe[HashRef] $item) :ReturnType(Maybe[HashRef]) {
   return $item if !defined $item;
   my $fields = $self->fields;
-  # if just return { map ... }, fails bizarrely
-  my %newvalue = map {
-    my $maybe = $item->{$_} // $fields->{$_}{default_value};
-    exists($item->{$_}) ? ($_ => scalar $fields->{$_}{type}->graphql_to_perl($maybe)) : ()
-  } keys %$fields;
-  \%newvalue;
+  $self->hashmap($item, [ keys %$fields ], sub {
+    my ($key, $value) = @_;
+    $fields->{$key}{type}->graphql_to_perl(
+      $value // $fields->{$key}{default_value}
+    );
+  });
 }
 
 __PACKAGE__->meta->make_immutable();

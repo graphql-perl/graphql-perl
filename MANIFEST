@@ -12,6 +12,7 @@ lib/GraphQL/Role/Composite.pm
 lib/GraphQL/Role/FieldDeprecation.pm
 lib/GraphQL/Role/FieldsInput.pm
 lib/GraphQL/Role/FieldsOutput.pm
+lib/GraphQL/Role/HashMappable.pm
 lib/GraphQL/Role/Input.pm
 lib/GraphQL/Role/Leaf.pm
 lib/GraphQL/Role/Listable.pm
