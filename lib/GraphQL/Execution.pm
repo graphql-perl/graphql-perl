@@ -434,6 +434,12 @@ fun _get_argument_values(
   my $arg_defs = $def->{args};
   my $arg_nodes = $node->{arguments};
   return {} if !$arg_defs or !$arg_nodes;
+  my @bad = grep !exists $arg_nodes->{$_} and !defined $arg_defs->{$_}{default_value} and $arg_defs->{$_}{type}->isa('GraphQL::Type::NonNull'), keys %$arg_defs;
+  die GraphQL::Error->new(
+    message => "Argument '$bad[0]' of type ".
+      "'@{[$arg_defs->{$bad[0]}{type}->to_string]}' not given.",
+    nodes => [ $node ],
+  ) if @bad;
   my %coerced_values;
   for my $name (keys %$arg_defs) {
     my $arg_def = $arg_defs->{$name};
@@ -441,15 +447,7 @@ fun _get_argument_values(
     my $argument_node = $arg_nodes->{$name};
     my $default_value = $arg_def->{default_value};
     if (!exists $arg_nodes->{$name}) {
-      if (defined $default_value) {
-        $coerced_values{$name} = $default_value;
-      } elsif ($arg_type->isa('GraphQL::Type::NonNull')) {
-        die GraphQL::Error->new(
-          message => "Argument '$name' of type '@{[$arg_type->to_string]}'"
-            . " not given.",
-          nodes => [ $node ],
-        );
-      }
+      $coerced_values{$name} = $default_value if exists $arg_def->{default_value};
     } elsif (ref($argument_node) eq 'SCALAR') {
       # scalar ref means it's a variable
       my $varname = $$argument_node;
