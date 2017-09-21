@@ -23,6 +23,24 @@ GraphQL::Type - GraphQL type object
 
 Superclass for other GraphQL type classes to inherit from.
 
+=head1 ENCODING
+
+Those Perl classes each implement a GraphQL type. Each item of
+GraphQL data has a GraphQL type.  Such an item of data can also be
+represented within Perl. Objects of that Perl class take responsibility
+for translating between the Perl representation and the "GraphQL
+representation". A "GraphQL representation" means something
+JSON-encodeable: an "object" (in Perl terms, a hash), an array (Perl:
+array-reference), string, number, boolean, or null.
+
+See L</METHODS> for generic methods to translate back and forth between
+these worlds.
+
+Code that you provide to do this translation must return things that
+I<can> be JSON-encoded, not things that I<have been> so encoded: this
+means, among other things, do not surround strings in C<">, and for
+boolean values, use the mechanism in L<JSON::MaybeXS>: C<JSON->true> etc.
+
 =head1 SUBCLASSES
 
 These subclasses implement part of the GraphQL language
@@ -100,7 +118,7 @@ method clone() :ReturnType(InstanceOf['GraphQL::Type']) {
 
 =head2 uplift
 
-Turn given Perl entity into valid value for this type if possible.
+Turn given Perl entity into valid Perl value for this type if possible.
 
 =cut
 
