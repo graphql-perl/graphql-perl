@@ -129,7 +129,12 @@ fun _variables_apply_defaults(
   map {
     my $opvar = $operation_variables->{$_};
     my $opvar_type = $schema->name2type->{$opvar->{type}};
-    $new_values{$_} = $opvar_type->graphql_to_perl($opvar_type->uplift($variable_values->{$_} // $opvar->{default_value}));
+    my $parsed_value;
+    my $maybe_value = $variable_values->{$_} // $opvar->{default_value};
+    eval { $parsed_value = $opvar_type->graphql_to_perl($opvar_type->uplift($maybe_value)) };
+    die "Variable '\$$_' got invalid value @{[$JSON->canonical->encode($maybe_value)]}.\n$@"
+      if $@;
+    $new_values{$_} = $parsed_value;
   } keys %$operation_variables;
   \%new_values;
 }

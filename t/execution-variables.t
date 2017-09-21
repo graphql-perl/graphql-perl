@@ -216,6 +216,17 @@ subtest 'Handles objects and nullability', sub {
         } },
       );
     };
+
+    subtest 'errors on null for nested non-null', sub {
+      my $vars = { input => { a => 'foo', b => 'bar', c => undef } };
+      run_test(
+        [$schema, $doc, undef, undef, $vars],
+        { errors => [
+          q{Variable '$input' got invalid value {"a":"foo","b":"bar","c":null}.}
+          ."\n".q{In field "c": String! given null value.}."\n"
+        ] },
+      );
+    };
   };
   done_testing;
 };
