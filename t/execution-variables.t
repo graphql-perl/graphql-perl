@@ -341,6 +341,18 @@ In method graphql_to_perl: parameter 1 ($item): found not an object at (eval 252
         { data => { fieldWithNullableStringInput => '"a"' } },
       );
     };
+
+    subtest 'allows nullable inputs to be set to a value directly', sub {
+      my $doc = '
+        {
+          fieldWithNullableStringInput(input: "a")
+        }
+      ';
+      run_test(
+        [$schema, $doc],
+        { data => { fieldWithNullableStringInput => '"a"' } },
+      );
+    };
   };
   done_testing;
 };
