@@ -354,6 +354,74 @@ In method graphql_to_perl: parameter 1 ($item): found not an object at (eval 252
       );
     };
   };
+
+  subtest 'Handles non-nullable scalars', sub {
+    subtest 'allows non-nullable inputs to be omitted given a default', sub {
+      my $doc = '
+        query SetsNonNullable($value: String = "default") {
+          fieldWithNonNullableStringInput(input: $value)
+        }
+      ';
+      run_test(
+        [$schema, $doc],
+        { data => { fieldWithNonNullableStringInput => '"default"' } },
+      );
+    };
+
+    subtest 'does not allow non-nullable inputs to be omitted in a variable', sub {
+      my $doc = '
+        query SetsNonNullable($value: String!) {
+          fieldWithNonNullableStringInput(input: $value)
+        }
+      ';
+      run_test(
+        [$schema, $doc],
+        { errors => [ { message =>
+          q{Variable '$value' got invalid value null.}."\n".
+          q{String! given null value.}."\n"
+        } ] },
+      );
+    };
+
+    subtest 'does not allow non-nullable inputs to be set to null in a variable', sub {
+      my $doc = '
+        query SetsNonNullable($value: String!) {
+          fieldWithNonNullableStringInput(input: $value)
+        }
+      ';
+      my $vars = { value => undef };
+      run_test(
+        [$schema, $doc, undef, undef, $vars],
+        { errors => [ { message =>
+          q{Variable '$value' got invalid value null.}."\n".
+          q{String! given null value.}."\n"
+        } ] },
+      );
+    };
+
+    subtest 'allows non-nullable inputs to be set to a value in a variable', sub {
+      my $doc = '
+        query SetsNonNullable($value: String!) {
+          fieldWithNonNullableStringInput(input: $value)
+        }
+      ';
+      my $vars = { value => 'a' };
+      run_test(
+        [$schema, $doc, undef, undef, $vars],
+        { data => { fieldWithNonNullableStringInput => '"a"' } },
+      );
+    };
+
+    subtest 'allows non-nullable inputs to be set to a value directly', sub {
+      my $doc = '
+        { fieldWithNonNullableStringInput(input: "a") }
+      ';
+      run_test(
+        [$schema, $doc],
+        { data => { fieldWithNonNullableStringInput => '"a"' } },
+      );
+    };
+  };
   done_testing;
 };
 
