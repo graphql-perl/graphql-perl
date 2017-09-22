@@ -234,7 +234,7 @@ subtest 'Handles objects and nullability', sub {
         [$schema, $doc, undef, undef, $vars],
         { errors => [ { message =>
 q{Variable '$input' got invalid value "foo bar".
-In method graphql_to_perl: parameter 2 ($item): found not an object at (eval 252) line 11.
+In method graphql_to_perl: parameter 1 ($item): found not an object at (eval 252) line 11.
 }
         } ] },
       );

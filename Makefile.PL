@@ -20,7 +20,7 @@ WriteMakefile(
   PREREQ_PM => {
     'Moo' => '0',
     'Type::Tiny' => '0',
-    'Function::Parameters' => '0',
+    'Function::Parameters' => '2.001001',
     'Return::Type' => '0',
     'Pegex' => '0',
     'MooX::Thunking' => '0.07', # takes care of Thunk in isa
