@@ -227,6 +227,18 @@ subtest 'Handles objects and nullability', sub {
         ] },
       );
     };
+
+    subtest 'errors on incorrect type', sub {
+      my $vars = { input => 'foo bar' };
+      run_test(
+        [$schema, $doc, undef, undef, $vars],
+        { errors => [
+q{Variable '$input' got invalid value "foo bar".
+In method graphql_to_perl: parameter 2 ($item): found not an object at (eval 252) line 11.
+}
+        ] },
+      );
+    };
   };
   done_testing;
 };

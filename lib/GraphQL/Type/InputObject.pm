@@ -5,6 +5,7 @@ use strict;
 use warnings;
 use Moo;
 use Types::Standard -all;
+use GraphQL::Type::Library -all;
 use Function::Parameters;
 use Return::Type;
 
@@ -79,7 +80,7 @@ method uplift(Maybe[HashRef] $item) :ReturnType(Maybe[HashRef]) {
   });
 }
 
-method graphql_to_perl(Maybe[HashRef] $item) :ReturnType(Maybe[HashRef]) {
+method graphql_to_perl(ExpectObject $item) :ReturnType(Maybe[HashRef]) {
   return $item if !defined $item;
   $item = $self->uplift($item);
   my $fields = $self->fields;

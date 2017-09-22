@@ -203,6 +203,17 @@ declare "UniqueByProperty",
     };
   };
 
+=head2 ExpectObject
+
+A C<Maybe[HashRef]> that produces a GraphQL-like message if it fails,
+saying "found not an object".
+
+=cut
+
+declare "ExpectObject",
+  as Maybe[HashRef],
+  message { "found not an object" };
+
 =head1 AUTHOR
 
 Ed J, C<< <etj at cpan.org> >>
