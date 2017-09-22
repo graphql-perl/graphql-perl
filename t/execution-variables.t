@@ -152,9 +152,9 @@ subtest 'Handles objects and nullability', sub {
         [$schema, $doc],
         {
           data => { fieldWithObjectInput => undef },
-          errors => [
+          errors => [ { message =>
             qq{Argument 'input' got invalid value ["foo","bar","baz"].\nExpected 'TestInputObject'.},
-          ],
+          } ],
         },
       );
     };
@@ -221,10 +221,10 @@ subtest 'Handles objects and nullability', sub {
       my $vars = { input => { a => 'foo', b => 'bar', c => undef } };
       run_test(
         [$schema, $doc, undef, undef, $vars],
-        { errors => [
+        { errors => [ { message =>
           q{Variable '$input' got invalid value {"a":"foo","b":"bar","c":null}.}
           ."\n".q{In field "c": String! given null value.}."\n"
-        ] },
+        } ] },
       );
     };
 
@@ -232,11 +232,11 @@ subtest 'Handles objects and nullability', sub {
       my $vars = { input => 'foo bar' };
       run_test(
         [$schema, $doc, undef, undef, $vars],
-        { errors => [
+        { errors => [ { message =>
 q{Variable '$input' got invalid value "foo bar".
 In method graphql_to_perl: parameter 2 ($item): found not an object at (eval 252) line 11.
 }
-        ] },
+        } ] },
       );
     };
 
@@ -244,10 +244,10 @@ In method graphql_to_perl: parameter 2 ($item): found not an object at (eval 252
       my $vars = { input => { a => 'foo', b => 'bar' } };
       run_test(
         [$schema, $doc, undef, undef, $vars],
-        { errors => [
+        { errors => [ { message =>
           q{Variable '$input' got invalid value {"a":"foo","b":"bar"}.}
           ."\n".q{In field "c": String! given null value.}."\n"
-        ] },
+        } ] },
       );
     };
 
@@ -260,11 +260,11 @@ In method graphql_to_perl: parameter 2 ($item): found not an object at (eval 252
       my $vars = { input => { na => { a => 'foo' } } };
       run_test(
         [$schema, $nested_doc, undef, undef, $vars],
-        { errors => [
+        { errors => [ { message =>
           q{Variable '$input' got invalid value {"na":{"a":"foo"}}.}."\n"
           .q{In field "na": In field "c": String! given null value.}."\n"
           .q{In field "nb": String! given null value.}."\n"
-        ] },
+        } ] },
       );
     };
 
@@ -272,10 +272,10 @@ In method graphql_to_perl: parameter 2 ($item): found not an object at (eval 252
       my $vars = { input => { b => 'bar', c => 'baz', extra => 'dog' } };
       run_test(
         [$schema, $doc, undef, undef, $vars],
-        { errors => [
+        { errors => [ { message =>
           q{Variable '$input' got invalid value {"b":"bar","c":"baz","extra":"dog"}.}
           ."\n".q{In field "extra": Unknown field.}."\n"
-        ] },
+        } ] },
       );
     };
   };

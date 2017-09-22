@@ -68,7 +68,7 @@ method execute(
       $field_resolver,
     );
   };
-  return { errors => [ $@ ] } if $@;
+  return { errors => [ { message => $@ } ] } if $@;
   my $result = eval {
     scalar _execute_operation(
       $context,
@@ -81,7 +81,7 @@ method execute(
   }
   my $wrapped = { data => $result };
   if (@{ $context->{errors} }) {
-    return { errors => [ map $_->to_string, @{$context->{errors}} ], %$wrapped };
+    return { errors => [ map { { message => $_->to_string } } @{$context->{errors}} ], %$wrapped };
   } else {
     return $wrapped;
   }
