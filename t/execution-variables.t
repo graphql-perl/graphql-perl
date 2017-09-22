@@ -58,7 +58,7 @@ my $TestType = GraphQL::Type::Object->new(
     },
     fieldWithNullableStringInput => {
       type => $String,
-      args => { input => { type => $TestInputObject } },
+      args => { input => { type => $String } },
       resolve => sub { $_[1]->{input} && $JSON->encode($_[1]->{input}) },
     },
     fieldWithNonNullableStringInput => {
@@ -326,6 +326,19 @@ In method graphql_to_perl: parameter 1 ($item): found not an object at (eval 252
       run_test(
         [$schema, $doc, undef, undef, $vars],
         { data => { fieldWithNullableStringInput => undef } },
+      );
+    };
+
+    subtest 'allows nullable inputs to be set to a value in a variable', sub {
+      my $doc = '
+        query SetsNullable($value: String) {
+          fieldWithNullableStringInput(input: $value)
+        }
+      ';
+      my $vars = { value => 'a' };
+      run_test(
+        [$schema, $doc, undef, undef, $vars],
+        { data => { fieldWithNullableStringInput => '"a"' } },
       );
     };
   };
