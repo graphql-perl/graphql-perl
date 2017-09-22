@@ -49,7 +49,8 @@ Code-ref.
 =back
 
 Each value will be the original value returned by the given code-ref,
-which is called with C<$keyname>, C<$value>.
+which is called with C<$keyname>, C<$value>. Will call the code for all
+given keys, but not copy over any values not existing in original item.
 
 If code throws an exception, the message will have added to it information
 about which data element caused it.
@@ -62,8 +63,8 @@ method hashmap(Maybe[HashRef] $item, ArrayRef $keys, CodeRef $code) :ReturnType(
   my %newvalue = map {
     my @pair = eval { ($_ => scalar $code->($_, $item->{$_})) };
     die qq{In field "$_": $@} if $@;
-    @pair;
-  } grep exists($item->{$_}), @$keys;
+    exists $item->{$_} ? @pair : ();
+  } @$keys;
   \%newvalue;
 }
 

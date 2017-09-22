@@ -239,6 +239,17 @@ In method graphql_to_perl: parameter 2 ($item): found not an object at (eval 252
         ] },
       );
     };
+
+    subtest 'errors on omission of nested non-null', sub {
+      my $vars = { input => { a => 'foo', b => 'bar' } };
+      run_test(
+        [$schema, $doc, undef, undef, $vars],
+        { errors => [
+          q{Variable '$input' got invalid value {"a":"foo","b":"bar"}.}
+          ."\n".q{In field "c": String! given null value.}."\n"
+        ] },
+      );
+    };
   };
   done_testing;
 };
