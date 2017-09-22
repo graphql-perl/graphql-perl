@@ -280,6 +280,55 @@ In method graphql_to_perl: parameter 1 ($item): found not an object at (eval 252
     };
     done_testing;
   };
+
+  subtest 'Handles nullable scalars', sub {
+    subtest 'allows nullable inputs to be omitted', sub {
+      my $doc = '
+        { fieldWithNullableStringInput }
+      ';
+      run_test(
+        [$schema, $doc],
+        { data => { fieldWithNullableStringInput => undef } },
+      );
+    };
+
+    subtest 'allows nullable inputs to be omitted in a variable', sub {
+      my $doc = '
+        query SetsNullable($value: String) {
+          fieldWithNullableStringInput(input: $value)
+        }
+      ';
+      run_test(
+        [$schema, $doc],
+        { data => { fieldWithNullableStringInput => undef } },
+      );
+    };
+
+    subtest 'allows nullable inputs to be omitted in an unlisted variable', sub {
+      my $doc = '
+        query SetsNullable {
+          fieldWithNullableStringInput(input: $value)
+        }
+      ';
+      run_test(
+        [$schema, $doc],
+        { data => { fieldWithNullableStringInput => undef } },
+      );
+    };
+
+    subtest 'allows nullable inputs to be set to null in a variable', sub {
+      my $doc = '
+        query SetsNullable($value: String) {
+          fieldWithNullableStringInput(input: $value)
+        }
+      ';
+      my $vars = { value => undef };
+      run_test(
+        [$schema, $doc, undef, undef, $vars],
+        { data => { fieldWithNullableStringInput => undef } },
+      );
+    };
+  };
   done_testing;
 };
 
