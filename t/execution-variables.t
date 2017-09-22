@@ -54,48 +54,48 @@ my $TestType = GraphQL::Type::Object->new(
     fieldWithObjectInput => {
       type => $String,
       args => { input => { type => $TestInputObject } },
-      resolve => sub { $JSON->encode($_[1]->{input}) },
+      resolve => sub { $_[1]->{input} && $JSON->encode($_[1]->{input}) },
     },
     fieldWithNullableStringInput => {
       type => $String,
       args => { input => { type => $TestInputObject } },
-      resolve => sub { $JSON->encode($_[1]->{input}) },
+      resolve => sub { $_[1]->{input} && $JSON->encode($_[1]->{input}) },
     },
     fieldWithNonNullableStringInput => {
       type => $String,
       args => { input => { type => $String->non_null } },
-      resolve => sub { $JSON->encode($_[1]->{input}) },
+      resolve => sub { $_[1]->{input} && $JSON->encode($_[1]->{input}) },
     },
     fieldWithDefaultArgumentValue => {
       type => $String,
       args => { input => { type => $String->non_null, default_value => 'Hello World' } },
-      resolve => sub { $JSON->encode($_[1]->{input}) },
+      resolve => sub { $_[1]->{input} && $JSON->encode($_[1]->{input}) },
     },
     # is correct as brings in type to schema. zap default_value as fails type
     fieldWithNestedInputObject => {
       type => $String,
       args => { input => { type => $TestNestedInputObject } },
-      resolve => sub { $JSON->encode($_[1]->{input}) },
+      resolve => sub { $_[1]->{input} && $JSON->encode($_[1]->{input}) },
     },
     list => {
       type => $String,
       args => { input => { type => $String } },
-      resolve => sub { $JSON->encode($_[1]->{input}) },
+      resolve => sub { $_[1]->{input} && $JSON->encode($_[1]->{input}) },
     },
     nnList => {
       type => $String,
       args => { input => { type => $String->list->non_null } },
-      resolve => sub { $JSON->encode($_[1]->{input}) },
+      resolve => sub { $_[1]->{input} && $JSON->encode($_[1]->{input}) },
     },
     listNN => {
       type => $String,
       args => { input => { type => $String->non_null->list } },
-      resolve => sub { $JSON->encode($_[1]->{input}) },
+      resolve => sub { $_[1]->{input} && $JSON->encode($_[1]->{input}) },
     },
     nnListNN => {
       type => $String,
       args => { input => { type => $String->non_null->list->non_null } },
-      resolve => sub { $JSON->encode($_[1]->{input}) },
+      resolve => sub { $_[1]->{input} && $JSON->encode($_[1]->{input}) },
     },
   },
 );
@@ -278,6 +278,7 @@ In method graphql_to_perl: parameter 1 ($item): found not an object at (eval 252
         } ] },
       );
     };
+    done_testing;
   };
   done_testing;
 };
