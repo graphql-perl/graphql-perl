@@ -41,7 +41,7 @@ my $TestInputObject = GraphQL::Type::InputObject->new(
 );
 
 my $TestNestedInputObject = GraphQL::Type::InputObject->new(
-  name => 'Author',
+  name => 'TestNestedInputObject',
   fields => {
     na => { type => $TestInputObject->non_null },
     nb => { type => $String->non_null },
@@ -71,12 +71,12 @@ my $TestType = GraphQL::Type::Object->new(
       args => { input => { type => $String->non_null, default_value => 'Hello World' } },
       resolve => sub { $JSON->encode($_[1]->{input}) },
     },
-# XXX this looks like an error in execution/variables-test.js
-#    fieldWithNestedInputObject => {
-#      type => $String,
-#      args => { input => { type => $TestNestedInputObject, default_value => 'Hello World' } },
-#      resolve => sub { $JSON->encode($_[1]->{input}) },
-#    },
+    # is correct as brings in type to schema. zap default_value as fails type
+    fieldWithNestedInputObject => {
+      type => $String,
+      args => { input => { type => $TestNestedInputObject } },
+      resolve => sub { $JSON->encode($_[1]->{input}) },
+    },
     list => {
       type => $String,
       args => { input => { type => $String } },
@@ -247,6 +247,23 @@ In method graphql_to_perl: parameter 2 ($item): found not an object at (eval 252
         { errors => [
           q{Variable '$input' got invalid value {"a":"foo","b":"bar"}.}
           ."\n".q{In field "c": String! given null value.}."\n"
+        ] },
+      );
+    };
+
+    subtest 'errors on deep nested errors and with many errors', sub {
+      my $nested_doc = '
+        query q($input: TestNestedInputObject) {
+          fieldWithNestedObjectInput(input: $input)
+        }
+      ';
+      my $vars = { input => { na => { a => 'foo' } } };
+      run_test(
+        [$schema, $nested_doc, undef, undef, $vars],
+        { errors => [
+          q{Variable '$input' got invalid value {"na":{"a":"foo"}}.}."\n"
+          .q{In field "na": In field "c": String! given null value.}."\n"
+          .q{In field "nb": String! given null value.}."\n"
         ] },
       );
     };

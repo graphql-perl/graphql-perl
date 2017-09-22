@@ -60,11 +60,13 @@ about which data element caused it.
 method hashmap(Maybe[HashRef] $item, ArrayRef $keys, CodeRef $code) :ReturnType(Maybe[HashRef]) {
   return $item if !defined $item;
   # if just return { map ... }, fails bizarrely
+  my @errors;
   my %newvalue = map {
     my @pair = eval { ($_ => scalar $code->($_, $item->{$_})) };
-    die qq{In field "$_": $@} if $@;
+    push @errors, qq{In field "$_": $@} if $@;
     exists $item->{$_} ? @pair : ();
-  } @$keys;
+  } sort @$keys;
+  die @errors if @errors;
   \%newvalue;
 }
 
