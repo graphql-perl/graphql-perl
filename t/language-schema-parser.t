@@ -64,13 +64,12 @@ __DATA__
                 'string',
                 'string'
               ],
-              'type' => {
-                'listType' => [
-                  {
-                    'type' => 'String'
-                  }
-                ]
-              }
+              'type' => [
+                'list',
+                {
+                  'type' => 'String'
+                }
+              ]
             }
           },
           'type' => 'String'
@@ -121,11 +120,12 @@ __DATA__
         'two' => {
           'args' => {
             'argument' => {
-              'type' => {
-                'nonNullType' => [
-                  'InputType'
-                ]
-              }
+              'type' => [
+                'non_null',
+                {
+                  'type' => 'InputType'
+                }
+              ]
             }
           },
           'type' => 'Type'
@@ -302,15 +302,16 @@ __DATA__
     'node' => {
       'fields' => {
         'answer' => {
-          'default_value' => '42',
+          'default_value' => 42,
           'type' => 'Int'
         },
         'key' => {
-          'type' => {
-            'nonNullType' => [
-              'String'
-            ]
-          }
+          'type' => [
+            'non_null',
+            {
+              'type' => 'String'
+            }
+          ]
         }
       },
       'name' => 'InputType'
@@ -344,13 +345,12 @@ __DATA__
         'seven' => {
           'args' => {
             'argument' => {
-              'type' => {
-                'listType' => [
-                  {
-                    'type' => 'String'
-                  }
-                ]
-              }
+              'type' => [
+                'list',
+                {
+                  'type' => 'String'
+                }
+              ]
             }
           },
           'type' => 'Type'
@@ -383,11 +383,12 @@ __DATA__
     'node' => {
       'args' => {
         'if' => {
-          'type' => {
-            'nonNullType' => [
-              'Boolean'
-            ]
-          }
+          'type' => [
+            'non_null',
+            {
+              'type' => 'Boolean'
+            }
+          ]
         }
       },
       'locations' => [
@@ -403,11 +404,12 @@ __DATA__
     'node' => {
       'args' => {
         'if' => {
-          'type' => {
-            'nonNullType' => [
-              'Boolean'
-            ]
-          }
+          'type' => [
+            'non_null',
+            {
+              'type' => 'Boolean'
+            }
+          ]
         }
       },
       'locations' => [

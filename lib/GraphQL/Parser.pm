@@ -440,4 +440,18 @@ method got_variable (Any $param = undef) {
   return \$varname;
 }
 
+method got_nonNullType (Any $param = undef) {
+  return unless defined $param;
+  $param = $param->[0]; # zap first useless layer
+  $param = { type => $param } unless ref $param;
+  return [ 'non_null', $param ];
+}
+
+method got_listType (Any $param = undef) {
+  return unless defined $param;
+  $param = $param->[0]; # zap first useless layer
+  $param = { type => $param } unless ref $param;
+  return [ 'list', $param ];
+}
+
 1;
