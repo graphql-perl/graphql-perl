@@ -465,17 +465,17 @@ fun _get_argument_values(
         ($variable_values && $variable_values->{$$argument_node})
         // $default_value;
     } else {
-      my $parsed_value;
-      eval { $parsed_value = $arg_type->graphql_to_perl($argument_node) } if !$@;
-      if ($@) {
-        die GraphQL::Error->new(
-          message => "Argument '$name' got invalid value"
-            . " " . $JSON->encode($argument_node) . ".\nExpected '"
-            . $arg_type->to_string . "'.",
-          nodes => [ $node ],
-        );
-      }
-      $coerced_values{$name} = $parsed_value;
+      $coerced_values{$name} = $argument_node;
+    }
+    next if !exists $coerced_values{$name};
+    eval { $coerced_values{$name} = $arg_type->graphql_to_perl($coerced_values{$name}) };
+    if ($@) {
+      die GraphQL::Error->new(
+        message => "Argument '$name' got invalid value"
+          . " @{[$JSON->encode($coerced_values{$name})]}.\nExpected '"
+          . $arg_type->to_string . "'.",
+        nodes => [ $node ],
+      );
     }
   }
   \%coerced_values;
