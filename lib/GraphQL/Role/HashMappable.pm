@@ -59,8 +59,7 @@ about which data element caused it.
 
 method hashmap(Maybe[HashRef] $item, HashRef $source, CodeRef $code) :ReturnType(Maybe[HashRef]) {
   return $item if !defined $item;
-  # if just return { map ... }, fails bizarrely
-  my @errors;
+  my @errors = map qq{In field "$_": Unknown field.\n}, grep !exists $source->{$_}, sort keys %$item;
   my %newvalue = map {
     my @pair = eval { ($_ => scalar $code->($_, $item->{$_})) };
     push @errors, qq{In field "$_": $@} if $@;

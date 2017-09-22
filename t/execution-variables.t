@@ -267,6 +267,17 @@ In method graphql_to_perl: parameter 2 ($item): found not an object at (eval 252
         ] },
       );
     };
+
+    subtest 'errors on addition of unknown input field', sub {
+      my $vars = { input => { b => 'bar', c => 'baz', extra => 'dog' } };
+      run_test(
+        [$schema, $doc, undef, undef, $vars],
+        { errors => [
+          q{Variable '$input' got invalid value {"b":"bar","c":"baz","extra":"dog"}.}
+          ."\n".q{In field "extra": Unknown field.}."\n"
+        ] },
+      );
+    };
   };
   done_testing;
 };
