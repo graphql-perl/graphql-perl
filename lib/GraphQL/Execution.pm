@@ -128,7 +128,7 @@ fun _variables_apply_defaults(
   my %new_values;
   map {
     my $opvar = $operation_variables->{$_};
-    my $opvar_type = $schema->name2type->{$opvar->{type}};
+    my $opvar_type = _lookup_type($schema, $opvar->{type});
     my $parsed_value;
     my $maybe_value = $variable_values->{$_} // $opvar->{default_value};
     eval { $parsed_value = $opvar_type->graphql_to_perl($maybe_value) };
@@ -137,6 +137,13 @@ fun _variables_apply_defaults(
     $new_values{$_} = $parsed_value;
   } keys %$operation_variables;
   \%new_values;
+}
+
+fun _lookup_type(
+  (InstanceOf['GraphQL::Schema']) $schema,
+  Str $typestr,
+) :ReturnType(InstanceOf['GraphQL::Type']) {
+  return $schema->name2type->{$typestr} if is_Str($typestr);
 }
 
 sub _get_operation {
