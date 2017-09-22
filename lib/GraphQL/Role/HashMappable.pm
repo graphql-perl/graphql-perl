@@ -38,9 +38,9 @@ given that. Parameters:
 
 Hash-ref.
 
-=item $keys
+=item $source
 
-Array-ref of the valid keys for this hash.
+Hash-ref of the source data for this hash. Will be used only for its keys.
 
 =item $code
 
@@ -57,7 +57,7 @@ about which data element caused it.
 
 =cut
 
-method hashmap(Maybe[HashRef] $item, ArrayRef $keys, CodeRef $code) :ReturnType(Maybe[HashRef]) {
+method hashmap(Maybe[HashRef] $item, HashRef $source, CodeRef $code) :ReturnType(Maybe[HashRef]) {
   return $item if !defined $item;
   # if just return { map ... }, fails bizarrely
   my @errors;
@@ -65,7 +65,7 @@ method hashmap(Maybe[HashRef] $item, ArrayRef $keys, CodeRef $code) :ReturnType(
     my @pair = eval { ($_ => scalar $code->($_, $item->{$_})) };
     push @errors, qq{In field "$_": $@} if $@;
     exists $item->{$_} ? @pair : ();
-  } sort @$keys;
+  } sort keys %$source;
   die @errors if @errors;
   \%newvalue;
 }

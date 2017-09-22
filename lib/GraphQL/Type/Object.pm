@@ -52,7 +52,7 @@ method graphql_to_perl(Maybe[HashRef] $item) :ReturnType(Maybe[HashRef]) {
   return $item if !defined $item;
   $item = $self->uplift($item);
   my $fields = $self->fields;
-  $self->hashmap($item, [ keys %$fields ], sub {
+  $self->hashmap($item, $fields, sub {
     my ($key, $value) = @_;
     $fields->{$key}{type}->graphql_to_perl(
       $value // $fields->{$key}{default_value}

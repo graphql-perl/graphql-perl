@@ -72,7 +72,7 @@ default values.
 method uplift(Maybe[HashRef] $item) :ReturnType(Maybe[HashRef]) {
   return $item if !defined $item;
   my $fields = $self->fields;
-  $self->hashmap($item, [ keys %$fields ], sub {
+  $self->hashmap($item, $fields, sub {
     my ($key, $value) = @_;
     $fields->{$key}{type}->uplift(
       $value // $fields->{$key}{default_value}
@@ -84,7 +84,7 @@ method graphql_to_perl(ExpectObject $item) :ReturnType(Maybe[HashRef]) {
   return $item if !defined $item;
   $item = $self->uplift($item);
   my $fields = $self->fields;
-  $self->hashmap($item, [ keys %$fields ], sub {
+  $self->hashmap($item, $fields, sub {
     $fields->{$_[0]}{type}->graphql_to_perl($_[1]);
   });
 }
