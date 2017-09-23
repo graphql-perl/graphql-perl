@@ -687,6 +687,19 @@ In method graphql_to_perl: parameter 1 ($item): found not an object at (eval 252
         { data => { fieldWithDefaultArgumentValue => '"Hello World"' } },
       );
     };
+
+    subtest 'not when argument cannot be coerced', sub {
+      my $doc = '
+        { fieldWithDefaultArgumentValue(input: WRONG_TYPE) }
+      ';
+      run_test(
+        [$schema, $doc],
+        { data => { fieldWithDefaultArgumentValue => undef },
+          errors => [ { message =>
+          q{Argument 'input' of type 'String!' was given WRONG_TYPE which is enum value.}
+        } ] },
+      );
+    };
   };
   done_testing;
 };

@@ -453,7 +453,7 @@ fun _get_argument_values(
     nodes => [ $node ],
   ) if @bad;
   my @novar = grep {
-    ref($arg_nodes->{$_}||'') eq 'SCALAR' and
+    ref($arg_nodes->{$_}) eq 'SCALAR' and
     (!$variable_values or !exists $variable_values->{${$arg_nodes->{$_}}}) and
     !defined $arg_defs->{$_}{default_value} and
     $arg_defs->{$_}{type}->isa('GraphQL::Type::NonNull')
@@ -464,6 +464,17 @@ fun _get_argument_values(
       " was given variable '\$${$arg_nodes->{$novar[0]}}' but no runtime value.",
     nodes => [ $node ],
   ) if @novar;
+  my @enumfail = grep {
+    ref($arg_nodes->{$_}) eq 'REF' and
+    ref(${$arg_nodes->{$_}}) eq 'SCALAR' and
+    !$arg_defs->{$_}{type}->isa('GraphQL::Type::Enum')
+  } keys %$arg_defs;
+  die GraphQL::Error->new(
+    message => "Argument '$enumfail[0]' of type ".
+      "'@{[$arg_defs->{$enumfail[0]}{type}->to_string]}'".
+      " was given ${${$arg_nodes->{$enumfail[0]}}} which is enum value.",
+    nodes => [ $node ],
+  ) if @enumfail;
   return {} if !$arg_nodes;
   my %coerced_values;
   for my $name (keys %$arg_defs) {
