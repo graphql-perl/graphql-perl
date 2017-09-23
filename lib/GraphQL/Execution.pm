@@ -129,6 +129,8 @@ fun _variables_apply_defaults(
   map {
     my $opvar = $operation_variables->{$_};
     my $opvar_type = _lookup_type($schema, $opvar);
+    die "Variable '\$$_' is type '@{[$opvar_type->to_string]}' which cannot be used as an input type.\n"
+      if !$opvar_type->DOES('GraphQL::Role::Input');
     my $parsed_value;
     my $maybe_value = $variable_values->{$_} // $opvar->{default_value};
     eval { $parsed_value = $opvar_type->graphql_to_perl($maybe_value) };

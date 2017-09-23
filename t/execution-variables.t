@@ -633,6 +633,21 @@ In method graphql_to_perl: parameter 1 ($item): found not an object at (eval 252
         } ] },
       );
     };
+
+    subtest 'does not allow invalid types to be used as values', sub {
+      my $doc = '
+        query q($input: TestType!) {
+          fieldWithObjectInput(input: $input)
+        }
+      ';
+      my $vars = { input => { list => [ 'A', 'B' ] } };
+      run_test(
+        [$schema, $doc, undef, undef, $vars],
+        { errors => [ { message =>
+          q{Variable '$input' is type 'TestType!' which cannot be used as an input type.}."\n"
+        } ] },
+      );
+    };
   };
   done_testing;
 };
