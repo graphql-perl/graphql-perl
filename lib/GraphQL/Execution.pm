@@ -443,24 +443,26 @@ fun _get_argument_values(
 ) {
   my $arg_defs = $def->{args};
   my $arg_nodes = $node->{arguments};
-  return {} if !$arg_defs or !$arg_nodes;
-  my @bad = grep !exists $arg_nodes->{$_} and !defined $arg_defs->{$_}{default_value} and $arg_defs->{$_}{type}->isa('GraphQL::Type::NonNull'), keys %$arg_defs;
+  return {} if !$arg_defs;
+  my @bad = grep { !exists $arg_nodes->{$_} and !defined $arg_defs->{$_}{default_value} and $arg_defs->{$_}{type}->isa('GraphQL::Type::NonNull') } keys %$arg_defs;
   die GraphQL::Error->new(
     message => "Argument '$bad[0]' of type ".
       "'@{[$arg_defs->{$bad[0]}{type}->to_string]}' not given.",
     nodes => [ $node ],
   ) if @bad;
-  my @novar = grep
+  my @novar = grep {
     ref($arg_nodes->{$_}||'') eq 'SCALAR' and
     (!$variable_values or !exists $variable_values->{${$arg_nodes->{$_}}}) and
     !defined $arg_defs->{$_}{default_value} and
-    $arg_defs->{$_}{type}->isa('GraphQL::Type::NonNull'), keys %$arg_defs;
+    $arg_defs->{$_}{type}->isa('GraphQL::Type::NonNull')
+  } keys %$arg_defs;
   die GraphQL::Error->new(
     message => "Argument '$novar[0]' of type ".
       "'@{[$arg_defs->{$bad[0]}{type}->to_string]}'".
       " was given variable '\$${$arg_nodes->{$novar[0]}}' but no runtime value.",
     nodes => [ $node ],
   ) if @novar;
+  return {} if !$arg_nodes;
   my %coerced_values;
   for my $name (keys %$arg_defs) {
     my $arg_def = $arg_defs->{$name};

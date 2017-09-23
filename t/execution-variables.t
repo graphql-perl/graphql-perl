@@ -421,6 +421,19 @@ In method graphql_to_perl: parameter 1 ($item): found not an object at (eval 252
         { data => { fieldWithNonNullableStringInput => '"a"' } },
       );
     };
+
+    subtest 'reports error for missing non-nullable inputs', sub {
+      my $doc = '
+        { fieldWithNonNullableStringInput }
+      ';
+      run_test(
+        [$schema, $doc],
+        { data => { fieldWithNonNullableStringInput => undef },
+          errors => [ { message =>
+          q{Argument 'input' of type 'String!' not given.}
+        } ] },
+      );
+    };
   };
   done_testing;
 };
