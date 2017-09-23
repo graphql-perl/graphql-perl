@@ -146,7 +146,7 @@ fun _lookup_type(
   HashRef $typedef,
 ) :ReturnType(InstanceOf['GraphQL::Type']) {
   my $type = $typedef->{type};
-  return $schema->name2type->{$type} if is_Str($type);
+  return $schema->name2type->{$type} // die "Unknown type '$type'.\n" if is_Str($type);
   my ($wrapper_type, $wrapped) = @$type;
   _lookup_type($schema, $wrapped)->$wrapper_type;
 }

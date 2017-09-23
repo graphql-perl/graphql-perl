@@ -648,6 +648,21 @@ In method graphql_to_perl: parameter 1 ($item): found not an object at (eval 252
         } ] },
       );
     };
+
+    subtest 'does not allow unknown types to be used as values', sub {
+      my $doc = '
+        query q($input: UnknownType!) {
+          fieldWithObjectInput(input: $input)
+        }
+      ';
+      my $vars = { input => 'whoknows' };
+      run_test(
+        [$schema, $doc, undef, undef, $vars],
+        { errors => [ { message =>
+          q{Unknown type 'UnknownType'.}."\n"
+        } ] },
+      );
+    };
   };
   done_testing;
 };
