@@ -79,7 +79,7 @@ my $TestType = GraphQL::Type::Object->new(
     },
     list => {
       type => $String,
-      args => { input => { type => $String } },
+      args => { input => { type => $String->list } },
       resolve => sub { $_[1]->{input} && $JSON->encode($_[1]->{input}) },
     },
     nnList => {
@@ -461,6 +461,34 @@ In method graphql_to_perl: parameter 1 ($item): found not an object at (eval 252
           errors => [ { message =>
           q{Argument 'input' of type 'String!' was given variable '$foo' but no runtime value.}
         } ] },
+      );
+    };
+  };
+
+  subtest 'Handles lists and nullability', sub {
+    subtest 'allows lists to be null', sub {
+      my $doc = '
+        query q($input: [String]) {
+          list(input: $input)
+        }
+      ';
+      my $vars = { input => undef };
+      run_test(
+        [$schema, $doc, undef, undef, $vars],
+        { data => { list => undef } },
+      );
+    };
+
+    subtest 'allows lists to contain values', sub {
+      my $doc = '
+        query q($input: [String]) {
+          list(input: $input)
+        }
+      ';
+      my $vars = { input => [ 'A' ] };
+      run_test(
+        [$schema, $doc, undef, undef, $vars],
+        { data => { list => '["A"]' } },
       );
     };
   };
