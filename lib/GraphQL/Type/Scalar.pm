@@ -4,8 +4,7 @@ use 5.014;
 use strict;
 use warnings;
 use Moo;
-use Types::Standard qw(CodeRef Num Str Bool);
-use GraphQL::Type::Library qw(Int32Signed);
+use GraphQL::Type::Library -all;
 use Types::Standard -all;
 use JSON::MaybeXS;
 use Exporter qw(import);
@@ -129,8 +128,8 @@ our $String = GraphQL::Type::Scalar->new(
     'The `String` scalar type represents textual data, represented as UTF-8 ' .
     'character sequences. The String type is most often used by GraphQL to ' .
     'represent free-form human-readable text.',
-  serialize => sub { defined $_[0] and Str->(@_); $_[0] },
-  parse_value => sub { defined $_[0] and Str->(@_); $_[0] },
+  serialize => sub { defined $_[0] and !is_Str($_[0]) and die "Not a String.\n"; $_[0] },
+  parse_value => sub { defined $_[0] and !is_Str($_[0]) and die "Not a String.\n"; $_[0] },
 );
 
 =head2 $Boolean

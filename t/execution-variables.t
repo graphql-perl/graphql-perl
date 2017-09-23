@@ -434,6 +434,22 @@ In method graphql_to_perl: parameter 1 ($item): found not an object at (eval 252
         } ] },
       );
     };
+
+    subtest 'reports error for array passed into string input', sub {
+      my $doc = '
+        query SetsNonNullable($value: String!) {
+          fieldWithNonNullableStringInput(input: $value)
+        }
+      ';
+      my $vars = { value => [ 1, 2, 3 ] };
+      run_test(
+        [$schema, $doc, undef, undef, $vars],
+        { errors => [ { message =>
+          q{Variable '$value' got invalid value [1,2,3].}."\n".
+          q{Not a String.}."\n"
+        } ] },
+      );
+    };
   };
   done_testing;
 };
