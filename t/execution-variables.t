@@ -450,6 +450,19 @@ In method graphql_to_perl: parameter 1 ($item): found not an object at (eval 252
         } ] },
       );
     };
+
+    subtest 'reports error for non-provided variables for non-nullable inputs', sub {
+      my $doc = '
+        { fieldWithNonNullableStringInput(input: $foo) }
+      ';
+      run_test(
+        [$schema, $doc],
+        { data => { fieldWithNonNullableStringInput => undef },
+          errors => [ { message =>
+          q{Argument 'input' of type 'String!' was given variable '$foo' but no runtime value.}
+        } ] },
+      );
+    };
   };
   done_testing;
 };

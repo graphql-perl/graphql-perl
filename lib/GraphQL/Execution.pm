@@ -458,7 +458,7 @@ fun _get_argument_values(
   } keys %$arg_defs;
   die GraphQL::Error->new(
     message => "Argument '$novar[0]' of type ".
-      "'@{[$arg_defs->{$bad[0]}{type}->to_string]}'".
+      "'@{[$arg_defs->{$novar[0]}{type}->to_string]}'".
       " was given variable '\$${$arg_nodes->{$novar[0]}}' but no runtime value.",
     nodes => [ $node ],
   ) if @novar;
