@@ -664,6 +664,30 @@ In method graphql_to_perl: parameter 1 ($item): found not an object at (eval 252
       );
     };
   };
+
+  subtest 'Execute: Uses argument default values', sub {
+    subtest 'when no argument provided', sub {
+      my $doc = '
+        { fieldWithDefaultArgumentValue }
+      ';
+      run_test(
+        [$schema, $doc],
+        { data => { fieldWithDefaultArgumentValue => '"Hello World"' } },
+      );
+    };
+
+    subtest 'when omitted variable provided', sub {
+      my $doc = '
+        query optionalVariable($optional: String) {
+          fieldWithDefaultArgumentValue(input: $optional)
+        }
+      ';
+      run_test(
+        [$schema, $doc],
+        { data => { fieldWithDefaultArgumentValue => '"Hello World"' } },
+      );
+    };
+  };
   done_testing;
 };
 
