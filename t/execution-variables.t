@@ -588,6 +588,51 @@ In method graphql_to_perl: parameter 1 ($item): found not an object at (eval 252
         } ] },
       );
     };
+
+    subtest 'does not allow non-null lists of non-nulls to be null', sub {
+      my $doc = '
+        query q($input: [String!]!) {
+          nnListNN(input: $input)
+        }
+      ';
+      my $vars = { input => undef };
+      run_test(
+        [$schema, $doc, undef, undef, $vars],
+        { errors => [ { message =>
+          q{Variable '$input' got invalid value null.}."\n".
+          q{[String!]! given null value.}."\n"
+        } ] },
+      );
+    };
+
+    subtest 'allows non-null lists of non-nulls to contain values', sub {
+      my $doc = '
+        query q($input: [String!]!) {
+          nnListNN(input: $input)
+        }
+      ';
+      my $vars = { input => [ 'A' ] };
+      run_test(
+        [$schema, $doc, undef, undef, $vars],
+        { data => { nnListNN => '["A"]' } },
+      );
+    };
+
+    subtest 'does not allow non-null lists of non-nulls to contain null', sub {
+      my $doc = '
+        query q($input: [String!]!) {
+          nnListNN(input: $input)
+        }
+      ';
+      my $vars = { input => [ 'A', undef, 'B' ] };
+      run_test(
+        [$schema, $doc, undef, undef, $vars],
+        { errors => [ { message =>
+          q{Variable '$input' got invalid value ["A",null,"B"].}."\n".
+          q{In element #1: String! given null value.}."\n"
+        } ] },
+      );
+    };
   };
   done_testing;
 };
