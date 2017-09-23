@@ -98,7 +98,16 @@ method graphql_to_perl(Maybe[ArrayRef] $item) :ReturnType(Maybe[ArrayRef]) {
   return $item if !defined $item;
   $item = $self->uplift($item);
   my $of = $self->of;
-  [ map $of->graphql_to_perl($_), @$item ];
+  my $i = 0;
+  my @errors;
+  my @values = map {
+    my $value = eval { $of->graphql_to_perl($_) };
+    push @errors, qq{In element #$i: $@} if $@;
+    $i++;
+    $value;
+  } @$item;
+  die @errors if @errors;
+  \@values;
 }
 
 __PACKAGE__->meta->make_immutable();
