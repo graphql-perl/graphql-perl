@@ -443,14 +443,14 @@ method got_variable (Any $param = undef) {
 method got_nonNullType (Any $param = undef) {
   return unless defined $param;
   $param = $param->[0]; # zap first useless layer
-  $param = { type => $param } unless ref $param;
+  $param = { type => $param } if ref $param ne 'HASH';
   return [ 'non_null', $param ];
 }
 
 method got_listType (Any $param = undef) {
   return unless defined $param;
   $param = $param->[0]; # zap first useless layer
-  $param = { type => $param } unless ref $param;
+  $param = { type => $param } if ref $param ne 'HASH';
   return [ 'list', $param ];
 }
 

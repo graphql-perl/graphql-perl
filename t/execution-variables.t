@@ -491,6 +491,35 @@ In method graphql_to_perl: parameter 1 ($item): found not an object at (eval 252
         { data => { list => '["A"]' } },
       );
     };
+
+    subtest 'allows lists to contain null', sub {
+      my $doc = '
+        query q($input: [String]) {
+          list(input: $input)
+        }
+      ';
+      my $vars = { input => [ 'A', undef, 'B' ] };
+      run_test(
+        [$schema, $doc, undef, undef, $vars],
+        { data => { list => '["A",null,"B"]' } },
+      );
+    };
+
+    subtest 'does not allow non-null lists to be null', sub {
+      my $doc = '
+        query q($input: [String]!) {
+          nnList(input: $input)
+        }
+      ';
+      my $vars = { input => undef };
+      run_test(
+        [$schema, $doc, undef, undef, $vars],
+        { errors => [ { message =>
+          q{Variable '$input' got invalid value null.}."\n".
+          q{[String]! given null value.}."\n"
+        } ] },
+      );
+    };
   };
   done_testing;
 };
