@@ -250,7 +250,7 @@ __DATA__
           'type' => 'ComplexType'
         },
         'site' => {
-          'default_value' => 'MOBILE',
+          'default_value' => \\'MOBILE',
           'type' => 'Site'
         }
       }

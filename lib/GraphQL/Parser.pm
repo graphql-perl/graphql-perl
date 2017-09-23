@@ -235,7 +235,7 @@ method got_enumTypeDefinition (Any $param = undef) {
   %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
   my %values;
   map {
-    my $name = delete $_->{value};
+    my $name = ${${delete $_->{value}}};
     $values{$name} = $_;
   } map $_->{enumValueDefinition}, @{shift @$param};
   $def{values} = \%values;
@@ -293,7 +293,8 @@ method got_float (Any $param = undef) {
 }
 
 method got_enumValue (Any $param = undef) {
-  unshift @_, $self; goto &got_string;
+  return unless defined $param;
+  return \\$param;
 }
 
 # not returning empty list if undef
