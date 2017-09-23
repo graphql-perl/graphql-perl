@@ -1,5 +1,18 @@
 Revision history for GraphQL
 
+0.08	Sat Sep 23 06:27:20 BST 2017
+ - zap GraphQL::Argument
+ - get all thunking right using MooX::Thunking
+ - is_deprecated auto handling
+ - Execution does top-level field resolving, type coercing
+ - port execution-resolve.t execution-variables.t from graphql-js
+ - Schema API mainly complete
+ - many types for validation
+ - make Parser return usable AST
+ - improvements to Pegex grammar from ingy
+ - start of GraphQL::Error
+ - JSON::MaybeXS so no stringify numbers
+
 0.07	Tue Sep  5 19:50:33 BST 2017
  - make GraphQL::Directive, GraphQL::Argument
  - make GraphQL::Type::Library with Type::Tiny constraints
