@@ -89,6 +89,10 @@ method graphql_to_perl(Any $item) :ReturnType(Any) {
   $self->parse_value->($item);
 }
 
+method perl_to_graphql(Any $item) :ReturnType(Any) {
+  $self->serialize->($item);
+}
+
 =head1 EXPORTED VARIABLES
 
 =head2 $Int
