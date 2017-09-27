@@ -35,6 +35,10 @@ See L<GraphQL::Type> for description of how to create GraphQL types.
 
 =end markdown
 
+=head1 DEBUGGING
+
+To debug, set environment variable C<GRAPHQL_DEBUG> to a true value.
+
 =head1 EXPORT
 
 None yet.

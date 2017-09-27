@@ -21,6 +21,7 @@ GraphQL::Execution - Execute GraphQL queries
 our $VERSION = '0.02';
 
 my $JSON = JSON::MaybeXS->new->allow_nonref;
+use constant DEBUG => $ENV{GRAPHQL_DEBUG}; # "DEBUG and" gets optimised out if false
 
 =head1 SYNOPSIS
 
@@ -198,6 +199,7 @@ fun _collect_fields(
   Map[StrNameValid,ArrayRef[HashRef]] $fields_got,
   Map[StrNameValid,Bool] $visited_fragments,
 ) :ReturnType(Map[StrNameValid,ArrayRef[HashRef]]) {
+  DEBUG and _debug('_collect_fields', $runtime_type->to_string, $fields_got, $selections);
   for my $selection (@$selections) {
     my $node = $selection->{node};
     next if !_should_include_node($context, $node);
@@ -258,6 +260,7 @@ fun _execute_fields(
   Map[StrNameValid,ArrayRef[HashRef]] $fields,
 ) :ReturnType(Map[StrNameValid,Any]){
   my %results;
+  DEBUG and _debug('_execute_fields', $parent_type->to_string, $fields, $root_value);
   map {
     my $result_name = $_;
     my $result = _resolve_field(
@@ -292,6 +295,7 @@ fun _resolve_field(
 ) {
   my $field_node = $nodes->[0];
   my $field_name = $field_node->{name};
+  DEBUG and _debug('_resolve_field', $parent_type->to_string, $nodes, $root_value);
   my $field_def = _get_field_def($context->{schema}, $parent_type, $field_name);
   return if !$field_def;
   my $resolve = $field_def->{resolve} || $context->{field_resolver};
@@ -359,6 +363,7 @@ fun _resolve_field_value_or_error(
   Maybe[Any] $root_value,
   HashRef $info,
 ) {
+  DEBUG and _debug('_resolve_field_value_or_error', $nodes, $root_value, $field_def);
   my $result = eval {
     my $args = _get_argument_values($field_def, $nodes->[0], $context->{variable_values});
     $resolve->($root_value, $args, $context->{context_value}, $info);
@@ -521,13 +526,26 @@ fun _default_field_resolver(
   my $property = is_HashRef($root_value)
     ? $root_value->{$field_name}
     : $root_value;
+  DEBUG and _debug('_default_field_resolver', $root_value, $field_name, $args, $property);
   if (eval { CodeLike->($property); 1 }) {
+    DEBUG and _debug('_default_field_resolver', 'codelike');
     return $property->($args, $context, $info);
   }
   if (is_InstanceOf($root_value) and $root_value->can($field_name)) {
+    DEBUG and _debug('_default_field_resolver', 'method');
     return $root_value->$field_name($args, $context, $info);
   }
   $property;
+}
+
+# TODO make log instead of diag
+sub _debug {
+  my $func = shift;
+  require Data::Dumper;
+  require Test::More;
+  local ($Data::Dumper::Sortkeys, $Data::Dumper::Indent, $Data::Dumper::Terse);
+  $Data::Dumper::Sortkeys = $Data::Dumper::Indent = $Data::Dumper::Terse = 1;
+  Test::More::diag("$func: ", Data::Dumper::Dumper([ @_ ]));
 }
 
 1;
