@@ -48,6 +48,15 @@ Optional, thunked array-ref of interface type objects implemented.
 
 has interfaces => (is => 'thunked', isa => ArrayRef[InstanceOf['GraphQL::Type::Interface']]);
 
+=head2 is_type_of
+
+Optional code-ref. Input is a value, an execution context hash-ref,
+and resolve-info hash-ref.
+
+=cut
+
+has is_type_of => (is => 'ro', isa => CodeRef);
+
 method graphql_to_perl(Maybe[HashRef] $item) :ReturnType(Maybe[HashRef]) {
   return $item if !defined $item;
   $item = $self->uplift($item);
