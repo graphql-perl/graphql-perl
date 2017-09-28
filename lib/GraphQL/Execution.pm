@@ -248,8 +248,15 @@ fun _fragment_condition_match(
   HashRef $node,
   (InstanceOf['GraphQL::Type']) $runtime_type,
 ) :ReturnType(Bool) {
-  # TODO implement
-  1;
+  DEBUG and _debug('_fragment_condition_match', $runtime_type->to_string, $node);
+  return 1 if !$node->{on};
+  return 1 if $node->{on} eq $runtime_type->name;
+  my $condition_type = $context->{schema}->name2type->{$node->{on}} //
+    die GraphQL::Error->new(
+      message => "Unknown type for fragment condition '$node->{on}'."
+    );
+  return '' if !$condition_type->DOES('GraphQL::Role::Abstract');
+  $context->{schema}->is_possible_type($condition_type, $runtime_type);
 }
 
 fun _execute_fields(
