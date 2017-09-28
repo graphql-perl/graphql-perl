@@ -145,7 +145,7 @@ our $Boolean = GraphQL::Type::Scalar->new(
   description =>
     'The `Boolean` scalar type represents `true` or `false`.',
   serialize => sub { defined $_[0] and Bool->(@_); $_[0] ? JSON->true : JSON->false },
-  parse_value => sub { defined $_[0] and Bool->(@_); $_[0] },
+  parse_value => sub { defined $_[0] and is_bool(@_); $_[0]+0 },
 );
 
 =head2 $ID
