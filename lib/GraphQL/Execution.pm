@@ -433,16 +433,177 @@ fun _complete_value(
   ArrayRef $path,
   Any $result,
 ) {
+  DEBUG and _debug('_complete_value', $return_type->to_string, $result);
   # TODO promise stuff
   die $result if GraphQL::Error->is($result);
-  return $result if !defined $result;
-  # TODO handle list
-  # TODO handle leaf
-  # TODO handle abstract
-  # TODO handle object
   if ($return_type->isa('GraphQL::Type::NonNull')) {
+    my $completed = _complete_value(
+      $context,
+      $return_type->of,
+      $nodes,
+      $info,
+      $path,
+      $result,
+    );
+    die GraphQL::Error->new(
+      message => "Cannot return null for non-nullable field @{[$info->{parent_type}->name]}.@{[$info->{field_name}]}."
+    ) if !defined $completed;
   }
-  $result;
+  return $result if !defined $result;
+  return _complete_list_value(@_) if $return_type->isa('GraphQL::Type::List');
+  return _complete_leaf_value($return_type, $result)
+    if $return_type->DOES('GraphQL::Role::Leaf');
+  return _complete_abstract_value(@_) if $return_type->DOES('GraphQL::Role::Abstract');
+  return _complete_object_value(@_) if $return_type->isa('GraphQL::Type::Object');
+  # shouldn't get here
+  die GraphQL::Error->new(
+    message => "Cannot complete value of unexpected type '@{[$return_type->to_string]}'."
+  );
+}
+
+fun _complete_list_value(
+  HashRef $context,
+  (InstanceOf['GraphQL::Type::List']) $return_type,
+  ArrayRef[HashRef] $nodes,
+  HashRef $info,
+  ArrayRef $path,
+  ArrayRef $result,
+) {
+  # TODO promise stuff
+  my $item_type = $return_type->of;
+  my $index = 0;
+  my @completed_results = map {
+    _complete_value_catching_error(
+      $context,
+      $item_type,
+      $nodes,
+      $info,
+      [ @$path, $index++ ],
+      $_,
+    );
+  } @$result;
+  \@completed_results;
+}
+
+fun _complete_leaf_value(
+  (ConsumerOf['GraphQL::Role::Leaf']) $return_type,
+  Any $result,
+) {
+  my $serialised = $return_type->perl_to_graphql($result);
+  DEBUG and _debug('_complete_leaf_value', $return_type->to_string, $result, $serialised);
+  die GraphQL::Error->new(message => "Expected a value of type '@{[$return_type->to_string]}' but received: '$result'") if !defined $serialised;
+  $serialised;
+}
+
+fun _complete_abstract_value(
+  HashRef $context,
+  (ConsumerOf['GraphQL::Role::Abstract']) $return_type,
+  ArrayRef[HashRef] $nodes,
+  HashRef $info,
+  ArrayRef $path,
+  Any $result,
+) {
+  my $runtime_type = ($return_type->resolve_type || \&_default_resolve_type)->(
+    $result, $context->{context_value}, $info, $return_type
+  );
+  # TODO promise stuff
+  _complete_object_value(
+    $context,
+    _ensure_valid_runtime_type(
+      $runtime_type,
+      $context,
+      $return_type,
+      $nodes,
+      $info,
+      $result,
+    ),
+    $nodes,
+    $info,
+    $path,
+    $result,
+  );
+}
+
+fun _ensure_valid_runtime_type(
+  (Str | InstanceOf['GraphQL::Type::Object']) $runtime_type_or_name,
+  HashRef $context,
+  (ConsumerOf['GraphQL::Role::Abstract']) $return_type,
+  ArrayRef[HashRef] $nodes,
+  HashRef $info,
+  Any $result,
+) :ReturnType(InstanceOf['GraphQL::Type::Object']) {
+  my $runtime_type = is_InstanceOf($runtime_type_or_name)
+    ? $runtime_type_or_name
+    : $context->{schema}->name2type->{$runtime_type_or_name};
+  die GraphQL::Error->new(
+    message => "Abstract type @{[$return_type->name]} must resolve to an " .
+      "Object type at runtime for field @{[$info->{parent_type}->name]}." .
+      "@{[$info->{field_name}]} with value $result, received '@{[$runtime_type->name]}'.",
+    nodes => [ $nodes ],
+  ) if !$runtime_type->isa('GraphQL::Type::Object');
+  die GraphQL::Error->new(
+    message => "Runtime Object type '@{[$runtime_type->name]}' is not a possible type for " .
+      "'@{[$return_type->name]}'.",
+    nodes => [ $nodes ],
+  ) if !$context->{schema}->is_possible_type($return_type, $runtime_type);
+  $runtime_type;
+}
+
+fun _default_resolve_type(
+  Any $value,
+  Any $context,
+  HashRef $info,
+  (ConsumerOf['GraphQL::Role::Abstract']) $abstract_type,
+) {
+  my @possibles = @{ $info->{schema}->get_possible_types($abstract_type) };
+  # TODO promise stuff
+  (grep $_->is_type_of->($value, $context, $info), grep $_->is_type_of, @possibles)[0];
+}
+
+fun _complete_object_value(
+  HashRef $context,
+  (InstanceOf['GraphQL::Type::Object']) $return_type,
+  ArrayRef[HashRef] $nodes,
+  HashRef $info,
+  ArrayRef $path,
+  Any $result,
+) {
+  if ($return_type->is_type_of) {
+    my $is_type_of = $return_type->is_type_of->($result, $context->{context_value}, $info);
+    # TODO promise stuff
+    die GraphQL::Error->new(message => "Expected a value of type '@{[$return_type->to_string]}' but received: '$result'") if !$is_type_of;
+  }
+  _collect_and_execute_subfields(
+    $context,
+    $return_type,
+    $nodes,
+    $info,
+    $path,
+    $result,
+  );
+}
+
+fun _collect_and_execute_subfields(
+  HashRef $context,
+  (InstanceOf['GraphQL::Type::Object']) $return_type,
+  ArrayRef[HashRef] $nodes,
+  HashRef $info,
+  ArrayRef $path,
+  Any $result,
+) {
+  my $subfield_nodes = {};
+  my $visited_fragment_names = {};
+  for (grep $_->{selections}, @$nodes) {
+    $subfield_nodes = _collect_fields(
+      $context,
+      $return_type,
+      $_->{selections},
+      $subfield_nodes,
+      $visited_fragment_names,
+    );
+  }
+  DEBUG and _debug('_collect_and_execute_subfields', $return_type->to_string, $subfield_nodes);
+  _execute_fields($context, $return_type, $result, $path, $subfield_nodes);
 }
 
 fun _located_error(
