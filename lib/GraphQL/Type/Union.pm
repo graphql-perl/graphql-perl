@@ -77,14 +77,14 @@ performing validation.
 has _types_validated => (is => 'rw', isa => Bool);
 method get_types() :ReturnType(ArrayRefNonEmpty[InstanceOf['GraphQL::Type::Object']]) {
   my @types = @{ $self->types };
-  return @types if $self->_types_validated; # only do once
+  return \@types if $self->_types_validated; # only do once
+  $self->_types_validated(1);
   if (!$self->resolve_type) {
     my @bad = map $_->name, grep !$_->is_type_of, @types;
     die $self->name." no resolve_type and no is_type_of for @bad" if @bad;
   }
-  $self->_types_validated(1);
   DEBUG and _debug('get_types', $self->name, \@types);
-  @types;
+  \@types;
 }
 
 __PACKAGE__->meta->make_immutable();

@@ -113,7 +113,7 @@ fun _expand_type(
   my @types;
   push @types, ($type, map @{ _expand_type($map, $_) }, @{ $type->interfaces || [] })
     if $type->isa('GraphQL::Type::Object');
-  push @types, ($type, map @{ _expand_type($map, $_) }, $type->get_types)
+  push @types, ($type, map @{ _expand_type($map, $_) }, @{ $type->get_types })
     if $type->isa('GraphQL::Type::Union');
   if (grep $type->DOES($_), qw(GraphQL::Role::FieldsInput GraphQL::Role::FieldsOutput)) {
     my $fields = $type->fields||{};
