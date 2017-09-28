@@ -330,7 +330,10 @@ fun _get_field_def(
   StrNameValid $field_name,
 ) :ReturnType(HashRef) {
   # TODO __schema and __typename and __type
-  $parent_type->fields->{$field_name};
+  $parent_type->fields->{$field_name} //
+    die GraphQL::Error->new(
+      message => "No field @{[$parent_type->name]}.$field_name."
+    );
 }
 
 # NB similar ordering as _execute_fields - graphql-js switches
