@@ -11,6 +11,7 @@ use Function::Parameters;
 use GraphQL::Parser;
 use GraphQL::Error;
 use JSON::MaybeXS;
+use GraphQL::Debug qw(_debug);
 
 =head1 NAME
 
@@ -546,16 +547,6 @@ fun _default_field_resolver(
     return $root_value->$field_name($args, $context, $info);
   }
   $property;
-}
-
-# TODO make log instead of diag
-sub _debug {
-  my $func = shift;
-  require Data::Dumper;
-  require Test::More;
-  local ($Data::Dumper::Sortkeys, $Data::Dumper::Indent, $Data::Dumper::Terse);
-  $Data::Dumper::Sortkeys = $Data::Dumper::Indent = $Data::Dumper::Terse = 1;
-  Test::More::diag("$func: ", Data::Dumper::Dumper([ @_ ]));
 }
 
 1;

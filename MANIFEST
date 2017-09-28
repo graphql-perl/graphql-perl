@@ -1,6 +1,7 @@
 Changes
 graphql.pgx
 lib/GraphQL.pm
+lib/GraphQL/Debug.pm
 lib/GraphQL/Directive.pm
 lib/GraphQL/Error.pm
 lib/GraphQL/Execution.pm
