@@ -8,8 +8,10 @@ use Types::Standard -all;
 use GraphQL::Type::Library -all;
 use Return::Type;
 use Function::Parameters;
+use GraphQL::Debug qw(_debug);
 
 our $VERSION = '0.02';
+use constant DEBUG => $ENV{GRAPHQL_DEBUG};
 
 =head1 NAME
 
@@ -119,6 +121,7 @@ fun _expand_type(
       map @{ _expand_type($map, $_->{type}) }, $_, values %{ $_->{args}||{} }
     } values %$fields;
   }
+  DEBUG and _debug('_expand_type', \@types);
   \@types;
 }
 
