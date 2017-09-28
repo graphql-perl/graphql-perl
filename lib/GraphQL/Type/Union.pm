@@ -9,6 +9,7 @@ use Types::Standard -all;
 use GraphQL::Type::Library -all;
 use Return::Type;
 use Function::Parameters;
+use GraphQL::Debug qw(_debug);
 extends qw(GraphQL::Type);
 with qw(
   GraphQL::Role::Output
@@ -17,6 +18,8 @@ with qw(
   GraphQL::Role::Nullable
   GraphQL::Role::Named
 );
+
+use constant DEBUG => $ENV{GRAPHQL_DEBUG};
 
 our $VERSION = '0.02';
 
@@ -80,6 +83,7 @@ method get_types() :ReturnType(ArrayRefNonEmpty[InstanceOf['GraphQL::Type::Objec
     die $self->name." no resolve_type and no is_type_of for @bad" if @bad;
   }
   $self->_types_validated(1);
+  DEBUG and _debug('get_types', $self->name, \@types);
   @types;
 }
 
