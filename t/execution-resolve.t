@@ -76,7 +76,7 @@ subtest 'default function passes args and context', sub {
 
 subtest 'uses provided resolve function', sub {
   my $schema = make_schema({
-    type => $Int,
+    type => $String,
     args => { aStr => { type => $String }, aInt => { type => $Int } },
     resolve => sub {
       my ($root_value, $args, $context, $info) = @_;
