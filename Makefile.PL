@@ -48,6 +48,11 @@ WriteMakefile(
           'Test::Pod' => '1.22',
         },
       },
+      runtime => {
+        suggests => {
+          'Cpanel::JSON::XS' => '3.0115',
+        },
+      },
     },
   },
 );
