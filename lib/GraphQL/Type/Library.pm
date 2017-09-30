@@ -92,6 +92,7 @@ GraphQL input type for the field.
 
 Default value for this argument if none supplied. Must be same type as
 the C<type> (implemented with type L</ValuesMatchTypes>.
+B<NB> this is a Perl value, not a JSON/GraphQL value.
 
 =item description
 
