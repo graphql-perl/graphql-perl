@@ -39,6 +39,7 @@ t/00-load.t
 t/00-report-prereqs.t
 t/execution-abstract.t
 t/execution-resolve.t
+t/execution-schema.t
 t/execution-variables.t
 t/kitchen-sink.graphql
 t/language-lexer.t
