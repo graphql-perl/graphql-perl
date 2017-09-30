@@ -4,8 +4,11 @@ use 5.014;
 use strict;
 use warnings;
 use Moo;
-use Types::Standard qw(Map Dict Optional Any Str);
-use GraphQL::Type::Library qw(StrNameValid);
+use Types::Standard -all;
+use GraphQL::Type::Library -all;
+use GraphQL::Debug qw(_debug);
+use Function::Parameters;
+use Return::Type;
 extends qw(GraphQL::Type);
 with qw(
   GraphQL::Role::Input
@@ -17,6 +20,8 @@ with qw(
 );
 
 our $VERSION = '0.02';
+
+use constant DEBUG => $ENV{GRAPHQL_DEBUG};
 
 =head1 NAME
 
@@ -74,6 +79,27 @@ has values => (
 );
 
 =head1 METHODS
+
+=head2 is_valid
+
+True if given Perl entity is valid value for this type. Relies on unique
+stringification of the value.
+
+=cut
+
+has _value2name => (is => 'lazy', isa => Map[Str, StrNameValid]);
+sub _build__value2name {
+  my ($self) = @_;
+  my $v = $self->values;
+  DEBUG and _debug('_build__value2name', $self, $v);
+  +{ map { ($v->{$_}{value} => $_) } keys %$v };
+}
+
+method is_valid(Any $item) :ReturnType(Bool) {
+  DEBUG and _debug('is_valid', $item, $item.'', $self->_value2name);
+  return 1 if !defined $item;
+  !!$self->_value2name->{$item};
+}
 
 =head2 BUILD
 
