@@ -451,6 +451,7 @@ fun _complete_value(
     die GraphQL::Error->new(
       message => "Cannot return null for non-nullable field @{[$info->{parent_type}->name]}.@{[$info->{field_name}]}."
     ) if !defined $completed;
+    return $completed;
   }
   return $result if !defined $result;
   return _complete_list_value(@_) if $return_type->isa('GraphQL::Type::List');
