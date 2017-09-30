@@ -210,6 +210,7 @@ fun _collect_fields(
       push @{ $fields_got->{$use_name} }, $node;
     } elsif ($selection->{kind} eq 'inline_fragment') {
       next if !_fragment_condition_match($context, $node, $runtime_type);
+      next if !_should_include_node($context, $node);
       _collect_fields(
         $context,
         $runtime_type,
@@ -220,14 +221,16 @@ fun _collect_fields(
     } elsif ($selection->{kind} eq 'fragment_spread') {
       my $frag_name = $node->{name};
       next if $visited_fragments->{$frag_name};
+      next if !_should_include_node($context, $node);
       $visited_fragments->{$frag_name} = 1;
       my $fragment = $context->{fragments}{$frag_name};
       next if !$fragment;
       next if !_fragment_condition_match($context, $fragment, $runtime_type);
+      DEBUG and _debug('_collect_fields(fragment_spread)', $fragment);
       _collect_fields(
         $context,
         $runtime_type,
-        $node->{selections},
+        $fragment->{selections},
         $fields_got,
         $visited_fragments,
       );
