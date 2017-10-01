@@ -126,6 +126,7 @@ fun _build_context(
 #  applies to it supplied variable from web request
 #  if none, applies any defaults in the operation var: query q(a: String = "h")
 #  converts with graphql_to_perl (which also validates) to Perl values
+# return { varname => { value => ... } }
 fun _variables_apply_defaults(
   (InstanceOf['GraphQL::Schema']) $schema,
   HashRef $operation_variables,
@@ -145,7 +146,7 @@ fun _variables_apply_defaults(
     eval { $parsed_value = $opvar_type->graphql_to_perl($maybe_value) };
     die "Variable '\$$_' got invalid value @{[$JSON->canonical->encode($maybe_value)]}.\n$@"
       if $@;
-    ($_ => $parsed_value)
+    ($_ => { value => $parsed_value })
   } keys %$operation_variables };
 }
 
@@ -691,7 +692,7 @@ fun _get_argument_values(
     } elsif (ref($argument_node) eq 'SCALAR') {
       # scalar ref means it's a variable. already validated perl
       $coerced_values{$name} =
-        ($variable_values && $variable_values->{$$argument_node})
+        ($variable_values && $variable_values->{$$argument_node} && $variable_values->{$$argument_node}{value})
         // $default_value;
       next;
     } elsif (ref($argument_node) eq 'REF') {
