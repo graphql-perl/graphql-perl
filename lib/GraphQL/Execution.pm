@@ -165,13 +165,13 @@ fun _lookup_type(
 
 sub _get_operation {
   my ($operation_name, $operations) = @_;
-  my $operation;
+  DEBUG and _debug('_get_operation', @_);
   if (!$operation_name) {
     die "Must provide operation name if query contains multiple operations."
       if @$operations > 1;
     return $operations->[0];
   }
-  my @matching = grep $_->{name} eq $operation_name, @$operations;
+  my @matching = grep $_->{node}{name} eq $operation_name, @$operations;
   return $matching[0] if @matching == 1;
   die "No operations matching '$operation_name' found.";
 }

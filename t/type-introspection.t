@@ -29,7 +29,7 @@ subtest 'executes an introspection query', sub {
     name => 'QueryRoot',
     fields => { onlyField => { type => $String } },
   ));
-  my $got = GraphQL::Execution->execute($schema, $QUERY);
+  my $got = GraphQL::Execution->execute($schema, $QUERY, undef, undef, undef, 'IntrospectionQuery');
   my $big_expected = eval join '', 'my ', <DATA>, ' $VAR1';
   local ($Data::Dumper::Sortkeys, $Data::Dumper::Indent, $Data::Dumper::Terse, $Data::Dumper::Purity);
   $Data::Dumper::Sortkeys = $Data::Dumper::Indent = $Data::Dumper::Terse = $Data::Dumper::Purity = 1;
