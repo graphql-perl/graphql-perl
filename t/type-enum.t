@@ -231,4 +231,28 @@ subtest 'does not accept internal value variable as enum input', sub {
   done_testing;
 };
 
+subtest 'enum value may have an internal value of 0', sub {
+  run_test(
+    [$schema, '{ colorEnum(fromEnum: RED) colorInt(fromEnum: RED) }'],
+    { data => { colorEnum => 'RED', colorInt => 0 } },
+  );
+  done_testing;
+};
+
+subtest 'enum inputs may be nullable', sub {
+  run_test(
+    [$schema, '{ colorEnum colorInt }'],
+    { data => { colorEnum => undef, colorInt => undef } },
+  );
+  done_testing;
+};
+
+subtest 'presents a getValues() API for complex enums', sub {
+  is_deeply $ComplexEnum->_name2value, {
+    ONE => $Complex1,
+    TWO => $Complex2,
+  };
+  done_testing;
+};
+
 done_testing;
