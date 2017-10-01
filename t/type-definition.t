@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Test::More;
 use Test::Exception;
+use Data::Dumper;
 
 BEGIN {
   use_ok( 'GraphQL::Type::Interface' ) || print "Bail out!\n";
@@ -214,19 +215,9 @@ subtest 'includes nested input objects in the map', sub {
     mutation => $SomeMutation,
     subscription => $SomeSubscription,
   );
-  is_deeply $schema->name2type, {
-    'Article' => $BlogArticle,
-    'Author' => $BlogAuthor,
-    'Boolean' => $Boolean,
-    'Image' => $BlogImage,
-    'Int' => $Int,
-    'NestedInputObject' => $NestedInputObject,
-    'Query' => $BlogQuery,
-    'SomeInputObject' => $SomeInputObject,
-    'SomeMutation' => $SomeMutation,
-    'SomeSubscription' => $SomeSubscription,
-    'String' => $String,
-  };
+  is_deeply [ sort keys %{$schema->name2type} ], [
+    qw(Article Author Boolean Image Int NestedInputObject Query SomeInputObject SomeMutation SomeSubscription String),
+  ] or diag Dumper [ sort keys %{$schema->name2type} ];
 };
 
 subtest 'includes interfaces\' subtypes in the type map', sub {
@@ -245,12 +236,9 @@ subtest 'includes interfaces\' subtypes in the type map', sub {
     fields => { iface => { type => $SomeInterface } },
   );
   my $schema = GraphQL::Schema->new(query => $query, types => [ $SomeSubtype ]);
-  is_deeply $schema->name2type, {
-    'Int' => $Int,
-    'Query' => $query,
-    'SomeInterface' => $SomeInterface,
-    'SomeSubtype' => $SomeSubtype,
-  };
+  is_deeply [ sort keys %{$schema->name2type} ], [
+    qw(Boolean Int Query SomeInterface SomeSubtype String),
+  ] or diag Dumper [ sort keys %{$schema->name2type} ];
 };
 
 subtest 'includes interfaces\' thunk subtypes in the type map', sub {
@@ -269,12 +257,9 @@ subtest 'includes interfaces\' thunk subtypes in the type map', sub {
     fields => { iface => { type => $SomeInterface } },
   );
   my $schema = GraphQL::Schema->new(query => $query, types => [ $SomeSubtype ]);
-  is_deeply $schema->name2type, {
-    'Int' => $Int,
-    'Query' => $query,
-    'SomeInterface' => $SomeInterface,
-    'SomeSubtype' => $SomeSubtype,
-  };
+  is_deeply [ sort keys %{$schema->name2type} ], [
+    qw(Boolean Int Query SomeInterface SomeSubtype String),
+  ] or diag Dumper [ sort keys %{$schema->name2type} ];
 };
 
 # NB for now, not overloading stringification, but providing to_string method
