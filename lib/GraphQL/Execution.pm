@@ -300,6 +300,9 @@ fun _execute_fields_serially(
   ArrayRef $path,
   Map[StrNameValid,ArrayRef[HashRef]] $fields,
 ) {
+  DEBUG and _debug('_execute_fields_serially', $parent_type->to_string, $fields, $root_value);
+  # TODO implement
+  goto &_execute_fields;
 }
 
 # NB same ordering as _execute_fields - graphql-js switches last 2

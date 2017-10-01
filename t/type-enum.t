@@ -185,4 +185,12 @@ subtest 'accepts JSON string as enum variable', sub {
   done_testing;
 };
 
+subtest 'accepts enum literals as input arguments to mutations', sub {
+  run_test(
+    [$schema, 'mutation x($color: Color!) { favoriteEnum(color: $color) }', undef, undef, { color => 'GREEN' }],
+    { data => { favoriteEnum => 'GREEN' } },
+  );
+  done_testing;
+};
+
 done_testing;
