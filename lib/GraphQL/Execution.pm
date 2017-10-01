@@ -122,19 +122,22 @@ fun _build_context(
   };
 }
 
+# takes each operation var: query q(a: String)
+#  applies to it supplied variable from web request
+#  if none, applies any defaults in the operation var: query q(a: String = "h")
+#  converts with graphql_to_perl (which also validates) to Perl values
 fun _variables_apply_defaults(
   (InstanceOf['GraphQL::Schema']) $schema,
   HashRef $operation_variables,
   HashRef $variable_values,
 ) :ReturnType(HashRef) {
-  my %new_values;
   my @bad = grep {
     ! _lookup_type($schema, $operation_variables->{$_})->DOES('GraphQL::Role::Input');
   } keys %$operation_variables;
   die "Variable '\$$bad[0]' is type '@{[
     _lookup_type($schema, $operation_variables->{$bad[0]})->to_string
   ]}' which cannot be used as an input type.\n" if @bad;
-  map {
+  +{ map {
     my $opvar = $operation_variables->{$_};
     my $opvar_type = _lookup_type($schema, $opvar);
     my $parsed_value;
@@ -142,9 +145,8 @@ fun _variables_apply_defaults(
     eval { $parsed_value = $opvar_type->graphql_to_perl($maybe_value) };
     die "Variable '\$$_' got invalid value @{[$JSON->canonical->encode($maybe_value)]}.\n$@"
       if $@;
-    $new_values{$_} = $parsed_value;
-  } keys %$operation_variables;
-  \%new_values;
+    ($_ => $parsed_value)
+  } keys %$operation_variables };
 }
 
 fun _lookup_type(
