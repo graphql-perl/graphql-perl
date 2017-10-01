@@ -128,11 +128,15 @@ fun _variables_apply_defaults(
   HashRef $variable_values,
 ) :ReturnType(HashRef) {
   my %new_values;
+  my @bad = grep {
+    ! _lookup_type($schema, $operation_variables->{$_})->DOES('GraphQL::Role::Input');
+  } keys %$operation_variables;
+  die "Variable '\$$bad[0]' is type '@{[
+    _lookup_type($schema, $operation_variables->{$bad[0]})->to_string
+  ]}' which cannot be used as an input type.\n" if @bad;
   map {
     my $opvar = $operation_variables->{$_};
     my $opvar_type = _lookup_type($schema, $opvar);
-    die "Variable '\$$_' is type '@{[$opvar_type->to_string]}' which cannot be used as an input type.\n"
-      if !$opvar_type->DOES('GraphQL::Role::Input');
     my $parsed_value;
     my $maybe_value = $variable_values->{$_} // $opvar->{default_value};
     eval { $parsed_value = $opvar_type->graphql_to_perl($maybe_value) };
