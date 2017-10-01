@@ -87,18 +87,31 @@ stringification of the value.
 
 =cut
 
+has _name2value => (is => 'lazy', isa => Map[StrNameValid, Any]);
+sub _build__name2value {
+  my ($self) = @_;
+  my $v = $self->values;
+  +{ map { ($_ => $v->{$_}{value}) } keys %$v };
+}
+
 has _value2name => (is => 'lazy', isa => Map[Str, StrNameValid]);
 sub _build__value2name {
   my ($self) = @_;
-  my $v = $self->values;
-  DEBUG and _debug('_build__value2name', $self, $v);
-  +{ map { ($v->{$_}{value} => $_) } keys %$v };
+  my $n2v = $self->_name2value;
+  DEBUG and _debug('_build__value2name', $self, $n2v);
+  +{ reverse %$n2v };
 }
 
 method is_valid(Any $item) :ReturnType(Bool) {
   DEBUG and _debug('is_valid', $item, $item.'', $self->_value2name);
   return 1 if !defined $item;
   !!$self->_value2name->{$item};
+}
+
+method graphql_to_perl(Any $item) {
+  DEBUG and _debug('graphql_to_perl', $item, $self->_value2name);
+  return undef if !defined $item;
+  $self->_name2value->{$item};
 }
 
 =head2 BUILD

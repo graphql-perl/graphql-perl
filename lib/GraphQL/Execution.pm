@@ -663,6 +663,7 @@ fun _get_argument_values(
     my $arg_type = $arg_def->{type};
     my $argument_node = $arg_nodes->{$name};
     my $default_value = $arg_def->{default_value};
+    DEBUG and _debug("_get_argument_values($name)", $arg_def, $arg_type, $argument_node, $default_value);
     if (!exists $arg_nodes->{$name}) {
       $coerced_values{$name} = $default_value if exists $arg_def->{default_value};
     } elsif (ref($argument_node) eq 'SCALAR') {
@@ -670,6 +671,9 @@ fun _get_argument_values(
       $coerced_values{$name} =
         ($variable_values && $variable_values->{$$argument_node})
         // $default_value;
+    } elsif (ref($argument_node) eq 'REF') {
+      # double ref means it's an enum value
+      $coerced_values{$name} = $$$argument_node;
     } else {
       $coerced_values{$name} = $argument_node;
     }
