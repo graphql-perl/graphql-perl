@@ -12,6 +12,7 @@ BEGIN {
   use_ok( 'GraphQL::Type::Object' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::Scalar', qw($String $Int $Boolean) ) || print "Bail out!\n";
   use_ok( 'GraphQL::Execution' ) || print "Bail out!\n";
+  use_ok( 'GraphQL::Introspection' ) || print "Bail out!\n";
 }
 
 my $ColorType = GraphQL::Type::Enum->new(
@@ -272,6 +273,15 @@ subtest 'may be internally represented with complex values', sub {
       message => "Expected a value of type 'Complex' but received: HASH.\n",
     } ] },
   );
+  done_testing;
+};
+
+subtest 'can be introspected without error', sub {
+  local $TODO = 'introspection not yet';
+  my $got = GraphQL::Execution->execute($schema, $GraphQL::Introspection::QUERY);
+  local ($Data::Dumper::Sortkeys, $Data::Dumper::Indent, $Data::Dumper::Terse);
+  $Data::Dumper::Sortkeys = $Data::Dumper::Indent = $Data::Dumper::Terse = 1;
+  ok !$got->{errors}, 'no query errors' or diag Dumper $got;
   done_testing;
 };
 
