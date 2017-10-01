@@ -682,16 +682,20 @@ fun _get_argument_values(
     my $default_value = $arg_def->{default_value};
     DEBUG and _debug("_get_argument_values($name)", $arg_def, $arg_type, $argument_node, $default_value);
     if (!exists $arg_nodes->{$name}) {
+      # none given - apply type arg's default if any. already validated perl
       $coerced_values{$name} = $default_value if exists $arg_def->{default_value};
+      next;
     } elsif (ref($argument_node) eq 'SCALAR') {
-      # scalar ref means it's a variable
+      # scalar ref means it's a variable. already validated perl
       $coerced_values{$name} =
         ($variable_values && $variable_values->{$$argument_node})
         // $default_value;
+      next;
     } elsif (ref($argument_node) eq 'REF') {
-      # double ref means it's an enum value
+      # double ref means it's an enum value. JSON land, needs convert/validate
       $coerced_values{$name} = $$$argument_node;
     } else {
+      # query literal. JSON land, needs convert/validate
       $coerced_values{$name} = $argument_node;
     }
     next if !exists $coerced_values{$name};

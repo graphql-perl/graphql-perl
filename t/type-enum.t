@@ -177,4 +177,12 @@ subtest 'does not accept enum literal in place of int', sub {
   done_testing;
 };
 
+subtest 'accepts JSON string as enum variable', sub {
+  run_test(
+    [$schema, 'query test($color: Color!) { colorEnum(fromEnum: $color) }', undef, undef, { color => 'BLUE' }],
+    { data => { colorEnum => 'BLUE' } },
+  );
+  done_testing;
+};
+
 done_testing;
