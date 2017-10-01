@@ -126,7 +126,7 @@ fun _build_context(
 #  applies to it supplied variable from web request
 #  if none, applies any defaults in the operation var: query q(a: String = "h")
 #  converts with graphql_to_perl (which also validates) to Perl values
-# return { varname => { value => ... } }
+# return { varname => { value => ..., type => $type } }
 fun _variables_apply_defaults(
   (InstanceOf['GraphQL::Schema']) $schema,
   HashRef $operation_variables,
@@ -146,7 +146,7 @@ fun _variables_apply_defaults(
     eval { $parsed_value = $opvar_type->graphql_to_perl($maybe_value) };
     die "Variable '\$$_' got invalid value @{[$JSON->canonical->encode($maybe_value)]}.\n$@"
       if $@;
-    ($_ => { value => $parsed_value })
+    ($_ => { value => $parsed_value, type => $opvar_type })
   } keys %$operation_variables };
 }
 
@@ -644,6 +644,16 @@ fun _get_argument_values(
       "'@{[$arg_defs->{$bad[0]}{type}->to_string]}' not given.",
     nodes => [ $node ],
   ) if @bad;
+  @bad = grep {
+    ref($arg_nodes->{$_}) eq 'SCALAR' and
+    $variable_values->{${$arg_nodes->{$_}}} and
+    !_type_will_accept($arg_defs->{$_}{type}, $variable_values->{${$arg_nodes->{$_}}}{type})
+  } keys %$arg_defs;
+  die GraphQL::Error->new(
+    message => "Variable '\$${$arg_nodes->{$bad[0]}}' of type '@{[$variable_values->{${$arg_nodes->{$bad[0]}}}{type}->to_string]}'".
+      " where expected '@{[$arg_defs->{$bad[0]}{type}->to_string]}'.",
+    nodes => [ $node ],
+  ) if @bad;
   my @novar = grep {
     ref($arg_nodes->{$_}) eq 'SCALAR' and
     (!$variable_values or !exists $variable_values->{${$arg_nodes->{$_}}}) and
@@ -714,6 +724,17 @@ fun _get_argument_values(
     }
   }
   \%coerced_values;
+}
+
+fun _type_will_accept(
+  (ConsumerOf['GraphQL::Role::Input']) $arg_type,
+  (ConsumerOf['GraphQL::Role::Input']) $var_type,
+) {
+  return 1 if $arg_type == $var_type;
+  $arg_type = $arg_type->of if $arg_type->isa('GraphQL::Type::NonNull');
+  $var_type = $var_type->of if $var_type->isa('GraphQL::Type::NonNull');
+  return 1 if $arg_type == $var_type;
+  '';
 }
 
 # $root_value is either a hash with fieldnames as keys and either data

@@ -211,4 +211,24 @@ subtest 'does not accept internal value as enum variable', sub {
   done_testing;
 };
 
+subtest 'does not accept string variables as enum input', sub {
+  run_test(
+    [$schema, 'query test($color: String!) { colorEnum(fromEnum: $color) }', undef, undef, { color => 'BLUE' }],
+    { data => { colorEnum => undef }, errors => [
+      { message => "Variable '\$color' of type 'String!' where expected 'Color'." }
+    ] },
+  );
+  done_testing;
+};
+
+subtest 'does not accept internal value variable as enum input', sub {
+  run_test(
+    [$schema, 'query test($color: Int!) { colorEnum(fromEnum: $color) }', undef, undef, { color => 2 }],
+    { data => { colorEnum => undef }, errors => [
+      { message => "Variable '\$color' of type 'Int!' where expected 'Color'." }
+    ] },
+  );
+  done_testing;
+};
+
 done_testing;
