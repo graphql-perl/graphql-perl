@@ -6,7 +6,7 @@ use warnings;
 use Moo;
 use GraphQL::Type::Library -all;
 use Types::Standard -all;
-use JSON::MaybeXS;
+use JSON::MaybeXS qw(JSON is_bool);
 use Exporter qw(import);
 extends qw(GraphQL::Type);
 with qw(
