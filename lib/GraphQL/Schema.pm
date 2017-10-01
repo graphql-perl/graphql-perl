@@ -9,6 +9,7 @@ use GraphQL::Type::Library -all;
 use Return::Type;
 use Function::Parameters;
 use GraphQL::Debug qw(_debug);
+use GraphQL::Directive;
 
 our $VERSION = '0.02';
 use constant DEBUG => $ENV{GRAPHQL_DEBUG};
@@ -73,7 +74,11 @@ has types => (
 
 =cut
 
-has directives => (is => 'ro', isa => ArrayRef[InstanceOf['GraphQL::Directive']], default => sub { [] });
+has directives => (
+  is => 'ro',
+  isa => ArrayRef[InstanceOf['GraphQL::Directive']],
+  default => sub { \@GraphQL::Directive::SPECIFIED_DIRECTIVES },
+);
 
 =head1 METHODS
 
