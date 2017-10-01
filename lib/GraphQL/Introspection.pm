@@ -456,7 +456,7 @@ $TYPE_META_TYPE = GraphQL::Type::Object->new(
       resolve => sub {
         my ($type) = @_;
         return if !$type->isa('GraphQL::Type::Object');
-        $type->interfaces;
+        $type->interfaces || [];
       }
     },
     possibleTypes => {

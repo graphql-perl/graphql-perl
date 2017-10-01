@@ -34,6 +34,7 @@ subtest 'executes an introspection query', sub {
   local ($Data::Dumper::Sortkeys, $Data::Dumper::Indent, $Data::Dumper::Terse, $Data::Dumper::Purity);
   $Data::Dumper::Sortkeys = $Data::Dumper::Indent = $Data::Dumper::Terse = $Data::Dumper::Purity = 1;
   #open my $fh, '>', 'tf'; print $fh Dumper $got; # uncomment to regenerate
+  $Data::Dumper::Purity = 0; # makes debug dumps less readable if 1
   is_deeply $got, $big_expected or diag Dumper $got;
   done_testing;
 };
@@ -150,7 +151,7 @@ $VAR1 = {
             }
           ],
           'inputFields' => undef,
-          'interfaces' => undef,
+          'interfaces' => [],
           'kind' => 'OBJECT',
           'name' => 'QueryRoot',
           'possibleTypes' => undef
@@ -249,7 +250,7 @@ In some cases, you need to provide options to alter GraphQL\'s execution behavio
             }
           ],
           'inputFields' => undef,
-          'interfaces' => undef,
+          'interfaces' => [],
           'kind' => 'OBJECT',
           'name' => '__Directive',
           'possibleTypes' => undef
@@ -435,7 +436,7 @@ In some cases, you need to provide options to alter GraphQL\'s execution behavio
             }
           ],
           'inputFields' => undef,
-          'interfaces' => undef,
+          'interfaces' => [],
           'kind' => 'OBJECT',
           'name' => '__EnumValue',
           'possibleTypes' => undef
@@ -542,7 +543,7 @@ In some cases, you need to provide options to alter GraphQL\'s execution behavio
             }
           ],
           'inputFields' => undef,
-          'interfaces' => undef,
+          'interfaces' => [],
           'kind' => 'OBJECT',
           'name' => '__Field',
           'possibleTypes' => undef
@@ -609,7 +610,7 @@ In some cases, you need to provide options to alter GraphQL\'s execution behavio
             }
           ],
           'inputFields' => undef,
-          'interfaces' => undef,
+          'interfaces' => [],
           'kind' => 'OBJECT',
           'name' => '__InputValue',
           'possibleTypes' => undef
@@ -708,7 +709,7 @@ In some cases, you need to provide options to alter GraphQL\'s execution behavio
             }
           ],
           'inputFields' => undef,
-          'interfaces' => undef,
+          'interfaces' => [],
           'kind' => 'OBJECT',
           'name' => '__Schema',
           'possibleTypes' => undef
@@ -895,7 +896,7 @@ Depending on the kind of a type, certain fields describe information about that 
             }
           ],
           'inputFields' => undef,
-          'interfaces' => undef,
+          'interfaces' => [],
           'kind' => 'OBJECT',
           'name' => '__Type',
           'possibleTypes' => undef
