@@ -193,4 +193,22 @@ subtest 'accepts enum literals as input arguments to mutations', sub {
   done_testing;
 };
 
+subtest 'accepts enum literals as input arguments to subscriptions', sub {
+  run_test(
+    [$schema, 'subscription x($color: Color!) { subscribeToEnum(color: $color) }', undef, undef, { color => 'GREEN' }],
+    { data => { subscribeToEnum => 'GREEN' } },
+  );
+  done_testing;
+};
+
+subtest 'does not accept internal value as enum variable', sub {
+  run_test(
+    [$schema, 'query test($color: Color!) { colorEnum(fromEnum: $color) }', undef, undef, { color => 2 }],
+    { errors => [
+      { message => "Variable '\$color' got invalid value 2.\nExpected type 'Color', found 2.\n" }
+    ] },
+  );
+  done_testing;
+};
+
 done_testing;
