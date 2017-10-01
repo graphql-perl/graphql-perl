@@ -626,6 +626,7 @@ fun _get_argument_values(
 ) {
   my $arg_defs = $def->{args};
   my $arg_nodes = $node->{arguments};
+  DEBUG and _debug("_get_argument_values", $arg_defs, $arg_nodes, $variable_values);
   return {} if !$arg_defs;
   my @bad = grep { !exists $arg_nodes->{$_} and !defined $arg_defs->{$_}{default_value} and $arg_defs->{$_}{type}->isa('GraphQL::Type::NonNull') } keys %$arg_defs;
   die GraphQL::Error->new(

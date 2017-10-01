@@ -109,7 +109,7 @@ method is_valid(Any $item) :ReturnType(Bool) {
 }
 
 method graphql_to_perl(Any $item) {
-  DEBUG and _debug('graphql_to_perl', $item, $self->_value2name);
+  DEBUG and _debug('graphql_to_perl', $item, $self->_name2value);
   return undef if !defined $item;
   $self->_name2value->{$item};
 }
