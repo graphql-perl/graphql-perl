@@ -129,4 +129,22 @@ subtest 'enum may be output type', sub {
   done_testing;
 };
 
+subtest 'enum may be both input and output type', sub {
+  run_test(
+    [$schema, '{ colorEnum(fromEnum: GREEN) }'],
+    { data => { colorEnum => 'GREEN' } },
+  );
+  done_testing;
+};
+
+subtest 'does not accept string literals', sub {
+  run_test(
+    [$schema, '{ colorEnum(fromEnum: "GREEN") }'],
+    { data => { colorEnum => undef }, errors => [
+      { message => "Argument 'fromEnum' of type 'Color' was given 'GREEN' which is not enum value." }
+    ] },
+  );
+  done_testing;
+};
+
 done_testing;

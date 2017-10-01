@@ -656,6 +656,16 @@ fun _get_argument_values(
       " was given ${${$arg_nodes->{$enumfail[0]}}} which is enum value.",
     nodes => [ $node ],
   ) if @enumfail;
+  my @enumstring = grep {
+    defined($arg_nodes->{$_}) and
+    !ref($arg_nodes->{$_})
+  } grep $arg_defs->{$_}{type}->isa('GraphQL::Type::Enum'), keys %$arg_defs;
+  die GraphQL::Error->new(
+    message => "Argument '$enumstring[0]' of type ".
+      "'@{[$arg_defs->{$enumstring[0]}{type}->to_string]}'".
+      " was given '$arg_nodes->{$enumstring[0]}' which is not enum value.",
+    nodes => [ $node ],
+  ) if @enumstring;
   return {} if !$arg_nodes;
   my %coerced_values;
   for my $name (keys %$arg_defs) {
