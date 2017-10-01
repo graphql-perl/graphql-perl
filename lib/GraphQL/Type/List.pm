@@ -74,10 +74,10 @@ True if given Perl array-ref is a valid value for this type.
 
 =cut
 
-method is_valid(Maybe[ArrayRef] $item) :ReturnType(Bool) {
+method is_valid(Any $item) :ReturnType(Bool) {
   return 1 if !defined $item;
   my $of = $self->of;
-  return if grep !$of->is_valid($_), @$item;
+  return if grep !$of->is_valid($_), @{ $self->uplift($item) };
   1;
 }
 
