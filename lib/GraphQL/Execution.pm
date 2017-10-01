@@ -503,9 +503,9 @@ fun _complete_leaf_value(
   (ConsumerOf['GraphQL::Role::Leaf']) $return_type,
   Any $result,
 ) {
+  DEBUG and _debug('_complete_leaf_value', $return_type->to_string, $result);
   my $serialised = $return_type->perl_to_graphql($result);
-  DEBUG and _debug('_complete_leaf_value', $return_type->to_string, $result, $serialised);
-  die GraphQL::Error->new(message => "Expected a value of type '@{[$return_type->to_string]}' but received: '$result'") if !defined $serialised;
+  die GraphQL::Error->new(message => "Expected a value of type '@{[$return_type->to_string]}' but received: '$result'.\n$@") if $@;
   $serialised;
 }
 

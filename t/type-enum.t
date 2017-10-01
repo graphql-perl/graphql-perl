@@ -151,7 +151,7 @@ subtest 'does not accept incorrect internal value', sub {
   run_test(
     [$schema, '{ colorEnum(fromString: "GREEN") }'],
     { data => { colorEnum => undef }, errors => [
-      { message => "Expected a value of type 'Color' but received: 'GREEN'" }
+      { message => "Expected a value of type 'Color' but received: 'GREEN'.\n" }
     ] },
   );
   done_testing;
@@ -252,6 +252,26 @@ subtest 'presents a getValues() API for complex enums', sub {
     ONE => $Complex1,
     TWO => $Complex2,
   };
+  done_testing;
+};
+
+subtest 'may be internally represented with complex values', sub {
+  run_test(
+    [$schema, '{
+      first: complexEnum
+      second: complexEnum(fromEnum: TWO)
+      good: complexEnum(provideGoodValue: true)
+      bad: complexEnum(provideBadValue: true)
+    }'],
+    { data => {
+      first => 'ONE',
+      second => 'TWO',
+      good => 'TWO',
+      bad => undef,
+    }, errors => [ {
+      message => "Expected a value of type 'Complex' but received: HASH.\n",
+    } ] },
+  );
   done_testing;
 };
 
