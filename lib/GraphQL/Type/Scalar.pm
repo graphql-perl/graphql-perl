@@ -18,9 +18,12 @@ with qw(
 );
 use Function::Parameters;
 use Return::Type;
+use GraphQL::Debug qw(_debug);
 
 our $VERSION = '0.02';
 our @EXPORT_OK = qw($Int $Float $String $Boolean $ID);
+
+use constant DEBUG => $ENV{GRAPHQL_DEBUG};
 
 =head1 NAME
 
