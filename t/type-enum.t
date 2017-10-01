@@ -147,4 +147,34 @@ subtest 'does not accept string literals', sub {
   done_testing;
 };
 
+subtest 'does not accept incorrect internal value', sub {
+  run_test(
+    [$schema, '{ colorEnum(fromString: "GREEN") }'],
+    { data => { colorEnum => undef }, errors => [
+      { message => "Expected a value of type 'Color' but received: 'GREEN'" }
+    ] },
+  );
+  done_testing;
+};
+
+subtest 'does not accept internal value in place of enum literal', sub {
+  run_test(
+    [$schema, '{ colorEnum(fromEnum: 1) }'],
+    { data => { colorEnum => undef }, errors => [
+      { message => "Argument 'fromEnum' of type 'Color' was given '1' which is not enum value." }
+    ] },
+  );
+  done_testing;
+};
+
+subtest 'does not accept enum literal in place of int', sub {
+  run_test(
+    [$schema, '{ colorEnum(fromInt: GREEN) }'],
+    { data => { colorEnum => undef }, errors => [
+      { message => "Argument 'fromInt' of type 'Int' was given GREEN which is enum value." }
+    ] },
+  );
+  done_testing;
+};
+
 done_testing;
