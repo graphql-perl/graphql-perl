@@ -121,4 +121,12 @@ subtest 'accepts enum literals as input', sub {
   done_testing;
 };
 
+subtest 'enum may be output type', sub {
+  run_test(
+    [$schema, '{ colorEnum(fromInt: 1) }'],
+    { data => { colorEnum => 'GREEN' } },
+  );
+  done_testing;
+};
+
 done_testing;

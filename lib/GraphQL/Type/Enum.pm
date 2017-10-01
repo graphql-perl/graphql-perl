@@ -114,6 +114,12 @@ method graphql_to_perl(Any $item) {
   $self->_name2value->{$item};
 }
 
+method perl_to_graphql(Any $item) {
+  DEBUG and _debug('graphql_to_perl', $item, $self->_value2name);
+  return undef if !defined $item;
+  $self->_value2name->{$item};
+}
+
 =head2 BUILD
 
 Internal method.
