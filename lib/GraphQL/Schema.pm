@@ -10,6 +10,7 @@ use Return::Type;
 use Function::Parameters;
 use GraphQL::Debug qw(_debug);
 use GraphQL::Directive;
+use GraphQL::Introspection qw($SCHEMA_META_TYPE);
 
 our $VERSION = '0.02';
 use constant DEBUG => $ENV{GRAPHQL_DEBUG};
@@ -92,7 +93,7 @@ type object.
 has name2type => (is => 'lazy', isa => Map[StrNameValid, ConsumerOf['GraphQL::Role::Named']]);
 sub _build_name2type {
   my ($self) = @_;
-  my @types = grep $_, map $self->$_, qw(query mutation subscription); # TODO also __Schema
+  my @types = grep $_, (map $self->$_, qw(query mutation subscription)), $SCHEMA_META_TYPE;
   push @types, @{ $self->types || [] };
   my %name2type;
   map _expand_type(\%name2type, $_), @types;

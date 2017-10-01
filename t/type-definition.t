@@ -217,6 +217,7 @@ subtest 'includes nested input objects in the map', sub {
   );
   is_deeply [ sort keys %{$schema->name2type} ], [
     qw(Article Author Boolean Image Int NestedInputObject Query SomeInputObject SomeMutation SomeSubscription String),
+    qw(__Directive __DirectiveLocation __EnumValue __Field __InputValue __Schema __Type __TypeKind)
   ] or diag Dumper [ sort keys %{$schema->name2type} ];
 };
 
@@ -238,6 +239,7 @@ subtest 'includes interfaces\' subtypes in the type map', sub {
   my $schema = GraphQL::Schema->new(query => $query, types => [ $SomeSubtype ]);
   is_deeply [ sort keys %{$schema->name2type} ], [
     qw(Boolean Int Query SomeInterface SomeSubtype String),
+    qw(__Directive __DirectiveLocation __EnumValue __Field __InputValue __Schema __Type __TypeKind)
   ] or diag Dumper [ sort keys %{$schema->name2type} ];
 };
 
@@ -259,6 +261,7 @@ subtest 'includes interfaces\' thunk subtypes in the type map', sub {
   my $schema = GraphQL::Schema->new(query => $query, types => [ $SomeSubtype ]);
   is_deeply [ sort keys %{$schema->name2type} ], [
     qw(Boolean Int Query SomeInterface SomeSubtype String),
+    qw(__Directive __DirectiveLocation __EnumValue __Field __InputValue __Schema __Type __TypeKind)
   ] or diag Dumper [ sort keys %{$schema->name2type} ];
 };
 

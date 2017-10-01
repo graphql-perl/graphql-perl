@@ -12,6 +12,9 @@ use GraphQL::Parser;
 use GraphQL::Error;
 use JSON::MaybeXS;
 use GraphQL::Debug qw(_debug);
+use GraphQL::Introspection qw(
+  $SCHEMA_META_FIELD_DEF $TYPE_META_FIELD_DEF $TYPE_NAME_META_FIELD_DEF
+);
 
 =head1 NAME
 
@@ -345,12 +348,18 @@ fun _resolve_field(
   );
 }
 
+use constant FIELDNAME2SPECIAL => {
+  map { ($_->{name} => $_) } $SCHEMA_META_FIELD_DEF, $TYPE_META_FIELD_DEF
+};
 fun _get_field_def(
   (InstanceOf['GraphQL::Schema']) $schema,
   (InstanceOf['GraphQL::Type']) $parent_type,
   StrNameValid $field_name,
 ) :ReturnType(HashRef) {
-  # TODO __schema and __typename and __type
+  return $TYPE_NAME_META_FIELD_DEF
+    if $field_name eq $TYPE_NAME_META_FIELD_DEF->{name};
+  return FIELDNAME2SPECIAL->{$field_name}
+    if FIELDNAME2SPECIAL->{$field_name} and $parent_type == $schema->query;
   $parent_type->fields->{$field_name} //
     die GraphQL::Error->new(
       message => "No field @{[$parent_type->name]}.$field_name."
