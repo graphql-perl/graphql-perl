@@ -73,7 +73,7 @@ has types => (
 
 =cut
 
-has directives => (is => 'ro', isa => ArrayRef[InstanceOf['GraphQL::Directive']]);
+has directives => (is => 'ro', isa => ArrayRef[InstanceOf['GraphQL::Directive']], default => sub { [] });
 
 =head1 METHODS
 
