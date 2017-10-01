@@ -386,9 +386,9 @@ __DATA__
           'kind' => 'field',
           'node' => {
             'arguments' => {
-              'falsey' => '',
+              'falsey' => bless( do{\(my $o = 0)}, 'JSON::XS::Boolean' ),
               'nullish' => undef,
-              'truthy' => 1
+              'truthy' => bless( do{\(my $o = 1)}, 'JSON::XS::Boolean' )
             },
             'name' => 'unnamed'
           }

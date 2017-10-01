@@ -7,9 +7,12 @@ use base 'Pegex::Receiver';
 use Return::Type;
 use Types::Standard -all;
 use Function::Parameters;
+use JSON::MaybeXS;
 
 require Pegex::Parser;
 require GraphQL::Grammar;
+
+my $JSON = JSON::MaybeXS->new->allow_nonref->canonical;
 
 =head1 NAME
 
@@ -269,7 +272,7 @@ method got_unionTypeDefinition (Any $param = undef) {
 
 method got_boolean (Any $param = undef) {
   return unless defined $param;
-  return $param eq 'true' ? 1 : '';
+  return $param eq 'true' ? JSON->true : JSON->false;
 }
 
 method got_null (Any $param = undef) {
