@@ -84,6 +84,25 @@ point above.
 
 For more, see the JavaScript tutorial in ["SEE ALSO"](#see-also).
 
+## Hooking your system up to GraphQL
+
+You will need to decide how to model your system in GraphQL terms. This
+will involve deciding on what [output object types](https://metacpan.org/pod/GraphQL::Type::Object)
+you have, what fields they have, and what arguments and return-types
+those fields have.
+
+Additionally, you will need to design mutations if you want to be able
+to update/create/delete data. This requires some thought for return types,
+to ensure you can get all the information you need to proceed to avoid
+extra round-trips.
+
+Finally, you should consider whether you need "subscriptions". These
+are designed to hook into WebSockets. Apollo has a [JavaScript
+module](https://github.com/apollographql/graphql-subscriptions) for this.
+
+Specifying types and fields is straightforward. See [the
+document](https://metacpan.org/pod/GraphQL::Type::Library#FieldMapOutput) for how to make resolvers.
+
 # DEBUGGING
 
 To debug, set environment variable `GRAPHQL_DEBUG` to a true value.
