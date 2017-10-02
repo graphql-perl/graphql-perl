@@ -8,6 +8,7 @@ use GraphQL::Type::Object;
 use GraphQL::Type::Enum;
 use GraphQL::Type::Scalar qw($String $Boolean);
 use GraphQL::Debug qw(_debug);
+use JSON::MaybeXS;
 
 =head1 NAME
 
@@ -33,6 +34,7 @@ our @EXPORT_OK = qw(
 );
 
 use constant DEBUG => $ENV{GRAPHQL_DEBUG};
+my $JSON = JSON::MaybeXS->new->allow_nonref;
 
 =head1 SYNOPSIS
 
@@ -342,8 +344,13 @@ our $INPUT_VALUE_META_TYPE = GraphQL::Type::Object->new(
         'A GraphQL-formatted string representing the default value for this ' .
         'input value.',
       resolve => sub {
-        # TODO perl_to_graphql
-        $_[0]->{default_value}
+        DEBUG and _debug('__InputValue.defaultValue.resolve', @_);
+        # must be JSON-encoded one time extra as buildClientSchema wants
+        # it parseable as though literal in query - hence "GraphQL-formatted"
+        return unless defined(my $value = $_[0]->{default_value});
+        my $gql = $_[0]->{type}->perl_to_graphql($value);
+        return $gql if $_[0]->{type}->isa('GraphQL::Type::Enum');
+        $JSON->encode($gql);
       },
     },
   } },

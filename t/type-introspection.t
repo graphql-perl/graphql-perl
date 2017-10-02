@@ -99,7 +99,7 @@ $VAR1 = {
         {
           'args' => [
             {
-              'defaultValue' => 'No longer supported',
+              'defaultValue' => '"No longer supported"',
               'description' => 'Explains why this element was deprecated, usually also including a suggestion for how to access supported similar data. Formatted in [Markdown](https://daringfireball.net/projects/markdown/).',
               'name' => 'reason',
               'type' => {
@@ -735,7 +735,7 @@ Depending on the kind of a type, certain fields describe information about that 
             {
               'args' => [
                 {
-                  'defaultValue' => 0,
+                  'defaultValue' => 'false',
                   'description' => undef,
                   'name' => 'includeDeprecated',
                   'type' => {
@@ -766,7 +766,7 @@ Depending on the kind of a type, certain fields describe information about that 
             {
               'args' => [
                 {
-                  'defaultValue' => 0,
+                  'defaultValue' => 'false',
                   'description' => undef,
                   'name' => 'includeDeprecated',
                   'type' => {
