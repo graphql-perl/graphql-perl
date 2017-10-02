@@ -38,6 +38,9 @@ WriteMakefile(
         url => 'git@github.com:graphql-perl/graphql-perl.git',
         web => 'https://github.com/graphql-perl/graphql-perl',
       },
+      bugtracker  => {
+        web => 'https://github.com/graphql-perl/graphql-perl/issues',
+      },
       license => [ 'http://dev.perl.org/licenses/' ],
     },
     prereqs => {
