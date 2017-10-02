@@ -21,6 +21,10 @@ See [GraphQL::Type](https://metacpan.org/pod/GraphQL::Type) for description of h
 
 [![CPAN version](https://badge.fury.io/pl/GraphQL.svg)](https://metacpan.org/pod/GraphQL)
 
+# DEBUGGING
+
+To debug, set environment variable `GRAPHQL_DEBUG` to a true value.
+
 # EXPORT
 
 None yet.

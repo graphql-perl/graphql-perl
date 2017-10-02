@@ -46,6 +46,7 @@ WriteMakefile(
           'Test::CheckManifest' => '0.9',
           'Test::Pod::Coverage' => '1.08',
           'Test::Pod' => '1.22',
+          'Pod::Markdown' => 0,
         },
       },
       runtime => {
@@ -61,5 +62,10 @@ sub MY::postamble {
   <<EOF;
 lib/GraphQL/Grammar.pm : graphql.pgx
 \t\$(PERL) -Ilib -MGraphQL::Grammar=compile
+
+pure_all :: README.md
+
+README.md : lib/GraphQL.pm
+\tpod2markdown \$< >\$\@
 EOF
 }
