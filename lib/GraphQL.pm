@@ -12,6 +12,18 @@ GraphQL - Perl implementation of GraphQL
 
 our $VERSION = '0.08';
 
+=begin markdown
+
+# PROJECT STATUS
+
+| OS      |  Build status |
+|:-------:|--------------:|
+| Linux   | [![Build Status](https://travis-ci.org/graphql-perl/graphql-perl.svg?branch=master)](https://travis-ci.org/graphql-perl/graphql-perl) |
+
+[![CPAN version](https://badge.fury.io/pl/GraphQL.svg)](https://metacpan.org/pod/GraphQL)
+
+=end markdown
+
 =head1 SYNOPSIS
 
   use GraphQL::Schema;
@@ -45,18 +57,6 @@ This module is a port of the GraphQL reference implementation,
 L<graphql-js|https://github.com/graphql-js/graphql-js>, to Perl 5.
 
 See L<GraphQL::Type> for description of how to create GraphQL types.
-
-=head1 PROJECT STATUS
-
-=begin markdown
-
-| OS      |  Build status |
-|:-------:|--------------:|
-| Linux   | [![Build Status](https://travis-ci.org/graphql-perl/graphql-perl.svg?branch=master)](https://travis-ci.org/graphql-perl/graphql-perl) |
-
-[![CPAN version](https://badge.fury.io/pl/GraphQL.svg)](https://metacpan.org/pod/GraphQL)
-
-=end markdown
 
 =head1 DEBUGGING
 
