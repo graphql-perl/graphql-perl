@@ -58,6 +58,50 @@ L<graphql-js|https://github.com/graphql-js/graphql-js>, to Perl 5.
 
 See L<GraphQL::Type> for description of how to create GraphQL types.
 
+=head2 Introduction to GraphQL
+
+GraphQL is a technology that lets clients talk to APIs via a single
+endpoint, which acts as a single "source of the truth". This means clients
+do not need to seek the whole picture from several APIs. Additionally,
+it makes this efficient in network traffic, time, and programming effort:
+
+=over
+
+=item Network traffic
+
+The request asks for exactly what it wants, which it gets, and no
+more. No wasted traffic.
+
+=item Time
+
+It gets all the things it needs in one go, including any connected
+resources, so it does not need to make several requests to fill its
+information requirement.
+
+=item Programming effort
+
+With "fragments" that can be attached to user-interface components,
+keeping track of what information a whole page needs to request can be
+automated. See L<Relay|https://facebook.github.io/relay/> or
+L<Apollo|http://dev.apollodata.com/> for more on this.
+
+=back
+
+=head2 Basic concepts
+
+GraphQL implements a system featuring a L<schema|GraphQL::Schema>,
+which features various classes of L<types|GraphQL::Type>, some of which
+are L<objects|GraphQL::Type::Object>. Special objects provide the roots
+of queries (mandatory), and mutations and subscriptions (both optional).
+
+Objects have fields, each of which can be specified to take arguments,
+and which have a return type. These are effectively the properties and/or
+methods on the type. If they return an object, then a query can specify
+subfields of that object, and so on - as alluded to in the "time-saving"
+point above.
+
+For more, see the JavaScript tutorial in L</"SEE ALSO">.
+
 =head1 DEBUGGING
 
 To debug, set environment variable C<GRAPHQL_DEBUG> to a true value.

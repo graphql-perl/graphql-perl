@@ -44,6 +44,46 @@ This module is a port of the GraphQL reference implementation,
 
 See [GraphQL::Type](https://metacpan.org/pod/GraphQL::Type) for description of how to create GraphQL types.
 
+## Introduction to GraphQL
+
+GraphQL is a technology that lets clients talk to APIs via a single
+endpoint, which acts as a single "source of the truth". This means clients
+do not need to seek the whole picture from several APIs. Additionally,
+it makes this efficient in network traffic, time, and programming effort:
+
+- Network traffic
+
+    The request asks for exactly what it wants, which it gets, and no
+    more. No wasted traffic.
+
+- Time
+
+    It gets all the things it needs in one go, including any connected
+    resources, so it does not need to make several requests to fill its
+    information requirement.
+
+- Programming effort
+
+    With "fragments" that can be attached to user-interface components,
+    keeping track of what information a whole page needs to request can be
+    automated. See [Relay](https://facebook.github.io/relay/) or
+    [Apollo](http://dev.apollodata.com/) for more on this.
+
+## Basic concepts
+
+GraphQL implements a system featuring a [schema](https://metacpan.org/pod/GraphQL::Schema),
+which features various classes of [types](https://metacpan.org/pod/GraphQL::Type), some of which
+are [objects](https://metacpan.org/pod/GraphQL::Type::Object). Special objects provide the roots
+of queries (mandatory), and mutations and subscriptions (both optional).
+
+Objects have fields, each of which can be specified to take arguments,
+and which have a return type. These are effectively the properties and/or
+methods on the type. If they return an object, then a query can specify
+subfields of that object, and so on - as alluded to in the "time-saving"
+point above.
+
+For more, see the JavaScript tutorial in ["SEE ALSO"](#see-also).
+
 # DEBUGGING
 
 To debug, set environment variable `GRAPHQL_DEBUG` to a true value.
