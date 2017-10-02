@@ -1,5 +1,17 @@
 Revision history for GraphQL
 
+0.09	Mon Oct  2 06:39:07 BST 2017
+ - implement conversion between Perl and GraphQL/JSON values
+ - add more usable debugging code
+ - error handling
+ - implement Object field resolving
+ - implement fragments
+ - implement Enum, Directive
+ - more type checking
+ - implement introspection
+ - list GitHub as bugtracker
+ - documentation
+
 0.08	Sat Sep 23 06:27:20 BST 2017
  - zap GraphQL::Argument
  - get all thunking right using MooX::Thunking
