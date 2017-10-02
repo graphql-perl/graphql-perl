@@ -129,6 +129,113 @@ A L</FieldMapInput>.
 =item resolve
 
 Code-ref to return a given property from a given source-object.
+A key concept is to remember that the "object" on which these fields
+exist, were themselves returned by other fields.
+
+An example function that takes a name and GraphQL type, and returns a
+field definition, with a resolver that calls read-only L<Moo> accessors,
+suitable for placing (several of) inside the hash-ref defining a type's
+fields:
+
+  sub _make_moo_field {
+    my ($field_name, $type) = @_;
+    ($field_name => { resolve => sub {
+      my ($root_value, $args, $context, $info) = @_;
+      my @passon = %$args ? ($args) : ();
+      return undef unless $root_value->can($field_name);
+      $root_value->$field_name(@passon);
+    }, type => $type });
+  }
+  # ...
+    fields => {
+      _make_moo_field(name => $String),
+      _make_moo_field(description => $String),
+    },
+  # ...
+
+The code-ref will be called with these parameters:
+
+=over
+
+=item $source
+
+The Perl entity (possibly a blessed object) returned by the resolver
+that conjured up this GraphQL object.
+
+=item $args
+
+Hash-ref of the arguments passed to the field. The values will be
+Perl values.
+
+=item $context
+
+The "context" value supplied to the call to
+L<GraphQL::Execution/execute>. Can be used for authenticated user
+information, or a per-request cache.
+
+=item $info
+
+A hash-ref with these keys:
+
+=over
+
+=item field_name
+
+The real name of this field.
+
+=item field_nodes
+
+The array of Abstract Syntax Tree (AST) nodes that refer to this field
+in this "selection set" (set of fields) on this object. There may be
+more than one such set for a given field, if it is requested with more
+than one name - i.e. with an alias.
+
+=item return_type
+
+The return type.
+
+=item parent_type
+
+The type of which this field is part.
+
+=item path
+
+The hierarchy of fields from the query root to this field-resolution.
+
+=item schema
+
+L<GraphQL::Schema> object.
+
+=item fragments
+
+Any fragments applying to this request.
+
+=item root_value
+
+The "root value" given to C<execute>.
+
+=item operation
+
+A hash-ref describing the operation (C<query>, etc) being executed.
+
+=item variable_values
+
+the operation's arguments, filled out with the variables hash supplied
+to the request.
+
+=back
+
+=back
+
+There are no restrictions on what you can return, so long as it is a
+scalar, and if your return type is a L<list|GraphQL::Type::List>, that
+scalar is an array-ref.
+
+Emphasis has been put on there being Perl values here. Conversion
+between Perl and GraphQL values is taken care of by
+L<scalar|GraphQL::Type::Scalar> types, and it is only scalar information
+that will be returned to the client, albeit in the shape dictated by
+the object types.
 
 =item subscribe
 
