@@ -4,12 +4,35 @@ GraphQL - Perl implementation of GraphQL
 
 # SYNOPSIS
 
-Perhaps a little code snippet.
+    use GraphQL::Schema;
+    use GraphQL::Type::Object;
+    use GraphQL::Type::Scalar qw($String);
+    use GraphQL::Execution;
 
-    use GraphQL;
-    my $foo = GraphQL->new();
+    my $schema = GraphQL::Schema->new(query => GraphQL::Type::Object->new(
+      name => 'QueryRoot',
+      fields => {
+        helloWorld => { type => $String, resolve => sub { 'Hello world!' } },
+      },
+    ));
+    post '/graphql' => sub {
+      send_as JSON => GraphQL::Execution->execute(
+        $schema,
+        body_parameters->{query},
+        undef,
+        undef,
+        body_parameters->{variables},
+        body_parameters->{operationName},
+        undef,
+      );
+    };
+
+The above is from [the sample Dancer 2 applet](https://github.com/graphql-perl/sample-dancer2).
 
 # DESCRIPTION
+
+This module is a port of the GraphQL reference implementation,
+[graphql-js](https://github.com/graphql-js/graphql-js), to Perl 5.
 
 See [GraphQL::Type](https://metacpan.org/pod/GraphQL::Type) for description of how to create GraphQL types.
 
@@ -28,6 +51,13 @@ To debug, set environment variable `GRAPHQL_DEBUG` to a true value.
 # EXPORT
 
 None yet.
+
+# SEE ALSO
+
+[http://facebook.github.io/graphql/](http://facebook.github.io/graphql/) - GraphQL specification
+
+[http://graphql.org/graphql-js/](http://graphql.org/graphql-js/) - Tutorial on the JavaScript version,
+highly recommended.
 
 # AUTHOR
 
