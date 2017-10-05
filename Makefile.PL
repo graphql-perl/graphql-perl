@@ -56,6 +56,7 @@ WriteMakefile(
       runtime => {
         suggests => {
           'Cpanel::JSON::XS' => '3.0237',
+          'JSON::XS' => 0,
         },
       },
     },
