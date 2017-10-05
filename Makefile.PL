@@ -24,7 +24,7 @@ WriteMakefile(
     'Return::Type' => '0',
     'Pegex' => '0',
     'MooX::Thunking' => '0.07', # takes care of Thunk in isa
-    'JSON::MaybeXS' => '0',
+    'JSON::MaybeXS' => '1.003009', # is_bool, also . @INC
   },
   dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
   clean => { FILES => 'GraphQL-*' },
