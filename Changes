@@ -1,5 +1,8 @@
 Revision history for GraphQL
 
+0.10	Thu Oct  5 05:30:56 BST 2017
+ - tighten the JSON module requirements to zap stringifying-numbers test fails
+
 0.09	Mon Oct  2 06:39:07 BST 2017
  - implement conversion between Perl and GraphQL/JSON values
  - add more usable debugging code
