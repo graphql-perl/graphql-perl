@@ -396,9 +396,10 @@ fun _resolve_field_value_or_error(
   Maybe[Any] $root_value,
   HashRef $info,
 ) {
-  DEBUG and _debug('_resolve_field_value_or_error', $nodes, $root_value, $field_def);
+  DEBUG and _debug('_resolve_field_value_or_error', $nodes, $root_value, $field_def, $JSON->encode($nodes->[0]));
   my $result = eval {
     my $args = _get_argument_values($field_def, $nodes->[0], $context->{variable_values});
+    DEBUG and _debug("_resolve_field_value_or_error(resolve)", $args, $JSON->encode($args));
     $resolve->($root_value, $args, $context->{context_value}, $info);
   };
   return GraphQL::Error->coerce($@) if $@;
@@ -645,7 +646,7 @@ fun _get_argument_values(
 ) {
   my $arg_defs = $def->{args};
   my $arg_nodes = $node->{arguments};
-  DEBUG and _debug("_get_argument_values", $arg_defs, $arg_nodes, $variable_values);
+  DEBUG and _debug("_get_argument_values", $arg_defs, $arg_nodes, $variable_values, $JSON->encode($node));
   return {} if !$arg_defs;
   my @bad = grep { !exists $arg_nodes->{$_} and !defined $arg_defs->{$_}{default_value} and $arg_defs->{$_}{type}->isa('GraphQL::Type::NonNull') } keys %$arg_defs;
   die GraphQL::Error->new(
@@ -722,7 +723,9 @@ fun _get_argument_values(
       $coerced_values{$name} = $argument_node;
     }
     next if !exists $coerced_values{$name};
+    DEBUG and _debug("_get_argument_values($name after initial)", $arg_def, $arg_type, $argument_node, $default_value, $JSON->encode(\%coerced_values));
     eval { $coerced_values{$name} = $arg_type->graphql_to_perl($coerced_values{$name}) };
+    DEBUG and _debug("_get_argument_values($name after coerce)", $JSON->encode(\%coerced_values));
     if ($@) {
       die GraphQL::Error->new(
         message => "Argument '$name' got invalid value"
