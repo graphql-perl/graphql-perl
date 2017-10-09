@@ -109,12 +109,12 @@ our $Int = GraphQL::Type::Scalar->new(
   description =>
     'The `Int` scalar type represents non-fractional signed whole numeric ' .
     'values. Int can represent values between -(2^31) and 2^31 - 1.',
-  serialize => sub { defined $_[0] and Int32Signed->(@_); $_[0] },
+  serialize => sub { defined $_[0] and Int32Signed->(@_); $_[0]+0 },
   parse_value => sub {
     DEBUG and _debug('Int.parse_value', @_, $JSON->encode({ intval => $_[0] }));
     defined $_[0] and Int32Signed->(@_);
     DEBUG and _debug('Int.parse_value(after asserts)', @_, $JSON->encode({ intval => $_[0] }));
-    $_[0]
+    $_[0]+0
   },
 );
 
@@ -128,8 +128,8 @@ our $Float = GraphQL::Type::Scalar->new(
     'The `Float` scalar type represents signed double-precision fractional ' .
     'values as specified by ' .
     '[IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point).',
-  serialize => sub { defined $_[0] and Num->(@_); $_[0] },
-  parse_value => sub { defined $_[0] and Num->(@_); $_[0] },
+  serialize => sub { defined $_[0] and Num->(@_); $_[0]+0 },
+  parse_value => sub { defined $_[0] and Num->(@_); $_[0]+0 },
 );
 
 =head2 $String
