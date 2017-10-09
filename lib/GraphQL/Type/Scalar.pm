@@ -5,6 +5,7 @@ use strict;
 use warnings;
 use Moo;
 use GraphQL::Type::Library -all;
+use GraphQL::Debug qw(_debug);
 use Types::Standard -all;
 use JSON::MaybeXS qw(JSON is_bool);
 use Exporter qw(import);
@@ -24,6 +25,7 @@ our $VERSION = '0.02';
 our @EXPORT_OK = qw($Int $Float $String $Boolean $ID);
 
 use constant DEBUG => $ENV{GRAPHQL_DEBUG};
+my $JSON = JSON::MaybeXS->new->allow_nonref->canonical;
 
 =head1 NAME
 
@@ -108,7 +110,12 @@ our $Int = GraphQL::Type::Scalar->new(
     'The `Int` scalar type represents non-fractional signed whole numeric ' .
     'values. Int can represent values between -(2^31) and 2^31 - 1.',
   serialize => sub { defined $_[0] and Int32Signed->(@_); $_[0] },
-  parse_value => sub { defined $_[0] and Int32Signed->(@_); $_[0] },
+  parse_value => sub {
+    DEBUG and _debug('Int.parse_value', @_, $JSON->encode({ intval => $_[0] }));
+    defined $_[0] and Int32Signed->(@_);
+    DEBUG and _debug('Int.parse_value(after asserts)', @_, $JSON->encode({ intval => $_[0] }));
+    $_[0]
+  },
 );
 
 =head2 $Float
