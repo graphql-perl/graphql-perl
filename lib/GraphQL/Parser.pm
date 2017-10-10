@@ -147,7 +147,7 @@ method got_enumValueDefinition (Any $param = undef) {
   while ($arg = shift @$param) {
     %def = (%def, %$arg);
   }
-  return {$self->{parser}{rule} => \%def};
+  return \%def;
 }
 
 method got_defaultValue (Any $param = undef) {
@@ -206,7 +206,7 @@ method got_enumTypeDefinition (Any $param = undef) {
   map {
     my $name = ${${delete $_->{value}}};
     $values{$name} = $_;
-  } map $_->{enumValueDefinition}, @{shift @$param};
+  } @{shift @$param};
   $def{values} = \%values;
   return {kind => 'enum', node => \%def};
 }
