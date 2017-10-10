@@ -88,11 +88,11 @@ method got_objectField (Any $param = undef) {
 method got_objectValue (Any $param = undef) {
   return unless defined $param;
   $param = $param->[0]; # zap first useless layer
-  my %value;
+  my %def;
   while (my $arg = shift @$param) {
-    %value = (%value, %$arg);
+    %def = (%def, %$arg);
   }
-  return \%value;
+  return \%def;
 }
 
 method got_objectField_const (Any $param = undef) {
@@ -163,13 +163,13 @@ method got_scalarTypeDefinition (Any $param = undef) {
 
 method got_enumValueDefinition (Any $param = undef) {
   return unless defined $param;
-  my %value;
+  my %def;
   my $arg = shift @$param;
-  $value{value} = $arg;
+  $def{value} = $arg;
   while ($arg = shift @$param) {
-    %value = (%value, %$arg);
+    %def = (%def, %$arg);
   }
-  return {$self->{parser}{rule} => \%value};
+  return {$self->{parser}{rule} => \%def};
 }
 
 method got_defaultValue (Any $param = undef) {
