@@ -226,8 +226,12 @@ method got_unionTypeDefinition (Any $param = undef) {
   return unless defined $param;
   my %def;
   %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
-  $def{types} = delete $def{unionMembers};
   return {kind => 'union', node => \%def};
+}
+
+method got_unionMembers (Any $param = undef) {
+  return unless defined $param;
+  return { types => $param };
 }
 
 method got_boolean (Any $param = undef) {
