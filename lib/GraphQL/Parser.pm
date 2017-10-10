@@ -355,12 +355,12 @@ method got_inlineFragment (Any $param = undef) {
   return {kind => 'inline_fragment', node => \%def};
 }
 
-method got_fragmentSpread (Any $param = undef) {
+method got_fragment_spread (Any $param = undef) {
   return unless defined $param;
   my %def;
   $def{name} = shift @$param;
   %def = (%def, %{shift @$param}) while @$param;
-  return {kind => 'fragment_spread', node => \%def};
+  return {kind => $self->{parser}{rule}, node => \%def};
 }
 
 method got_selectionSet (Any $param = undef) {

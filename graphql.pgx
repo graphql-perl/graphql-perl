@@ -18,7 +18,7 @@ operationType: /(query|mutation|subscription)/
 
 selectionSet: /- LCURLY -/ ( (selection+ %% /- COMMA? -/) | `Expected name` ) /- RCURLY -/
 
-selection: field | inlineFragment | fragmentSpread
+selection: field | inlineFragment | fragment_spread
 
 field: alias? name - arguments? - directives? selectionSet?
 
@@ -28,7 +28,7 @@ arguments: /- LPAREN -/ (argument+ %% /- COMMA? -/) /- RPAREN -/
 
 argument: name /- COLON -/ value
 
-fragmentSpread: .spread fragmentName - directives?
+fragment_spread: .spread fragmentName - directives?
 
 inlineFragment: .spread typeCondition? - directives? - selectionSet
 

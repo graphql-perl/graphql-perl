@@ -39,7 +39,7 @@ Override method from L<Pegex::Grammar>.
 
 =cut
 
-sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.63001)
+sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
   {
     '+grammar' => 'graphql',
     '+include' => 'pegex-atoms',
@@ -417,7 +417,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.63001)
         }
       ]
     },
-    'fragmentSpread' => {
+    'fragment_spread' => {
       '.all' => [
         {
           '-skip' => 1,
@@ -926,7 +926,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.63001)
           '.ref' => 'inlineFragment'
         },
         {
-          '.ref' => 'fragmentSpread'
+          '.ref' => 'fragment_spread'
         }
       ]
     },
