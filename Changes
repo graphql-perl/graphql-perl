@@ -1,5 +1,8 @@
 Revision history for GraphQL
 
+0.12	Tue Oct 10 05:13:29 BST 2017
+ - allow $context to be anything (such as request headers)
+
 0.11	Mon Oct  9 17:17:17 BST 2017
  - coerce numbers in Int and Float to dodge stringifying of numbers for JSON::XS
 
