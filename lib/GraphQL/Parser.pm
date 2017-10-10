@@ -175,11 +175,10 @@ method got_argumentsDefinition (Any $param = undef) {
 
 method got_objectTypeDefinition (Any $param = undef) {
   return unless defined $param;
-  my %def;
-  %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
-  my %fields = map %$_, @{shift @$param};
-  $def{fields} = \%fields;
-  return {kind => 'type', node => \%def};
+  my $def = _merge_hash($param);
+  my %fields = map { map %$_, @$_ } grep ref eq 'ARRAY', @$param;
+  $def->{fields} = \%fields;
+  return {kind => 'type', node => $def};
 }
 
 method got_fieldDefinition (Any $param = undef) {
@@ -198,33 +197,30 @@ method got_typeExtensionDefinition (Any $param = undef) {
 
 method got_inputObjectTypeDefinition (Any $param = undef) {
   return unless defined $param;
-  my %def;
-  %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
-  my %fields = map %$_, @{shift @$param};
-  $def{fields} = \%fields;
-  return {kind => 'input', node => \%def};
+  my $def = _merge_hash($param);
+  my %fields = map { map %$_, @$_ } grep ref eq 'ARRAY', @$param;
+  $def->{fields} = \%fields;
+  return {kind => 'input', node => $def};
 }
 
 method got_enumTypeDefinition (Any $param = undef) {
   return unless defined $param;
-  my %def;
-  %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
+  my $def = _merge_hash($param);
   my %values;
   map {
     my $name = ${${delete $_->{value}}};
     $values{$name} = $_;
-  } @{shift @$param};
-  $def{values} = \%values;
-  return {kind => 'enum', node => \%def};
+  } @{(grep ref eq 'ARRAY', @$param)[0]};
+  $def->{values} = \%values;
+  return {kind => 'enum', node => $def};
 }
 
 method got_interfaceTypeDefinition (Any $param = undef) {
   return unless defined $param;
-  my %def;
-  %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
-  my %fields = map %$_, @{shift @$param};
-  $def{fields} = \%fields;
-  return {kind => 'interface', node => \%def};
+  my $def = _merge_hash($param);
+  my %fields = map { map %$_, @$_ } grep ref eq 'ARRAY', @$param;
+  $def->{fields} = \%fields;
+  return {kind => 'interface', node => $def};
 }
 
 method got_unionTypeDefinition (Any $param = undef) {
