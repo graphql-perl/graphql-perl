@@ -76,11 +76,15 @@ method got_arguments (Any $param = undef) {
   $param = $param->[0]; # zap first useless layer
   my %args;
   for my $arg (@$param) {
-    ($arg) = values %$arg; # zap useless layer
     my $name = shift(@$arg)->{name};
     $args{$name} = shift @$arg;
   }
   return {$self->{parser}{rule} => \%args};
+}
+
+method got_argument (Any $param = undef) {
+  return unless defined $param;
+  $param;
 }
 
 method got_objectField (Any $param = undef) {
