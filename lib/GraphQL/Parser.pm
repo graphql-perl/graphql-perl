@@ -72,7 +72,7 @@ method got_arguments (Any $param = undef) {
   my %args;
   for my $arg (@$param) {
     ($arg) = values %$arg; # zap useless layer
-    my $name = shift @$arg;
+    my $name = shift(@$arg)->{name};
     $args{$name} = shift @$arg;
   }
   return {$self->{parser}{rule} => \%args};
@@ -80,7 +80,7 @@ method got_arguments (Any $param = undef) {
 
 method got_objectField (Any $param = undef) {
   return unless defined $param;
-  my $name = shift @$param;
+  my $name = shift(@$param)->{name};
   my $value = shift @$param;
   return {$name => $value};
 }
@@ -88,10 +88,7 @@ method got_objectField (Any $param = undef) {
 method got_objectValue (Any $param = undef) {
   return unless defined $param;
   $param = $param->[0]; # zap first useless layer
-  my %def;
-  while (my $arg = shift @$param) {
-    %def = (%def, %$arg);
-  }
+  my %def = map %$_, @$param;
   return \%def;
 }
 
@@ -115,49 +112,29 @@ method got_listValue_const (Any $param = undef) {
 
 method got_directive (Any $param = undef) {
   return unless defined $param;
-  my %value;
-  my $arg = shift @$param;
-  $value{name} = $arg;
-  if ($arg = shift @$param) {
-    %value = (%value, %$arg);
-  }
-  return {$self->{parser}{rule} => \%value};
+  my %def = map %$_, @$param;
+  return {$self->{parser}{rule} => \%def};
 }
 
 method got_inputValueDefinition (Any $param = undef) {
   return unless defined $param;
-  my %value;
-  my $arg = shift @$param;
-  $value{name} = $arg;
-  while ($arg = shift @$param) {
-    %value = (%value, %$arg);
-  }
-  return {$self->{parser}{rule} => \%value};
+  my %def = map %$_, @$param;
+  return {$self->{parser}{rule} => \%def};
 }
 
 method got_directiveLocations (Any $param = undef) {
   return unless defined $param;
-  return {locations => $param};
-}
-
-method got_name (Any $param = undef) {
-  return unless defined $param;
-  return $param;
+  return {locations => [ map $_->{name}, @$param ]};
 }
 
 method got_namedType (Any $param = undef) {
   return unless defined $param;
-  return $param;
+  return $param->{name};
 }
 
 method got_scalarTypeDefinition (Any $param = undef) {
   return unless defined $param;
-  my %def;
-  my $arg = shift @$param;
-  $def{name} = $arg;
-  while ($arg = shift @$param) {
-    %def = (%def, %$arg);
-  }
+  my %def = map %$_, @$param;
   return {kind => 'scalar', node => \%def};
 }
 
@@ -197,14 +174,12 @@ method got_argumentsDefinition (Any $param = undef) {
 method got_objectTypeDefinition (Any $param = undef) {
   return unless defined $param;
   my %def;
-  $def{name} = shift @$param;
   %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
   my %fields;
   map {
-    my $name = shift @$_;
     my %field_def;
     %field_def = (%field_def, %{shift @$_}) while @$_;
-    $fields{$name} = \%field_def;
+    $fields{delete $field_def{name}} = \%field_def;
   } map $_->{fieldDefinition}, @{shift @$param};
   $def{fields} = \%fields;
   return {kind => 'type', node => \%def};
@@ -220,7 +195,6 @@ method got_typeExtensionDefinition (Any $param = undef) {
 method got_inputObjectTypeDefinition (Any $param = undef) {
   return unless defined $param;
   my %def;
-  $def{name} = shift @$param;
   %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
   my %fields;
   map {
@@ -234,7 +208,6 @@ method got_inputObjectTypeDefinition (Any $param = undef) {
 method got_enumTypeDefinition (Any $param = undef) {
   return unless defined $param;
   my %def;
-  $def{name} = shift @$param;
   %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
   my %values;
   map {
@@ -248,14 +221,12 @@ method got_enumTypeDefinition (Any $param = undef) {
 method got_interfaceTypeDefinition (Any $param = undef) {
   return unless defined $param;
   my %def;
-  $def{name} = shift @$param;
   %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
   my %fields;
   map {
-    my $name = shift @$_;
     my %field_def;
     %field_def = (%field_def, %{shift @$_}) while @$_;
-    $fields{$name} = \%field_def;
+    $fields{delete $field_def{name}} = \%field_def;
   } map $_->{fieldDefinition}, @{shift @$param};
   $def{fields} = \%fields;
   return {kind => 'interface', node => \%def};
@@ -264,7 +235,6 @@ method got_interfaceTypeDefinition (Any $param = undef) {
 method got_unionTypeDefinition (Any $param = undef) {
   return unless defined $param;
   my %def;
-  $def{name} = shift @$param;
   %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
   $def{types} = delete $def{unionMembers};
   return {kind => 'union', node => \%def};
@@ -297,7 +267,8 @@ method got_float (Any $param = undef) {
 
 method got_enumValue (Any $param = undef) {
   return unless defined $param;
-  return \\$param;
+  my $varname = $param->{name};
+  return \\$varname;
 }
 
 # not returning empty list if undef
@@ -324,14 +295,20 @@ method got_selection (Any $param = undef) {
   unshift @_, $self; goto &got_value_const;
 }
 
+method got_type (Any $param = undef) {
+  return unless defined $param;
+  $param = $param->{name} if ref($param) eq 'HASH';
+  return {$self->{parser}{rule} => $param};
+}
+
 method got_alias (Any $param = undef) {
   return unless defined $param;
-  return {$self->{parser}{rule} => @$param};
+  return {$self->{parser}{rule} => $param->[0]{name}};
 }
 
 method got_typeCondition (Any $param = undef) {
   return unless defined $param;
-  return {on => @$param};
+  return {on => $param->[0]};
 }
 
 method got_fragmentName (Any $param = undef) {
@@ -341,25 +318,19 @@ method got_fragmentName (Any $param = undef) {
 
 method got_field (Any $param = undef) {
   return unless defined $param;
-  my %def;
-  %def = (%def, %{shift @$param}) if ref($param->[0]) eq 'HASH'; # alias
-  $def{name} = shift @$param;
-  %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
+  my %def = map %$_, @$param;
   return {kind => 'field', node => \%def};
 }
 
 method got_inlineFragment (Any $param = undef) {
   return unless defined $param;
-  my %def;
-  %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
+  my %def = map %$_, @$param;
   return {kind => 'inline_fragment', node => \%def};
 }
 
 method got_fragment_spread (Any $param = undef) {
   return unless defined $param;
-  my %def;
-  $def{name} = shift @$param;
-  %def = (%def, %{shift @$param}) while @$param;
+  my %def = map %$_, @$param;
   return {kind => $self->{parser}{rule}, node => \%def};
 }
 
@@ -371,30 +342,20 @@ method got_selectionSet (Any $param = undef) {
 
 method got_fragmentDefinition (Any $param = undef) {
   return unless defined $param;
-  my %def;
-  $def{name} = shift @$param;
-  %def = (%def, %{shift @$param}) while @$param;
+  my %def = map %$_, @$param;
   return {kind => 'fragment', node => \%def};
 }
 
 method got_operationDefinition (Any $param = undef) {
   return unless defined $param;
   $param = [ $param ] unless ref $param eq 'ARRAY'; # bare selectionSet
-  my %def;
-  map {
-    $_ = { name => $_ } if !ref $_;
-    %def = (%def, %$_);
-  } @$param;
+  my %def = map %$_, @$param;
   return {kind => 'operation', node => \%def};
 }
 
 method got_directiveDefinition (Any $param = undef) {
   return unless defined $param;
-  my %def;
-  map {
-    $_ = { name => $_ } if !ref $_;
-    %def = (%def, %$_);
-  } @$param;
+  my %def = map %$_, @$param;
   return {kind => 'directive', node => \%def};
 }
 
@@ -421,10 +382,7 @@ method got_operationTypeDefinition (Any $param = undef) {
 method got_schemaDefinition (Any $param = undef) {
   return unless defined $param;
   $param = $param->[0]; # zap first useless layer
-  my %def;
-  map {
-    %def = (%def, %$_);
-  } @$param;
+  my %def = map %$_, @$param;
   return {kind => 'schema', node => \%def};
 }
 
@@ -440,7 +398,7 @@ method got_typeDefinition (Any $param = undef) {
 
 method got_variable (Any $param = undef) {
   return unless defined $param;
-  my $varname = shift @$param;
+  my $varname = $param->[0]{name};
   return \$varname;
 }
 
