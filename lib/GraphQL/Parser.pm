@@ -224,8 +224,7 @@ method got_interfaceTypeDefinition (Any $param = undef) {
 
 method got_unionTypeDefinition (Any $param = undef) {
   return unless defined $param;
-  my %def;
-  %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
+  my %def = map %$_, @$param;
   return {kind => 'union', node => \%def};
 }
 
