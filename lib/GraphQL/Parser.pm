@@ -154,12 +154,7 @@ method got_scalarTypeDefinition (Any $param = undef) {
 
 method got_enumValueDefinition (Any $param = undef) {
   return unless defined $param;
-  my %def;
-  my $arg = shift @$param;
-  $def{value} = $arg;
-  while ($arg = shift @$param) {
-    %def = (%def, %$arg);
-  }
+  my %def = (value => shift @$param, map %$_, @$param);
   return \%def;
 }
 
