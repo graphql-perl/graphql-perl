@@ -66,8 +66,15 @@ method final (Any $param = undef) {
   return {$self->{parser}{rule} => []};
 }
 
-fun _merge_hash (Any $param = undef) {
+fun _merge_hash (Any $param = undef, Any $arraykey = undef) {
   my %def = map %$_, grep ref eq 'HASH', @$param;
+  if ($arraykey) {
+    my @arrays = grep ref eq 'ARRAY', @$param;
+    die "More than one array found\n" if @arrays > 1;
+    die "No arrays found but \$arraykey given\n" if !@arrays;
+    my %fields = map %$_, @{$arrays[0]};
+    $def{$arraykey} = \%fields;
+  }
   \%def;
 }
 
@@ -175,10 +182,7 @@ method got_argumentsDefinition (Any $param = undef) {
 
 method got_objectTypeDefinition (Any $param = undef) {
   return unless defined $param;
-  my $def = _merge_hash($param);
-  my %fields = map { map %$_, @$_ } grep ref eq 'ARRAY', @$param;
-  $def->{fields} = \%fields;
-  return {kind => 'type', node => $def};
+  return {kind => 'type', node => _merge_hash($param, 'fields') };
 }
 
 method got_fieldDefinition (Any $param = undef) {
@@ -197,10 +201,7 @@ method got_typeExtensionDefinition (Any $param = undef) {
 
 method got_inputObjectTypeDefinition (Any $param = undef) {
   return unless defined $param;
-  my $def = _merge_hash($param);
-  my %fields = map { map %$_, @$_ } grep ref eq 'ARRAY', @$param;
-  $def->{fields} = \%fields;
-  return {kind => 'input', node => $def};
+  return {kind => 'input', node => _merge_hash($param, 'fields') };
 }
 
 method got_enumTypeDefinition (Any $param = undef) {
@@ -217,10 +218,7 @@ method got_enumTypeDefinition (Any $param = undef) {
 
 method got_interfaceTypeDefinition (Any $param = undef) {
   return unless defined $param;
-  my $def = _merge_hash($param);
-  my %fields = map { map %$_, @$_ } grep ref eq 'ARRAY', @$param;
-  $def->{fields} = \%fields;
-  return {kind => 'interface', node => $def};
+  return {kind => 'interface', node => _merge_hash($param, 'fields') };
 }
 
 method got_unionTypeDefinition (Any $param = undef) {
