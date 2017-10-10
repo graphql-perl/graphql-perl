@@ -66,6 +66,11 @@ method final (Any $param = undef) {
   return {$self->{parser}{rule} => []};
 }
 
+fun _merge_hash (Any $param = undef) {
+  my %def = map %$_, grep ref eq 'HASH', @$param;
+  \%def;
+}
+
 method got_arguments (Any $param = undef) {
   return unless defined $param;
   $param = $param->[0]; # zap first useless layer
@@ -88,8 +93,7 @@ method got_objectField (Any $param = undef) {
 method got_objectValue (Any $param = undef) {
   return unless defined $param;
   $param = $param->[0]; # zap first useless layer
-  my %def = map %$_, @$param;
-  return \%def;
+  _merge_hash($param);
 }
 
 method got_objectField_const (Any $param = undef) {
@@ -112,15 +116,14 @@ method got_listValue_const (Any $param = undef) {
 
 method got_directive (Any $param = undef) {
   return unless defined $param;
-  my %def = map %$_, @$param;
-  return {$self->{parser}{rule} => \%def};
+  return {$self->{parser}{rule} => _merge_hash($param) };
 }
 
 method got_inputValueDefinition (Any $param = undef) {
   return unless defined $param;
-  my %def = map %$_, @$param;
-  my $name = delete $def{name};
-  return { $name => \%def };
+  my $def = _merge_hash($param);
+  my $name = delete $def->{name};
+  return { $name => $def };
 }
 
 method got_directiveLocations (Any $param = undef) {
@@ -135,8 +138,7 @@ method got_namedType (Any $param = undef) {
 
 method got_scalarTypeDefinition (Any $param = undef) {
   return unless defined $param;
-  my %def = map %$_, @$param;
-  return {kind => 'scalar', node => \%def};
+  return {kind => 'scalar', node => _merge_hash($param)};
 }
 
 method got_enumValueDefinition (Any $param = undef) {
@@ -164,8 +166,7 @@ method got_implementsInterfaces (Any $param = undef) {
 method got_argumentsDefinition (Any $param = undef) {
   return unless defined $param;
   $param = $param->[0]; # zap first useless layer
-  my %def = map %$_, @$param;
-  return { args => \%def };
+  return { args => _merge_hash($param)};
 }
 
 method got_objectTypeDefinition (Any $param = undef) {
@@ -179,9 +180,9 @@ method got_objectTypeDefinition (Any $param = undef) {
 
 method got_fieldDefinition (Any $param = undef) {
   return unless defined $param;
-  my %def = map %$_, @$param;
-  my $name = delete $def{name};
-  return { $name => \%def };
+  my $def = _merge_hash($param);
+  my $name = delete $def->{name};
+  return { $name => $def };
 }
 
 method got_typeExtensionDefinition (Any $param = undef) {
@@ -224,8 +225,7 @@ method got_interfaceTypeDefinition (Any $param = undef) {
 
 method got_unionTypeDefinition (Any $param = undef) {
   return unless defined $param;
-  my %def = map %$_, @$param;
-  return {kind => 'union', node => \%def};
+  return {kind => 'union', node => _merge_hash($param)};
 }
 
 method got_unionMembers (Any $param = undef) {
@@ -311,20 +311,17 @@ method got_fragmentName (Any $param = undef) {
 
 method got_field (Any $param = undef) {
   return unless defined $param;
-  my %def = map %$_, @$param;
-  return {kind => 'field', node => \%def};
+  return {kind => 'field', node => _merge_hash($param)};
 }
 
 method got_inlineFragment (Any $param = undef) {
   return unless defined $param;
-  my %def = map %$_, @$param;
-  return {kind => 'inline_fragment', node => \%def};
+  return {kind => 'inline_fragment', node => _merge_hash($param)};
 }
 
 method got_fragment_spread (Any $param = undef) {
   return unless defined $param;
-  my %def = map %$_, @$param;
-  return {kind => $self->{parser}{rule}, node => \%def};
+  return {kind => $self->{parser}{rule}, node => _merge_hash($param)};
 }
 
 method got_selectionSet (Any $param = undef) {
@@ -335,21 +332,18 @@ method got_selectionSet (Any $param = undef) {
 
 method got_fragmentDefinition (Any $param = undef) {
   return unless defined $param;
-  my %def = map %$_, @$param;
-  return {kind => 'fragment', node => \%def};
+  return {kind => 'fragment', node => _merge_hash($param)};
 }
 
 method got_operationDefinition (Any $param = undef) {
   return unless defined $param;
   $param = [ $param ] unless ref $param eq 'ARRAY'; # bare selectionSet
-  my %def = map %$_, @$param;
-  return {kind => 'operation', node => \%def};
+  return {kind => 'operation', node => _merge_hash($param)};
 }
 
 method got_directiveDefinition (Any $param = undef) {
   return unless defined $param;
-  my %def = map %$_, @$param;
-  return {kind => 'directive', node => \%def};
+  return {kind => 'directive', node => _merge_hash($param)};
 }
 
 method got_directives (Any $param = undef) {
@@ -375,8 +369,7 @@ method got_operationTypeDefinition (Any $param = undef) {
 method got_schemaDefinition (Any $param = undef) {
   return unless defined $param;
   $param = $param->[0]; # zap first useless layer
-  my %def = map %$_, @$param;
-  return {kind => 'schema', node => \%def};
+  return {kind => 'schema', node => _merge_hash($param)};
 }
 
 method got_typeSystemDefinition (Any $param = undef) {
