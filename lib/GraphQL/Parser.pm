@@ -119,7 +119,8 @@ method got_directive (Any $param = undef) {
 method got_inputValueDefinition (Any $param = undef) {
   return unless defined $param;
   my %def = map %$_, @$param;
-  return {$self->{parser}{rule} => \%def};
+  my $name = delete $def{name};
+  return { $name => \%def };
 }
 
 method got_directiveLocations (Any $param = undef) {
@@ -163,12 +164,8 @@ method got_implementsInterfaces (Any $param = undef) {
 method got_argumentsDefinition (Any $param = undef) {
   return unless defined $param;
   $param = $param->[0]; # zap first useless layer
-  my %args;
-  map {
-    my $name = delete $_->{name};
-    $args{$name} = $_;
-  } map $_->{inputValueDefinition}, @$param;
-  return { args => \%args };
+  my %def = map %$_, @$param;
+  return { args => \%def };
 }
 
 method got_objectTypeDefinition (Any $param = undef) {
@@ -196,11 +193,7 @@ method got_inputObjectTypeDefinition (Any $param = undef) {
   return unless defined $param;
   my %def;
   %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
-  my %fields;
-  map {
-    my $name = delete $_->{name};
-    $fields{$name} = $_;
-  } map $_->{inputValueDefinition}, @{shift @$param};
+  my %fields = map %$_, @{shift @$param};
   $def{fields} = \%fields;
   return {kind => 'input', node => \%def};
 }
