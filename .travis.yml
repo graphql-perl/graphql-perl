@@ -23,3 +23,9 @@ script:
   - prove -l -j$(test-jobs) $(test-files)   # parallel testing
 #after_success:
 #  - coverage-report
+notifications:
+  irc:
+    channels:
+    - "irc.perl.org#graphql-perl"
+    on_failure: always
+    skip_join: true
