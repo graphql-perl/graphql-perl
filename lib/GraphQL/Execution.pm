@@ -757,7 +757,7 @@ fun _type_will_accept(
 fun _default_field_resolver(
   CodeLike | HashRef | InstanceOf $root_value,
   HashRef $args,
-  Maybe[HashRef] $context,
+  Any $context,
   HashRef $info,
 ) {
   my $field_name = $info->{field_name};
