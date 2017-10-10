@@ -127,7 +127,7 @@ method got_listValue_const (Any $param = undef) {
 
 method got_directive (Any $param = undef) {
   return unless defined $param;
-  return {$self->{parser}{rule} => _merge_hash($param) };
+  _merge_hash($param);
 }
 
 method got_inputValueDefinition (Any $param = undef) {
@@ -346,7 +346,7 @@ method got_directiveDefinition (Any $param = undef) {
 
 method got_directives (Any $param = undef) {
   return unless defined $param;
-  return {$self->{parser}{rule} => [ map $_->{directive}, @$param ]};
+  return {$self->{parser}{rule} => $param};
 }
 
 method got_graphql (Any $param = undef) {
