@@ -172,14 +172,16 @@ method got_objectTypeDefinition (Any $param = undef) {
   return unless defined $param;
   my %def;
   %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
-  my %fields;
-  map {
-    my %field_def;
-    %field_def = (%field_def, %{shift @$_}) while @$_;
-    $fields{delete $field_def{name}} = \%field_def;
-  } map $_->{fieldDefinition}, @{shift @$param};
+  my %fields = map %$_, @{shift @$param};
   $def{fields} = \%fields;
   return {kind => 'type', node => \%def};
+}
+
+method got_fieldDefinition (Any $param = undef) {
+  return unless defined $param;
+  my %def = map %$_, @$param;
+  my $name = delete $def{name};
+  return { $name => \%def };
 }
 
 method got_typeExtensionDefinition (Any $param = undef) {
@@ -215,12 +217,7 @@ method got_interfaceTypeDefinition (Any $param = undef) {
   return unless defined $param;
   my %def;
   %def = (%def, %{shift @$param}) while ref($param->[0]) eq 'HASH';
-  my %fields;
-  map {
-    my %field_def;
-    %field_def = (%field_def, %{shift @$_}) while @$_;
-    $fields{delete $field_def{name}} = \%field_def;
-  } map $_->{fieldDefinition}, @{shift @$param};
+  my %fields = map %$_, @{shift @$param};
   $def{fields} = \%fields;
   return {kind => 'interface', node => \%def};
 }
