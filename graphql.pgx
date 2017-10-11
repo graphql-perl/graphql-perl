@@ -10,7 +10,7 @@
 
 graphql: - definition+
 
-definition: - (operationDefinition | fragmentDefinition | typeSystemDefinition)
+definition: - (operationDefinition | fragment | typeSystemDefinition)
 
 operationDefinition: selectionSet | operationType - name? - variableDefinitions? - directives? - selectionSet
 
@@ -18,7 +18,7 @@ operationType: /(query|mutation|subscription)/
 
 selectionSet: /- LCURLY -/ ( (selection+ %% /- COMMA? -/) | `Expected name` ) /- RCURLY -/
 
-selection: field | inlineFragment | fragment_spread
+selection: field | inline_fragment | fragment_spread
 
 field: alias? name - arguments? - directives? selectionSet?
 
@@ -30,9 +30,9 @@ argument: name /- COLON -/ value
 
 fragment_spread: .spread fragmentName - directives?
 
-inlineFragment: .spread typeCondition? - directives? - selectionSet
+inline_fragment: .spread typeCondition? - directives? - selectionSet
 
-fragmentDefinition: /'fragment' -/ fragmentName - (typeCondition | `Expected "on"`) - directives? - selectionSet
+fragment: /'fragment' -/ fragmentName - (typeCondition | `Expected "on"`) - directives? - selectionSet
 
 fragmentName: ('on' `Unexpected Name "on"` | name)
 
@@ -136,13 +136,14 @@ schemaDefinition: /'schema' -/ directives? /- LCURLY -/ operationTypeDefinition+
 
 operationTypeDefinition: operationType /- COLON -/ namedType -
 
-typeDefinition: scalar | objectTypeDefinition | interfaceTypeDefinition | unionTypeDefinition | enumTypeDefinition | inputObjectTypeDefinition
+typeDefinition: scalar | type | interface | union | enumTypeDefinition | input
 
 # aka scalarTypeDefinition
 scalar: /'scalar' -/ name - directives?
 
 # fieldDefinition is "*" not "+" because JS implementation test allows
-objectTypeDefinition: /'type' -/ name - implementsInterfaces? - directives? /- LCURLY -/ fieldDefinition* /- RCURLY -/
+# aka objectTypeDefinition
+type: /'type' -/ name - implementsInterfaces? - directives? /- LCURLY -/ fieldDefinition* /- RCURLY -/
 
 implementsInterfaces: /'implements' -/ (namedType+ % /- COMMA? -/)
 
@@ -152,9 +153,9 @@ argumentsDefinition: /- LPAREN -/ (inputValueDefinition+ % /- COMMA? -/) /- RPAR
 
 inputValueDefinition: name /- COLON -/ typedef - defaultValue? - directives?
 
-interfaceTypeDefinition: /'interface' -/ name - directives? /- LCURLY -/ fieldDefinition+ /- RCURLY -/
+interface: /'interface' -/ name - directives? /- LCURLY -/ fieldDefinition+ /- RCURLY -/
 
-unionTypeDefinition: /'union' -/ name - directives? /- EQUAL -/ unionMembers
+union: /'union' -/ name - directives? /- EQUAL -/ unionMembers
 
 unionMembers: namedType+ % /- PIPE -/
 
@@ -162,9 +163,9 @@ enumTypeDefinition: /'enum' -/ name - directives? /- LCURLY -/ (enumValueDefinit
 
 enumValueDefinition: enumValue - directives?
 
-inputObjectTypeDefinition: /'input' -/ name - directives? /- LCURLY -/ inputValueDefinition+ /- RCURLY -/
+input: /'input' -/ name - directives? /- LCURLY -/ inputValueDefinition+ /- RCURLY -/
 
-typeExtensionDefinition: /'extend' -/ objectTypeDefinition
+typeExtensionDefinition: /'extend' -/ type
 
 directiveDefinition: /'directive' - AT -/ name - argumentsDefinition? /- 'on' -/ directiveLocations
 

@@ -163,7 +163,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
               '.ref' => 'operationDefinition'
             },
             {
-              '.ref' => 'fragmentDefinition'
+              '.ref' => 'fragment'
             },
             {
               '.ref' => 'typeSystemDefinition'
@@ -364,7 +364,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
     'float' => {
       '.rgx' => qr/\G(\-?(?:0|[1-9][0-9]*)(?:(?:\.[0-9]+)(?:[eE][\-\+]?[0-9]+)|(?:\.[0-9]+)|(?:[eE][\-\+]?[0-9]+)))/
     },
-    'fragmentDefinition' => {
+    'fragment' => {
       '.all' => [
         {
           '.rgx' => qr/\Gfragment(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
@@ -472,7 +472,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
         }
       ]
     },
-    'inlineFragment' => {
+    'inline_fragment' => {
       '.all' => [
         {
           '-skip' => 1,
@@ -497,7 +497,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
         }
       ]
     },
-    'inputObjectTypeDefinition' => {
+    'input' => {
       '.all' => [
         {
           '.rgx' => qr/\Ginput(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
@@ -554,7 +554,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
     'int' => {
       '.rgx' => qr/\G(\-?(?:0|[1-9][0-9]*))/
     },
-    'interfaceTypeDefinition' => {
+    'interface' => {
       '.all' => [
         {
           '.rgx' => qr/\Ginterface(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
@@ -710,40 +710,6 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
         },
         {
           '.ref' => 'value_const'
-        }
-      ]
-    },
-    'objectTypeDefinition' => {
-      '.all' => [
-        {
-          '.rgx' => qr/\Gtype(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
-        },
-        {
-          '.ref' => 'name'
-        },
-        {
-          '.ref' => '_'
-        },
-        {
-          '+max' => 1,
-          '.ref' => 'implementsInterfaces'
-        },
-        {
-          '.ref' => '_'
-        },
-        {
-          '+max' => 1,
-          '.ref' => 'directives'
-        },
-        {
-          '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*\{(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
-        },
-        {
-          '+min' => 0,
-          '.ref' => 'fieldDefinition'
-        },
-        {
-          '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*\}(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
         }
       ]
     },
@@ -923,7 +889,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'field'
         },
         {
-          '.ref' => 'inlineFragment'
+          '.ref' => 'inline_fragment'
         },
         {
           '.ref' => 'fragment_spread'
@@ -983,6 +949,40 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
     'string' => {
       '.rgx' => qr/\G"((?:\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})|[^"\x00-\x1f\\])*)"/
     },
+    'type' => {
+      '.all' => [
+        {
+          '.rgx' => qr/\Gtype(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+        },
+        {
+          '.ref' => 'name'
+        },
+        {
+          '.ref' => '_'
+        },
+        {
+          '+max' => 1,
+          '.ref' => 'implementsInterfaces'
+        },
+        {
+          '.ref' => '_'
+        },
+        {
+          '+max' => 1,
+          '.ref' => 'directives'
+        },
+        {
+          '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*\{(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+        },
+        {
+          '+min' => 0,
+          '.ref' => 'fieldDefinition'
+        },
+        {
+          '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*\}(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+        }
+      ]
+    },
     'typeCondition' => {
       '.all' => [
         {
@@ -999,19 +999,19 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'scalar'
         },
         {
-          '.ref' => 'objectTypeDefinition'
+          '.ref' => 'type'
         },
         {
-          '.ref' => 'interfaceTypeDefinition'
+          '.ref' => 'interface'
         },
         {
-          '.ref' => 'unionTypeDefinition'
+          '.ref' => 'union'
         },
         {
           '.ref' => 'enumTypeDefinition'
         },
         {
-          '.ref' => 'inputObjectTypeDefinition'
+          '.ref' => 'input'
         }
       ]
     },
@@ -1021,7 +1021,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.rgx' => qr/\Gextend(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
         },
         {
-          '.ref' => 'objectTypeDefinition'
+          '.ref' => 'type'
         }
       ]
     },
@@ -1064,26 +1064,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
         }
       ]
     },
-    'unionMembers' => {
-      '.all' => [
-        {
-          '.ref' => 'namedType'
-        },
-        {
-          '+min' => 0,
-          '-flat' => 1,
-          '.all' => [
-            {
-              '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*\|(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
-            },
-            {
-              '.ref' => 'namedType'
-            }
-          ]
-        }
-      ]
-    },
-    'unionTypeDefinition' => {
+    'union' => {
       '.all' => [
         {
           '.rgx' => qr/\Gunion(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
@@ -1103,6 +1084,25 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
         },
         {
           '.ref' => 'unionMembers'
+        }
+      ]
+    },
+    'unionMembers' => {
+      '.all' => [
+        {
+          '.ref' => 'namedType'
+        },
+        {
+          '+min' => 0,
+          '-flat' => 1,
+          '.all' => [
+            {
+              '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*\|(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+            },
+            {
+              '.ref' => 'namedType'
+            }
+          ]
         }
       ]
     },

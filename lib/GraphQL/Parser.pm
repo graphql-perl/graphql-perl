@@ -164,9 +164,9 @@ method got_argumentsDefinition (Any $param = undef) {
   return { args => _merge_hash($param->[0])};
 }
 
-method got_objectTypeDefinition (Any $param = undef) {
+method got_type (Any $param = undef) {
   return unless defined $param;
-  return {kind => 'type', node => _merge_hash($param, 'fields') };
+  return {kind => $self->{parser}{rule}, node => _merge_hash($param, 'fields') };
 }
 
 method got_fieldDefinition (Any $param = undef) {
@@ -183,9 +183,9 @@ method got_typeExtensionDefinition (Any $param = undef) {
   return $node;
 }
 
-method got_inputObjectTypeDefinition (Any $param = undef) {
+method got_input (Any $param = undef) {
   return unless defined $param;
-  return {kind => 'input', node => _merge_hash($param, 'fields') };
+  return {kind => $self->{parser}{rule}, node => _merge_hash($param, 'fields') };
 }
 
 method got_enumTypeDefinition (Any $param = undef) {
@@ -200,14 +200,14 @@ method got_enumTypeDefinition (Any $param = undef) {
   return {kind => 'enum', node => $def};
 }
 
-method got_interfaceTypeDefinition (Any $param = undef) {
+method got_interface (Any $param = undef) {
   return unless defined $param;
-  return {kind => 'interface', node => _merge_hash($param, 'fields') };
+  return {kind => $self->{parser}{rule}, node => _merge_hash($param, 'fields') };
 }
 
-method got_unionTypeDefinition (Any $param = undef) {
+method got_union (Any $param = undef) {
   return unless defined $param;
-  return {kind => 'union', node => _merge_hash($param)};
+  return {kind => $self->{parser}{rule}, node => _merge_hash($param)};
 }
 
 method got_unionMembers (Any $param = undef) {
@@ -298,9 +298,9 @@ method got_field (Any $param = undef) {
   return {kind => $self->{parser}{rule}, node => _merge_hash($param)};
 }
 
-method got_inlineFragment (Any $param = undef) {
+method got_inline_fragment (Any $param = undef) {
   return unless defined $param;
-  return {kind => 'inline_fragment', node => _merge_hash($param)};
+  return {kind => $self->{parser}{rule}, node => _merge_hash($param)};
 }
 
 method got_fragment_spread (Any $param = undef) {
@@ -313,9 +313,9 @@ method got_selectionSet (Any $param = undef) {
   return {selections => $param->[0]};
 }
 
-method got_fragmentDefinition (Any $param = undef) {
+method got_fragment (Any $param = undef) {
   return unless defined $param;
-  return {kind => 'fragment', node => _merge_hash($param)};
+  return {kind => $self->{parser}{rule}, node => _merge_hash($param)};
 }
 
 method got_operationDefinition (Any $param = undef) {
