@@ -272,10 +272,10 @@ method got_selection (Any $param = undef) {
   unshift @_, $self; goto &got_value_const;
 }
 
-method got_type (Any $param = undef) {
+method got_typedef (Any $param = undef) {
   return unless defined $param;
   $param = $param->{name} if ref($param) eq 'HASH';
-  return {$self->{parser}{rule} => $param};
+  return {type => $param};
 }
 
 method got_alias (Any $param = undef) {

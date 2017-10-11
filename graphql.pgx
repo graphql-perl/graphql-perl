@@ -62,17 +62,18 @@ objectField_const: name /- COLON -/ value_const
 
 variableDefinitions: /- LPAREN -/ (variableDefinition+ % /- COMMA? -/) /- RPAREN -/
 
-variableDefinition: variable /- COLON -/ type defaultValue?
+variableDefinition: variable /- COLON -/ typedef defaultValue?
 
 variable: /- DOLLAR/ name
 
 defaultValue: /- EQUAL -/ value_const
 
-type: nonNullType | namedType | listType
+# not "type" as using that for "objectTypeDefinition"
+typedef: nonNullType | namedType | listType
 
 namedType: name
 
-listType: LSQUARE type RSQUARE
+listType: LSQUARE typedef RSQUARE
 
 nonNullType: namedType /- BANG/ | listType /- BANG/
 
@@ -145,11 +146,11 @@ objectTypeDefinition: /'type' -/ name - implementsInterfaces? - directives? /- L
 
 implementsInterfaces: /'implements' -/ (namedType+ % /- COMMA? -/)
 
-fieldDefinition: name - argumentsDefinition? /- COLON -/ type - directives?
+fieldDefinition: name - argumentsDefinition? /- COLON -/ typedef - directives?
 
 argumentsDefinition: /- LPAREN -/ (inputValueDefinition+ % /- COMMA? -/) /- RPAREN -/
 
-inputValueDefinition: name /- COLON -/ type - defaultValue? - directives?
+inputValueDefinition: name /- COLON -/ typedef - defaultValue? - directives?
 
 interfaceTypeDefinition: /'interface' -/ name - directives? /- LCURLY -/ fieldDefinition+ /- RCURLY -/
 

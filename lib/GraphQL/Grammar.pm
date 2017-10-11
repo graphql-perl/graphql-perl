@@ -350,7 +350,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*:(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
         },
         {
-          '.ref' => 'type'
+          '.ref' => 'typedef'
         },
         {
           '.ref' => '_'
@@ -533,7 +533,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*:(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
         },
         {
-          '.ref' => 'type'
+          '.ref' => 'typedef'
         },
         {
           '.ref' => '_'
@@ -587,7 +587,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'LSQUARE'
         },
         {
-          '.ref' => 'type'
+          '.ref' => 'typedef'
         },
         {
           '.ref' => 'RSQUARE'
@@ -983,19 +983,6 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
     'string' => {
       '.rgx' => qr/\G"((?:\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})|[^"\x00-\x1f\\])*)"/
     },
-    'type' => {
-      '.any' => [
-        {
-          '.ref' => 'nonNullType'
-        },
-        {
-          '.ref' => 'namedType'
-        },
-        {
-          '.ref' => 'listType'
-        }
-      ]
-    },
     'typeCondition' => {
       '.all' => [
         {
@@ -1061,6 +1048,19 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
         },
         {
           '.ref' => '_'
+        }
+      ]
+    },
+    'typedef' => {
+      '.any' => [
+        {
+          '.ref' => 'nonNullType'
+        },
+        {
+          '.ref' => 'namedType'
+        },
+        {
+          '.ref' => 'listType'
         }
       ]
     },
@@ -1184,7 +1184,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*:(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
         },
         {
-          '.ref' => 'type'
+          '.ref' => 'typedef'
         },
         {
           '+max' => 1,
