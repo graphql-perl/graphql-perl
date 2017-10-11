@@ -80,8 +80,7 @@ fun _merge_hash (Any $param = undef, Any $arraykey = undef) {
 
 method got_arguments (Any $param = undef) {
   return unless defined $param;
-  $param = $param->[0]; # zap first useless layer
-  my %args = map { ($_->[0]{name} => $_->[1]) } @$param;
+  my %args = map { ($_->[0]{name} => $_->[1]) } @{$param->[0]};
   return {$self->{parser}{rule} => \%args};
 }
 
@@ -97,8 +96,7 @@ method got_objectField (Any $param = undef) {
 
 method got_objectValue (Any $param = undef) {
   return unless defined $param;
-  $param = $param->[0]; # zap first useless layer
-  _merge_hash($param);
+  _merge_hash($param->[0]);
 }
 
 method got_objectField_const (Any $param = undef) {
@@ -111,8 +109,7 @@ method got_objectValue_const (Any $param = undef) {
 
 method got_listValue (Any $param = undef) {
   return unless defined $param;
-  $param = $param->[0]; # zap first useless layer
-  return $param;
+  return $param->[0];
 }
 
 method got_listValue_const (Any $param = undef) {
@@ -159,14 +156,12 @@ method got_defaultValue (Any $param = undef) {
 
 method got_implementsInterfaces (Any $param = undef) {
   return unless defined $param;
-  $param = $param->[0]; # zap first useless layer
-  return { interfaces => $param };
+  return { interfaces => $param->[0] };
 }
 
 method got_argumentsDefinition (Any $param = undef) {
   return unless defined $param;
-  $param = $param->[0]; # zap first useless layer
-  return { args => _merge_hash($param)};
+  return { args => _merge_hash($param->[0])};
 }
 
 method got_objectTypeDefinition (Any $param = undef) {
@@ -260,12 +255,11 @@ method got_value (Any $param = undef) {
 
 method got_variableDefinitions (Any $param = undef) {
   return unless defined $param;
-  $param = $param->[0]; # zap first useless layer
   my %def;
   map {
     my $name = ${ shift @$_ };
     $def{$name} = { map %$_, @$_ }; # merge
-  } @$param;
+  } @{$param->[0]};
   return {variables => \%def};
 }
 
@@ -316,8 +310,7 @@ method got_fragment_spread (Any $param = undef) {
 
 method got_selectionSet (Any $param = undef) {
   return unless defined $param;
-  $param = $param->[0]; # zap first useless layer
-  return {selections => $param};
+  return {selections => $param->[0]};
 }
 
 method got_fragmentDefinition (Any $param = undef) {
@@ -358,8 +351,7 @@ method got_operationTypeDefinition (Any $param = undef) {
 
 method got_schemaDefinition (Any $param = undef) {
   return unless defined $param;
-  $param = $param->[0]; # zap first useless layer
-  return {kind => 'schema', node => _merge_hash($param)};
+  return {kind => 'schema', node => _merge_hash($param->[0])};
 }
 
 method got_typeSystemDefinition (Any $param = undef) {
