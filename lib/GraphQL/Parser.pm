@@ -81,11 +81,7 @@ fun _merge_hash (Any $param = undef, Any $arraykey = undef) {
 method got_arguments (Any $param = undef) {
   return unless defined $param;
   $param = $param->[0]; # zap first useless layer
-  my %args;
-  for my $arg (@$param) {
-    my $name = shift(@$arg)->{name};
-    $args{$name} = shift @$arg;
-  }
+  my %args = map { ($_->[0]{name} => $_->[1]) } @$param;
   return {$self->{parser}{rule} => \%args};
 }
 
