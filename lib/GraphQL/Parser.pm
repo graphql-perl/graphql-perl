@@ -116,7 +116,7 @@ method got_listValue_const (Any $param = undef) {
   unshift @_, $self; goto &got_listValue;
 }
 
-method got_directive (Any $param = undef) {
+method got_directiveactual (Any $param = undef) {
   return unless defined $param;
   _merge_hash($param);
 }

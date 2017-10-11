@@ -77,9 +77,9 @@ listType: LSQUARE typedef RSQUARE
 
 nonNullType: namedType /- BANG/ | listType /- BANG/
 
-directives: directive+
+directives: directiveactual+
 
-directive: /- AT/ name arguments?
+directiveactual: /- AT/ name arguments?
 
 string: /
   DOUBLE

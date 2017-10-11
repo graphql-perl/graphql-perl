@@ -172,20 +172,6 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
         }
       ]
     },
-    'directive' => {
-      '.all' => [
-        {
-          '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*\@/u
-        },
-        {
-          '.ref' => 'name'
-        },
-        {
-          '+max' => 1,
-          '.ref' => 'arguments'
-        }
-      ]
-    },
     'directiveDefinition' => {
       '.all' => [
         {
@@ -228,9 +214,23 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
         }
       ]
     },
+    'directiveactual' => {
+      '.all' => [
+        {
+          '.rgx' => qr/\G(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*\@/u
+        },
+        {
+          '.ref' => 'name'
+        },
+        {
+          '+max' => 1,
+          '.ref' => 'arguments'
+        }
+      ]
+    },
     'directives' => {
       '+min' => 1,
-      '.ref' => 'directive'
+      '.ref' => 'directiveactual'
     },
     'enumTypeDefinition' => {
       '.all' => [
