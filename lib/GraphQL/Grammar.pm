@@ -172,7 +172,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
         }
       ]
     },
-    'directiveDefinition' => {
+    'directive' => {
       '.all' => [
         {
           '.rgx' => qr/\Gdirective(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*\@(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
@@ -862,7 +862,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
         }
       ]
     },
-    'schemaDefinition' => {
+    'schema' => {
       '.all' => [
         {
           '.rgx' => qr/\Gschema(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
@@ -1033,7 +1033,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
         {
           '.any' => [
             {
-              '.ref' => 'schemaDefinition'
+              '.ref' => 'schema'
             },
             {
               '.ref' => 'typeDefinition'
@@ -1042,7 +1042,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
               '.ref' => 'typeExtensionDefinition'
             },
             {
-              '.ref' => 'directiveDefinition'
+              '.ref' => 'directive'
             }
           ]
         },

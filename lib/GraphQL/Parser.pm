@@ -324,9 +324,9 @@ method got_operationDefinition (Any $param = undef) {
   return {kind => 'operation', node => _merge_hash($param)};
 }
 
-method got_directiveDefinition (Any $param = undef) {
+method got_directive (Any $param = undef) {
   return unless defined $param;
-  return {kind => 'directive', node => _merge_hash($param)};
+  return {kind => $self->{parser}{rule}, node => _merge_hash($param)};
 }
 
 method got_directives (Any $param = undef) {
@@ -349,9 +349,9 @@ method got_operationTypeDefinition (Any $param = undef) {
   return { map { ref($_) ? values %$_ : $_ } @$param };
 }
 
-method got_schemaDefinition (Any $param = undef) {
+method got_schema (Any $param = undef) {
   return unless defined $param;
-  return {kind => 'schema', node => _merge_hash($param->[0])};
+  return {kind => $self->{parser}{rule}, node => _merge_hash($param->[0])};
 }
 
 method got_typeSystemDefinition (Any $param = undef) {
