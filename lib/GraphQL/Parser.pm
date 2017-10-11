@@ -96,9 +96,7 @@ method got_argument (Any $param = undef) {
 
 method got_objectField (Any $param = undef) {
   return unless defined $param;
-  my $name = shift(@$param)->{name};
-  my $value = shift @$param;
-  return {$name => $value};
+  return {$param->[0]{name} => $param->[1]};
 }
 
 method got_objectValue (Any $param = undef) {
