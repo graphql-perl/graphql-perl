@@ -295,7 +295,7 @@ method got_fragmentName (Any $param = undef) {
 
 method got_field (Any $param = undef) {
   return unless defined $param;
-  return {kind => 'field', node => _merge_hash($param)};
+  return {kind => $self->{parser}{rule}, node => _merge_hash($param)};
 }
 
 method got_inlineFragment (Any $param = undef) {
