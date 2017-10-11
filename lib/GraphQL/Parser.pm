@@ -14,6 +14,17 @@ require GraphQL::Grammar;
 
 my $JSON = JSON::MaybeXS->new->allow_nonref->canonical;
 
+my @KINDHASH = qw(
+  scalar
+  union
+  field
+  inline_fragment
+  fragment_spread
+  fragment
+  directive
+);
+my %KINDHASH21 = map { ($_ => 1) } @KINDHASH;
+
 =head1 NAME
 
 GraphQL::Parser - GraphQL language parser
@@ -58,6 +69,9 @@ method parse(Str $source, Bool $noLocation = undef) :ReturnType(ArrayRef) {
 
 method gotrule (Any $param = undef) {
   return unless defined $param;
+  if ($KINDHASH21{$self->{parser}{rule}}) {
+    return {kind => $self->{parser}{rule}, node => _merge_hash($param)};
+  }
   return {$self->{parser}{rule} => $param};
 }
 
@@ -138,11 +152,6 @@ method got_namedType (Any $param = undef) {
   return $param->{name};
 }
 
-method got_scalar (Any $param = undef) {
-  return unless defined $param;
-  return {kind => $self->{parser}{rule}, node => _merge_hash($param)};
-}
-
 method got_enumValueDefinition (Any $param = undef) {
   return unless defined $param;
   my %def = (value => shift @$param, map %$_, @$param);
@@ -203,11 +212,6 @@ method got_enumTypeDefinition (Any $param = undef) {
 method got_interface (Any $param = undef) {
   return unless defined $param;
   return {kind => $self->{parser}{rule}, node => _merge_hash($param, 'fields') };
-}
-
-method got_union (Any $param = undef) {
-  return unless defined $param;
-  return {kind => $self->{parser}{rule}, node => _merge_hash($param)};
 }
 
 method got_unionMembers (Any $param = undef) {
@@ -293,40 +297,15 @@ method got_fragmentName (Any $param = undef) {
   return $param;
 }
 
-method got_field (Any $param = undef) {
-  return unless defined $param;
-  return {kind => $self->{parser}{rule}, node => _merge_hash($param)};
-}
-
-method got_inline_fragment (Any $param = undef) {
-  return unless defined $param;
-  return {kind => $self->{parser}{rule}, node => _merge_hash($param)};
-}
-
-method got_fragment_spread (Any $param = undef) {
-  return unless defined $param;
-  return {kind => $self->{parser}{rule}, node => _merge_hash($param)};
-}
-
 method got_selectionSet (Any $param = undef) {
   return unless defined $param;
   return {selections => $param->[0]};
-}
-
-method got_fragment (Any $param = undef) {
-  return unless defined $param;
-  return {kind => $self->{parser}{rule}, node => _merge_hash($param)};
 }
 
 method got_operationDefinition (Any $param = undef) {
   return unless defined $param;
   $param = [ $param ] unless ref $param eq 'ARRAY'; # bare selectionSet
   return {kind => 'operation', node => _merge_hash($param)};
-}
-
-method got_directive (Any $param = undef) {
-  return unless defined $param;
-  return {kind => $self->{parser}{rule}, node => _merge_hash($param)};
 }
 
 method got_directives (Any $param = undef) {
