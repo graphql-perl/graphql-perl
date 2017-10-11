@@ -135,9 +135,10 @@ schemaDefinition: /'schema' -/ directives? /- LCURLY -/ operationTypeDefinition+
 
 operationTypeDefinition: operationType /- COLON -/ namedType -
 
-typeDefinition: scalarTypeDefinition | objectTypeDefinition | interfaceTypeDefinition | unionTypeDefinition | enumTypeDefinition | inputObjectTypeDefinition
+typeDefinition: scalar | objectTypeDefinition | interfaceTypeDefinition | unionTypeDefinition | enumTypeDefinition | inputObjectTypeDefinition
 
-scalarTypeDefinition: /'scalar' -/ name - directives?
+# aka scalarTypeDefinition
+scalar: /'scalar' -/ name - directives?
 
 # fieldDefinition is "*" not "+" because JS implementation test allows
 objectTypeDefinition: /'type' -/ name - implementsInterfaces? - directives? /- LCURLY -/ fieldDefinition* /- RCURLY -/

@@ -879,7 +879,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
         }
       ]
     },
-    'scalarTypeDefinition' => {
+    'scalar' => {
       '.all' => [
         {
           '.rgx' => qr/\Gscalar(?:\s|\x{FEFF}|\#[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
@@ -1009,7 +1009,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
     'typeDefinition' => {
       '.any' => [
         {
-          '.ref' => 'scalarTypeDefinition'
+          '.ref' => 'scalar'
         },
         {
           '.ref' => 'objectTypeDefinition'

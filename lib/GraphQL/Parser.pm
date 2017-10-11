@@ -138,9 +138,9 @@ method got_namedType (Any $param = undef) {
   return $param->{name};
 }
 
-method got_scalarTypeDefinition (Any $param = undef) {
+method got_scalar (Any $param = undef) {
   return unless defined $param;
-  return {kind => 'scalar', node => _merge_hash($param)};
+  return {kind => $self->{parser}{rule}, node => _merge_hash($param)};
 }
 
 method got_enumValueDefinition (Any $param = undef) {
