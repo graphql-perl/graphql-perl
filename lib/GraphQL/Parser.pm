@@ -273,8 +273,13 @@ method got_variableDefinitions (Any $param = undef) {
   map {
     my $name = ${ shift @$_ };
     $def{$name} = { map %$_, @$_ }; # merge
-  } map $_->{variableDefinition}, @$param;
+  } @$param;
   return {variables => \%def};
+}
+
+method got_variableDefinition (Any $param = undef) {
+  return unless defined $param;
+  return $param;
 }
 
 method got_selection (Any $param = undef) {
