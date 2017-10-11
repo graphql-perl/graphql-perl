@@ -25,6 +25,13 @@ my @KINDHASH = qw(
 );
 my %KINDHASH21 = map { ($_ => 1) } @KINDHASH;
 
+my @KINDFIELDS = qw(
+  type
+  input
+  interface
+);
+my %KINDFIELDS21 = map { ($_ => 1) } @KINDFIELDS;
+
 =head1 NAME
 
 GraphQL::Parser - GraphQL language parser
@@ -71,6 +78,8 @@ method gotrule (Any $param = undef) {
   return unless defined $param;
   if ($KINDHASH21{$self->{parser}{rule}}) {
     return {kind => $self->{parser}{rule}, node => _merge_hash($param)};
+  } elsif ($KINDFIELDS21{$self->{parser}{rule}}) {
+    return {kind => $self->{parser}{rule}, node => _merge_hash($param, 'fields')};
   }
   return {$self->{parser}{rule} => $param};
 }
@@ -173,11 +182,6 @@ method got_argumentsDefinition (Any $param = undef) {
   return { args => _merge_hash($param->[0])};
 }
 
-method got_type (Any $param = undef) {
-  return unless defined $param;
-  return {kind => $self->{parser}{rule}, node => _merge_hash($param, 'fields') };
-}
-
 method got_fieldDefinition (Any $param = undef) {
   return unless defined $param;
   my $def = _merge_hash($param);
@@ -192,11 +196,6 @@ method got_typeExtensionDefinition (Any $param = undef) {
   return $node;
 }
 
-method got_input (Any $param = undef) {
-  return unless defined $param;
-  return {kind => $self->{parser}{rule}, node => _merge_hash($param, 'fields') };
-}
-
 method got_enumTypeDefinition (Any $param = undef) {
   return unless defined $param;
   my $def = _merge_hash($param);
@@ -207,11 +206,6 @@ method got_enumTypeDefinition (Any $param = undef) {
   } @{(grep ref eq 'ARRAY', @$param)[0]};
   $def->{values} = \%values;
   return {kind => 'enum', node => $def};
-}
-
-method got_interface (Any $param = undef) {
-  return unless defined $param;
-  return {kind => $self->{parser}{rule}, node => _merge_hash($param, 'fields') };
 }
 
 method got_unionMembers (Any $param = undef) {
