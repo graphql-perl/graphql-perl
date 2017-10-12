@@ -19,11 +19,13 @@ local $Data::Dumper::Indent = $Data::Dumper::Sortkeys = $Data::Dumper::Terse = 1
 
 is_deeply $got, $expected, 'lex big doc correct' or diag Dumper $got;
 
-throws_ok { do_lex("\x{0007}") } qr/Parse document failed for some reason/, 'invalid char';
+dies_ok { do_lex("\x{0007}") };
+like $@->message, qr/Parse document failed for some reason/, 'invalid char';
 
 lives_ok { do_lex("\x{FEFF} query foo { id }") } 'accepts BOM';
 
-throws_ok { do_lex("\n\n    ?  \n\n\n") } qr/line:\s*3.*column:\s*5/s, 'error respects whitespace';
+dies_ok { do_lex("\n\n    ?  \n\n\n") };
+like $@->message, qr/line:\s*3.*column:\s*5/s, 'error respects whitespace';
 
 $got = do_lex(string_make(' x '));
 is string_lookup($got), ' x ', 'string preserve whitespace' or diag Dumper $got;
@@ -31,24 +33,37 @@ is string_lookup($got), ' x ', 'string preserve whitespace' or diag Dumper $got;
 $got = do_lex(string_make('quote \\"'));
 is string_lookup($got), 'quote \\"', 'string quote kept' or diag Dumper $got; # not de-quoted by lexer
 
-throws_ok { do_lex(string_make('quote \\')) } qr/line:\s*1.*column:\s*21/s, 'error on unterminated string';
+dies_ok { do_lex(string_make('quote \\')) };
+like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on unterminated string';
 
-throws_ok { do_lex(q(query q { foo(name: 'hello') { id } })) } qr/line:\s*1.*column:\s*21/s, 'error on single quote';
+dies_ok { do_lex(q(query q { foo(name: 'hello') { id } })) };
+like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on single quote';
 
-throws_ok { do_lex("\x{0007}") } qr/line:\s*1.*column:\s*1/s, 'error on invalid char';
+dies_ok { do_lex("\x{0007}") };
+like $@->message, qr/line:\s*1.*column:\s*1/s, 'error on invalid char';
 
-throws_ok { do_lex(string_make("\x{0000}")) } qr/line:\s*1.*column:\s*21/s, 'error on NUL char';
+dies_ok { do_lex(string_make("\x{0000}")) };
+like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on NUL char';
 
-throws_ok { do_lex(string_make("hi\nthere")) } qr/line:\s*1.*column:\s*21/s, 'error on multi-line string';
-throws_ok { do_lex(string_make("hi\rthere")) } qr/line:\s*1.*column:\s*21/s, 'error on MacOS multi-line string';
+dies_ok { do_lex(string_make("hi\nthere")) };
+like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on multi-line string';
+dies_ok { do_lex(string_make("hi\rthere")) };
+like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on MacOS multi-line string';
 
-throws_ok { do_lex(string_make('\z')) } qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
-throws_ok { do_lex(string_make('bad \\x esc')) } qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
-throws_ok { do_lex(string_make('bad \\u1 esc')) } qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
-throws_ok { do_lex(string_make('bad \\u0XX1 esc')) } qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
-throws_ok { do_lex(string_make('bad \\uXXXX esc')) } qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
-throws_ok { do_lex(string_make('bad \\uFXXX esc')) } qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
-throws_ok { do_lex(string_make('bad \\uXXXF esc')) } qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
+dies_ok { do_lex(string_make('\z')) };
+like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
+dies_ok { do_lex(string_make('bad \\x esc')) };
+like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
+dies_ok { do_lex(string_make('bad \\u1 esc')) };
+like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
+dies_ok { do_lex(string_make('bad \\u0XX1 esc')) };
+like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
+dies_ok { do_lex(string_make('bad \\uXXXX esc')) };
+like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
+dies_ok { do_lex(string_make('bad \\uFXXX esc')) };
+like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
+dies_ok { do_lex(string_make('bad \\uXXXF esc')) };
+like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
 
 number_test('4', 'int', 'simple int');
 number_test('4.123', 'float', 'simple float');
@@ -66,14 +81,22 @@ number_test('-1.123e-4', 'float', 'neg float negexp lower');
 number_test('-1.123e+4', 'float', 'neg float posexp lower');
 number_test('-1.123e4567', 'float', 'neg float longexp lower');
 
-throws_ok { do_lex(number_make('00')) } qr/line:\s*1.*column:\s*22/s, 'error on invalid int';
-throws_ok { do_lex(number_make('+1')) } qr/line:\s*1.*column:\s*21/s, 'error on invalid int';
-throws_ok { do_lex(number_make('1.')) } qr/line:\s*1.*column:\s*22/s, 'error on invalid int';
-throws_ok { do_lex(number_make('.123')) } qr/line:\s*1.*column:\s*21/s, 'error on invalid float';
-throws_ok { do_lex(number_make('1.A')) } qr/line:\s*1.*column:\s*22/s, 'error on invalid int';
-throws_ok { do_lex(number_make('-A')) } qr/line:\s*1.*column:\s*21/s, 'error on invalid int';
-throws_ok { do_lex(number_make('1.0e')) } qr/line:\s*1.*column:\s*25/s, 'error on invalid int';
-throws_ok { do_lex(number_make('1.0eA')) } qr/line:\s*1.*column:\s*26/s, 'error on invalid int';
+dies_ok { do_lex(number_make('00')) };
+like $@->message, qr/line:\s*1.*column:\s*22/s, 'error on invalid int';
+dies_ok { do_lex(number_make('+1')) };
+like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on invalid int';
+dies_ok { do_lex(number_make('1.')) };
+like $@->message, qr/line:\s*1.*column:\s*22/s, 'error on invalid int';
+dies_ok { do_lex(number_make('.123')) };
+like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on invalid float';
+dies_ok { do_lex(number_make('1.A')) };
+like $@->message, qr/line:\s*1.*column:\s*22/s, 'error on invalid int';
+dies_ok { do_lex(number_make('-A')) };
+like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on invalid int';
+dies_ok { do_lex(number_make('1.0e')) };
+like $@->message, qr/line:\s*1.*column:\s*25/s, 'error on invalid int';
+dies_ok { do_lex(number_make('1.0eA')) };
+like $@->message, qr/line:\s*1.*column:\s*26/s, 'error on invalid int';
 
 my $multibyte = "Has a \x{0A0A} multi-byte character.";
 $got = do_lex(string_make($multibyte));

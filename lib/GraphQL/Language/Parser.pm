@@ -9,6 +9,7 @@ use Types::Standard -all;
 use Function::Parameters;
 use GraphQL::Language::Grammar;
 use GraphQL::Language::Receiver;
+use GraphQL::Error;
 
 our $VERSION = '0.02';
 
@@ -48,6 +49,38 @@ method parse(Str $source, Bool $noLocation = undef) :ReturnType(ArrayRef) {
   );
   my $input = Pegex::Input->new(string => $source);
   return $parser->SUPER::parse($input);
+}
+
+=head2 format_error
+
+Override of parent method. Returns a L<GraphQL::Error>.
+
+=cut
+
+sub format_error :ReturnType(InstanceOf['GraphQL::Error']) {
+    my ($self, $msg) = @_;
+    my $buffer = $self->{buffer};
+    my $position = $self->{farthest};
+    my $real_pos = $self->{position};
+    my $line = $self->line($position);
+    my $column = $position - rindex($$buffer, "\n", $position);
+    my $pretext = substr(
+        $$buffer,
+        $position < 50 ? 0 : $position - 50,
+        $position < 50 ? $position : 50
+    );
+    my $context = substr($$buffer, $position, 50);
+    $pretext =~ s/.*\n//gs;
+    $context =~ s/\n/\\n/g;
+    return GraphQL::Error->new(message => <<EOF);
+Error parsing Pegex document:
+  msg:      $msg
+  line:     $line
+  column:   $column
+  context:  $pretext$context
+  ${\ (' ' x (length($pretext) + 10) . '^')}
+  position: $position ($real_pos pre-lookahead)
+EOF
 }
 
 1;

@@ -9,22 +9,30 @@ BEGIN {
   use_ok( 'GraphQL::Language::Parser' ) || print "Bail out!\n";
 }
 
-throws_ok { do_parse('{') } qr/Expected name/, 'trivial fail';
+dies_ok { do_parse('{') };
+like $@->message, qr/Expected name/, 'trivial fail';
 
-throws_ok { do_parse(<<'EOF'
+dies_ok { do_parse(<<'EOF'
 { ...MissingOn }
 fragment MissingOn Type
 EOF
-) } qr/Expected "on"/, 'missing "on"';
+) };
+like $@->message, qr/Expected "on"/, 'missing "on"';
 
-throws_ok { do_parse('{ field: {} }') } qr/Expected name/, 'expected';
-throws_ok { do_parse('notanoperation Foo { field }') } qr/Parse document failed/, 'bad op';
-throws_ok { do_parse('...') } qr/Parse document failed/, 'spread wrong place';
+dies_ok { do_parse('{ field: {} }') };
+like $@->message, qr/Expected name/, 'expected';
+dies_ok { do_parse('notanoperation Foo { field }') };
+like $@->message, qr/Parse document failed/, 'bad op';
+dies_ok { do_parse('...') };
+like $@->message, qr/Parse document failed/, 'spread wrong place';
 
 lives_ok { do_parse('{ field(complex: { a: { b: [ $var ] } }) }') } 'parses variable inline values';
-throws_ok { do_parse('query Foo($x: Complex = { a: { b: [ $var ] } }) { field }') } qr/Expected name or constant/, 'no var in default values';
-throws_ok { do_parse('fragment on on on { on }') } qr/Unexpected Name "on"/, 'no accept fragments named "on"';
-throws_ok { do_parse('{ ...on }') } qr/Unexpected Name "on"/, 'no accept fragment spread named "on"';
+dies_ok { do_parse('query Foo($x: Complex = { a: { b: [ $var ] } }) { field }') };
+like $@->message, qr/Expected name or constant/, 'no var in default values';
+dies_ok { do_parse('fragment on on on { on }') };
+like $@->message, qr/Unexpected Name "on"/, 'no accept fragments named "on"';
+dies_ok { do_parse('{ ...on }') };
+like $@->message, qr/Unexpected Name "on"/, 'no accept fragment spread named "on"';
 
 my @nonKeywords = (
   'on',
