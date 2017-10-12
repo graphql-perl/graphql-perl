@@ -62,8 +62,7 @@ sub format_error :ReturnType(InstanceOf['GraphQL::Error']) {
     my $buffer = $self->{buffer};
     my $position = $self->{farthest};
     my $real_pos = $self->{position};
-    my $line = $self->line($position);
-    my $column = $position - rindex($$buffer, "\n", $position);
+    my ($line, $column) = @{$self->line_column($position)};
     my $pretext = substr(
         $$buffer,
         $position < 50 ? 0 : $position - 50,
