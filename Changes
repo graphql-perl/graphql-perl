@@ -1,5 +1,8 @@
 Revision history for GraphQL
 
+0.13	Thu Oct 12 16:18:20 BST 2017
+ - bulletproof JSON booleans. figured with help from @haarg and @shadowcat-mst
+
 0.12	Tue Oct 10 05:13:29 BST 2017
  - allow $context to be anything (such as request headers)
 
