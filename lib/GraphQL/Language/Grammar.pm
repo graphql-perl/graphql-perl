@@ -1,4 +1,4 @@
-package GraphQL::Grammar;
+package GraphQL::Language::Grammar;
 
 use 5.014;
 use strict;
@@ -10,17 +10,17 @@ our $VERSION = '0.02';
 
 =head1 NAME
 
-GraphQL::Grammar - GraphQL grammar
+GraphQL::Language::Grammar - GraphQL grammar
 
 =head1 SYNOPSIS
 
   use Pegex::Parser;
-  use GraphQL::Grammar;
+  use GraphQL::Language::Grammar;
   use Pegex::Tree::Wrap;
   use Pegex::Input;
 
   my $parser = Pegex::Parser->new(
-    grammar => GraphQL::Grammar->new,
+    grammar => GraphQL::Language::Grammar->new,
     receiver => Pegex::Tree::Wrap->new,
   );
   my $text = 'query q { foo(name: "hi") { id } }';

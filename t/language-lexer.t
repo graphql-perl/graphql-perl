@@ -3,7 +3,7 @@ use warnings;
 use Test::More;
 use Test::Exception;
 use Pegex::Parser;
-use GraphQL::Grammar;
+use GraphQL::Language::Grammar;
 use GraphQL::Language::Receiver;
 use Pegex::Tree::Wrap;
 use Pegex::Input;
@@ -11,7 +11,7 @@ use Data::Dumper;
 use JSON::MaybeXS;
 
 my $parser = Pegex::Parser->new(
-  grammar => GraphQL::Grammar->new,
+  grammar => GraphQL::Language::Grammar->new,
   receiver => GraphQL::Language::Receiver->new,
 );
 open my $fh, '<', 't/kitchen-sink.graphql';

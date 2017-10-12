@@ -65,8 +65,8 @@ WriteMakefile(
 
 sub MY::postamble {
   <<EOF;
-lib/GraphQL/Grammar.pm : graphql.pgx
-\t\$(PERL) -Ilib -MGraphQL::Grammar=compile
+lib/GraphQL/Language/Grammar.pm : graphql.pgx
+\t\$(PERL) -Ilib -MGraphQL::Language::Grammar=compile
 
 pure_all :: README.md
 

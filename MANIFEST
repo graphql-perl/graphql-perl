@@ -5,8 +5,8 @@ lib/GraphQL/Debug.pm
 lib/GraphQL/Directive.pm
 lib/GraphQL/Error.pm
 lib/GraphQL/Execution.pm
-lib/GraphQL/Grammar.pm
 lib/GraphQL/Introspection.pm
+lib/GraphQL/Language/Grammar.pm
 lib/GraphQL/Language/Receiver.pm
 lib/GraphQL/Role/Abstract.pm
 lib/GraphQL/Role/Composite.pm
