@@ -4,7 +4,7 @@ use Test::More;
 use Test::Exception;
 use Pegex::Parser;
 use GraphQL::Grammar;
-use GraphQL::Parser;
+use GraphQL::Language::Receiver;
 use Pegex::Tree::Wrap;
 use Pegex::Input;
 use Data::Dumper;
@@ -12,7 +12,7 @@ use JSON::MaybeXS;
 
 my $parser = Pegex::Parser->new(
   grammar => GraphQL::Grammar->new,
-  receiver => GraphQL::Parser->new,
+  receiver => GraphQL::Language::Receiver->new,
 );
 open my $fh, '<', 't/kitchen-sink.graphql';
 my $got = do_lex(join('', <$fh>));

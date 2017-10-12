@@ -1,4 +1,4 @@
-package GraphQL::Parser;
+package GraphQL::Language::Receiver;
 
 use 5.014;
 use strict;
@@ -34,7 +34,7 @@ my %KINDFIELDS21 = map { ($_ => 1) } @KINDFIELDS;
 
 =head1 NAME
 
-GraphQL::Parser - GraphQL language parser
+GraphQL::Language::Receiver - GraphQL Pegex AST constructor
 
 =head1 VERSION
 
@@ -46,8 +46,8 @@ our $VERSION = '0.02';
 
 =head1 SYNOPSIS
 
-  use GraphQL::Parser;
-  my $parsed = GraphQL::Parser->parse(
+  use GraphQL::Language::Receiver;
+  my $parsed = GraphQL::Language::Receiver->parse(
     $source
   );
 
@@ -61,7 +61,7 @@ parsing events into data usable by GraphQL.
 
 =head2 parse
 
-  GraphQL::Parser->parse($source, $noLocation);
+  GraphQL::Language::Receiver->parse($source, $noLocation);
 
 =cut
 

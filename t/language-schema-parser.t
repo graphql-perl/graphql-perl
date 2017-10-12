@@ -8,7 +8,7 @@ use Data::Dumper;
 use JSON::MaybeXS;
 
 BEGIN {
-  use_ok( 'GraphQL::Parser' ) || print "Bail out!\n";
+  use_ok( 'GraphQL::Language::Receiver' ) || print "Bail out!\n";
 }
 
 lives_ok { do_parse('type Hello { world: String }') } 'simple schema';
@@ -42,7 +42,7 @@ local $Data::Dumper::Indent = $Data::Dumper::Sortkeys = $Data::Dumper::Terse = 1
 is_deeply $got, $expected, 'lex big doc correct' or diag Dumper $got;
 
 sub do_parse {
-  return GraphQL::Parser->parse($_[0]);
+  return GraphQL::Language::Receiver->parse($_[0]);
 }
 
 done_testing;

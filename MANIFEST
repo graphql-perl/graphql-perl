@@ -7,7 +7,7 @@ lib/GraphQL/Error.pm
 lib/GraphQL/Execution.pm
 lib/GraphQL/Grammar.pm
 lib/GraphQL/Introspection.pm
-lib/GraphQL/Parser.pm
+lib/GraphQL/Language/Receiver.pm
 lib/GraphQL/Role/Abstract.pm
 lib/GraphQL/Role/Composite.pm
 lib/GraphQL/Role/FieldDeprecation.pm
