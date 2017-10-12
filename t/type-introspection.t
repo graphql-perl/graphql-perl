@@ -30,7 +30,9 @@ subtest 'executes an introspection query', sub {
     fields => { onlyField => { type => $String } },
   ));
   my $got = GraphQL::Execution->execute($schema, $QUERY, undef, undef, undef, 'IntrospectionQuery');
-  my $big_expected = eval join '', 'my ', <DATA>, ' $VAR1';
+  my $expected_text = join '', <DATA>;
+  $expected_text =~ s#bless\(\s*do\{\\\(my\s*\$o\s*=\s*(.)\)\},\s*'JSON::PP::Boolean'\s*\)#'JSON->' . ($1 ? 'true' : 'false')#ge;
+  my $big_expected = eval 'use JSON::MaybeXS;my '.$expected_text.';$VAR1';
   local ($Data::Dumper::Sortkeys, $Data::Dumper::Indent, $Data::Dumper::Terse, $Data::Dumper::Purity);
   $Data::Dumper::Sortkeys = $Data::Dumper::Indent = $Data::Dumper::Terse = $Data::Dumper::Purity = 1;
   #open my $fh, '>', 'tf'; print $fh Dumper $got; # uncomment to regenerate

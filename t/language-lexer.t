@@ -8,15 +8,17 @@ use GraphQL::Parser;
 use Pegex::Tree::Wrap;
 use Pegex::Input;
 use Data::Dumper;
+use JSON::MaybeXS;
 
 my $parser = Pegex::Parser->new(
   grammar => GraphQL::Grammar->new,
   receiver => GraphQL::Parser->new,
 );
 open my $fh, '<', 't/kitchen-sink.graphql';
-
 my $got = do_lex(join('', <$fh>));
-my $expected = eval join '', <DATA>;
+my $expected_text = join '', <DATA>;
+$expected_text =~ s#bless\(\s*do\{\\\(my\s*\$o\s*=\s*(.)\)\},\s*'JSON::PP::Boolean'\s*\)#'JSON->' . ($1 ? 'true' : 'false')#ge;
+my $expected = eval $expected_text;
 local $Data::Dumper::Indent = $Data::Dumper::Sortkeys = $Data::Dumper::Terse = 1;
 #open $fh, '>', 'tf'; print $fh Dumper $got; # uncomment to regenerate
 
