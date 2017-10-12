@@ -77,7 +77,7 @@ Error parsing Pegex document:
   line:     $line
   column:   $column
   context:  $pretext$context
-  ${\ (' ' x (length($pretext) + 10) . '^')}
+            ${\ (' ' x (length($pretext)) . '^')}
   position: $position ($real_pos pre-lookahead)
 EOF
 }
