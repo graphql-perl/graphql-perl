@@ -3,17 +3,12 @@ use warnings;
 use Test::More;
 use Test::Exception;
 use Pegex::Parser;
-use GraphQL::Language::Grammar;
-use GraphQL::Language::Receiver;
+use GraphQL::Language::Parser;
 use Pegex::Tree::Wrap;
 use Pegex::Input;
 use Data::Dumper;
 use JSON::MaybeXS;
 
-my $parser = Pegex::Parser->new(
-  grammar => GraphQL::Language::Grammar->new,
-  receiver => GraphQL::Language::Receiver->new,
-);
 open my $fh, '<', 't/kitchen-sink.graphql';
 my $got = do_lex(join('', <$fh>));
 my $expected_text = join '', <DATA>;
@@ -119,8 +114,7 @@ sub query_lookup {
 
 sub do_lex {
   my ($text) = @_;
-  my $input = Pegex::Input->new(string => $text);
-  return $parser->parse($input);
+  GraphQL::Language::Parser->parse($text);
 }
 
 __DATA__
