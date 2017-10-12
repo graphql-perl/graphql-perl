@@ -6,7 +6,7 @@ use Test::More;
 use Test::Exception;
 
 BEGIN {
-  use_ok( 'GraphQL::Language::Receiver' ) || print "Bail out!\n";
+  use_ok( 'GraphQL::Language::Parser' ) || print "Bail out!\n";
 }
 
 throws_ok { do_parse('{') } qr/Expected name/, 'trivial fail';
@@ -60,7 +60,7 @@ EOF
 lives_ok { do_parse('{ field(complex: { a: { b: [ 123 "abc" ] } }) }') } 'list values';
 
 sub do_parse {
-  return GraphQL::Language::Receiver->parse($_[0]);
+  return GraphQL::Language::Parser->parse($_[0]);
 }
 
 done_testing;

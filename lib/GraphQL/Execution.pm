@@ -8,7 +8,7 @@ use Types::Standard -all;
 use Types::TypeTiny -all;
 use GraphQL::Type::Library -all;
 use Function::Parameters;
-use GraphQL::Language::Receiver;
+use GraphQL::Language::Parser;
 use GraphQL::Error;
 use JSON::MaybeXS;
 use GraphQL::Debug qw(_debug);
@@ -61,7 +61,7 @@ method execute(
   Maybe[Str] $operation_name = undef,
   Maybe[CodeLike] $field_resolver = undef,
 ) :ReturnType(HashRef) {
-  my $ast = GraphQL::Language::Receiver->parse($doc);
+  my $ast = GraphQL::Language::Parser->parse($doc);
   my $context = eval {
     _build_context(
       $schema,
