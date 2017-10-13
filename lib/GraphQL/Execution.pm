@@ -61,8 +61,8 @@ method execute(
   Maybe[Str] $operation_name = undef,
   Maybe[CodeLike] $field_resolver = undef,
 ) :ReturnType(HashRef) {
-  my $ast = GraphQL::Language::Parser->parse($doc);
   my $context = eval {
+    my $ast = GraphQL::Language::Parser->parse($doc);
     _build_context(
       $schema,
       $ast,
@@ -73,7 +73,7 @@ method execute(
       $field_resolver,
     );
   };
-  return { errors => [ { message => $@ } ] } if $@;
+  return { errors => [ GraphQL::Error->coerce($@)->to_json ] } if $@;
   my $result = eval {
     scalar _execute_operation(
       $context,
