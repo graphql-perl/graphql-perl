@@ -183,7 +183,7 @@ fun _execute_operation(
 ) :ReturnType(HashRef) {
   my $op_type = $operation->{operationType} || 'query';
   my $type = $context->{schema}->$op_type;
-  my $fields = _collect_fields(
+  my ($fields) = _collect_fields(
     $context,
     $type,
     $operation->{selections},
@@ -209,7 +209,7 @@ fun _collect_fields(
   ArrayRef $selections,
   Map[StrNameValid,ArrayRef[HashRef]] $fields_got,
   Map[StrNameValid,Bool] $visited_fragments,
-) :ReturnType(Map[StrNameValid,ArrayRef[HashRef]]) {
+) {
   DEBUG and _debug('_collect_fields', $runtime_type->to_string, $fields_got, $selections);
   for my $selection (@$selections) {
     my $node = $selection->{node};
@@ -223,7 +223,7 @@ fun _collect_fields(
     } elsif ($selection->{kind} eq 'inline_fragment') {
       next if !_fragment_condition_match($context, $node, $runtime_type);
       next if !_should_include_node($context, $node);
-      $fields_got = _collect_fields(
+      ($fields_got, $visited_fragments) = _collect_fields(
         $context,
         $runtime_type,
         $node->{selections},
@@ -234,12 +234,12 @@ fun _collect_fields(
       my $frag_name = $node->{name};
       next if $visited_fragments->{$frag_name};
       next if !_should_include_node($context, $node);
-      $visited_fragments->{$frag_name} = 1;
+      $visited_fragments = { %$visited_fragments, $frag_name => 1 }; # !mutate
       my $fragment = $context->{fragments}{$frag_name};
       next if !$fragment;
       next if !_fragment_condition_match($context, $fragment, $runtime_type);
       DEBUG and _debug('_collect_fields(fragment_spread)', $fragment);
-      $fields_got = _collect_fields(
+      ($fields_got, $visited_fragments) = _collect_fields(
         $context,
         $runtime_type,
         $fragment->{selections},
@@ -248,7 +248,7 @@ fun _collect_fields(
       );
     }
   }
-  $fields_got;
+  ($fields_got, $visited_fragments);
 }
 
 fun _should_include_node(
@@ -618,7 +618,7 @@ fun _collect_and_execute_subfields(
   my $subfield_nodes = {};
   my $visited_fragment_names = {};
   for (grep $_->{selections}, @$nodes) {
-    $subfield_nodes = _collect_fields(
+    ($subfield_nodes, $visited_fragment_names) = _collect_fields(
       $context,
       $return_type,
       $_->{selections},
