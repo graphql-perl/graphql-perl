@@ -1,5 +1,10 @@
 Revision history for GraphQL
 
+0.14	Fri Oct 13 06:31:33 BST 2017
+ - catch and report query-parse errors
+ - parse and other errors now report query-doc location
+ - eliminated various data mutations for purer functions
+
 0.13	Thu Oct 12 16:18:20 BST 2017
  - bulletproof JSON booleans. figured with help from @haarg and @shadowcat-mst
 
