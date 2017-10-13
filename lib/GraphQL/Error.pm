@@ -11,6 +11,8 @@ use Function::Parameters;
 
 our $VERSION = '0.02';
 
+my %NONENUM = map { ($_ => 1) } qw(original_error);
+
 =head1 NAME
 
 GraphQL::Error - GraphQL error object
@@ -93,6 +95,17 @@ Converts to string.
 
 method to_string() :ReturnType(Str) {
   $self->message;
+}
+
+=head2 to_json
+
+Converts to a JSON-able hash, in the format to send back as a member of
+the C<errors> array in the results.
+
+=cut
+
+method to_json() :ReturnType(HashRef) {
+  +{ map { ($_ => $self->{$_}) } grep !$NONENUM{$_}, keys %$self };
 }
 
 __PACKAGE__->meta->make_immutable();

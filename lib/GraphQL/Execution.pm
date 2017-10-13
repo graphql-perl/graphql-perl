@@ -86,7 +86,7 @@ method execute(
   }
   my $wrapped = { data => $result };
   if (@{ $context->{errors} }) {
-    return { errors => [ map { { message => $_->to_string } } @{$context->{errors}} ], %$wrapped };
+    return { errors => [ map $_->to_json, @{$context->{errors}} ], %$wrapped };
   } else {
     return $wrapped;
   }
