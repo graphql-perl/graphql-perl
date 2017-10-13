@@ -56,6 +56,10 @@ __DATA__
   {
     'kind' => 'schema',
     'node' => {
+      'location' => {
+        'column' => 1,
+        'line' => 13
+      },
       'mutation' => 'MutationType',
       'query' => 'QueryType'
     }
@@ -141,6 +145,10 @@ __DATA__
       'interfaces' => [
         'Bar'
       ],
+      'location' => {
+        'column' => 1,
+        'line' => 23
+      },
       'name' => 'Foo'
     }
   },
@@ -176,6 +184,10 @@ __DATA__
           'type' => 'Type'
         }
       },
+      'location' => {
+        'column' => 1,
+        'line' => 27
+      },
       'name' => 'AnnotatedObject'
     }
   },
@@ -195,6 +207,10 @@ __DATA__
         'one' => {
           'type' => 'Type'
         }
+      },
+      'location' => {
+        'column' => 1,
+        'line' => 32
       },
       'name' => 'Bar'
     }
@@ -227,12 +243,20 @@ __DATA__
           'type' => 'Type'
         }
       },
+      'location' => {
+        'column' => 1,
+        'line' => 36
+      },
       'name' => 'AnnotatedInterface'
     }
   },
   {
     'kind' => 'union',
     'node' => {
+      'location' => {
+        'column' => 0,
+        'line' => 36
+      },
       'name' => 'Feed',
       'types' => [
         'Story',
@@ -249,6 +273,10 @@ __DATA__
           'name' => 'onUnion'
         }
       ],
+      'location' => {
+        'column' => 0,
+        'line' => 38
+      },
       'name' => 'AnnotatedUnion',
       'types' => [
         'A',
@@ -259,6 +287,10 @@ __DATA__
   {
     'kind' => 'scalar',
     'node' => {
+      'location' => {
+        'column' => 1,
+        'line' => 42
+      },
       'name' => 'CustomScalar'
     }
   },
@@ -270,12 +302,20 @@ __DATA__
           'name' => 'onScalar'
         }
       ],
+      'location' => {
+        'column' => 0,
+        'line' => 42
+      },
       'name' => 'AnnotatedScalar'
     }
   },
   {
     'kind' => 'enum',
     'node' => {
+      'location' => {
+        'column' => 1,
+        'line' => 49
+      },
       'name' => 'Site',
       'values' => {
         'DESKTOP' => {},
@@ -291,6 +331,10 @@ __DATA__
           'name' => 'onEnum'
         }
       ],
+      'location' => {
+        'column' => 1,
+        'line' => 54
+      },
       'name' => 'AnnotatedEnum',
       'values' => {
         'ANNOTATED_VALUE' => {
@@ -321,6 +365,10 @@ __DATA__
           ]
         }
       },
+      'location' => {
+        'column' => 1,
+        'line' => 59
+      },
       'name' => 'InputType'
     }
   },
@@ -341,6 +389,10 @@ __DATA__
           ],
           'type' => 'Type'
         }
+      },
+      'location' => {
+        'column' => 1,
+        'line' => 63
       },
       'name' => 'AnnotatedInput'
     }
@@ -363,6 +415,10 @@ __DATA__
           'type' => 'Type'
         }
       },
+      'location' => {
+        'column' => 1,
+        'line' => 67
+      },
       'name' => 'Foo'
     }
   },
@@ -375,6 +431,10 @@ __DATA__
         }
       ],
       'fields' => {},
+      'location' => {
+        'column' => 1,
+        'line' => 69
+      },
       'name' => 'Foo'
     }
   },
@@ -382,6 +442,10 @@ __DATA__
     'kind' => 'type',
     'node' => {
       'fields' => {},
+      'location' => {
+        'column' => 1,
+        'line' => 71
+      },
       'name' => 'NoFields'
     }
   },
@@ -397,6 +461,10 @@ __DATA__
             }
           ]
         }
+      },
+      'location' => {
+        'column' => 0,
+        'line' => 71
       },
       'locations' => [
         'FIELD',
@@ -418,6 +486,10 @@ __DATA__
             }
           ]
         }
+      },
+      'location' => {
+        'column' => 0,
+        'line' => 76
       },
       'locations' => [
         'FIELD',

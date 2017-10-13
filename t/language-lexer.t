@@ -145,6 +145,10 @@ __DATA__
   {
     'kind' => 'operation',
     'node' => {
+      'location' => {
+        'column' => 1,
+        'line' => 29
+      },
       'name' => 'queryName',
       'operationType' => 'query',
       'selections' => [
@@ -158,11 +162,19 @@ __DATA__
                 456
               ]
             },
+            'location' => {
+              'column' => 1,
+              'line' => 27
+            },
             'name' => 'node',
             'selections' => [
               {
                 'kind' => 'field',
                 'node' => {
+                  'location' => {
+                    'column' => 8,
+                    'line' => 10
+                  },
                   'name' => 'id'
                 }
               },
@@ -174,16 +186,28 @@ __DATA__
                       'name' => 'defer'
                     }
                   ],
+                  'location' => {
+                    'column' => 5,
+                    'line' => 20
+                  },
                   'on' => 'User',
                   'selections' => [
                     {
                       'kind' => 'field',
                       'node' => {
+                        'location' => {
+                          'column' => 5,
+                          'line' => 19
+                        },
                         'name' => 'field2',
                         'selections' => [
                           {
                             'kind' => 'field',
                             'node' => {
+                              'location' => {
+                                'column' => 12,
+                                'line' => 13
+                              },
                               'name' => 'id'
                             }
                           },
@@ -203,17 +227,29 @@ __DATA__
                                   'name' => 'include'
                                 }
                               ],
+                              'location' => {
+                                'column' => 7,
+                                'line' => 18
+                              },
                               'name' => 'field1',
                               'selections' => [
                                 {
                                   'kind' => 'field',
                                   'node' => {
+                                    'location' => {
+                                      'column' => 13,
+                                      'line' => 15
+                                    },
                                     'name' => 'id'
                                   }
                                 },
                                 {
                                   'kind' => 'fragment_spread',
                                   'node' => {
+                                    'location' => {
+                                      'column' => 9,
+                                      'line' => 17
+                                    },
                                     'name' => 'frag'
                                   }
                                 }
@@ -237,10 +273,18 @@ __DATA__
                       'name' => 'skip'
                     }
                   ],
+                  'location' => {
+                    'column' => 5,
+                    'line' => 23
+                  },
                   'selections' => [
                     {
                       'kind' => 'field',
                       'node' => {
+                        'location' => {
+                          'column' => 5,
+                          'line' => 22
+                        },
                         'name' => 'id'
                       }
                     }
@@ -250,10 +294,18 @@ __DATA__
               {
                 'kind' => 'inline_fragment',
                 'node' => {
+                  'location' => {
+                    'column' => 3,
+                    'line' => 26
+                  },
                   'selections' => [
                     {
                       'kind' => 'field',
                       'node' => {
+                        'location' => {
+                          'column' => 5,
+                          'line' => 25
+                        },
                         'name' => 'id'
                       }
                     }
@@ -278,6 +330,10 @@ __DATA__
   {
     'kind' => 'operation',
     'node' => {
+      'location' => {
+        'column' => 1,
+        'line' => 37
+      },
       'name' => 'likeStory',
       'operationType' => 'mutation',
       'selections' => [
@@ -292,16 +348,28 @@ __DATA__
                 'name' => 'defer'
               }
             ],
+            'location' => {
+              'column' => 1,
+              'line' => 35
+            },
             'name' => 'like',
             'selections' => [
               {
                 'kind' => 'field',
                 'node' => {
+                  'location' => {
+                    'column' => 3,
+                    'line' => 34
+                  },
                   'name' => 'story',
                   'selections' => [
                     {
                       'kind' => 'field',
                       'node' => {
+                        'location' => {
+                          'column' => 5,
+                          'line' => 33
+                        },
                         'name' => 'id'
                       }
                     }
@@ -317,6 +385,10 @@ __DATA__
   {
     'kind' => 'operation',
     'node' => {
+      'location' => {
+        'column' => 1,
+        'line' => 50
+      },
       'name' => 'StoryLikeSubscription',
       'operationType' => 'subscription',
       'selections' => [
@@ -326,21 +398,37 @@ __DATA__
             'arguments' => {
               'input' => \'input'
             },
+            'location' => {
+              'column' => 1,
+              'line' => 48
+            },
             'name' => 'storyLikeSubscribe',
             'selections' => [
               {
                 'kind' => 'field',
                 'node' => {
+                  'location' => {
+                    'column' => 3,
+                    'line' => 47
+                  },
                   'name' => 'story',
                   'selections' => [
                     {
                       'kind' => 'field',
                       'node' => {
+                        'location' => {
+                          'column' => 7,
+                          'line' => 43
+                        },
                         'name' => 'likers',
                         'selections' => [
                           {
                             'kind' => 'field',
                             'node' => {
+                              'location' => {
+                                'column' => 7,
+                                'line' => 42
+                              },
                               'name' => 'count'
                             }
                           }
@@ -350,11 +438,19 @@ __DATA__
                     {
                       'kind' => 'field',
                       'node' => {
+                        'location' => {
+                          'column' => 5,
+                          'line' => 46
+                        },
                         'name' => 'likeSentence',
                         'selections' => [
                           {
                             'kind' => 'field',
                             'node' => {
+                              'location' => {
+                                'column' => 7,
+                                'line' => 45
+                              },
                               'name' => 'text'
                             }
                           }
@@ -378,6 +474,10 @@ __DATA__
   {
     'kind' => 'fragment',
     'node' => {
+      'location' => {
+        'column' => 1,
+        'line' => 54
+      },
       'name' => 'frag',
       'on' => 'Friend',
       'selections' => [
@@ -391,6 +491,10 @@ __DATA__
               },
               'size' => \'size'
             },
+            'location' => {
+              'column' => 1,
+              'line' => 52
+            },
             'name' => 'foo'
           }
         }
@@ -400,6 +504,10 @@ __DATA__
   {
     'kind' => 'operation',
     'node' => {
+      'location' => {
+        'column' => 1,
+        'line' => 58
+      },
       'selections' => [
         {
           'kind' => 'field',
@@ -409,12 +517,20 @@ __DATA__
               'nullish' => undef,
               'truthy' => bless( do{\(my $o = 1)}, 'JSON::PP::Boolean' )
             },
+            'location' => {
+              'column' => 54,
+              'line' => 55
+            },
             'name' => 'unnamed'
           }
         },
         {
           'kind' => 'field',
           'node' => {
+            'location' => {
+              'column' => 1,
+              'line' => 57
+            },
             'name' => 'query'
           }
         }

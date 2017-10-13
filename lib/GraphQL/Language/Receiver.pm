@@ -56,11 +56,16 @@ usable by GraphQL.
 method gotrule (Any $param = undef) {
   return unless defined $param;
   if ($KINDHASH21{$self->{parser}{rule}}) {
-    return {kind => $self->{parser}{rule}, node => _merge_hash($param)};
+    return {kind => $self->{parser}{rule}, node => $self->_locate_hash(_merge_hash($param))};
   } elsif ($KINDFIELDS21{$self->{parser}{rule}}) {
-    return {kind => $self->{parser}{rule}, node => _merge_hash($param, 'fields')};
+    return {kind => $self->{parser}{rule}, node => $self->_locate_hash(_merge_hash($param, 'fields'))};
   }
   return {$self->{parser}{rule} => $param};
+}
+
+method _locate_hash(HashRef $hash) {
+  my ($line, $column) = @{$self->{parser}->line_column($self->{parser}{farthest})};
+  +{ %$hash, location => { line => $line, column => $column } };
 }
 
 method final (Any $param = undef) {
@@ -171,7 +176,7 @@ method got_fieldDefinition (Any $param = undef) {
 method got_typeExtensionDefinition (Any $param = undef) {
   return unless defined $param;
   my $node = shift @$param;
-  return {kind => 'extend', node => $node->{node}};
+  return {kind => 'extend', node => $self->_locate_hash($node->{node})};
 }
 
 method got_enumTypeDefinition (Any $param = undef) {
@@ -183,7 +188,7 @@ method got_enumTypeDefinition (Any $param = undef) {
     $values{$name} = $_;
   } @{(grep ref eq 'ARRAY', @$param)[0]};
   $def->{values} = \%values;
-  return {kind => 'enum', node => $def};
+  return {kind => 'enum', node => $self->_locate_hash($def)};
 }
 
 method got_unionMembers (Any $param = undef) {
@@ -277,7 +282,7 @@ method got_selectionSet (Any $param = undef) {
 method got_operationDefinition (Any $param = undef) {
   return unless defined $param;
   $param = [ $param ] unless ref $param eq 'ARRAY'; # bare selectionSet
-  return {kind => 'operation', node => _merge_hash($param)};
+  return {kind => 'operation', node => $self->_locate_hash(_merge_hash($param))};
 }
 
 method got_directives (Any $param = undef) {
@@ -302,7 +307,7 @@ method got_operationTypeDefinition (Any $param = undef) {
 
 method got_schema (Any $param = undef) {
   return unless defined $param;
-  return {kind => $self->{parser}{rule}, node => _merge_hash($param->[0])};
+  return {kind => $self->{parser}{rule}, node => $self->_locate_hash(_merge_hash($param->[0]))};
 }
 
 method got_typeSystemDefinition (Any $param = undef) {
