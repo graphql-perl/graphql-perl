@@ -40,6 +40,14 @@ If there is an original error to be preserved.
 
 has original_error => (is => 'ro', isa => Any);
 
+=head2 locations
+
+Array-ref of L<GraphQL::Type::Library/DocumentLocation>s.
+
+=cut
+
+has locations => (is => 'ro', isa => ArrayRef[DocumentLocation]);
+
 =head1 METHODS
 
 =head2 is
@@ -63,6 +71,18 @@ method coerce(Any $item) :ReturnType(InstanceOf[__PACKAGE__]) {
   is_InstanceOf($item)
     ? $self->new(message => $item.'', original_error => $item)
     : $self->new(message => $item);
+}
+
+=head2 but
+
+Returns a copy of the error object, but with the given properties (as
+with a C<new> method, not coincidentally) overriding the existing ones.
+
+=cut
+
+sub but :ReturnType(InstanceOf[__PACKAGE__]) {
+  my $self = shift;
+  $self->new(%$self, @_);
 }
 
 =head2 to_string

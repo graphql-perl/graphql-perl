@@ -322,6 +322,18 @@ declare "ExpectObject",
   as Maybe[HashRef],
   message { "found not an object" };
 
+=head2 DocumentLocation
+
+Hash-ref that has keys C<line> and C<column> which are C<Int>.
+
+=cut
+
+declare "DocumentLocation",
+  as Dict[
+    line => Int,
+    column => Int,
+  ];
+
 =head1 AUTHOR
 
 Ed J, C<< <etj at cpan.org> >>
