@@ -442,9 +442,7 @@ fun _complete_value_with_located_error(
     # TODO promise stuff
     $completed;
   };
-  if ($@) {
-    die _located_error($@, $nodes, $path);
-  }
+  die _located_error($@, $nodes, $path) if $@;
   $result;
 }
 
