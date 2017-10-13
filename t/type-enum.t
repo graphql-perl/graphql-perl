@@ -144,6 +144,7 @@ subtest 'does not accept string literals', sub {
     { data => { colorEnum => undef }, errors => [
       { message => "Argument 'fromEnum' of type 'Color' was given 'GREEN' which is not enum value.",
         locations => [ { line => 1, column => 32 } ],
+        path => [ 'colorEnum' ],
     } ] },
   );
   done_testing;
@@ -155,6 +156,7 @@ subtest 'does not accept incorrect internal value', sub {
     { data => { colorEnum => undef }, errors => [
       { message => "Expected a value of type 'Color' but received: 'GREEN'.\n",
         locations => [ { line => 1, column => 34 } ],
+        path => [ 'colorEnum' ],
     } ] },
   );
   done_testing;
@@ -166,6 +168,7 @@ subtest 'does not accept internal value in place of enum literal', sub {
     { data => { colorEnum => undef }, errors => [
       { message => "Argument 'fromEnum' of type 'Color' was given '1' which is not enum value.",
         locations => [ { line => 1, column => 26 } ],
+        path => [ 'colorEnum' ],
     } ] },
   );
   done_testing;
@@ -176,7 +179,8 @@ subtest 'does not accept enum literal in place of int', sub {
     [$schema, '{ colorEnum(fromInt: GREEN) }'],
     { data => { colorEnum => undef }, errors => [
       { message => "Argument 'fromInt' of type 'Int' was given GREEN which is enum value.",
-        locations => [ { line => 1, column => 29 } ]
+        locations => [ { line => 1, column => 29 } ],
+        path => [ 'colorEnum' ],
     } ] },
   );
   done_testing;
@@ -222,6 +226,7 @@ subtest 'does not accept string variables as enum input', sub {
     { data => { colorEnum => undef }, errors => [
       { message => "Variable '\$color' of type 'String!' where expected 'Color'.",
         locations => [ { line => 1, column => 59 } ],
+        path => [ 'colorEnum' ],
     } ] },
   );
   done_testing;
@@ -233,6 +238,7 @@ subtest 'does not accept internal value variable as enum input', sub {
     { data => { colorEnum => undef }, errors => [
       { message => "Variable '\$color' of type 'Int!' where expected 'Color'.",
         locations => [ { line => 1, column => 56 } ],
+        path => [ 'colorEnum' ],
     } ] },
   );
   done_testing;
@@ -278,6 +284,7 @@ subtest 'may be internally represented with complex values', sub {
     }, errors => [ {
       message => "Expected a value of type 'Complex' but received: HASH.\n",
       locations => [ { line => 6, column => 5 } ],
+      path => [ 'bad' ],
     } ] },
   );
   done_testing;

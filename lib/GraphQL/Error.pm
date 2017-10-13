@@ -50,6 +50,15 @@ Array-ref of L<GraphQL::Type::Library/DocumentLocation>s.
 
 has locations => (is => 'ro', isa => ArrayRef[DocumentLocation]);
 
+=head2 path
+
+Array-ref of L<GraphQL::Type::Library/StrNameValid>s or C<Int>s describing
+the path from the top operation (being either fields, or a List offset).
+
+=cut
+
+has path => (is => 'ro', isa => ArrayRef[StrNameValid | Int]);
+
 =head1 METHODS
 
 =head2 is

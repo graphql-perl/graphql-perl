@@ -637,6 +637,7 @@ fun _located_error(
 ) {
   GraphQL::Error->coerce($error)->but(
     locations => [ map $_->{location}, @$nodes ],
+    path => $path,
   );
 }
 
