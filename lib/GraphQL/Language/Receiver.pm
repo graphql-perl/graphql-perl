@@ -171,8 +171,7 @@ method got_fieldDefinition (Any $param = undef) {
 method got_typeExtensionDefinition (Any $param = undef) {
   return unless defined $param;
   my $node = shift @$param;
-  $node->{kind} = 'extend';
-  return $node;
+  return {kind => 'extend', node => $node->{node}};
 }
 
 method got_enumTypeDefinition (Any $param = undef) {
