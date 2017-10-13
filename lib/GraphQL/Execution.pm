@@ -199,7 +199,7 @@ fun _execute_operation(
   my $path = [];
   my $execute = $op_type eq 'mutation'
     ? \&_execute_fields_serially : \&_execute_fields;
-  my $result = eval {
+  (my $result, $context) = eval {
     $execute->($context, $type, $root_value, $path, $fields);
   };
   return ({}, _context_error($context, GraphQL::Error->coerce($@))) if $@;
@@ -289,7 +289,7 @@ fun _execute_fields(
   DEBUG and _debug('_execute_fields', $parent_type->to_string, $fields, $root_value);
   map {
     my $result_name = $_;
-    my $result = _resolve_field(
+    (my $result, $context) = _resolve_field(
       $context,
       $parent_type,
       $root_value,
@@ -299,7 +299,7 @@ fun _execute_fields(
     $results{$result_name} = $result;
     # TODO promise stuff
   } keys %$fields; # TODO ordering of fields
-  \%results;
+  (\%results, $context);
 }
 
 fun _execute_fields_serially(
@@ -326,7 +326,7 @@ fun _resolve_field(
   my $field_name = $field_node->{name};
   DEBUG and _debug('_resolve_field', $parent_type->to_string, $nodes, $root_value);
   my $field_def = _get_field_def($context->{schema}, $parent_type, $field_name);
-  return if !$field_def;
+  return (undef, $context) if !$field_def;
   my $resolve = $field_def->{resolve} || $context->{field_resolver};
   my $info = _build_resolve_info(
     $context,
@@ -423,15 +423,12 @@ fun _complete_value_catching_error(
     return _complete_value_with_located_error(@_);
   }
   my $result = eval {
-    my $completed = _complete_value_with_located_error(@_);
+    (my $completed, $context) = _complete_value_with_located_error(@_);
     # TODO promise stuff
     $completed;
   };
-  if ($@) {
-    push @{ $context->{errors} }, GraphQL::Error->coerce($@);
-    return undef; # null value
-  }
-  $result;
+  return (undef, _context_error($context, GraphQL::Error->coerce($@))) if $@;
+  ($result, $context);
 }
 
 fun _complete_value_with_located_error(
@@ -443,12 +440,12 @@ fun _complete_value_with_located_error(
   Any $result,
 ) {
   my $result = eval {
-    my $completed = _complete_value(@_);
+    (my $completed, $context) = _complete_value(@_);
     # TODO promise stuff
     $completed;
   };
   die _located_error($@, $nodes, $path) if $@;
-  $result;
+  ($result, $context);
 }
 
 fun _complete_value(
@@ -463,7 +460,7 @@ fun _complete_value(
   # TODO promise stuff
   die $result if GraphQL::Error->is($result);
   if ($return_type->isa('GraphQL::Type::NonNull')) {
-    my $completed = _complete_value(
+    (my $completed, $context) = _complete_value(
       $context,
       $return_type->of,
       $nodes,
@@ -474,11 +471,11 @@ fun _complete_value(
     die GraphQL::Error->new(
       message => "Cannot return null for non-nullable field @{[$info->{parent_type}->name]}.@{[$info->{field_name}]}."
     ) if !defined $completed;
-    return $completed;
+    return ($completed, $context);
   }
-  return $result if !defined $result;
+  return ($result, $context) if !defined $result;
   return _complete_list_value(@_) if $return_type->isa('GraphQL::Type::List');
-  return _complete_leaf_value($return_type, $result)
+  return (_complete_leaf_value($return_type, $result), $context)
     if $return_type->DOES('GraphQL::Role::Leaf');
   return _complete_abstract_value(@_) if $return_type->DOES('GraphQL::Role::Abstract');
   return _complete_object_value(@_) if $return_type->isa('GraphQL::Type::Object');
@@ -500,7 +497,7 @@ fun _complete_list_value(
   my $item_type = $return_type->of;
   my $index = 0;
   my @completed_results = map {
-    _complete_value_catching_error(
+    (my $r, $context) = _complete_value_catching_error(
       $context,
       $item_type,
       $nodes,
@@ -508,8 +505,9 @@ fun _complete_list_value(
       [ @$path, $index++ ],
       $_,
     );
+    $r;
   } @$result;
-  \@completed_results;
+  (\@completed_results, $context);
 }
 
 fun _complete_leaf_value(
