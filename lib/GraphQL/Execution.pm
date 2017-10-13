@@ -398,7 +398,7 @@ fun _resolve_field_value_or_error(
   Maybe[Any] $root_value,
   HashRef $info,
 ) {
-  DEBUG and _debug('_resolve_field_value_or_error', $nodes, $root_value, $field_def, $JSON->encode($nodes->[0]));
+  DEBUG and _debug('_resolve_field_value_or_error', $nodes, $root_value, $field_def, eval { $JSON->encode($nodes->[0]) });
   my $result = eval {
     my $args = _get_argument_values($field_def, $nodes->[0], $context->{variable_values});
     DEBUG and _debug("_resolve_field_value_or_error(resolve)", $args, $JSON->encode($args));
@@ -648,7 +648,7 @@ fun _get_argument_values(
 ) {
   my $arg_defs = $def->{args};
   my $arg_nodes = $node->{arguments};
-  DEBUG and _debug("_get_argument_values", $arg_defs, $arg_nodes, $variable_values, $JSON->encode($node));
+  DEBUG and _debug("_get_argument_values", $arg_defs, $arg_nodes, $variable_values, eval { $JSON->encode($node) });
   return {} if !$arg_defs;
   my @bad = grep { !exists $arg_nodes->{$_} and !defined $arg_defs->{$_}{default_value} and $arg_defs->{$_}{type}->isa('GraphQL::Type::NonNull') } keys %$arg_defs;
   die GraphQL::Error->new(
