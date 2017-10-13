@@ -25,7 +25,7 @@ like $@->message, qr/Parse document failed for some reason/, 'invalid char';
 lives_ok { do_lex("\x{FEFF} query foo { id }") } 'accepts BOM';
 
 dies_ok { do_lex("\n\n    ?  \n\n\n") };
-like $@->message, qr/line:\s*3.*column:\s*5/s, 'error respects whitespace';
+is_deeply [ map $@->locations->[0]->{$_}, qw(line column) ], [3,5], 'error respects whitespace';
 
 $got = do_lex(string_make(' x '));
 is string_lookup($got), ' x ', 'string preserve whitespace' or diag Dumper $got;
@@ -34,36 +34,36 @@ $got = do_lex(string_make('quote \\"'));
 is string_lookup($got), 'quote \\"', 'string quote kept' or diag Dumper $got; # not de-quoted by lexer
 
 dies_ok { do_lex(string_make('quote \\')) };
-like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on unterminated string';
+is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,21], 'error on unterminated string';
 
 dies_ok { do_lex(q(query q { foo(name: 'hello') { id } })) };
-like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on single quote';
+is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,21], 'error on single quote';
 
 dies_ok { do_lex("\x{0007}") };
-like $@->message, qr/line:\s*1.*column:\s*1/s, 'error on invalid char';
+is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,1], 'error on invalid char';
 
 dies_ok { do_lex(string_make("\x{0000}")) };
-like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on NUL char';
+is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,21], 'error on NUL char';
 
 dies_ok { do_lex(string_make("hi\nthere")) };
-like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on multi-line string';
+is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,21], 'error on multi-line string';
 dies_ok { do_lex(string_make("hi\rthere")) };
-like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on MacOS multi-line string';
+is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,21], 'error on MacOS multi-line string';
 
 dies_ok { do_lex(string_make('\z')) };
-like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
+is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,21], 'error on invalid escape';
 dies_ok { do_lex(string_make('bad \\x esc')) };
-like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
+is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,21], 'error on invalid escape';
 dies_ok { do_lex(string_make('bad \\u1 esc')) };
-like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
+is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,21], 'error on invalid escape';
 dies_ok { do_lex(string_make('bad \\u0XX1 esc')) };
-like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
+is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,21], 'error on invalid escape';
 dies_ok { do_lex(string_make('bad \\uXXXX esc')) };
-like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
+is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,21], 'error on invalid escape';
 dies_ok { do_lex(string_make('bad \\uFXXX esc')) };
-like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
+is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,21], 'error on invalid escape';
 dies_ok { do_lex(string_make('bad \\uXXXF esc')) };
-like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on invalid escape';
+is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,21], 'error on invalid escape';
 
 number_test('4', 'int', 'simple int');
 number_test('4.123', 'float', 'simple float');
@@ -82,21 +82,21 @@ number_test('-1.123e+4', 'float', 'neg float posexp lower');
 number_test('-1.123e4567', 'float', 'neg float longexp lower');
 
 dies_ok { do_lex(number_make('00')) };
-like $@->message, qr/line:\s*1.*column:\s*22/s, 'error on invalid int';
+is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,22], 'error on invalid int';
 dies_ok { do_lex(number_make('+1')) };
-like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on invalid int';
+is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,21], 'error on invalid int';
 dies_ok { do_lex(number_make('1.')) };
-like $@->message, qr/line:\s*1.*column:\s*22/s, 'error on invalid int';
+is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,22], 'error on invalid int';
 dies_ok { do_lex(number_make('.123')) };
-like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on invalid float';
+is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,21], 'error on invalid float';
 dies_ok { do_lex(number_make('1.A')) };
-like $@->message, qr/line:\s*1.*column:\s*22/s, 'error on invalid int';
+is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,22], 'error on invalid int';
 dies_ok { do_lex(number_make('-A')) };
-like $@->message, qr/line:\s*1.*column:\s*21/s, 'error on invalid int';
+is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,21], 'error on invalid int';
 dies_ok { do_lex(number_make('1.0e')) };
-like $@->message, qr/line:\s*1.*column:\s*25/s, 'error on invalid int';
+is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,25], 'error on invalid int';
 dies_ok { do_lex(number_make('1.0eA')) };
-like $@->message, qr/line:\s*1.*column:\s*26/s, 'error on invalid int';
+is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,26], 'error on invalid int';
 
 my $multibyte = "Has a \x{0A0A} multi-byte character.";
 $got = do_lex(string_make($multibyte));

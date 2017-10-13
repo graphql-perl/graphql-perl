@@ -71,11 +71,11 @@ sub format_error :ReturnType(InstanceOf['GraphQL::Error']) {
     my $context = substr($$buffer, $position, 50);
     $pretext =~ s/.*\n//gs;
     $context =~ s/\n/\\n/g;
-    return GraphQL::Error->new(message => <<EOF);
+    return GraphQL::Error->new(
+      locations => [ { line => $line, column => $column } ],
+      message => <<EOF);
 Error parsing Pegex document:
   msg:      $msg
-  line:     $line
-  column:   $column
   context:  $pretext$context
             ${\ (' ' x (length($pretext)) . '^')}
   position: $position ($real_pos pre-lookahead)
