@@ -83,7 +83,7 @@ method execute(
   };
   $context = _context_error($context, GraphQL::Error->coerce($@)) if $@;
   my $wrapped = { data => $result };
-  if (@{ $context->{errors}||[] }) {
+  if (@{ $context->{errors} || [] }) {
     return { errors => [ map $_->to_json, @{$context->{errors}} ], %$wrapped };
   } else {
     return $wrapped;
@@ -95,7 +95,7 @@ fun _context_error(
   Any $error,
 ) :ReturnType(HashRef) {
   # like push but no mutation
-  +{ %$context, errors => [ @{$context->{errors}||[]}, $error ] };
+  +{ %$context, errors => [ @{$context->{errors} || []}, $error ] };
 }
 
 fun _build_context(
@@ -221,7 +221,7 @@ fun _collect_fields(
       my $use_name = $node->{alias} || $node->{name};
       $fields_got = {
         %$fields_got,
-        $use_name => [ @{$fields_got->{$use_name}||[]}, $node ],
+        $use_name => [ @{$fields_got->{$use_name} || []}, $node ],
       }; # like push but no mutation
     } elsif ($selection->{kind} eq 'inline_fragment') {
       next if !_fragment_condition_match($context, $node, $runtime_type);
