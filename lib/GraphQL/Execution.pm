@@ -215,13 +215,15 @@ fun _collect_fields(
     my $node = $selection->{node};
     next if !_should_include_node($context, $node);
     if ($selection->{kind} eq 'field') {
-      # TODO no mutate $fields_got
       my $use_name = $node->{alias} || $node->{name};
-      push @{ $fields_got->{$use_name} }, $node;
+      $fields_got = {
+        %$fields_got,
+        $use_name => [ @{$fields_got->{$use_name}||[]}, $node ],
+      }; # like push but no mutation
     } elsif ($selection->{kind} eq 'inline_fragment') {
       next if !_fragment_condition_match($context, $node, $runtime_type);
       next if !_should_include_node($context, $node);
-      _collect_fields(
+      $fields_got = _collect_fields(
         $context,
         $runtime_type,
         $node->{selections},
@@ -237,7 +239,7 @@ fun _collect_fields(
       next if !$fragment;
       next if !_fragment_condition_match($context, $fragment, $runtime_type);
       DEBUG and _debug('_collect_fields(fragment_spread)', $fragment);
-      _collect_fields(
+      $fields_got = _collect_fields(
         $context,
         $runtime_type,
         $fragment->{selections},
