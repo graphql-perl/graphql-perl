@@ -635,8 +635,9 @@ fun _located_error(
   ArrayRef[HashRef] $nodes,
   ArrayRef $path,
 ) {
-  # TODO implement
-  GraphQL::Error->coerce($error);
+  GraphQL::Error->coerce($error)->but(
+    locations => [ map $_->{location}, @$nodes ],
+  );
 }
 
 fun _get_argument_values(

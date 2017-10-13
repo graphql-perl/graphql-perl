@@ -154,6 +154,7 @@ subtest 'Handles objects and nullability', sub {
           data => { fieldWithObjectInput => undef },
           errors => [ { message =>
             qq{Argument 'input' got invalid value ["foo","bar","baz"].\nExpected 'TestInputObject'.},
+            locations => [ { line => 3, column => 7 } ],
           } ],
         },
       );
@@ -431,7 +432,8 @@ In method graphql_to_perl: parameter 1 ($item): found not an object at (eval 252
         [$schema, $doc],
         { data => { fieldWithNonNullableStringInput => undef },
           errors => [ { message =>
-          q{Argument 'input' of type 'String!' not given.}
+            q{Argument 'input' of type 'String!' not given.},
+            locations => [ { line => 2, column => 43 } ],
         } ] },
       );
     };
@@ -460,7 +462,8 @@ In method graphql_to_perl: parameter 1 ($item): found not an object at (eval 252
         [$schema, $doc],
         { data => { fieldWithNonNullableStringInput => undef },
           errors => [ { message =>
-          q{Argument 'input' of type 'String!' was given variable '$foo' but no runtime value.}
+            q{Argument 'input' of type 'String!' was given variable '$foo' but no runtime value.},
+            locations => [ { line => 2, column => 56 } ],
         } ] },
       );
     };
@@ -697,7 +700,8 @@ In method graphql_to_perl: parameter 1 ($item): found not an object at (eval 252
         [$schema, $doc],
         { data => { fieldWithDefaultArgumentValue => undef },
           errors => [ { message =>
-          q{Argument 'input' of type 'String!' was given WRONG_TYPE which is enum value.}
+            q{Argument 'input' of type 'String!' was given WRONG_TYPE which is enum value.},
+            locations => [ { line => 2, column => 60 } ],
         } ] },
       );
     };

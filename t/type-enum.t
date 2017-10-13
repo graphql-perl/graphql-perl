@@ -142,8 +142,9 @@ subtest 'does not accept string literals', sub {
   run_test(
     [$schema, '{ colorEnum(fromEnum: "GREEN") }'],
     { data => { colorEnum => undef }, errors => [
-      { message => "Argument 'fromEnum' of type 'Color' was given 'GREEN' which is not enum value." }
-    ] },
+      { message => "Argument 'fromEnum' of type 'Color' was given 'GREEN' which is not enum value.",
+        locations => [ { line => 1, column => 32 } ],
+    } ] },
   );
   done_testing;
 };
@@ -152,8 +153,9 @@ subtest 'does not accept incorrect internal value', sub {
   run_test(
     [$schema, '{ colorEnum(fromString: "GREEN") }'],
     { data => { colorEnum => undef }, errors => [
-      { message => "Expected a value of type 'Color' but received: 'GREEN'.\n" }
-    ] },
+      { message => "Expected a value of type 'Color' but received: 'GREEN'.\n",
+        locations => [ { line => 1, column => 34 } ],
+    } ] },
   );
   done_testing;
 };
@@ -162,8 +164,9 @@ subtest 'does not accept internal value in place of enum literal', sub {
   run_test(
     [$schema, '{ colorEnum(fromEnum: 1) }'],
     { data => { colorEnum => undef }, errors => [
-      { message => "Argument 'fromEnum' of type 'Color' was given '1' which is not enum value." }
-    ] },
+      { message => "Argument 'fromEnum' of type 'Color' was given '1' which is not enum value.",
+        locations => [ { line => 1, column => 26 } ],
+    } ] },
   );
   done_testing;
 };
@@ -172,8 +175,9 @@ subtest 'does not accept enum literal in place of int', sub {
   run_test(
     [$schema, '{ colorEnum(fromInt: GREEN) }'],
     { data => { colorEnum => undef }, errors => [
-      { message => "Argument 'fromInt' of type 'Int' was given GREEN which is enum value." }
-    ] },
+      { message => "Argument 'fromInt' of type 'Int' was given GREEN which is enum value.",
+        locations => [ { line => 1, column => 29 } ]
+    } ] },
   );
   done_testing;
 };
@@ -216,8 +220,9 @@ subtest 'does not accept string variables as enum input', sub {
   run_test(
     [$schema, 'query test($color: String!) { colorEnum(fromEnum: $color) }', undef, undef, { color => 'BLUE' }],
     { data => { colorEnum => undef }, errors => [
-      { message => "Variable '\$color' of type 'String!' where expected 'Color'." }
-    ] },
+      { message => "Variable '\$color' of type 'String!' where expected 'Color'.",
+        locations => [ { line => 1, column => 59 } ],
+    } ] },
   );
   done_testing;
 };
@@ -226,8 +231,9 @@ subtest 'does not accept internal value variable as enum input', sub {
   run_test(
     [$schema, 'query test($color: Int!) { colorEnum(fromEnum: $color) }', undef, undef, { color => 2 }],
     { data => { colorEnum => undef }, errors => [
-      { message => "Variable '\$color' of type 'Int!' where expected 'Color'." }
-    ] },
+      { message => "Variable '\$color' of type 'Int!' where expected 'Color'.",
+        locations => [ { line => 1, column => 56 } ],
+    } ] },
   );
   done_testing;
 };
@@ -271,6 +277,7 @@ subtest 'may be internally represented with complex values', sub {
       bad => undef,
     }, errors => [ {
       message => "Expected a value of type 'Complex' but received: HASH.\n",
+      locations => [ { line => 6, column => 5 } ],
     } ] },
   );
   done_testing;

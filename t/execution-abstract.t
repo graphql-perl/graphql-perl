@@ -180,8 +180,9 @@ subtest 'resolveType on Interface yields useful error', sub {
     { data => {
       pets => [ @EXPECTED, undef ],
     }, errors => [
-      { message => "Runtime Object type 'Human' is not a possible type for 'Pet'." },
-    ] },
+      { message => "Runtime Object type 'Human' is not a possible type for 'Pet'.",
+        locations => [ { line => 11, column => 1 } ],
+    }, ] },
   );
   done_testing;
 };
@@ -219,8 +220,9 @@ subtest 'resolveType on Union yields useful error', sub {
     { data => {
       pets => [ @EXPECTED, undef ],
     }, errors => [
-      { message => "Runtime Object type 'Human' is not a possible type for 'Pet'." },
-    ] },
+      { message => "Runtime Object type 'Human' is not a possible type for 'Pet'.",
+        locations => [ { line => 11, column => 1 } ],
+    } ] },
   );
   done_testing;
 };
