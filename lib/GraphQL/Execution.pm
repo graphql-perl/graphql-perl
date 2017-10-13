@@ -74,22 +74,28 @@ method execute(
     );
   };
   return { errors => [ GraphQL::Error->coerce($@)->to_json ] } if $@;
-  my $result = eval {
-    scalar _execute_operation(
+  (my $result, $context) = eval {
+    _execute_operation(
       $context,
       $context->{operation},
       $root_value,
     );
   };
-  if ($@) {
-    push @{ $context->{errors} }, GraphQL::Error->coerce($@); # TODO no mutate $context
-  }
+  $context = _context_error($context, GraphQL::Error->coerce($@)) if $@;
   my $wrapped = { data => $result };
-  if (@{ $context->{errors} }) {
+  if (@{ $context->{errors}||[] }) {
     return { errors => [ map $_->to_json, @{$context->{errors}} ], %$wrapped };
   } else {
     return $wrapped;
   }
+}
+
+fun _context_error(
+  HashRef $context,
+  Any $error,
+) :ReturnType(HashRef) {
+  # like push but no mutation
+  +{ %$context, errors => [ @{$context->{errors}||[]}, $error ] };
 }
 
 fun _build_context(
@@ -180,7 +186,7 @@ fun _execute_operation(
   HashRef $context,
   HashRef $operation,
   Any $root_value,
-) :ReturnType(HashRef) {
+) {
   my $op_type = $operation->{operationType} || 'query';
   my $type = $context->{schema}->$op_type;
   my ($fields) = _collect_fields(
@@ -196,11 +202,8 @@ fun _execute_operation(
   my $result = eval {
     $execute->($context, $type, $root_value, $path, $fields);
   };
-  if ($@) {
-    push @{ $context->{errors} }, GraphQL::Error->coerce($@); # TODO no mutate $context
-    return {};
-  }
-  $result;
+  return ({}, _context_error($context, GraphQL::Error->coerce($@))) if $@;
+  ($result, $context);
 }
 
 fun _collect_fields(
