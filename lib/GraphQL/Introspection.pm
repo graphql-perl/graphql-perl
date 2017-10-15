@@ -481,8 +481,8 @@ $TYPE_META_TYPE = GraphQL::Type::Object->new(
       resolve => sub {
         my ($type, $args) = @_;
         return if !$type->isa('GraphQL::Type::Enum');
-        DEBUG and _debug('enumValues.resolve', $type, $args);
         my $values = $type->values;
+        DEBUG and _debug('enumValues.resolve', $type, $args, $values);
         $values = { map { ($_ => $values->{$_}) } grep !$values->{$_}{is_deprecated}, keys %$values } if !$args->{includeDeprecated};
         [ map { +{
           name => $_,

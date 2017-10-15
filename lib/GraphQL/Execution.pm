@@ -627,7 +627,7 @@ fun _collect_and_execute_subfields(
       $visited_fragment_names,
     );
   }
-  DEBUG and _debug('_collect_and_execute_subfields', $return_type->to_string, $subfield_nodes);
+  DEBUG and _debug('_collect_and_execute_subfields', $return_type->to_string, $subfield_nodes, $result);
   _execute_fields($context, $return_type, $result, $path, $subfield_nodes);
 }
 
