@@ -138,6 +138,9 @@ bug as I make changes.
 The creation of this work has been sponsored by Perl Careers:
 [https://perl.careers/](https://perl.careers/).
 
+Artur Khabibullin `<rtkh at cpan.org>` contributed valuable ports
+of the JavaScript tests.
+
 # LICENSE AND COPYRIGHT
 
 Copyright 2017 Ed J.

@@ -156,6 +156,9 @@ bug as I make changes.
 The creation of this work has been sponsored by Perl Careers:
 L<https://perl.careers/>.
 
+Artur Khabibullin C<< <rtkh at cpan.org> >> contributed valuable ports
+of the JavaScript tests.
+
 =head1 LICENSE AND COPYRIGHT
 
 Copyright 2017 Ed J.
