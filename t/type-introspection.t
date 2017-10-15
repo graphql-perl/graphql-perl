@@ -49,6 +49,112 @@ subtest 'executes an introspection query', sub {
   done_testing;
 };
 
+subtest 'introspects on input object'=> sub {
+  my $TestInputObject = GraphQL::Type::InputObject->new(
+    name => 'TestInputObject',
+    fields => {
+      a => { type => $String, default_value => 'foo' },
+      b => { type => $String->list },
+      c => { type => $String, default_value => undef }
+    }
+  );
+
+  my $TestType = GraphQL::Type::Object->new(
+    name => 'TestType',
+    fields => {
+      field => {
+        type => $String,
+        args => { complex => { type => $TestInputObject } },
+        resolve => sub {
+          my (undef, $args) = @_;
+          return $JSON->encode($args->{complex});
+        },
+      }
+    }
+  );
+
+  my $schema = GraphQL::Schema->new(query => $TestType);
+  my $request = <<'EOQ';
+{
+  __schema {
+    types {
+      kind
+      name
+      inputFields {
+        name
+        type { ...TypeRef }
+        defaultValue
+      }
+    }
+  }
+}
+
+fragment TypeRef on __Type {
+  kind
+  name
+  ofType {
+    kind
+    name
+    ofType {
+      kind
+      name
+      ofType {
+        kind
+        name
+      }
+    }
+  }
+}
+EOQ
+
+  my $got = GraphQL::Execution->execute($schema, $request);
+  cmp_deeply $got, {
+    data => {
+      __schema => {
+        types => supersetof(
+          {
+            kind => 'INPUT_OBJECT',
+            name => 'TestInputObject',
+            inputFields => bag(
+              {
+                name => 'a',
+                type => {
+                  kind => 'SCALAR',
+                  name => 'String',
+                  ofType => undef,
+                },
+                defaultValue => '"foo"',
+              },
+              {
+                name => 'b',
+                type => {
+                  kind => 'LIST',
+                  name => undef,
+                  ofType => {
+                    kind => 'SCALAR',
+                    name => 'String',
+                    ofType => undef,
+                  }
+                },
+                defaultValue => undef,
+              },
+              {
+                name => 'c',
+                type => {
+                  kind => 'SCALAR',
+                  name => 'String',
+                  ofType => undef,
+                },
+                defaultValue => undef,
+              }
+            )
+          }
+        )
+      }
+    }
+  } or diag nice_dump($got);
+};
+
 done_testing;
 
 __DATA__
