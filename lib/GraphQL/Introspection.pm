@@ -315,8 +315,8 @@ our $ENUM_VALUE_META_TYPE = GraphQL::Type::Object->new(
   fields => {
     name => { type => $String->non_null },
     description => { type => $String },
-    _make_hash_bool_field(isDeprecated => $Boolean->non_null, 'is_deprecated'),
-    _make_hash_field(deprecationReason => $String, 'deprecation_reason'),
+    _make_hash_bool_field(isDeprecated => $Boolean->non_null, 'isDeprecated'),
+    _make_hash_field(deprecationReason => $String, 'deprecationReason'),
   },
 );
 
@@ -376,8 +376,8 @@ our $FIELD_META_TYPE = GraphQL::Type::Object->new(
       resolve => sub { _hash2array($_[0]->{args}||{}) },
     },
     type => { type => $TYPE_META_TYPE->non_null },
-    _make_hash_bool_field(isDeprecated => $Boolean->non_null, 'is_deprecated'),
-    _make_hash_field(deprecationReason => $String, 'deprecation_reason'),
+    _make_hash_bool_field(isDeprecated => $Boolean->non_null, 'isDeprecated'),
+    _make_hash_field(deprecationReason => $String, 'deprecationReason'),
   } },
 );
 
