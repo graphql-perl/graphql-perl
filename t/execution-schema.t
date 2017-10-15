@@ -15,7 +15,7 @@ BEGIN {
   use_ok( 'GraphQL::Schema' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::Object' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::Scalar', qw($String $Int $Boolean $ID) ) || print "Bail out!\n";
-  use_ok( 'GraphQL::Execution' ) || print "Bail out!\n";
+  use_ok( 'GraphQL::Execution', qw(execute) ) || print "Bail out!\n";
 }
 
 my $BlogImage = GraphQL::Type::Object->new(
@@ -133,7 +133,7 @@ fragment articleFields on Article {
 
 sub run_test {
   my ($args, $expected) = @_;
-  my $got = GraphQL::Execution->execute(@$args);
+  my $got = execute(@$args);
   local ($Data::Dumper::Sortkeys, $Data::Dumper::Indent, $Data::Dumper::Terse);
   $Data::Dumper::Sortkeys = $Data::Dumper::Indent = $Data::Dumper::Terse = 1;
   is_deeply $got, $expected or diag Dumper $got;

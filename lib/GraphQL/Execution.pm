@@ -15,6 +15,7 @@ use GraphQL::Debug qw(_debug);
 use GraphQL::Introspection qw(
   $SCHEMA_META_FIELD_DEF $TYPE_META_FIELD_DEF $TYPE_NAME_META_FIELD_DEF
 );
+use base qw(Exporter);
 
 =head1 NAME
 
@@ -22,6 +23,9 @@ GraphQL::Execution - Execute GraphQL queries
 
 =cut
 
+our @EXPORT_OK = qw(
+  execute
+);
 our $VERSION = '0.02';
 
 my $JSON = JSON::MaybeXS->new->allow_nonref;
@@ -29,8 +33,8 @@ use constant DEBUG => $ENV{GRAPHQL_DEBUG}; # "DEBUG and" gets optimised out if f
 
 =head1 SYNOPSIS
 
-  use GraphQL::Execution;
-  my $result = GraphQL::Execution->execute($schema, $doc, $root_value);
+  use GraphQL::Execution qw(execute);
+  my $result = execute($schema, $doc, $root_value);
 
 =head1 DESCRIPTION
 
@@ -40,7 +44,7 @@ Executes a GraphQL query, returns results.
 
 =head2 execute
 
-  my $result = GraphQL::Execution->execute(
+  my $result = execute(
     $schema,
     $doc,
     $root_value,
@@ -52,7 +56,7 @@ Executes a GraphQL query, returns results.
 
 =cut
 
-method execute(
+fun execute(
   (InstanceOf['GraphQL::Schema']) $schema,
   Str $doc,
   Any $root_value = undef,

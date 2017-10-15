@@ -39,7 +39,7 @@ my $JSON = JSON::MaybeXS->new->allow_nonref;
 =head1 SYNOPSIS
 
   use GraphQL::Introspection qw($QUERY);
-  my $schema_data = GraphQL::Execution->execute($schema, $QUERY);
+  my $schema_data = execute($schema, $QUERY);
 
 =head1 DESCRIPTION
 

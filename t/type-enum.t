@@ -11,7 +11,7 @@ BEGIN {
   use_ok( 'GraphQL::Type::Enum' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::Object' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::Scalar', qw($String $Int $Boolean) ) || print "Bail out!\n";
-  use_ok( 'GraphQL::Execution' ) || print "Bail out!\n";
+  use_ok( 'GraphQL::Execution', qw(execute) ) || print "Bail out!\n";
   use_ok( 'GraphQL::Introspection' ) || print "Bail out!\n";
 }
 
@@ -108,7 +108,7 @@ my $schema = GraphQL::Schema->new(
 
 sub run_test {
   my ($args, $expected) = @_;
-  my $got = GraphQL::Execution->execute(@$args);
+  my $got = execute(@$args);
   local ($Data::Dumper::Sortkeys, $Data::Dumper::Indent, $Data::Dumper::Terse);
   $Data::Dumper::Sortkeys = $Data::Dumper::Indent = $Data::Dumper::Terse = 1;
   is_deeply $got, $expected or diag Dumper $got;
@@ -291,7 +291,7 @@ subtest 'may be internally represented with complex values', sub {
 };
 
 subtest 'can be introspected without error', sub {
-  my $got = GraphQL::Execution->execute($schema, $GraphQL::Introspection::QUERY);
+  my $got = execute($schema, $GraphQL::Introspection::QUERY);
   local ($Data::Dumper::Sortkeys, $Data::Dumper::Indent, $Data::Dumper::Terse);
   $Data::Dumper::Sortkeys = $Data::Dumper::Indent = $Data::Dumper::Terse = 1;
   ok !$got->{errors}, 'no query errors' or diag Dumper $got;

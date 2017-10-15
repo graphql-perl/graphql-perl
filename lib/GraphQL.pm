@@ -29,7 +29,7 @@ our $VERSION = '0.14';
   use GraphQL::Schema;
   use GraphQL::Type::Object;
   use GraphQL::Type::Scalar qw($String);
-  use GraphQL::Execution;
+  use GraphQL::Execution qw(execute);
 
   my $schema = GraphQL::Schema->new(query => GraphQL::Type::Object->new(
     name => 'QueryRoot',
@@ -38,7 +38,7 @@ our $VERSION = '0.14';
     },
   ));
   post '/graphql' => sub {
-    send_as JSON => GraphQL::Execution->execute(
+    send_as JSON => execute(
       $schema,
       body_parameters->{query},
       undef,

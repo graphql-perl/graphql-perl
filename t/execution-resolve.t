@@ -11,7 +11,7 @@ BEGIN {
   use_ok( 'GraphQL::Schema' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::Object' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::Scalar', qw($String $Int) ) || print "Bail out!\n";
-  use_ok( 'GraphQL::Execution' ) || print "Bail out!\n";
+  use_ok( 'GraphQL::Execution', qw(execute) ) || print "Bail out!\n";
 }
 
 $Data::Dumper::Sortkeys = $Data::Dumper::Indent = $Data::Dumper::Terse = 1;
@@ -29,7 +29,7 @@ sub make_schema {
 
 sub run_test {
   my ($args, $expected) = @_;
-  my $got = GraphQL::Execution->execute(@$args);
+  my $got = execute(@$args);
   is_deeply $got, $expected or diag Dumper $got;
 }
 

@@ -16,12 +16,12 @@ BEGIN {
   use_ok( 'GraphQL::Type::Scalar', qw($String) ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::Enum' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Introspection', '$QUERY' ) || print "Bail out!\n";
-  use_ok( 'GraphQL::Execution' ) || print "Bail out!\n";
+  use_ok( 'GraphQL::Execution', qw(execute) ) || print "Bail out!\n";
 }
 
 sub run_test {
   my ($args, $expected) = @_;
-  my $got = GraphQL::Execution->execute(@$args);
+  my $got = execute(@$args);
   is_deeply $got, $expected or diag nice_dump($got);
 }
 
@@ -37,7 +37,7 @@ subtest 'executes an introspection query', sub {
     name => 'QueryRoot',
     fields => { onlyField => { type => $String } },
   ));
-  my $got = GraphQL::Execution->execute($schema, $QUERY, undef, undef, undef, 'IntrospectionQuery');
+  my $got = execute($schema, $QUERY, undef, undef, undef, 'IntrospectionQuery');
   my $expected_text = join '', <DATA>;
   $expected_text =~ s#bless\(\s*do\{\\\(my\s*\$o\s*=\s*(.)\)\},\s*'JSON::PP::Boolean'\s*\)#'JSON->' . ($1 ? 'true' : 'false')#ge;
   my $big_expected = eval 'use JSON::MaybeXS;my '.$expected_text.';$VAR1';
@@ -107,7 +107,7 @@ fragment TypeRef on __Type {
 }
 EOQ
 
-  my $got = GraphQL::Execution->execute($schema, $request);
+  my $got = execute($schema, $request);
   cmp_deeply $got, {
     data => {
       __schema => {
@@ -416,7 +416,7 @@ subtest 'fails as expected on the __type root field without an arg'=> sub {
 }
 EOQ
 
-  my $got = GraphQL::Execution->execute($schema, $request);
+  my $got = execute($schema, $request);
   cmp_deeply $got, {
     data => { __type => undef },
     errors => [noclass(superhashof({
@@ -448,7 +448,7 @@ subtest 'exposes descriptions on types and fields'=> sub {
 }
 EOQ
 
-  my $got = GraphQL::Execution->execute($schema, $request);
+  my $got = execute($schema, $request);
   cmp_deeply $got, {
     data => {
       schemaType => {
@@ -503,7 +503,7 @@ subtest 'exposes descriptions on enums'=> sub {
 }
 EOQ
 
-  my $got = GraphQL::Execution->execute($schema, $request);
+  my $got = execute($schema, $request);
   cmp_deeply $got, {
     data => {
       typeKindType => {

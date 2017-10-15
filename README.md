@@ -15,7 +15,7 @@ GraphQL - Perl implementation of GraphQL
     use GraphQL::Schema;
     use GraphQL::Type::Object;
     use GraphQL::Type::Scalar qw($String);
-    use GraphQL::Execution;
+    use GraphQL::Execution qw(execute);
 
     my $schema = GraphQL::Schema->new(query => GraphQL::Type::Object->new(
       name => 'QueryRoot',
@@ -24,7 +24,7 @@ GraphQL - Perl implementation of GraphQL
       },
     ));
     post '/graphql' => sub {
-      send_as JSON => GraphQL::Execution->execute(
+      send_as JSON => execute(
         $schema,
         body_parameters->{query},
         undef,
