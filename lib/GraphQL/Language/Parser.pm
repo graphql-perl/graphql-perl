@@ -3,7 +3,7 @@ package GraphQL::Language::Parser;
 use 5.014;
 use strict;
 use warnings;
-use base 'Pegex::Parser';
+use base qw(Pegex::Parser Exporter);
 use Return::Type;
 use Types::Standard -all;
 use Function::Parameters;
@@ -12,6 +12,9 @@ use GraphQL::Language::Receiver;
 use GraphQL::Error;
 
 our $VERSION = '0.02';
+our @EXPORT_OK = qw(
+  parse
+);
 
 =head1 NAME
 
@@ -19,8 +22,8 @@ GraphQL::Language::Parser - GraphQL Pegex parser
 
 =head1 SYNOPSIS
 
-  use GraphQL::Language::Parser;
-  my $parsed = GraphQL::Language::Parser->parse(
+  use GraphQL::Language::Parser qw(parse);
+  my $parsed = parse(
     $source
   );
 
@@ -34,21 +37,21 @@ into an AST usable by GraphQL.
 
 =head2 parse
 
-  GraphQL::Language::Parser->parse($source, $noLocation);
+  parse($source, $noLocation);
 
-B<NB> that unlike in C<Pegex::Parser> this is a class method, not an instance
+B<NB> that unlike in C<Pegex::Parser> this is a function, not an instance
 method. This achieves hiding of Pegex implementation details.
 
 =cut
 
 my $GRAMMAR = GraphQL::Language::Grammar->new; # singleton
-method parse(Str $source, Bool $noLocation = undef) :ReturnType(ArrayRef) {
-  my $parser = $self->SUPER::new(
+fun parse(Str $source, Bool $noLocation = undef) :ReturnType(ArrayRef) {
+  my $parser = __PACKAGE__->SUPER::new(
     grammar => $GRAMMAR,
     receiver => GraphQL::Language::Receiver->new,
   );
   my $input = Pegex::Input->new(string => $source);
-  return $parser->SUPER::parse($input);
+  $parser->SUPER::parse($input);
 }
 
 =head2 format_error

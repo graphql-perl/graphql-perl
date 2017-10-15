@@ -43,8 +43,8 @@ our $VERSION = '0.02';
 =head1 SYNOPSIS
 
   # this class used internally by:
-  use GraphQL::Language::Parser;
-  my $parsed = GraphQL::Language::Parser->parse($source);
+  use GraphQL::Language::Parser qw(parse);
+  my $parsed = parse($source);
 
 =head1 DESCRIPTION
 
