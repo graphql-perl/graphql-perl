@@ -16,6 +16,7 @@ WriteMakefile(
   TEST_REQUIRES => {
     'Test::More' => '0.88', # done_testing
     'Test::Exception' => '0.42',
+    'Test::Deep' => '1.127',
   },
   PREREQ_PM => {
     'Moo' => '0',

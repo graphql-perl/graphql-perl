@@ -3,8 +3,11 @@ use strict;
 use warnings;
 use Test::More;
 use Test::Exception;
+use Test::Deep;
 use JSON::MaybeXS;
 use Data::Dumper;
+
+my $JSON = JSON::MaybeXS->new->allow_nonref;
 
 BEGIN {
   use_ok( 'GraphQL::Schema' ) || print "Bail out!\n";
@@ -19,9 +22,14 @@ BEGIN {
 sub run_test {
   my ($args, $expected) = @_;
   my $got = GraphQL::Execution->execute(@$args);
+  is_deeply $got, $expected or diag nice_dump($got);
+}
+
+sub nice_dump {
+  my ($got) = @_;
   local ($Data::Dumper::Sortkeys, $Data::Dumper::Indent, $Data::Dumper::Terse);
   $Data::Dumper::Sortkeys = $Data::Dumper::Indent = $Data::Dumper::Terse = 1;
-  is_deeply $got, $expected or diag Dumper $got;
+  Dumper $got;
 }
 
 subtest 'executes an introspection query', sub {
