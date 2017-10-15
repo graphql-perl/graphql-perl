@@ -486,9 +486,9 @@ $TYPE_META_TYPE = GraphQL::Type::Object->new(
         $values = { map { ($_ => $values->{$_}) } grep !$values->{$_}{is_deprecated}, keys %$values } if !$args->{includeDeprecated};
         [ map { +{
           name => $_,
-          description => $values->{description},
-          isDeprecated => $values->{is_deprecated},
-          deprecationReason => $values->{deprecation_reason},
+          description => $values->{$_}{description},
+          isDeprecated => $values->{$_}{is_deprecated},
+          deprecationReason => $values->{$_}{deprecation_reason},
         } } sort keys %{$values} ];
       },
     },

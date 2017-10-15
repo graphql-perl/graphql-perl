@@ -376,109 +376,109 @@ In some cases, you need to provide options to alter GraphQL\'s execution behavio
           'enumValues' => [
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Location adjacent to an argument definition.',
               'isDeprecated' => do{my $o},
               'name' => 'ARGUMENT_DEFINITION'
             },
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Location adjacent to an enum definition.',
               'isDeprecated' => do{my $o},
               'name' => 'ENUM'
             },
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Location adjacent to an enum value definition.',
               'isDeprecated' => do{my $o},
               'name' => 'ENUM_VALUE'
             },
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Location adjacent to a field.',
               'isDeprecated' => do{my $o},
               'name' => 'FIELD'
             },
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Location adjacent to a field definition.',
               'isDeprecated' => do{my $o},
               'name' => 'FIELD_DEFINITION'
             },
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Location adjacent to a fragment definition.',
               'isDeprecated' => do{my $o},
               'name' => 'FRAGMENT_DEFINITION'
             },
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Location adjacent to a fragment spread.',
               'isDeprecated' => do{my $o},
               'name' => 'FRAGMENT_SPREAD'
             },
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Location adjacent to an inline fragment.',
               'isDeprecated' => do{my $o},
               'name' => 'INLINE_FRAGMENT'
             },
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Location adjacent to an input object field definition.',
               'isDeprecated' => do{my $o},
               'name' => 'INPUT_FIELD_DEFINITION'
             },
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Location adjacent to an input object type definition.',
               'isDeprecated' => do{my $o},
               'name' => 'INPUT_OBJECT'
             },
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Location adjacent to an interface definition.',
               'isDeprecated' => do{my $o},
               'name' => 'INTERFACE'
             },
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Location adjacent to a mutation operation.',
               'isDeprecated' => do{my $o},
               'name' => 'MUTATION'
             },
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Location adjacent to an object type definition.',
               'isDeprecated' => do{my $o},
               'name' => 'OBJECT'
             },
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Location adjacent to a query operation.',
               'isDeprecated' => do{my $o},
               'name' => 'QUERY'
             },
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Location adjacent to a scalar definition.',
               'isDeprecated' => do{my $o},
               'name' => 'SCALAR'
             },
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Location adjacent to a schema definition.',
               'isDeprecated' => do{my $o},
               'name' => 'SCHEMA'
             },
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Location adjacent to a subscription operation.',
               'isDeprecated' => do{my $o},
               'name' => 'SUBSCRIPTION'
             },
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Location adjacent to a union definition.',
               'isDeprecated' => do{my $o},
               'name' => 'UNION'
             }
@@ -1022,49 +1022,49 @@ Depending on the kind of a type, certain fields describe information about that 
           'enumValues' => [
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Indicates this type is an enum. `enumValues` is a valid field.',
               'isDeprecated' => do{my $o},
               'name' => 'ENUM'
             },
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Indicates this type is an input object. `inputFields` is a valid field.',
               'isDeprecated' => do{my $o},
               'name' => 'INPUT_OBJECT'
             },
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Indicates this type is an interface. `fields` and `possibleTypes` are valid fields.',
               'isDeprecated' => do{my $o},
               'name' => 'INTERFACE'
             },
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Indicates this type is a list. `ofType` is a valid field.',
               'isDeprecated' => do{my $o},
               'name' => 'LIST'
             },
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Indicates this type is a non-null. `ofType` is a valid field.',
               'isDeprecated' => do{my $o},
               'name' => 'NON_NULL'
             },
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Indicates this type is an object. `fields` and `interfaces` are valid fields.',
               'isDeprecated' => do{my $o},
               'name' => 'OBJECT'
             },
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Indicates this type is a scalar.',
               'isDeprecated' => do{my $o},
               'name' => 'SCALAR'
             },
             {
               'deprecationReason' => undef,
-              'description' => undef,
+              'description' => 'Indicates this type is a union. `possibleTypes` is a valid field.',
               'isDeprecated' => do{my $o},
               'name' => 'UNION'
             }
