@@ -115,8 +115,8 @@ fun _build_context(
     ($_->{name} => $_)
   } map $_->{node}, grep $_->{kind} eq 'fragment', @$ast;
   my @operations = grep $_->{kind} eq 'operation', @$ast;
-  die "No operations supplied." if !@operations;
-  die "Can only execute document containing fragments or operations"
+  die "No operations supplied.\n" if !@operations;
+  die "Can only execute document containing fragments or operations\n"
     if @$ast != keys(%fragments) + @operations;
   my $operation = _get_operation($operation_name, \@operations);
   {
@@ -179,13 +179,13 @@ fun _get_operation(
 ) {
   DEBUG and _debug('_get_operation', @_);
   if (!$operation_name) {
-    die "Must provide operation name if query contains multiple operations."
+    die "Must provide operation name if query contains multiple operations.\n"
       if @$operations > 1;
     return $operations->[0];
   }
   my @matching = grep $_->{node}{name} eq $operation_name, @$operations;
   return $matching[0] if @matching == 1;
-  die "No operations matching '$operation_name' found.";
+  die "No operations matching '$operation_name' found.\n";
 }
 
 fun _execute_operation(
