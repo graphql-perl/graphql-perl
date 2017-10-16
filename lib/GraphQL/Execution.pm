@@ -173,8 +173,10 @@ fun _lookup_type(
   _lookup_type($schema, $wrapped)->$wrapper_type;
 }
 
-sub _get_operation {
-  my ($operation_name, $operations) = @_;
+fun _get_operation(
+  Maybe[Str] $operation_name,
+  ArrayRef[HashRef] $operations,
+) {
   DEBUG and _debug('_get_operation', @_);
   if (!$operation_name) {
     die "Must provide operation name if query contains multiple operations."
