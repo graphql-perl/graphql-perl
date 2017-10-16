@@ -611,7 +611,7 @@ fun _complete_object_value(
   if ($return_type->is_type_of) {
     my $is_type_of = $return_type->is_type_of->($result, $context->{context_value}, $info);
     # TODO promise stuff
-    die GraphQL::Error->new(message => "Expected a value of type '@{[$return_type->to_string]}' but received: '$result'") if !$is_type_of;
+    die GraphQL::Error->new(message => "Expected a value of type '@{[$return_type->to_string]}' but received: '@{[ref($result)||$result]}'.") if !$is_type_of;
   }
   _collect_and_execute_subfields(
     $context,
