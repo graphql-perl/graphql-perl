@@ -46,7 +46,7 @@ Executes a GraphQL query, returns results.
 
   my $result = execute(
     $schema,
-    $doc,
+    $doc, # can also be AST
     $root_value,
     $context_value,
     $variable_values,
@@ -58,7 +58,7 @@ Executes a GraphQL query, returns results.
 
 fun execute(
   (InstanceOf['GraphQL::Schema']) $schema,
-  Str $doc,
+  Str | ArrayRef[HashRef] $doc,
   Any $root_value = undef,
   Any $context_value = undef,
   Maybe[HashRef] $variable_values = undef,
@@ -66,7 +66,7 @@ fun execute(
   Maybe[CodeLike] $field_resolver = undef,
 ) :ReturnType(HashRef) {
   my $context = eval {
-    my $ast = parse($doc);
+    my $ast = ref($doc) ? $doc : parse($doc);
     _build_context(
       $schema,
       $ast,
