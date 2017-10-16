@@ -295,15 +295,25 @@ fun _execute_fields(
   DEBUG and _debug('_execute_fields', $parent_type->to_string, $fields, $root_value);
   map {
     my $result_name = $_;
-    (my $result, $context) = _resolve_field(
-      $context,
-      $parent_type,
-      $root_value,
-      [ @$path, $result_name ],
-      $fields->{$_},
-    );
-    $results{$result_name} = $result;
-    # TODO promise stuff
+    my $result;
+    eval {
+      ($result, $context) = _resolve_field(
+        $context,
+        $parent_type,
+        $root_value,
+        [ @$path, $result_name ],
+        $fields->{$result_name},
+      );
+    };
+    if ($@) {
+      $context = _context_error(
+        $context,
+        _located_error($@, $fields->{$result_name}, [ @$path, $result_name ])
+      );
+    } else {
+      $results{$result_name} = $result;
+      # TODO promise stuff
+    }
   } keys %$fields; # TODO ordering of fields
   (\%results, $context);
 }
@@ -332,7 +342,6 @@ fun _resolve_field(
   my $field_name = $field_node->{name};
   DEBUG and _debug('_resolve_field', $parent_type->to_string, $nodes, $root_value);
   my $field_def = _get_field_def($context->{schema}, $parent_type, $field_name);
-  return (undef, $context) if !$field_def;
   my $resolve = $field_def->{resolve} || $context->{field_resolver};
   my $info = _build_resolve_info(
     $context,
