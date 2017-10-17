@@ -231,7 +231,6 @@ fun _collect_fields(
       }; # like push but no mutation
     } elsif ($selection->{kind} eq 'inline_fragment') {
       next if !_fragment_condition_match($context, $node, $runtime_type);
-      next if !_should_include_node($context, $node);
       ($fields_got, $visited_fragments) = _collect_fields(
         $context,
         $runtime_type,
@@ -242,7 +241,6 @@ fun _collect_fields(
     } elsif ($selection->{kind} eq 'fragment_spread') {
       my $frag_name = $node->{name};
       next if $visited_fragments->{$frag_name};
-      next if !_should_include_node($context, $node);
       $visited_fragments = { %$visited_fragments, $frag_name => 1 }; # !mutate
       my $fragment = $context->{fragments}{$frag_name};
       next if !$fragment;
