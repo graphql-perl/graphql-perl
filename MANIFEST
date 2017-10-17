@@ -40,6 +40,7 @@ README.md
 t/00-load.t
 t/00-report-prereqs.t
 t/execution-abstract.t
+t/execution-directives.t
 t/execution-execute.t
 t/execution-resolve.t
 t/execution-schema.t
