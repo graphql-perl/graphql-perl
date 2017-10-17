@@ -15,7 +15,7 @@ use GraphQL::Debug qw(_debug);
 use GraphQL::Introspection qw(
   $SCHEMA_META_FIELD_DEF $TYPE_META_FIELD_DEF $TYPE_NAME_META_FIELD_DEF
 );
-use base qw(Exporter);
+use Exporter 'import';
 
 =head1 NAME
 

@@ -3,7 +3,7 @@ package GraphQL::Introspection;
 use 5.014;
 use strict;
 use warnings;
-use base 'Exporter';
+use Exporter 'import';
 use GraphQL::Type::Object;
 use GraphQL::Type::Enum;
 use GraphQL::Type::Scalar qw($String $Boolean);

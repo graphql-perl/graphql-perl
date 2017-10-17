@@ -8,7 +8,7 @@ use GraphQL::Type::Library -all;
 use GraphQL::Debug qw(_debug);
 use Types::Standard -all;
 use JSON::MaybeXS qw(JSON is_bool);
-use Exporter qw(import);
+use Exporter 'import';
 extends qw(GraphQL::Type);
 with qw(
   GraphQL::Role::Input

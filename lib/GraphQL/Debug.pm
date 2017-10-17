@@ -3,7 +3,7 @@ package GraphQL::Debug;
 use 5.014;
 use strict;
 use warnings;
-use base qw(Exporter);
+use Exporter 'import';
 
 our @EXPORT_OK = qw(_debug);
 
