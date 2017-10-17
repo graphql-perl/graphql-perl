@@ -89,11 +89,64 @@ __PACKAGE__->meta->make_immutable();
 
 =head1 PACKAGE VARIABLES
 
+=head2 $GraphQL::Directive::DEPRECATED
+
+=cut
+
+$GraphQL::Directive::DEPRECATED = GraphQL::Directive->new(
+  name => 'deprecated',
+  description => 'Marks an element of a GraphQL schema as no longer supported.',
+  locations => [ qw(FIELD_DEFINITION ENUM_VALUE) ],
+  args => {
+    reason => {
+      type => $String,
+      description =>
+        'Explains why this element was deprecated, usually also including ' .
+        'a suggestion for how to access supported similar data. Formatted ' .
+        'in [Markdown](https://daringfireball.net/projects/markdown/).',
+      default_value => 'No longer supported',
+    },
+  },
+);
+
+=head2 $GraphQL::Directive::INCLUDE
+
+=cut
+
+$GraphQL::Directive::INCLUDE = GraphQL::Directive->new(
+  name => 'include',
+  description => 'Directs the executor to include this field or fragment only when the `if` argument is true.',
+  locations => [ qw(FIELD FRAGMENT_SPREAD INLINE_FRAGMENT) ],
+  args => {
+    if => {
+      type => $Boolean->non_null,
+      description => 'Included when true.',
+    },
+  },
+);
+
+=head2 $GraphQL::Directive::SKIP
+
+=cut
+
+$GraphQL::Directive::SKIP = GraphQL::Directive->new(
+  name => 'skip',
+  description => 'Directs the executor to skip this field or fragment when the `if` argument is true.',
+  locations => [ qw(FIELD FRAGMENT_SPREAD INLINE_FRAGMENT) ],
+  args => {
+    if => {
+      type => $Boolean->non_null,
+      description => 'Skipped when true.',
+    },
+  },
+);
+
 =head2 @GraphQL::Directive::SPECIFIED_DIRECTIVES
 
 Not exported. Contains the three GraphQL-specified directives: C<@skip>,
-C<@if>, C<@deprecated>. Use if you want to have these plus your own
-directives in your schema:
+C<@include>, C<@deprecated>, each of which are available with the
+variables above. Use if you want to have these plus your own directives
+in your schema:
 
   my $schema = GraphQL::Schema->new(
     # ...
@@ -103,43 +156,9 @@ directives in your schema:
 =cut
 
 @GraphQL::Directive::SPECIFIED_DIRECTIVES = (
-  GraphQL::Directive->new(
-    name => 'include',
-    description => 'Directs the executor to include this field or fragment only when the `if` argument is true.',
-    locations => [ qw(FIELD FRAGMENT_SPREAD INLINE_FRAGMENT) ],
-    args => {
-      if => {
-        type => $Boolean->non_null,
-        description => 'Included when true.',
-      },
-    },
-  ),
-  GraphQL::Directive->new(
-    name => 'skip',
-    description => 'Directs the executor to skip this field or fragment when the `if` argument is true.',
-    locations => [ qw(FIELD FRAGMENT_SPREAD INLINE_FRAGMENT) ],
-    args => {
-      if => {
-        type => $Boolean->non_null,
-        description => 'Skipped when true.',
-      },
-    },
-  ),
-  GraphQL::Directive->new(
-    name => 'deprecated',
-    description => 'Marks an element of a GraphQL schema as no longer supported.',
-    locations => [ qw(FIELD_DEFINITION ENUM_VALUE) ],
-    args => {
-      reason => {
-        type => $String,
-        description =>
-          'Explains why this element was deprecated, usually also including ' .
-          'a suggestion for how to access supported similar data. Formatted ' .
-          'in [Markdown](https://daringfireball.net/projects/markdown/).',
-        default_value => 'No longer supported',
-      },
-    },
-  ),
+  $GraphQL::Directive::INCLUDE,
+  $GraphQL::Directive::SKIP,
+  $GraphQL::Directive::DEPRECATED,
 );
 
 1;
