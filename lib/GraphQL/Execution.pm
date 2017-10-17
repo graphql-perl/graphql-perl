@@ -222,7 +222,7 @@ fun _collect_fields(
   DEBUG and _debug('_collect_fields', $runtime_type->to_string, $fields_got, $selections);
   for my $selection (@$selections) {
     my $node = $selection->{node};
-    next if !_should_include_node($context, $node);
+    next if !_should_include_node($context->{variable_values}, $node);
     if ($selection->{kind} eq 'field') {
       my $use_name = $node->{alias} || $node->{name};
       $fields_got = {
@@ -259,7 +259,7 @@ fun _collect_fields(
 }
 
 fun _should_include_node(
-  HashRef $context,
+  HashRef $variables,
   HashRef $node,
 ) :ReturnType(Bool) {
   # TODO implement
