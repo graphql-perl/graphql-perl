@@ -656,7 +656,7 @@ fun _located_error(
 }
 
 fun _get_argument_values(
-  HashRef $def,
+  (HashRef | InstanceOf['GraphQL::Directive']) $def,
   HashRef $node,
   Maybe[HashRef] $variable_values = {},
 ) {
