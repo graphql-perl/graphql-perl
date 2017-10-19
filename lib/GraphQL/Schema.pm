@@ -12,6 +12,7 @@ use GraphQL::Debug qw(_debug);
 use GraphQL::Directive;
 use GraphQL::Introspection qw($SCHEMA_META_TYPE);
 use GraphQL::Type::Scalar qw($Int $Float $String $Boolean $ID);
+use GraphQL::Language::Parser qw(parse);
 
 our $VERSION = '0.02';
 use constant DEBUG => $ENV{GRAPHQL_DEBUG};
@@ -237,6 +238,20 @@ method from_ast(
       $schema_node->{$_} ? ($_ => $name2type{$schema_node->{$_}}) : ()
     } qw(query mutation subscription)),
   );
+}
+
+=head2 from_doc($doc)
+
+Class method. Takes text that is a Schema Definition Language (SDL) (aka
+Interface Definition Language) document and returns a schema object. Will
+not be a complete schema since it will have only default resolvers.
+
+=cut
+
+method from_doc(
+  Str $doc,
+) :ReturnType(InstanceOf[__PACKAGE__]) {
+  $self->from_ast(parse($doc));
 }
 
 __PACKAGE__->meta->make_immutable();

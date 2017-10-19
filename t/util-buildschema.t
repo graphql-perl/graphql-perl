@@ -42,4 +42,18 @@ EOF
   );
 };
 
+subtest 'can build a schema directly from the source' => sub {
+  my $doc = <<'EOF';
+schema { query: Query }
+type Query {
+  add(x: Int, y: Int): Int
+}
+EOF
+  my $schema = GraphQL::Schema->from_doc($doc);
+  run_test(
+    [$schema, '{ add(x: 34, y: 55) }', {add => sub {$_[0]->{x} + $_[0]->{y}}}],
+    { data => { add => 89 } },
+  );
+};
+
 done_testing;
