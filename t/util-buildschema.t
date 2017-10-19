@@ -56,4 +56,21 @@ EOF
   );
 };
 
+subtest 'Simple type' => sub {
+  my $doc = <<'EOF';
+schema {
+  query: HelloScalars
+}
+
+type HelloScalars {
+  bool: Boolean
+  float: Float
+  id: ID
+  int: Int
+  str: String
+}
+EOF
+  is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
+};
+
 done_testing;

@@ -255,6 +255,28 @@ method from_doc(
   $self->from_ast(parse($doc));
 }
 
+=head2 to_doc($doc)
+
+Returns Schema Definition Language (SDL) document that describes this
+schema object.
+
+=cut
+
+has to_doc => (is => 'lazy', isa => Str);
+sub _build_to_doc {
+  my ($self) = @_;
+  join "\n",
+    join('', map "$_\n",
+    "schema {",
+      (map "  $_: @{[$self->$_->name]}", grep $self->$_, @TYPE_ATTRS),
+    "}"),
+    (map $self->name2type->{$_}->to_doc,
+      grep !/^__/,
+      grep $self->name2type->{$_}->isa('GraphQL::Type::Object'),
+      sort keys %{$self->name2type}),
+    ;
+}
+
 __PACKAGE__->meta->make_immutable();
 
 1;

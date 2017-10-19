@@ -69,6 +69,23 @@ method graphql_to_perl(Maybe[HashRef] $item) :ReturnType(Maybe[HashRef]) {
   });
 }
 
+=head2 to_doc($doc)
+
+Returns Schema Definition Language (SDL) document that describes this
+object.
+
+=cut
+
+has to_doc => (is => 'lazy', isa => Str);
+sub _build_to_doc {
+  my ($self) = @_;
+  join '', map "$_\n",
+    "type @{[$self->name]} {",
+      (map "  $_: @{[$self->fields->{$_}{type}->to_string]}",
+        sort keys %{$self->fields}),
+    "}";
+}
+
 __PACKAGE__->meta->make_immutable();
 
 1;
