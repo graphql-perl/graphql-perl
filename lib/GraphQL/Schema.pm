@@ -204,6 +204,18 @@ not be a complete schema since it will have only default resolvers.
 
 =cut
 
+fun _make_field_def(
+  HashRef $name2type,
+  Str $field_name,
+  HashRef $field_def,
+) {
+  my %args;
+  %args = (args => +{
+    map _make_field_def($name2type, $_, $field_def->{args}{$_}),
+      keys %{$field_def->{args}}
+  }) if $field_def->{args};
+  ($_ => { type => $name2type->{$field_def->{type}}, %args });
+}
 method from_ast(
   ArrayRef[HashRef] $ast,
 ) :ReturnType(InstanceOf[__PACKAGE__]) {
@@ -215,9 +227,8 @@ method from_ast(
     $name2type{$node->{name}} = GraphQL::Type::Object->new(
       name => $node->{name},
       fields => sub { +{
-        map {
-          ($_ => { type => $name2type{$node->{fields}{$_}{type}} })
-        } keys %{$node->{fields}}
+        map _make_field_def(\%name2type, $_, $node->{fields}{$_}),
+          keys %{$node->{fields}}
       } },
     );
   }
