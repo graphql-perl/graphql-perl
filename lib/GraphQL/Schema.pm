@@ -11,9 +11,11 @@ use Function::Parameters;
 use GraphQL::Debug qw(_debug);
 use GraphQL::Directive;
 use GraphQL::Introspection qw($SCHEMA_META_TYPE);
+use GraphQL::Type::Scalar qw($Int $Float $String $Boolean $ID);
 
 our $VERSION = '0.02';
 use constant DEBUG => $ENV{GRAPHQL_DEBUG};
+my %BUILTIN2TYPE = map { ($_->name => $_) } ($Int, $Float, $String, $Boolean, $ID);
 
 =head1 NAME
 
@@ -192,6 +194,38 @@ method assert_object_implements_interface(
 ) {
   my @types = @{ $self->types };
   return;
+}
+
+=head2 from_ast($ast)
+
+Class method. Takes hash-ref AST made by
+L<GraphQL::Language::Parser/parse> and returns a schema object. Will
+not be a complete schema since it will have only default resolvers.
+
+=cut
+
+method from_ast(
+  ArrayRef[HashRef] $ast,
+) :ReturnType(InstanceOf[__PACKAGE__]) {
+  my @type_nodes = map $_->{node}, grep $_->{kind} eq 'type', @$ast;
+  my ($schema_node) = map $_->{node}, grep $_->{kind} eq 'schema', @$ast;
+  die "No schema found in AST\n" unless $schema_node;
+  my %name2type = %BUILTIN2TYPE;
+  for my $node (@type_nodes) {
+    $name2type{$node->{name}} = GraphQL::Type::Object->new(
+      name => $node->{name},
+      fields => sub { +{
+        map {
+          ($_ => { type => $name2type{$node->{fields}{$_}{type}} })
+        } keys %{$node->{fields}}
+      } },
+    );
+  }
+  $self->new(
+    (map {
+      $schema_node->{$_} ? ($_ => $name2type{$schema_node->{$_}}) : ()
+    } qw(query mutation subscription)),
+  );
 }
 
 __PACKAGE__->meta->make_immutable();
