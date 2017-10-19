@@ -17,6 +17,7 @@ use GraphQL::Language::Parser qw(parse);
 our $VERSION = '0.02';
 use constant DEBUG => $ENV{GRAPHQL_DEBUG};
 my %BUILTIN2TYPE = map { ($_->name => $_) } ($Int, $Float, $String, $Boolean, $ID);
+my @TYPE_ATTRS = qw(query mutation subscription);
 
 =head1 NAME
 
@@ -96,7 +97,7 @@ type object.
 has name2type => (is => 'lazy', isa => Map[StrNameValid, ConsumerOf['GraphQL::Role::Named']]);
 sub _build_name2type {
   my ($self) = @_;
-  my @types = grep $_, (map $self->$_, qw(query mutation subscription)), $SCHEMA_META_TYPE;
+  my @types = grep $_, (map $self->$_, @TYPE_ATTRS), $SCHEMA_META_TYPE;
   push @types, @{ $self->types || [] };
   my %name2type;
   map _expand_type(\%name2type, $_), @types;
@@ -236,7 +237,7 @@ method from_ast(
   $self->new(
     (map {
       $schema_node->{$_} ? ($_ => $name2type{$schema_node->{$_}}) : ()
-    } qw(query mutation subscription)),
+    } @TYPE_ATTRS),
   );
 }
 
