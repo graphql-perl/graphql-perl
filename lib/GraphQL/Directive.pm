@@ -126,15 +126,20 @@ sub _build_to_doc {
   my @argtuples = map [
     "$_: @{[$self->args->{$_}{type}->to_string]}", $self->args->{$_}{description}
   ], sort keys %{$self->args};
+  DEBUG and _debug('Directive.to_doc(args)', \@argtuples);
   my $end = ") on " . join(' | ', @{$self->locations});
   return join("\n", @start).join(
     ', ', map $_->[0], @argtuples
-  ).$end."\n"; # no descriptions
+  ).$end."\n" if !grep $_->[1], @argtuples; # no descriptions
   # if descriptions
   join '', map "$_\n",
     @start,
-      (map "  $_: @{[$self->args->{$_}{type}->to_string]}",
-        sort keys %{$self->args}),
+      (map {
+        (
+          ($_->[1] ? (map "  # $_", split /\n/, $_->[1]) : ()),
+          "  $_->[0]",
+        )
+      } @argtuples),
     $end;
 }
 
