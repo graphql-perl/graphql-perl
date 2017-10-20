@@ -166,8 +166,8 @@ __DATA__
                 'kind' => 'field',
                 'node' => {
                   'location' => {
-                    'column' => 8,
-                    'line' => 10
+                    'column' => 5,
+                    'line' => 11
                   },
                   'name' => 'id'
                 }
@@ -199,8 +199,8 @@ __DATA__
                             'kind' => 'field',
                             'node' => {
                               'location' => {
-                                'column' => 12,
-                                'line' => 13
+                                'column' => 9,
+                                'line' => 14
                               },
                               'name' => 'id'
                             }
@@ -231,8 +231,8 @@ __DATA__
                                   'kind' => 'field',
                                   'node' => {
                                     'location' => {
-                                      'column' => 13,
-                                      'line' => 15
+                                      'column' => 11,
+                                      'line' => 16
                                     },
                                     'name' => 'id'
                                   }
@@ -512,8 +512,8 @@ __DATA__
               'truthy' => bless( do{\(my $o = 1)}, 'JSON::PP::Boolean' )
             },
             'location' => {
-              'column' => 54,
-              'line' => 55
+              'column' => 3,
+              'line' => 56
             },
             'name' => 'unnamed'
           }
