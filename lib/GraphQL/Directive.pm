@@ -106,6 +106,7 @@ method from_ast(
   DEBUG and _debug('Directive.from_ast', $ast_node);
   $self->new(
     name => $ast_node->{name},
+    ($ast_node->{description} ? (description => $ast_node->{description}) : ()),
     locations => $ast_node->{locations},
     args => +{
       map $self->_make_field_def($name2type, $_, $ast_node->{args}{$_}),
@@ -118,14 +119,20 @@ has to_doc => (is => 'lazy', isa => Str);
 sub _build_to_doc {
   my ($self) = @_;
   DEBUG and _debug('Directive.to_doc', $self);
-  my $start = "directive \@@{[$self->name]}(";
-  my @argpairs = (map "$_: @{[$self->args->{$_}{type}->to_string]}",
-    sort keys %{$self->args}),
+  my @start = (
+    ($self->description ? (map "# $_", split /\n/, $self->description) : ()),
+    "directive \@@{[$self->name]}(",
+  );
+  my @argtuples = map [
+    "$_: @{[$self->args->{$_}{type}->to_string]}", $self->args->{$_}{description}
+  ], sort keys %{$self->args};
   my $end = ") on " . join(' | ', @{$self->locations});
-  return $start.join(', ', @argpairs).$end."\n"; # no descriptions
+  return join("\n", @start).join(
+    ', ', map $_->[0], @argtuples
+  ).$end."\n"; # no descriptions
   # if descriptions
   join '', map "$_\n",
-    $start,
+    @start,
       (map "  $_: @{[$self->args->{$_}{type}->to_string]}",
         sort keys %{$self->args}),
     $end;

@@ -141,6 +141,7 @@ method from_ast(
 ) :ReturnType(InstanceOf[__PACKAGE__]) {
   $self->new(
     name => $ast_node->{name},
+    ($ast_node->{description} ? (description => $ast_node->{description}) : ()),
     values => $ast_node->{values},
   );
 }
@@ -149,6 +150,7 @@ has to_doc => (is => 'lazy', isa => Str);
 sub _build_to_doc {
   my ($self) = @_;
   join '', map "$_\n",
+    ($self->description ? (map "# $_", split /\n/, $self->description) : ()),
     "enum @{[$self->name]} {",
       (map "  $_",
         sort keys %{$self->values}),

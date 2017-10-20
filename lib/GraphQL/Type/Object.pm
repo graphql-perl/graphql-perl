@@ -73,6 +73,7 @@ has to_doc => (is => 'lazy', isa => Str);
 sub _build_to_doc {
   my ($self) = @_;
   join '', map "$_\n",
+    ($self->description ? (map "# $_", split /\n/, $self->description) : ()),
     "type @{[$self->name]} {",
       (map "  $_: @{[$self->fields->{$_}{type}->to_string]}",
         sort keys %{$self->fields}),
@@ -85,6 +86,7 @@ method from_ast(
 ) :ReturnType(InstanceOf[__PACKAGE__]) {
   $self->new(
     name => $ast_node->{name},
+    ($ast_node->{description} ? (description => $ast_node->{description}) : ()),
     fields => sub { +{
       map $self->_make_field_def($name2type, $_, $ast_node->{fields}{$_}),
         keys %{$ast_node->{fields}}
