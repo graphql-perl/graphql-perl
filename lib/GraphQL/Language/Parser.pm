@@ -46,13 +46,16 @@ method. This achieves hiding of Pegex implementation details.
 =cut
 
 my $GRAMMAR = GraphQL::Language::Grammar->new; # singleton
-fun parse(Str $source, Bool $noLocation = undef) :ReturnType(ArrayRef) {
+fun parse(
+  Str $source,
+  Bool $noLocation = undef,
+) :ReturnType(ArrayRef[HashRef]) {
   my $parser = __PACKAGE__->SUPER::new(
     grammar => $GRAMMAR,
     receiver => GraphQL::Language::Receiver->new,
   );
   my $input = Pegex::Input->new(string => $source);
-  $parser->SUPER::parse($input);
+  scalar $parser->SUPER::parse($input);
 }
 
 =head2 format_error
