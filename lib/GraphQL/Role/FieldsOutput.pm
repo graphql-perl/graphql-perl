@@ -4,8 +4,10 @@ use 5.014;
 use strict;
 use warnings;
 use Moo::Role;
+use Types::Standard -all;
 use GraphQL::Type::Library -all;
 use MooX::Thunking;
+use Function::Parameters;
 with 'GraphQL::Role::FieldDeprecation';
 
 our $VERSION = '0.02';
@@ -41,6 +43,19 @@ around fields => sub {
   $self->_fields_deprecation_apply('fields');
   $self->{fields};
 };
+
+method _make_field_def(
+  HashRef $name2type,
+  Str $field_name,
+  HashRef $field_def,
+) {
+  my %args;
+  %args = (args => +{
+    map $self->_make_field_def($name2type, $_, $field_def->{args}{$_}),
+      keys %{$field_def->{args}}
+  }) if $field_def->{args};
+  ($_ => { type => $name2type->{$field_def->{type}}, %args });
+}
 
 __PACKAGE__->meta->make_immutable();
 

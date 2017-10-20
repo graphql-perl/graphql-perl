@@ -86,6 +86,19 @@ sub _build_to_doc {
     "}";
 }
 
+method from_ast(
+  HashRef $name2type,
+  HashRef $ast_node,
+) :ReturnType(InstanceOf[__PACKAGE__]) {
+  $self->new(
+    name => $ast_node->{name},
+    fields => sub { +{
+      map $self->_make_field_def($name2type, $_, $ast_node->{fields}{$_}),
+        keys %{$ast_node->{fields}}
+    } },
+  );
+}
+
 __PACKAGE__->meta->make_immutable();
 
 1;

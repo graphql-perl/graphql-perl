@@ -200,39 +200,24 @@ method assert_object_implements_interface(
 
 =head2 from_ast($ast)
 
-Class method. Takes hash-ref AST made by
+Class method. Takes AST (array-ref of hash-refs) made by
 L<GraphQL::Language::Parser/parse> and returns a schema object. Will
 not be a complete schema since it will have only default resolvers.
 
 =cut
 
-fun _make_field_def(
-  HashRef $name2type,
-  Str $field_name,
-  HashRef $field_def,
-) {
-  my %args;
-  %args = (args => +{
-    map _make_field_def($name2type, $_, $field_def->{args}{$_}),
-      keys %{$field_def->{args}}
-  }) if $field_def->{args};
-  ($_ => { type => $name2type->{$field_def->{type}}, %args });
-}
+my %kind2class = qw(
+  type GraphQL::Type::Object
+);
 method from_ast(
   ArrayRef[HashRef] $ast,
 ) :ReturnType(InstanceOf[__PACKAGE__]) {
-  my @type_nodes = map $_->{node}, grep $_->{kind} eq 'type', @$ast;
+  my @type_nodes = grep $kind2class{$_->{kind}}, @$ast;
   my ($schema_node) = map $_->{node}, grep $_->{kind} eq 'schema', @$ast;
   die "No schema found in AST\n" unless $schema_node;
   my %name2type = %BUILTIN2TYPE;
-  for my $node (@type_nodes) {
-    $name2type{$node->{name}} = GraphQL::Type::Object->new(
-      name => $node->{name},
-      fields => sub { +{
-        map _make_field_def(\%name2type, $_, $node->{fields}{$_}),
-          keys %{$node->{fields}}
-      } },
-    );
+  for (@type_nodes) {
+    $name2type{$_->{node}{name}} = $kind2class{$_->{kind}}->from_ast(\%name2type, $_->{node});
   }
   $self->new(
     (map {
