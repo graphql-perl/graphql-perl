@@ -85,8 +85,6 @@ Hash-ref of arguments. See L<GraphQL::Type::Library/FieldMapInput>.
 
 has args => (is => 'ro', isa => FieldMapInput, required => 1);
 
-__PACKAGE__->meta->make_immutable();
-
 =head1 PACKAGE VARIABLES
 
 =head2 $GraphQL::Directive::DEPRECATED
@@ -160,5 +158,7 @@ in your schema:
   $GraphQL::Directive::SKIP,
   $GraphQL::Directive::DEPRECATED,
 );
+
+__PACKAGE__->meta->make_immutable();
 
 1;
