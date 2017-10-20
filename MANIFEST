@@ -12,6 +12,7 @@ lib/GraphQL/Language/Receiver.pm
 lib/GraphQL/Role/Abstract.pm
 lib/GraphQL/Role/Composite.pm
 lib/GraphQL/Role/FieldDeprecation.pm
+lib/GraphQL/Role/FieldsEither.pm
 lib/GraphQL/Role/FieldsInput.pm
 lib/GraphQL/Role/FieldsOutput.pm
 lib/GraphQL/Role/HashMappable.pm
