@@ -149,11 +149,17 @@ method from_ast(
 has to_doc => (is => 'lazy', isa => Str);
 sub _build_to_doc {
   my ($self) = @_;
+  my $v = $self->values;
+  my @valuelines = map {
+    (
+      ($v->{$_}{description} ? ("# $v->{$_}{description}") : ()),
+      $_
+    )
+  } sort keys %$v;
   join '', map "$_\n",
     ($self->description ? (map "# $_", split /\n/, $self->description) : ()),
     "enum @{[$self->name]} {",
-      (map "  $_",
-        sort keys %{$self->values}),
+      (map "  $_", @valuelines),
     "}";
 }
 
