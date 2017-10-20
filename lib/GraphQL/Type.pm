@@ -129,6 +129,11 @@ Class method.  C<$name2type> is a hash-ref populated by
 L<GraphQL::Schema/from_ast>.  Takes a hash-ref node from an AST made by
 L<GraphQL::Language::Parser/parse>. Returns a type object.
 
+=head2 to_doc($doc)
+
+Returns Schema Definition Language (SDL) document that describes this
+object.
+
 =cut
 
 __PACKAGE__->meta->make_immutable();

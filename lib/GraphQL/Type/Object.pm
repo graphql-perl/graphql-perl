@@ -69,13 +69,6 @@ method graphql_to_perl(Maybe[HashRef] $item) :ReturnType(Maybe[HashRef]) {
   });
 }
 
-=head2 to_doc($doc)
-
-Returns Schema Definition Language (SDL) document that describes this
-object.
-
-=cut
-
 has to_doc => (is => 'lazy', isa => Str);
 sub _build_to_doc {
   my ($self) = @_;
