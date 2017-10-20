@@ -75,11 +75,17 @@ has to_doc => (is => 'lazy', isa => Str);
 sub _build_to_doc {
   my ($self) = @_;
   DEBUG and _debug('Object.to_doc', $self);
+  my $f = $self->fields;
+  my @fieldlines = map {
+    (
+      ($f->{$_}{description} ? ("# $f->{$_}{description}") : ()),
+      "$_: @{[$f->{$_}{type}->to_string]}",
+    )
+  } sort keys %$f;
   join '', map "$_\n",
     ($self->description ? (map "# $_", split /\n/, $self->description) : ()),
     "type @{[$self->name]} {",
-      (map "  $_: @{[$self->fields->{$_}{type}->to_string]}",
-        sort keys %{$self->fields}),
+      (map "  $_", @fieldlines),
     "}";
 }
 
