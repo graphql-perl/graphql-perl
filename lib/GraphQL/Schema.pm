@@ -208,7 +208,9 @@ not be a complete schema since it will have only default resolvers.
 
 my %kind2class = qw(
   type GraphQL::Type::Object
+  enum GraphQL::Type::Enum
 );
+my %class2kind = reverse %kind2class;
 method from_ast(
   ArrayRef[HashRef] $ast,
 ) :ReturnType(InstanceOf[__PACKAGE__]) {
@@ -226,6 +228,7 @@ method from_ast(
       $schema_node->{$_} ? ($_ => $name2type{$schema_node->{$_}}) : ()
     } @TYPE_ATTRS),
     (@directives ? (directives => \@directives) : ()),
+    types => [ values %name2type ],
   );
 }
 
@@ -265,7 +268,7 @@ sub _build_to_doc {
       @{ $self->directives }),
     (map $self->name2type->{$_}->to_doc,
       grep !/^__/,
-      grep $self->name2type->{$_}->isa('GraphQL::Type::Object'),
+      grep $class2kind{ref $self->name2type->{$_}},
       sort keys %{$self->name2type}),
     ;
 }
