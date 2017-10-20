@@ -4,6 +4,7 @@ use 5.014;
 use strict;
 use warnings;
 use Moo;
+use GraphQL::Debug qw(_debug);
 use Types::Standard -all;
 use GraphQL::Type::Library -all;
 use MooX::Thunking;
@@ -20,6 +21,7 @@ with qw(
 );
 
 our $VERSION = '0.02';
+use constant DEBUG => $ENV{GRAPHQL_DEBUG};
 
 =head1 NAME
 
@@ -72,6 +74,7 @@ method graphql_to_perl(Maybe[HashRef] $item) :ReturnType(Maybe[HashRef]) {
 has to_doc => (is => 'lazy', isa => Str);
 sub _build_to_doc {
   my ($self) = @_;
+  DEBUG and _debug('Object.to_doc', $self);
   join '', map "$_\n",
     ($self->description ? (map "# $_", split /\n/, $self->description) : ()),
     "type @{[$self->name]} {",

@@ -4,10 +4,12 @@ use 5.014;
 use strict;
 use warnings;
 use Moo::Role;
+use GraphQL::Debug qw(_debug);
 use Types::Standard -all;
 use Function::Parameters;
 
 our $VERSION = '0.02';
+use constant DEBUG => $ENV{GRAPHQL_DEBUG};
 
 =head1 NAME
 
@@ -31,6 +33,7 @@ method _make_field_def(
   Str $field_name,
   HashRef $field_def,
 ) {
+  DEBUG and _debug('FieldsEither._make_field_def', $field_def);
   my %args;
   %args = (args => +{
     map $self->_make_field_def($name2type, $_, $field_def->{args}{$_}),
