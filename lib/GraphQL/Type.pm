@@ -105,17 +105,6 @@ L<Function::Parameters>/L<Return::Type> methods and functions.
 
 =head1 METHODS
 
-=head2 clone
-
-Shallow copy of the object, suitable for reblessing without affecting
-the original object.
-
-=cut
-
-method clone() :ReturnType(InstanceOf['GraphQL::Type']) {
-  ref($self)->new(%$self)
-}
-
 =head2 uplift
 
 Turn given Perl entity into valid Perl value for this type if possible.
