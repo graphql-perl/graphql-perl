@@ -5,6 +5,7 @@ use strict;
 use warnings;
 use Moo;
 use Function::Parameters;
+use GraphQL::Debug qw(_debug);
 use Types::Standard -all;
 use GraphQL::Type::Library -all;
 use GraphQL::Type::Scalar qw($Boolean $String);
@@ -14,6 +15,7 @@ with qw(
 );
 
 our $VERSION = '0.02';
+use constant DEBUG => $ENV{GRAPHQL_DEBUG};
 
 my @LOCATIONS = qw(
   QUERY
@@ -101,6 +103,7 @@ method from_ast(
   HashRef $name2type,
   HashRef $ast_node,
 ) :ReturnType(InstanceOf[__PACKAGE__]) {
+  DEBUG and _debug('Directive.from_ast', $ast_node);
   $self->new(
     name => $ast_node->{name},
     locations => $ast_node->{locations},
@@ -114,6 +117,7 @@ method from_ast(
 has to_doc => (is => 'lazy', isa => Str);
 sub _build_to_doc {
   my ($self) = @_;
+  DEBUG and _debug('Directive.to_doc', $self);
   my $start = "directive \@@{[$self->name]}(";
   my @argpairs = (map "$_: @{[$self->args->{$_}{type}->to_string]}",
     sort keys %{$self->args}),

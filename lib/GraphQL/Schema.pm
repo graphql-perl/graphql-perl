@@ -214,6 +214,7 @@ my %class2kind = reverse %kind2class;
 method from_ast(
   ArrayRef[HashRef] $ast,
 ) :ReturnType(InstanceOf[__PACKAGE__]) {
+  DEBUG and _debug('Schema.from_ast', $ast);
   my @type_nodes = grep $kind2class{$_->{kind}}, @$ast;
   my ($schema_node) = map $_->{node}, grep $_->{kind} eq 'schema', @$ast;
   die "No schema found in AST\n" unless $schema_node;
