@@ -4,10 +4,14 @@ use 5.014;
 use strict;
 use warnings;
 use Moo;
+use Function::Parameters;
 use Types::Standard -all;
 use GraphQL::Type::Library -all;
 use GraphQL::Type::Scalar qw($Boolean $String);
-with qw(GraphQL::Role::Named);
+with qw(
+  GraphQL::Role::Named
+  GraphQL::Role::FieldsEither
+);
 
 our $VERSION = '0.02';
 
@@ -84,6 +88,44 @@ Hash-ref of arguments. See L<GraphQL::Type::Library/FieldMapInput>.
 =cut
 
 has args => (is => 'ro', isa => FieldMapInput, required => 1);
+
+=head1 METHODS
+
+=head2 from_ast
+
+See L<GraphQL::Type/from_ast>.
+
+=cut
+
+method from_ast(
+  HashRef $name2type,
+  HashRef $ast_node,
+) :ReturnType(InstanceOf[__PACKAGE__]) {
+  $self->new(
+    name => $ast_node->{name},
+    locations => $ast_node->{locations},
+    args => +{
+      map $self->_make_field_def($name2type, $_, $ast_node->{args}{$_}),
+        keys %{$ast_node->{args}}
+    },
+  );
+}
+
+has to_doc => (is => 'lazy', isa => Str);
+sub _build_to_doc {
+  my ($self) = @_;
+  my $start = "directive \@@{[$self->name]}(";
+  my @argpairs = (map "$_: @{[$self->args->{$_}{type}->to_string]}",
+    sort keys %{$self->args}),
+  my $end = ") on " . join(' | ', @{$self->locations});
+  return $start.join(', ', @argpairs).$end."\n"; # no descriptions
+  # if descriptions
+  join '', map "$_\n",
+    $start,
+      (map "  $_: @{[$self->args->{$_}{type}->to_string]}",
+        sort keys %{$self->args}),
+    $end;
+}
 
 =head1 PACKAGE VARIABLES
 

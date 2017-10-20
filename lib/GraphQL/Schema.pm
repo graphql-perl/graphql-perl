@@ -219,10 +219,13 @@ method from_ast(
   for (@type_nodes) {
     $name2type{$_->{node}{name}} = $kind2class{$_->{kind}}->from_ast(\%name2type, $_->{node});
   }
+  my @directives = map GraphQL::Directive->from_ast(\%name2type, $_->{node}),
+    grep $_->{kind} eq 'directive', @$ast;
   $self->new(
     (map {
       $schema_node->{$_} ? ($_ => $name2type{$schema_node->{$_}}) : ()
     } @TYPE_ATTRS),
+    (@directives ? (directives => \@directives) : ()),
   );
 }
 
@@ -248,6 +251,7 @@ schema object.
 =cut
 
 has to_doc => (is => 'lazy', isa => Str);
+my %directive2builtin = map { ($_=>1) } @GraphQL::Directive::SPECIFIED_DIRECTIVES;
 sub _build_to_doc {
   my ($self) = @_;
   join "\n",
@@ -255,6 +259,10 @@ sub _build_to_doc {
     "schema {",
       (map "  $_: @{[$self->$_->name]}", grep $self->$_, @TYPE_ATTRS),
     "}"),
+    (map $_->to_doc,
+      sort { $a->name cmp $b->name }
+      grep !$directive2builtin{$_},
+      @{ $self->directives }),
     (map $self->name2type->{$_}->to_doc,
       grep !/^__/,
       grep $self->name2type->{$_}->isa('GraphQL::Type::Object'),

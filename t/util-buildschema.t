@@ -73,4 +73,19 @@ EOF
   is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
 };
 
+subtest 'With directives' => sub {
+  my $doc = <<'EOF';
+schema {
+  query: Hello
+}
+
+directive @foo(arg: Int) on FIELD
+
+type Hello {
+  str: String
+}
+EOF
+  is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
+};
+
 done_testing;
