@@ -12,7 +12,7 @@ graphql: - definition+ / EOS /
 
 definition: - (operationDefinition | fragment | typeSystemDefinition)
 
-operationDefinition: selectionSet | operationType - name? - variableDefinitions? - directives? - selectionSet
+operationDefinition: selectionSet | operationType - name? - variableDefinitions? - directives? selectionSet
 
 operationType: /(query|mutation|subscription)/
 
@@ -30,9 +30,9 @@ argument: name /- COLON -/ value
 
 fragment_spread: .spread fragmentName - directives?
 
-inline_fragment: .spread typeCondition? - directives? - selectionSet
+inline_fragment: .spread typeCondition? - directives? selectionSet
 
-fragment: /'fragment' -/ fragmentName - (typeCondition | `Expected "on"`) - directives? - selectionSet
+fragment: /'fragment' -/ fragmentName - (typeCondition | `Expected "on"`) - directives? selectionSet
 
 fragmentName: ('on' `Unexpected Name "on"` | name)
 

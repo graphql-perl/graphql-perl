@@ -393,9 +393,6 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'directives'
         },
         {
-          '.ref' => '_'
-        },
-        {
           '.ref' => 'selectionSet'
         }
       ]
@@ -491,9 +488,6 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
         {
           '+max' => 1,
           '.ref' => 'directives'
-        },
-        {
-          '.ref' => '_'
         },
         {
           '.ref' => 'selectionSet'
@@ -818,9 +812,6 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
             {
               '+max' => 1,
               '.ref' => 'directives'
-            },
-            {
-              '.ref' => '_'
             },
             {
               '.ref' => 'selectionSet'
