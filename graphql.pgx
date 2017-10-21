@@ -24,9 +24,9 @@ selection: (field | inline_fragment | fragment_spread) .(-)
 
 field: alias? name .(-) arguments? .(-) directives? selectionSet?
 
-alias: name /- COLON -/
+alias: name .(/- COLON -/)
 
-arguments: /- LPAREN -/ argument+ /- RPAREN -/
+arguments: .(/- LPAREN -/) argument+ .(/- RPAREN -/)
 
 argument: name .(/- COLON -/) value
 
@@ -38,7 +38,7 @@ fragment: .(/- 'fragment' -/) fragmentName .(-) (typeCondition | `Expected "on"`
 
 fragmentName: ('on' `Unexpected Name "on"` | name)
 
-typeCondition: /'on' -/ namedType
+typeCondition: .(/'on' -/) namedType
 
 value: (variable | float | int | string | boolean | null | enumValue | listValue | objectValue) .(-)
 
@@ -50,23 +50,23 @@ null: /(null)/
 
 enumValue: (/(true|false|null)/ `Invalid enum value` | name)
 
-listValue: /- LSQUARE -/ value* /- RSQUARE -/
+listValue: .(/- LSQUARE -/) value* .(/- RSQUARE -/)
 
-listValue_const: /- LSQUARE -/ value_const* /- RSQUARE -/
+listValue_const: .(/- LSQUARE -/) value_const* .(/- RSQUARE -/)
 
-objectValue: /- LCURLY -/ ( objectField+ | `Expected name` ) /- RCURLY -/
+objectValue: .(/- LCURLY -/) ( objectField+ | `Expected name` ) .(/- RCURLY -/)
 
-objectValue_const: /- LCURLY -/ ( objectField_const+ | `Expected name or constant` ) /- RCURLY -/
+objectValue_const: .(/- LCURLY -/) ( objectField_const+ | `Expected name or constant` ) .(/- RCURLY -/)
 
 objectField: name .(/- COLON -/) value .(-)
 
 objectField_const: name .(/- COLON -/) value_const
 
-variableDefinitions: /- LPAREN -/ variableDefinition+ /- RPAREN -/
+variableDefinitions: .(/- LPAREN -/) variableDefinition+ .(/- RPAREN -/)
 
 variableDefinition: variable .(/- COLON -/) typedef defaultValue? .(-)
 
-variable: /- DOLLAR/ name
+variable: .(/- DOLLAR/) name
 
 defaultValue: .(/- EQUAL -/) value_const
 
@@ -147,11 +147,11 @@ scalar: .(/'scalar' -/) name .(-) directives?
 # aka objectTypeDefinition
 type: .(/'type' -/) name .(-) implementsInterfaces? .(-) directives? .(/- LCURLY /) fieldDefinition* .(/- RCURLY /)
 
-implementsInterfaces: /'implements' -/ namedType+
+implementsInterfaces: .(/'implements' -/) namedType+
 
 fieldDefinition: - name .(-) argumentsDefinition? .(/- COLON -/) typedef .(-) directives?
 
-argumentsDefinition: /- LPAREN / inputValueDefinition+ /- RPAREN /
+argumentsDefinition: .(/- LPAREN /) inputValueDefinition+ .(/- RPAREN /)
 
 inputValueDefinition: - name .(/- COLON -/) typedef .(-) defaultValue? .(-) directives? .(-)
 
@@ -167,7 +167,7 @@ enumValueDefinition: - enumValue .(-) directives?
 
 input: .(/'input' -/) name .(-) directives? .(/- LCURLY /) inputValueDefinition+ .(/- RCURLY /)
 
-typeExtensionDefinition: /'extend' -/ type
+typeExtensionDefinition: .(/'extend' -/) type
 
 directive: .(/'directive' - AT -/) name .(-) argumentsDefinition? .(/- 'on' -/) directiveLocations
 
