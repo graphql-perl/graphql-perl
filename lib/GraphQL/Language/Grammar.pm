@@ -268,7 +268,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           ]
         },
         {
-          '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*\}(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+          '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*\}/u
         }
       ]
     },
@@ -512,7 +512,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'inputValueDefinition'
         },
         {
-          '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*\}(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+          '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*\}/u
         }
       ]
     },
@@ -569,7 +569,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'fieldDefinition'
         },
         {
-          '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*\}(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+          '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*\}/u
         }
       ]
     },
@@ -868,7 +868,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'operationTypeDefinition'
         },
         {
-          '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*\}(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+          '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*\}/u
         }
       ]
     },
@@ -968,7 +968,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'fieldDefinition'
         },
         {
-          '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*\}(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+          '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*\}/u
         }
       ]
     },
@@ -1034,9 +1034,6 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
               '.ref' => 'directive'
             }
           ]
-        },
-        {
-          '.ref' => '_'
         }
       ]
     },
