@@ -26,9 +26,9 @@ field: alias? name - arguments? - directives? selectionSet?
 
 alias: name /- COLON -/
 
-arguments: /- LPAREN -/ (argument+ %% /-/) /- RPAREN -/
+arguments: /- LPAREN -/ argument+ /- RPAREN -/
 
-argument: name /- COLON -/ value
+argument: (name /- COLON -/ value) .(-)
 
 fragment_spread: .spread fragmentName - directives?
 
