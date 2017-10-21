@@ -128,7 +128,7 @@ spread: /\.{3}/ -
 
 ws: / (: WS | \x{FEFF} | COMMA | comment ) /
 
-comment: / HASH [^\r\n]* (: EOL | CR !NL | EOS ) / # CR is because MacOS 9
+comment: / HASH BLANK* [^\r\n]* (: EOL | CR !NL | EOS ) / # CR is because MacOS 9
 
 typeSystemDefinition: - (schema | typeDefinition | typeExtensionDefinition | directive) -
 
