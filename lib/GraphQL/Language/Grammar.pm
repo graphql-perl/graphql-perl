@@ -589,24 +589,8 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*\[(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
         },
         {
-          '+max' => 1,
-          '.all' => [
-            {
-              '.ref' => 'value_const'
-            },
-            {
-              '+min' => 0,
-              '-flat' => 1,
-              '.all' => [
-                {
-                  '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
-                },
-                {
-                  '.ref' => 'value_const'
-                }
-              ]
-            }
-          ]
+          '+min' => 0,
+          '.ref' => 'value_const'
         },
         {
           '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*\](?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
@@ -716,23 +700,8 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
         {
           '.any' => [
             {
-              '.all' => [
-                {
-                  '.ref' => 'objectField_const'
-                },
-                {
-                  '+min' => 0,
-                  '-flat' => 1,
-                  '.all' => [
-                    {
-                      '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
-                    },
-                    {
-                      '.ref' => 'objectField_const'
-                    }
-                  ]
-                }
-              ]
+              '+min' => 1,
+              '.ref' => 'objectField_const'
             },
             {
               '.err' => 'Expected name or constant'
@@ -1099,30 +1068,38 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
       ]
     },
     'value_const' => {
-      '.any' => [
+      '.all' => [
         {
-          '.ref' => 'float'
+          '.any' => [
+            {
+              '.ref' => 'float'
+            },
+            {
+              '.ref' => 'int'
+            },
+            {
+              '.ref' => 'string'
+            },
+            {
+              '.ref' => 'boolean'
+            },
+            {
+              '.ref' => 'null'
+            },
+            {
+              '.ref' => 'enumValue'
+            },
+            {
+              '.ref' => 'listValue_const'
+            },
+            {
+              '.ref' => 'objectValue_const'
+            }
+          ]
         },
         {
-          '.ref' => 'int'
-        },
-        {
-          '.ref' => 'string'
-        },
-        {
-          '.ref' => 'boolean'
-        },
-        {
-          '.ref' => 'null'
-        },
-        {
-          '.ref' => 'enumValue'
-        },
-        {
-          '.ref' => 'listValue_const'
-        },
-        {
-          '.ref' => 'objectValue_const'
+          '-skip' => 1,
+          '.ref' => '_'
         }
       ]
     },

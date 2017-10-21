@@ -42,7 +42,7 @@ typeCondition: /'on' -/ namedType
 
 value: (variable | float | int | string | boolean | null | enumValue | listValue | objectValue) .(-)
 
-value_const: float | int | string | boolean | null | enumValue | listValue_const | objectValue_const
+value_const: (float | int | string | boolean | null | enumValue | listValue_const | objectValue_const) .(-)
 
 boolean: /(true|false)/
 
@@ -52,11 +52,11 @@ enumValue: (/(true|false|null)/ `Invalid enum value` | name)
 
 listValue: /- LSQUARE -/ value* /- RSQUARE -/
 
-listValue_const: /- LSQUARE -/ (value_const* % /-/) /- RSQUARE -/
+listValue_const: /- LSQUARE -/ value_const* /- RSQUARE -/
 
 objectValue: /- LCURLY -/ ( (objectField+ % /-/) | `Expected name` ) /- RCURLY -/
 
-objectValue_const: /- LCURLY -/ ( (objectField_const+ % /-/) | `Expected name or constant` ) /- RCURLY -/
+objectValue_const: /- LCURLY -/ ( objectField_const+ | `Expected name or constant` ) /- RCURLY -/
 
 objectField: name /- COLON -/ value
 
