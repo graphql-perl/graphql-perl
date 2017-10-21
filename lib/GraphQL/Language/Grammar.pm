@@ -860,15 +860,23 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
       ]
     },
     'selection' => {
-      '.any' => [
+      '.all' => [
         {
-          '.ref' => 'field'
+          '.any' => [
+            {
+              '.ref' => 'field'
+            },
+            {
+              '.ref' => 'inline_fragment'
+            },
+            {
+              '.ref' => 'fragment_spread'
+            }
+          ]
         },
         {
-          '.ref' => 'inline_fragment'
-        },
-        {
-          '.ref' => 'fragment_spread'
+          '-skip' => 1,
+          '.ref' => '_'
         }
       ]
     },
@@ -881,29 +889,8 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
         {
           '.any' => [
             {
-              '.all' => [
-                {
-                  '.ref' => 'selection'
-                },
-                {
-                  '+min' => 0,
-                  '-flat' => 1,
-                  '.all' => [
-                    {
-                      '-skip' => 1,
-                      '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
-                    },
-                    {
-                      '.ref' => 'selection'
-                    }
-                  ]
-                },
-                {
-                  '+max' => 1,
-                  '-skip' => 1,
-                  '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
-                }
-              ]
+              '+min' => 1,
+              '.ref' => 'selection'
             },
             {
               '.err' => 'Expected name'

@@ -18,9 +18,9 @@ operationDefinition: selectionSet | operationType - name? - variableDefinitions?
 
 operationType: /(query|mutation|subscription)/
 
-selectionSet: .(/- LCURLY -/) ( (selection+ %% .(/-/)) | `Expected name` ) .(/- RCURLY -/)
+selectionSet: .(/- LCURLY -/) ( selection+ | `Expected name` ) .(/- RCURLY -/)
 
-selection: field | inline_fragment | fragment_spread
+selection: (field | inline_fragment | fragment_spread) .(-)
 
 field: alias? name - arguments? - directives? selectionSet?
 
