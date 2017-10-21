@@ -147,7 +147,10 @@ method got_namedType (Any $param = undef) {
 
 method got_enumValueDefinition (Any $param = undef) {
   return unless defined $param;
-  my %def = (value => shift @$param, map %$_, @$param);
+  my $value = shift @$param;
+  $param = $param->[0]; # only one item left, flatten one
+  my $rest = ref $param eq 'HASH' ? [ $param ] : $param;
+  my %def = (value => $value, map %$_, @$rest);
   return \%def;
 }
 

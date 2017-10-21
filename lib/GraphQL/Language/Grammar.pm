@@ -264,12 +264,16 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'enumValue'
         },
         {
-          '-skip' => 1,
-          '.ref' => '_'
-        },
-        {
           '+max' => 1,
-          '.ref' => 'directives'
+          '.all' => [
+            {
+              '-skip' => 1,
+              '.ref' => '_'
+            },
+            {
+              '.ref' => 'directives'
+            }
+          ]
         }
       ]
     },
