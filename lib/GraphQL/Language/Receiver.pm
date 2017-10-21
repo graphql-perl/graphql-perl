@@ -276,7 +276,7 @@ method got_fragmentName (Any $param = undef) {
 
 method got_selectionSet (Any $param = undef) {
   return unless defined $param;
-  return {selections => $param->[0]};
+  return {selections => $param};
 }
 
 method got_operationDefinition (Any $param = undef) {
