@@ -145,6 +145,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
     'defaultValue' => {
       '.all' => [
         {
+          '-skip' => 1,
           '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*=(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
         },
         {

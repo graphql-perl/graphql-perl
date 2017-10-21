@@ -152,8 +152,8 @@ method got_enumValueDefinition (Any $param = undef) {
 }
 
 method got_defaultValue (Any $param = undef) {
-  return unless defined $param;
-  return { default_value => $param->[0] };
+  # the value can be undef
+  return { default_value => $param };
 }
 
 method got_implementsInterfaces (Any $param = undef) {
