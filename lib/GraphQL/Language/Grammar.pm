@@ -249,23 +249,8 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*\{/u
         },
         {
-          '.all' => [
-            {
-              '.ref' => 'enumValueDefinition'
-            },
-            {
-              '+min' => 0,
-              '-flat' => 1,
-              '.all' => [
-                {
-                  '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
-                },
-                {
-                  '.ref' => 'enumValueDefinition'
-                }
-              ]
-            }
-          ]
+          '+min' => 1,
+          '.ref' => 'enumValueDefinition'
         },
         {
           '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*\}/u

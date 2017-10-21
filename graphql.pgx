@@ -159,7 +159,7 @@ union: /'union' -/ name - directives? /- EQUAL -/ unionMembers
 
 unionMembers: namedType+ % /- PIPE -/
 
-enumTypeDefinition: /'enum' -/ name - directives? /- LCURLY / (enumValueDefinition+ % /-/) /- RCURLY /
+enumTypeDefinition: /'enum' -/ name - directives? /- LCURLY / enumValueDefinition+ /- RCURLY /
 
 enumValueDefinition: - enumValue - directives?
 
