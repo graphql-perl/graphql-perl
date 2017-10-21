@@ -168,6 +168,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'name'
         },
         {
+          '-skip' => 1,
           '.ref' => '_'
         },
         {
@@ -228,6 +229,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'name'
         },
         {
+          '-skip' => 1,
           '.ref' => '_'
         },
         {
@@ -272,6 +274,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'enumValue'
         },
         {
+          '-skip' => 1,
           '.ref' => '_'
         },
         {
@@ -290,6 +293,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'name'
         },
         {
+          '-skip' => 1,
           '.ref' => '_'
         },
         {
@@ -297,6 +301,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'arguments'
         },
         {
+          '-skip' => 1,
           '.ref' => '_'
         },
         {
@@ -318,6 +323,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'name'
         },
         {
+          '-skip' => 1,
           '.ref' => '_'
         },
         {
@@ -331,6 +337,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'typedef'
         },
         {
+          '-skip' => 1,
           '.ref' => '_'
         },
         {
@@ -351,6 +358,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'fragmentName'
         },
         {
+          '-skip' => 1,
           '.ref' => '_'
         },
         {
@@ -364,6 +372,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           ]
         },
         {
+          '-skip' => 1,
           '.ref' => '_'
         },
         {
@@ -402,6 +411,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'fragmentName'
         },
         {
+          '-skip' => 1,
           '.ref' => '_'
         },
         {
@@ -451,6 +461,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'typeCondition'
         },
         {
+          '-skip' => 1,
           '.ref' => '_'
         },
         {
@@ -471,6 +482,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'name'
         },
         {
+          '-skip' => 1,
           '.ref' => '_'
         },
         {
@@ -504,6 +516,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'typedef'
         },
         {
+          '-skip' => 1,
           '.ref' => '_'
         },
         {
@@ -511,6 +524,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'defaultValue'
         },
         {
+          '-skip' => 1,
           '.ref' => '_'
         },
         {
@@ -531,6 +545,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'name'
         },
         {
+          '-skip' => 1,
           '.ref' => '_'
         },
         {
@@ -764,6 +779,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
               '.ref' => 'operationType'
             },
             {
+              '-skip' => 1,
               '.ref' => '_'
             },
             {
@@ -771,6 +787,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
               '.ref' => 'name'
             },
             {
+              '-skip' => 1,
               '.ref' => '_'
             },
             {
@@ -778,6 +795,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
               '.ref' => 'variableDefinitions'
             },
             {
+              '-skip' => 1,
               '.ref' => '_'
             },
             {
@@ -806,6 +824,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'namedType'
         },
         {
+          '-skip' => 1,
           '.ref' => '_'
         }
       ]
@@ -819,6 +838,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'name'
         },
         {
+          '-skip' => 1,
           '.ref' => '_'
         },
         {
@@ -898,6 +918,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.rgx' => qr/\G\.{3}/
         },
         {
+          '-skip' => 1,
           '.ref' => '_'
         }
       ]
@@ -914,6 +935,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'name'
         },
         {
+          '-skip' => 1,
           '.ref' => '_'
         },
         {
@@ -921,6 +943,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'implementsInterfaces'
         },
         {
+          '-skip' => 1,
           '.ref' => '_'
         },
         {
@@ -1026,6 +1049,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.ref' => 'name'
         },
         {
+          '-skip' => 1,
           '.ref' => '_'
         },
         {

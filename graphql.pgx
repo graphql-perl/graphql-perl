@@ -14,7 +14,7 @@ graphql: definition+
 
 definition: (operationDefinition | fragment | typeSystemDefinition | .ws2)
 
-operationDefinition: selectionSet | operationType - name? - variableDefinitions? - directives? selectionSet
+operationDefinition: selectionSet | operationType .(-) name? .(-) variableDefinitions? .(-) directives? selectionSet
 
 operationType: /(query|mutation|subscription)/
 
@@ -22,7 +22,7 @@ selectionSet: .(/- LCURLY -/) ( selection+ | `Expected name` ) .(/- RCURLY -/)
 
 selection: (field | inline_fragment | fragment_spread) .(-)
 
-field: alias? name - arguments? - directives? selectionSet?
+field: alias? name .(-) arguments? .(-) directives? selectionSet?
 
 alias: name /- COLON -/
 
@@ -30,11 +30,11 @@ arguments: /- LPAREN -/ argument+ /- RPAREN -/
 
 argument: (name /- COLON -/ value) .(-)
 
-fragment_spread: .spread fragmentName - directives?
+fragment_spread: .spread fragmentName .(-) directives?
 
-inline_fragment: .spread typeCondition? - directives? selectionSet
+inline_fragment: .spread typeCondition? .(-) directives? selectionSet
 
-fragment: /- 'fragment' -/ fragmentName - (typeCondition | `Expected "on"`) - directives? selectionSet
+fragment: /- 'fragment' -/ fragmentName .(-) (typeCondition | `Expected "on"`) .(-) directives? selectionSet
 
 fragmentName: ('on' `Unexpected Name "on"` | name)
 
@@ -126,7 +126,7 @@ int: /(
 
 name: /([ UNDER ALPHAS ] [ WORDS ]*)/
 
-spread: /\.{3}/ -
+spread: /\.{3}/ .(-)
 
 ws: / (: WS | \x{FEFF} | COMMA | comment ) /
 
@@ -136,39 +136,39 @@ typeSystemDefinition: - (schema | typeDefinition | typeExtensionDefinition | dir
 
 schema: /'schema' -/ directives? /- LCURLY -/ operationTypeDefinition+ /- RCURLY /
 
-operationTypeDefinition: operationType /- COLON -/ namedType -
+operationTypeDefinition: operationType /- COLON -/ namedType .(-)
 
 typeDefinition: scalar | type | interface | union | enumTypeDefinition | input
 
 # aka scalarTypeDefinition
-scalar: /'scalar' -/ name - directives?
+scalar: /'scalar' -/ name .(-) directives?
 
 # fieldDefinition is "*" not "+" because JS implementation test allows
 # aka objectTypeDefinition
-type: /'type' -/ name - implementsInterfaces? - directives? /- LCURLY / fieldDefinition* /- RCURLY /
+type: /'type' -/ name .(-) implementsInterfaces? .(-) directives? /- LCURLY / fieldDefinition* /- RCURLY /
 
 implementsInterfaces: /'implements' -/ (namedType+ % /-/)
 
-fieldDefinition: - name - argumentsDefinition? /- COLON -/ typedef - directives?
+fieldDefinition: - name .(-) argumentsDefinition? /- COLON -/ typedef .(-) directives?
 
 argumentsDefinition: /- LPAREN / (inputValueDefinition+ % /-/) /- RPAREN /
 
-inputValueDefinition: - name /- COLON -/ typedef - defaultValue? - directives?
+inputValueDefinition: - name /- COLON -/ typedef .(-) defaultValue? .(-) directives?
 
-interface: /'interface' -/ name - directives? /- LCURLY / fieldDefinition+ /- RCURLY /
+interface: /'interface' -/ name .(-) directives? /- LCURLY / fieldDefinition+ /- RCURLY /
 
-union: /'union' -/ name - directives? /- EQUAL -/ unionMembers
+union: /'union' -/ name .(-) directives? /- EQUAL -/ unionMembers
 
 unionMembers: namedType+ % /- PIPE -/
 
-enumTypeDefinition: /'enum' -/ name - directives? /- LCURLY / enumValueDefinition+ /- RCURLY /
+enumTypeDefinition: /'enum' -/ name .(-) directives? /- LCURLY / enumValueDefinition+ /- RCURLY /
 
-enumValueDefinition: - enumValue - directives?
+enumValueDefinition: - enumValue .(-) directives?
 
-input: /'input' -/ name - directives? /- LCURLY / inputValueDefinition+ /- RCURLY /
+input: /'input' -/ name .(-) directives? /- LCURLY / inputValueDefinition+ /- RCURLY /
 
 typeExtensionDefinition: /'extend' -/ type
 
-directive: /'directive' - AT -/ name - argumentsDefinition? /- 'on' -/ directiveLocations
+directive: /'directive' - AT -/ name .(-) argumentsDefinition? /- 'on' -/ directiveLocations
 
 directiveLocations: name+ % /- PIPE -/
