@@ -10,7 +10,7 @@
 
 # in order to capture comments *before* a given rule-group *into* it,
 # can't suck up whitespace *after* rule-groups as part of them
-graphql: definition+ / EOS /
+graphql: definition+
 
 definition: (operationDefinition | fragment | typeSystemDefinition | .ws2)
 

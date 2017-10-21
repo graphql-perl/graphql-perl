@@ -292,7 +292,7 @@ method got_directives (Any $param = undef) {
 
 method got_graphql (Any $param = undef) {
   return unless defined $param;
-  return @$param;
+  return $param;
 }
 
 method got_definition (Any $param = undef) {

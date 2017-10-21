@@ -422,15 +422,8 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
       ]
     },
     'graphql' => {
-      '.all' => [
-        {
-          '+min' => 1,
-          '.ref' => 'definition'
-        },
-        {
-          '.rgx' => qr/\G\z/
-        }
-      ]
+      '+min' => 1,
+      '.ref' => 'definition'
     },
     'implementsInterfaces' => {
       '.all' => [
