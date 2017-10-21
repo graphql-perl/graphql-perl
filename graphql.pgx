@@ -28,7 +28,7 @@ alias: name /- COLON -/
 
 arguments: /- LPAREN -/ argument+ /- RPAREN -/
 
-argument: (name /- COLON -/ value) .(-)
+argument: name /- COLON -/ value
 
 fragment_spread: .spread fragmentName .(-) directives?
 
@@ -40,7 +40,7 @@ fragmentName: ('on' `Unexpected Name "on"` | name)
 
 typeCondition: /'on' -/ namedType
 
-value: variable | float | int | string | boolean | null | enumValue | listValue | objectValue
+value: (variable | float | int | string | boolean | null | enumValue | listValue | objectValue) .(-)
 
 value_const: float | int | string | boolean | null | enumValue | listValue_const | objectValue_const
 
@@ -50,7 +50,7 @@ null: /(null)/
 
 enumValue: (/(true|false|null)/ `Invalid enum value` | name)
 
-listValue: /- LSQUARE -/ (value* % /-/) /- RSQUARE -/
+listValue: /- LSQUARE -/ value* /- RSQUARE -/
 
 listValue_const: /- LSQUARE -/ (value_const* % /-/) /- RSQUARE -/
 

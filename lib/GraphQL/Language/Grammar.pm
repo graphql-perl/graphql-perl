@@ -67,21 +67,13 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
     'argument' => {
       '.all' => [
         {
-          '.all' => [
-            {
-              '.ref' => 'name'
-            },
-            {
-              '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*:(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
-            },
-            {
-              '.ref' => 'value'
-            }
-          ]
+          '.ref' => 'name'
         },
         {
-          '-skip' => 1,
-          '.ref' => '_'
+          '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*:(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+        },
+        {
+          '.ref' => 'value'
         }
       ]
     },
@@ -583,24 +575,8 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*\[(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
         },
         {
-          '+max' => 1,
-          '.all' => [
-            {
-              '.ref' => 'value'
-            },
-            {
-              '+min' => 0,
-              '-flat' => 1,
-              '.all' => [
-                {
-                  '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
-                },
-                {
-                  '.ref' => 'value'
-                }
-              ]
-            }
-          ]
+          '+min' => 0,
+          '.ref' => 'value'
         },
         {
           '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*\](?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
@@ -1084,33 +1060,41 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
       ]
     },
     'value' => {
-      '.any' => [
+      '.all' => [
         {
-          '.ref' => 'variable'
+          '.any' => [
+            {
+              '.ref' => 'variable'
+            },
+            {
+              '.ref' => 'float'
+            },
+            {
+              '.ref' => 'int'
+            },
+            {
+              '.ref' => 'string'
+            },
+            {
+              '.ref' => 'boolean'
+            },
+            {
+              '.ref' => 'null'
+            },
+            {
+              '.ref' => 'enumValue'
+            },
+            {
+              '.ref' => 'listValue'
+            },
+            {
+              '.ref' => 'objectValue'
+            }
+          ]
         },
         {
-          '.ref' => 'float'
-        },
-        {
-          '.ref' => 'int'
-        },
-        {
-          '.ref' => 'string'
-        },
-        {
-          '.ref' => 'boolean'
-        },
-        {
-          '.ref' => 'null'
-        },
-        {
-          '.ref' => 'enumValue'
-        },
-        {
-          '.ref' => 'listValue'
-        },
-        {
-          '.ref' => 'objectValue'
+          '-skip' => 1,
+          '.ref' => '_'
         }
       ]
     },
