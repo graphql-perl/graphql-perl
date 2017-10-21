@@ -154,22 +154,19 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
       ]
     },
     'definition' => {
-      '.all' => [
+      '.any' => [
         {
-          '.ref' => '_'
+          '.ref' => 'operationDefinition'
         },
         {
-          '.any' => [
-            {
-              '.ref' => 'operationDefinition'
-            },
-            {
-              '.ref' => 'fragment'
-            },
-            {
-              '.ref' => 'typeSystemDefinition'
-            }
-          ]
+          '.ref' => 'fragment'
+        },
+        {
+          '.ref' => 'typeSystemDefinition'
+        },
+        {
+          '-skip' => 1,
+          '.ref' => 'ws2'
         }
       ]
     },
@@ -368,7 +365,7 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
     'fragment' => {
       '.all' => [
         {
-          '.rgx' => qr/\Gfragment(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
+          '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*fragment(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
         },
         {
           '.ref' => 'fragmentName'
@@ -1212,6 +1209,9 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
           '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*\)(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*/u
         }
       ]
+    },
+    'ws2' => {
+      '.rgx' => qr/\G(?:\s|\x{FEFF}|,|\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))+/u
     }
   }
 }

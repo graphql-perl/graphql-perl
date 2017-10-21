@@ -297,7 +297,7 @@ method got_graphql (Any $param = undef) {
 
 method got_definition (Any $param = undef) {
   return unless defined $param;
-  return @$param;
+  return $param;
 }
 
 method got_operationTypeDefinition (Any $param = undef) {
