@@ -54,17 +54,17 @@ listValue: /- LSQUARE -/ value* /- RSQUARE -/
 
 listValue_const: /- LSQUARE -/ value_const* /- RSQUARE -/
 
-objectValue: /- LCURLY -/ ( (objectField+ % /-/) | `Expected name` ) /- RCURLY -/
+objectValue: /- LCURLY -/ ( objectField+ | `Expected name` ) /- RCURLY -/
 
 objectValue_const: /- LCURLY -/ ( objectField_const+ | `Expected name or constant` ) /- RCURLY -/
 
-objectField: name /- COLON -/ value
+objectField: name /- COLON -/ value .(-)
 
 objectField_const: name /- COLON -/ value_const
 
-variableDefinitions: /- LPAREN -/ (variableDefinition+ % /-/) /- RPAREN -/
+variableDefinitions: /- LPAREN -/ variableDefinition+ /- RPAREN -/
 
-variableDefinition: variable /- COLON -/ typedef defaultValue?
+variableDefinition: variable /- COLON -/ typedef defaultValue? .(-)
 
 variable: /- DOLLAR/ name
 
@@ -73,7 +73,7 @@ defaultValue: .(/- EQUAL -/) value_const
 # not "type" as using that for "objectTypeDefinition"
 typedef: nonNullType | namedType | listType
 
-namedType: name
+namedType: name .(-)
 
 listType: LSQUARE typedef RSQUARE
 
@@ -147,13 +147,13 @@ scalar: /'scalar' -/ name .(-) directives?
 # aka objectTypeDefinition
 type: /'type' -/ name .(-) implementsInterfaces? .(-) directives? /- LCURLY / fieldDefinition* /- RCURLY /
 
-implementsInterfaces: /'implements' -/ (namedType+ % /-/)
+implementsInterfaces: /'implements' -/ namedType+
 
 fieldDefinition: - name .(-) argumentsDefinition? /- COLON -/ typedef .(-) directives?
 
-argumentsDefinition: /- LPAREN / (inputValueDefinition+ % /-/) /- RPAREN /
+argumentsDefinition: /- LPAREN / inputValueDefinition+ /- RPAREN /
 
-inputValueDefinition: - name /- COLON -/ typedef .(-) defaultValue? .(-) directives?
+inputValueDefinition: - name /- COLON -/ typedef .(-) defaultValue? .(-) directives? .(-)
 
 interface: /'interface' -/ name .(-) directives? /- LCURLY / fieldDefinition+ /- RCURLY /
 

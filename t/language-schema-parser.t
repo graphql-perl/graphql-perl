@@ -250,8 +250,8 @@ __DATA__
     'kind' => 'union',
     'node' => {
       'location' => {
-        'column' => 0,
-        'line' => 36
+        'column' => 1,
+        'line' => 38
       },
       'name' => 'Feed',
       'types' => [
@@ -270,8 +270,8 @@ __DATA__
         }
       ],
       'location' => {
-        'column' => 0,
-        'line' => 38
+        'column' => 1,
+        'line' => 40
       },
       'name' => 'AnnotatedUnion',
       'types' => [
