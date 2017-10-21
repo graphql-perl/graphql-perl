@@ -8,7 +8,7 @@
 # inspiration drawn from the slightly obsolete https://github.com/antlr/grammars-v4/blob/master/graphql/GraphQL.g4
 # string and number from https://github.com/ingydotnet/json-pgx/blob/master/json.pgx
 
-graphql: - definition+ / EOS /
+graphql: definition+ / EOS /
 
 definition: - (operationDefinition | fragment | typeSystemDefinition)
 

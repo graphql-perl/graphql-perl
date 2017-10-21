@@ -436,9 +436,6 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.64)
     'graphql' => {
       '.all' => [
         {
-          '.ref' => '_'
-        },
-        {
           '+min' => 1,
           '.ref' => 'definition'
         },
