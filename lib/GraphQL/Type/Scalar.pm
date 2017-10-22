@@ -98,6 +98,26 @@ method perl_to_graphql(Any $item) :ReturnType(Any) {
   $self->serialize->($item);
 }
 
+method from_ast(
+  HashRef $name2type,
+  HashRef $ast_node,
+) :ReturnType(InstanceOf[__PACKAGE__]) {
+  DEBUG and _debug('Scalar.from_ast', $ast_node);
+  $self->new(
+    $self->_from_ast_named($ast_node),
+    serialize => sub {}, # fake
+  );
+}
+
+has to_doc => (is => 'lazy', isa => Str);
+sub _build_to_doc {
+  my ($self) = @_;
+  DEBUG and _debug('Scalar.to_doc', $self);
+  join '', map "$_\n",
+    ($self->description ? (map "# $_", split /\n/, $self->description) : ()),
+    "scalar @{[$self->name]}";
+}
+
 =head1 EXPORTED VARIABLES
 
 =head2 $Int

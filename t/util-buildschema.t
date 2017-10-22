@@ -357,4 +357,19 @@ EOF
   is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
 };
 
+subtest 'Custom Scalar' => sub {
+  my $doc = <<'EOF';
+schema {
+  query: Root
+}
+
+scalar CustomScalar
+
+type Root {
+  customScalar: CustomScalar
+}
+EOF
+  is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
+};
+
 done_testing;

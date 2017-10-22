@@ -214,6 +214,7 @@ my %kind2class = qw(
   enum GraphQL::Type::Enum
   interface GraphQL::Type::Interface
   union GraphQL::Type::Union
+  scalar GraphQL::Type::Scalar
 );
 my %class2kind = reverse %kind2class;
 method from_ast(
@@ -262,6 +263,7 @@ schema object.
 
 has to_doc => (is => 'lazy', isa => Str);
 my %directive2builtin = map { ($_=>1) } @GraphQL::Directive::SPECIFIED_DIRECTIVES;
+my %scalar2builtin = map { ($_->name=>1) } ($Int, $Float, $String, $Boolean, $ID);
 sub _build_to_doc {
   my ($self) = @_;
   join "\n",
@@ -275,6 +277,7 @@ sub _build_to_doc {
       @{ $self->directives }),
     (map $self->name2type->{$_}->to_doc,
       grep !/^__/,
+      grep !$scalar2builtin{$_},
       grep $class2kind{ref $self->name2type->{$_}},
       sort keys %{$self->name2type}),
     ;
