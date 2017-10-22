@@ -213,6 +213,7 @@ my %kind2class = qw(
   type GraphQL::Type::Object
   enum GraphQL::Type::Enum
   interface GraphQL::Type::Interface
+  union GraphQL::Type::Union
 );
 my %class2kind = reverse %kind2class;
 method from_ast(

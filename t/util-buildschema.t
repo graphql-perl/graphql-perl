@@ -315,4 +315,46 @@ EOF
   is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
 };
 
+subtest 'Simple Union' => sub {
+  my $doc = <<'EOF';
+schema {
+  query: Root
+}
+
+union Hello = World
+
+type Root {
+  hello: Hello
+}
+
+type World {
+  str: String
+}
+EOF
+  is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
+};
+
+subtest 'Multiple Union' => sub {
+  my $doc = <<'EOF';
+schema {
+  query: Root
+}
+
+union Hello = WorldOne | WorldTwo
+
+type Root {
+  hello: Hello
+}
+
+type WorldOne {
+  str: String
+}
+
+type WorldTwo {
+  str: String
+}
+EOF
+  is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
+};
+
 done_testing;

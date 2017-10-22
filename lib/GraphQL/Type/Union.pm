@@ -77,14 +77,40 @@ performing validation.
 has _types_validated => (is => 'rw', isa => Bool);
 method get_types() :ReturnType(ArrayRefNonEmpty[InstanceOf['GraphQL::Type::Object']]) {
   my @types = @{ $self->types };
+  DEBUG and _debug('Union.get_types', $self->name, \@types);
   return \@types if $self->_types_validated; # only do once
   $self->_types_validated(1);
   if (!$self->resolve_type) {
     my @bad = map $_->name, grep !$_->is_type_of, @types;
     die $self->name." no resolve_type and no is_type_of for @bad" if @bad;
   }
-  DEBUG and _debug('get_types', $self->name, \@types);
   \@types;
+}
+
+method from_ast(
+  HashRef $name2type,
+  HashRef $ast_node,
+) :ReturnType(InstanceOf[__PACKAGE__]) {
+  DEBUG and _debug('Union.from_ast', $ast_node);
+  $self->new(
+    name => $ast_node->{name},
+    ($ast_node->{description} ? (description => $ast_node->{description}) : ()),
+    resolve_type => sub {}, # fake
+    (
+      $ast_node->{types}
+        ? (types => sub {[map $name2type->{$_}, @{$ast_node->{types}}]})
+        : ()
+    ),
+  );
+}
+
+has to_doc => (is => 'lazy', isa => Str);
+sub _build_to_doc {
+  my ($self) = @_;
+  DEBUG and _debug('Union.to_doc', $self);
+  join '', map "$_\n",
+    ($self->description ? (map "# $_", split /\n/, $self->description) : ()),
+    "union @{[$self->name]} = " . join(' | ', map $_->name, @{$self->{types}});
 }
 
 __PACKAGE__->meta->make_immutable();
