@@ -43,6 +43,22 @@ method _make_field_def(
   ($_ => { %$field_def, type => GraphQL::Schema::lookup_type($field_def, $name2type), %args });
 }
 
+method _make_fieldtuples(
+  HashRef $fields,
+) {
+  DEBUG and _debug('FieldsEither._make_fieldtuples', $fields);
+  map {
+    my @argtuples = map $_->[0],
+      $self->_make_fieldtuples($fields->{$_}{args} || {});
+    [
+      "$_@{[
+        @argtuples ? ('('.join(', ', @argtuples).')') : ''
+      ]}: @{[$fields->{$_}{type}->to_string]}",
+      $fields->{$_}{description},
+    ]
+  } sort keys %$fields;
+}
+
 __PACKAGE__->meta->make_immutable();
 
 1;

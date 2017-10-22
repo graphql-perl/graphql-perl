@@ -123,9 +123,7 @@ sub _build_to_doc {
     ($self->description ? (map "# $_", split /\n/, $self->description) : ()),
     "directive \@@{[$self->name]}(",
   );
-  my @argtuples = map [
-    "$_: @{[$self->args->{$_}{type}->to_string]}", $self->args->{$_}{description}
-  ], sort keys %{$self->args};
+  my @argtuples = $self->_make_fieldtuples($self->args);
   DEBUG and _debug('Directive.to_doc(args)', \@argtuples);
   my $end = ") on " . join(' | ', @{$self->locations});
   return join("\n", @start).join(

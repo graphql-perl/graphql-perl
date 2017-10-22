@@ -216,4 +216,21 @@ EOF
   is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
 };
 
+subtest 'Single argument field' => sub {
+  my $doc = <<'EOF';
+schema {
+  query: Hello
+}
+
+type Hello {
+  booleanToStr(bool: Boolean): String
+  floatToStr(float: Float): String
+  idToStr(id: ID): String
+  str(int: Int): String
+  strToStr(bool: String): String
+}
+EOF
+  is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
+};
+
 done_testing;
