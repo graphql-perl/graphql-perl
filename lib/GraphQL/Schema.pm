@@ -228,7 +228,7 @@ method from_ast(
     (map {
       $schema_node->{$_} ? ($_ => $name2type{$schema_node->{$_}}) : ()
     } @TYPE_ATTRS),
-    (@directives ? (directives => \@directives) : ()),
+    (@directives ? (directives => [ @GraphQL::Directive::SPECIFIED_DIRECTIVES, @directives ]) : ()),
     types => [ values %name2type ],
   );
 }
@@ -272,6 +272,18 @@ sub _build_to_doc {
       grep $class2kind{ref $self->name2type->{$_}},
       sort keys %{$self->name2type}),
     ;
+}
+
+=head2 name2directive
+
+In this schema, returns a hash-ref mapping all directives' names to their
+directive object.
+
+=cut
+
+has name2directive => (is => 'lazy', isa => Map[StrNameValid, InstanceOf['GraphQL::Directive']]);
+method _build_name2directive() {
+  +{ map { ($_->name => $_) } @{ $self->directives } };
 }
 
 __PACKAGE__->meta->make_immutable();

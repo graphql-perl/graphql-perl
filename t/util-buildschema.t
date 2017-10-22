@@ -117,4 +117,53 @@ EOF
   is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
 };
 
+subtest 'Maintains @skip & @include' => sub {
+  my $doc = <<'EOF';
+schema {
+  query: Hello
+}
+type Hello {
+  str: String
+}
+EOF
+  my $schema = GraphQL::Schema->from_doc($doc);
+  is_deeply $schema->directives, \@GraphQL::Directive::SPECIFIED_DIRECTIVES;
+};
+
+subtest 'Overriding directives excludes specified' => sub {
+  my $doc = <<'EOF';
+schema {
+  query: Hello
+}
+directive @skip on FIELD
+directive @include on FIELD
+directive @deprecated on FIELD_DEFINITION
+type Hello {
+  str: String
+}
+EOF
+  my $schema = GraphQL::Schema->from_doc($doc);
+  is keys %{ $schema->name2directive }, 3;
+  isnt $schema->name2directive->{skip}, $GraphQL::Directive::SKIP;
+  isnt $schema->name2directive->{include}, $GraphQL::Directive::INCLUDE;
+  isnt $schema->name2directive->{deprecated}, $GraphQL::Directive::DEPRECATED;
+};
+
+subtest 'Adding directives maintains @skip & @include' => sub {
+  my $doc = <<'EOF';
+schema {
+  query: Hello
+}
+directive @foo(arg: Int) on FIELD
+type Hello {
+  str: String
+}
+EOF
+  my $schema = GraphQL::Schema->from_doc($doc);
+  is keys %{ $schema->name2directive }, 4;
+  is $schema->name2directive->{skip}, $GraphQL::Directive::SKIP;
+  is $schema->name2directive->{include}, $GraphQL::Directive::INCLUDE;
+  is $schema->name2directive->{deprecated}, $GraphQL::Directive::DEPRECATED;
+};
+
 done_testing;
