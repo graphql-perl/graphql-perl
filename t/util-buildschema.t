@@ -233,4 +233,34 @@ EOF
   is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
 };
 
+subtest 'Simple type with multiple arguments' => sub {
+  my $doc = <<'EOF';
+schema {
+  query: Hello
+}
+
+type Hello {
+  str(bool: Boolean, int: Int): String
+}
+EOF
+  is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
+};
+
+subtest 'Simple type with interface' => sub {
+  my $doc = <<'EOF';
+schema {
+  query: Hello
+}
+
+type Hello implements WorldInterface {
+  str: String
+}
+
+interface WorldInterface {
+  str: String
+}
+EOF
+  is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
+};
+
 done_testing;

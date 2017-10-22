@@ -13,6 +13,7 @@ use GraphQL::Directive;
 use GraphQL::Introspection qw($SCHEMA_META_TYPE);
 use GraphQL::Type::Scalar qw($Int $Float $String $Boolean $ID);
 use GraphQL::Language::Parser qw(parse);
+use Module::Runtime qw(require_module);
 use Exporter 'import';
 
 our $VERSION = '0.02';
@@ -211,6 +212,7 @@ not be a complete schema since it will have only default resolvers.
 my %kind2class = qw(
   type GraphQL::Type::Object
   enum GraphQL::Type::Enum
+  interface GraphQL::Type::Interface
 );
 my %class2kind = reverse %kind2class;
 method from_ast(
@@ -222,6 +224,7 @@ method from_ast(
   die "No schema found in AST\n" unless $schema_node;
   my %name2type = %BUILTIN2TYPE;
   for (@type_nodes) {
+    require_module $kind2class{$_->{kind}};
     $name2type{$_->{node}{name}} = $kind2class{$_->{kind}}->from_ast(\%name2type, $_->{node});
   }
   my @directives = map GraphQL::Directive->from_ast(\%name2type, $_->{node}),

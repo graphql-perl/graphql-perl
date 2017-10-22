@@ -4,7 +4,9 @@ use 5.014;
 use strict;
 use warnings;
 use Moo;
-use Types::Standard qw(CodeRef);
+use Types::Standard -all;
+use Function::Parameters;
+use Return::Type;
 extends qw(GraphQL::Type);
 with qw(
   GraphQL::Role::Output
@@ -13,9 +15,11 @@ with qw(
   GraphQL::Role::Nullable
   GraphQL::Role::Named
   GraphQL::Role::FieldsOutput
+  GraphQL::Role::FieldsEither
 );
 
 our $VERSION = '0.02';
+use constant DEBUG => $ENV{GRAPHQL_DEBUG};
 
 =head1 NAME
 
@@ -45,6 +49,37 @@ Optional code-ref to resolve types.
 =cut
 
 has resolve_type => (is => 'ro', isa => CodeRef);
+
+method from_ast(
+  HashRef $name2type,
+  HashRef $ast_node,
+) :ReturnType(InstanceOf[__PACKAGE__]) {
+  $self->new(
+    name => $ast_node->{name},
+    ($ast_node->{description} ? (description => $ast_node->{description}) : ()),
+    fields => sub { +{
+      map $self->_make_field_def($name2type, $_, $ast_node->{fields}{$_}),
+        keys %{$ast_node->{fields}}
+    } },
+  );
+}
+
+has to_doc => (is => 'lazy', isa => Str);
+sub _build_to_doc {
+  my ($self) = @_;
+  DEBUG and _debug('Interface.to_doc', $self);
+  my @fieldlines = map {
+    (
+      ($_->[1] ? ("# $_->[1]") : ()),
+      $_->[0],
+    )
+  } $self->_make_fieldtuples($self->fields);
+  join '', map "$_\n",
+    ($self->description ? (map "# $_", split /\n/, $self->description) : ()),
+    "interface @{[$self->name]} {",
+      (map "  $_", @fieldlines),
+    "}";
+}
 
 __PACKAGE__->meta->make_immutable();
 

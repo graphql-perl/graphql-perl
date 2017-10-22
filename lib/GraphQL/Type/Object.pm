@@ -81,9 +81,11 @@ sub _build_to_doc {
       $_->[0],
     )
   } $self->_make_fieldtuples($self->fields);
+  my $implements = join ', ', map $_->name, @{ $self->interfaces || [] };
+  $implements &&= 'implements ' . $implements . ' ';
   join '', map "$_\n",
     ($self->description ? (map "# $_", split /\n/, $self->description) : ()),
-    "type @{[$self->name]} {",
+    "type @{[$self->name]} $implements\{",
       (map "  $_", @fieldlines),
     "}";
 }
@@ -95,6 +97,11 @@ method from_ast(
   $self->new(
     name => $ast_node->{name},
     ($ast_node->{description} ? (description => $ast_node->{description}) : ()),
+    (
+      $ast_node->{interfaces}
+        ? (interfaces => sub {[map $name2type->{$_}, @{$ast_node->{interfaces}}]})
+        : ()
+    ),
     fields => sub { +{
       map $self->_make_field_def($name2type, $_, $ast_node->{fields}{$_}),
         keys %{$ast_node->{fields}}
