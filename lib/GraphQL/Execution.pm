@@ -16,6 +16,7 @@ use GraphQL::Introspection qw(
   $SCHEMA_META_FIELD_DEF $TYPE_META_FIELD_DEF $TYPE_NAME_META_FIELD_DEF
 );
 use GraphQL::Directive;
+use GraphQL::Schema qw(lookup_type);
 use Exporter 'import';
 
 =head1 NAME
@@ -147,14 +148,14 @@ fun _variables_apply_defaults(
   HashRef $variable_values,
 ) :ReturnType(HashRef) {
   my @bad = grep {
-    ! _lookup_type($schema, $operation_variables->{$_})->DOES('GraphQL::Role::Input');
+    ! lookup_type($operation_variables->{$_}, $schema->name2type)->DOES('GraphQL::Role::Input');
   } keys %$operation_variables;
   die "Variable '\$$bad[0]' is type '@{[
-    _lookup_type($schema, $operation_variables->{$bad[0]})->to_string
+    lookup_type($operation_variables->{$bad[0]}, $schema->name2type)->to_string
   ]}' which cannot be used as an input type.\n" if @bad;
   +{ map {
     my $opvar = $operation_variables->{$_};
-    my $opvar_type = _lookup_type($schema, $opvar);
+    my $opvar_type = lookup_type($opvar, $schema->name2type);
     my $parsed_value;
     my $maybe_value = $variable_values->{$_} // $opvar->{default_value};
     eval { $parsed_value = $opvar_type->graphql_to_perl($maybe_value) };
@@ -162,16 +163,6 @@ fun _variables_apply_defaults(
       if $@;
     ($_ => { value => $parsed_value, type => $opvar_type })
   } keys %$operation_variables };
-}
-
-fun _lookup_type(
-  (InstanceOf['GraphQL::Schema']) $schema,
-  HashRef $typedef,
-) :ReturnType(InstanceOf['GraphQL::Type']) {
-  my $type = $typedef->{type};
-  return $schema->name2type->{$type} // die "Unknown type '$type'.\n" if is_Str($type);
-  my ($wrapper_type, $wrapped) = @$type;
-  _lookup_type($schema, $wrapped)->$wrapper_type;
 }
 
 fun _get_operation(

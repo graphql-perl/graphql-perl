@@ -13,8 +13,10 @@ use GraphQL::Directive;
 use GraphQL::Introspection qw($SCHEMA_META_TYPE);
 use GraphQL::Type::Scalar qw($Int $Float $String $Boolean $ID);
 use GraphQL::Language::Parser qw(parse);
+use Exporter 'import';
 
 our $VERSION = '0.02';
+our @EXPORT_OK = qw(lookup_type);
 use constant DEBUG => $ENV{GRAPHQL_DEBUG};
 my %BUILTIN2TYPE = map { ($_->name => $_) } ($Int, $Float, $String, $Boolean, $ID);
 my @TYPE_ATTRS = qw(query mutation subscription);
@@ -284,6 +286,32 @@ directive object.
 has name2directive => (is => 'lazy', isa => Map[StrNameValid, InstanceOf['GraphQL::Directive']]);
 method _build_name2directive() {
   +{ map { ($_->name => $_) } @{ $self->directives } };
+}
+
+=head1 FUNCTIONS
+
+=head2 lookup_type($typedef, $name2type)
+
+Turns given AST fragment into a type.
+
+If the hash-ref's C<type> member is a string, will return a type of that name.
+
+If an array-ref, first element must be either C<list> or C<non_null>,
+second will be a recursive AST fragment, which will be passed into a
+recursive call. The result will then have the modifier method (C<list>
+or C<non_null>) called, and that will be returned.
+
+=cut
+
+fun lookup_type(
+  HashRef $typedef,
+  (Map[StrNameValid, InstanceOf['GraphQL::Type']]) $name2type,
+) :ReturnType(InstanceOf['GraphQL::Type']) {
+  my $type = $typedef->{type};
+  return $name2type->{$type} // die "Unknown type '$type'.\n"
+    if is_Str($type);
+  my ($wrapper_type, $wrapped) = @$type;
+  lookup_type($wrapped, $name2type)->$wrapper_type;
 }
 
 __PACKAGE__->meta->make_immutable();
