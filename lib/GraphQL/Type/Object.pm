@@ -97,10 +97,7 @@ method from_ast(
   $self->new(
     $self->_from_ast_named($ast_node),
     $self->_from_ast_maptype($name2type, $ast_node, 'interfaces'),
-    fields => sub { +{
-      map $self->_make_field_def($name2type, $_, $ast_node->{fields}{$_}),
-        keys %{$ast_node->{fields}}
-    } },
+    $self->_from_ast_fields($name2type, $ast_node, 'fields'),
   );
 }
 

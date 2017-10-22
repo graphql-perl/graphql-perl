@@ -4,6 +4,7 @@ use 5.014;
 use strict;
 use warnings;
 use Moo;
+use MooX::Thunking;
 use Function::Parameters;
 use GraphQL::Debug qw(_debug);
 use Types::Standard -all;
@@ -89,7 +90,7 @@ Hash-ref of arguments. See L<GraphQL::Type::Library/FieldMapInput>.
 
 =cut
 
-has args => (is => 'ro', isa => FieldMapInput, required => 1);
+has args => (is => 'thunked', isa => FieldMapInput, required => 1);
 
 =head1 METHODS
 
@@ -107,10 +108,7 @@ method from_ast(
   $self->new(
     $self->_from_ast_named($ast_node),
     locations => $ast_node->{locations},
-    args => +{
-      map $self->_make_field_def($name2type, $_, $ast_node->{args}{$_}),
-        keys %{$ast_node->{args}}
-    },
+    $self->_from_ast_fields($name2type, $ast_node, 'args'),
   );
 }
 

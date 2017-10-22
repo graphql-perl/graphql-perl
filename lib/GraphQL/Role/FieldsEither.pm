@@ -43,6 +43,19 @@ method _make_field_def(
   ($_ => { %$field_def, type => GraphQL::Schema::lookup_type($field_def, $name2type), %args });
 }
 
+method _from_ast_fields(
+  HashRef $name2type,
+  HashRef $ast_node,
+  Str $key,
+) {
+  (
+    $key => sub { +{
+      map $self->_make_field_def($name2type, $_, $ast_node->{$key}{$_}),
+        keys %{$ast_node->{$key}}
+    } },
+  );
+}
+
 method _make_fieldtuples(
   HashRef $fields,
 ) {

@@ -56,10 +56,7 @@ method from_ast(
 ) :ReturnType(InstanceOf[__PACKAGE__]) {
   $self->new(
     $self->_from_ast_named($ast_node),
-    fields => sub { +{
-      map $self->_make_field_def($name2type, $_, $ast_node->{fields}{$_}),
-        keys %{$ast_node->{fields}}
-    } },
+    $self->_from_ast_fields($name2type, $ast_node, 'fields'),
   );
 }
 
