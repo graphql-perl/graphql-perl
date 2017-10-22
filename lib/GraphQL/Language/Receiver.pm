@@ -7,6 +7,7 @@ use base 'Pegex::Receiver';
 use Types::Standard -all;
 use Function::Parameters;
 use JSON::MaybeXS;
+use Carp;
 
 my $JSON = JSON::MaybeXS->new->allow_nonref->canonical;
 
@@ -77,8 +78,8 @@ fun _merge_hash (Any $param = undef, Any $arraykey = undef) {
   my %def = map %$_, grep ref eq 'HASH', @$param;
   if ($arraykey) {
     my @arrays = grep ref eq 'ARRAY', @$param;
-    die "More than one array found\n" if @arrays > 1;
-    die "No arrays found but \$arraykey given\n" if !@arrays;
+    Carp::confess "More than one array found\n" if @arrays > 1;
+    Carp::confess "No arrays found but \$arraykey given\n" if !@arrays;
     my %fields = map %$_, @{$arrays[0]};
     $def{$arraykey} = \%fields;
   }
