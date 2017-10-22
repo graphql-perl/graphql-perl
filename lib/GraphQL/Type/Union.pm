@@ -95,11 +95,7 @@ method from_ast(
   $self->new(
     $self->_from_ast_named($ast_node),
     resolve_type => sub {}, # fake
-    (
-      $ast_node->{types}
-        ? (types => sub {[map $name2type->{$_}, @{$ast_node->{types}}]})
-        : ()
-    ),
+    $self->_from_ast_maptype($name2type, $ast_node, 'types'),
   );
 }
 

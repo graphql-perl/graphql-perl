@@ -6,7 +6,7 @@ use warnings;
 use Moo;
 use Return::Type;
 use Function::Parameters;
-use Types::Standard qw(InstanceOf Any); # if -all causes objects to be class 'Object'!
+use Types::Standard qw(InstanceOf Any HashRef Str); # if -all causes objects to be class 'Object'!
 with 'GraphQL::Role::Listable';
 
 our $VERSION = '0.02';
@@ -135,6 +135,15 @@ Returns Schema Definition Language (SDL) document that describes this
 object.
 
 =cut
+
+method _from_ast_maptype(
+  HashRef $name2type,
+  HashRef $ast_node,
+  Str $key,
+) {
+  return if !$ast_node->{$key};
+  ($key => sub { [ map $name2type->{$_}, @{$ast_node->{$key}} ] });
+}
 
 __PACKAGE__->meta->make_immutable();
 
