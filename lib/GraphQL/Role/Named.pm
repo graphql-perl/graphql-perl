@@ -4,7 +4,8 @@ use 5.014;
 use strict;
 use warnings;
 use Moo::Role;
-use Types::Standard qw(Str);
+use Types::Standard -all;
+use Function::Parameters;
 use GraphQL::Type::Library qw(StrNameValid);
 
 our $VERSION = '0.02';
@@ -50,6 +51,15 @@ has to_string => (is => 'lazy', isa => Str, init_arg => undef, builder => sub {
   my ($self) = @_;
   $self->name;
 });
+
+method _from_ast_named(
+  HashRef $ast_node,
+) {
+  (
+    name => $ast_node->{name},
+    ($ast_node->{description} ? (description => $ast_node->{description}) : ()),
+  );
+}
 
 __PACKAGE__->meta->make_immutable();
 

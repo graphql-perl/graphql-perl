@@ -93,8 +93,7 @@ method from_ast(
 ) :ReturnType(InstanceOf[__PACKAGE__]) {
   DEBUG and _debug('Union.from_ast', $ast_node);
   $self->new(
-    name => $ast_node->{name},
-    ($ast_node->{description} ? (description => $ast_node->{description}) : ()),
+    $self->_from_ast_named($ast_node),
     resolve_type => sub {}, # fake
     (
       $ast_node->{types}

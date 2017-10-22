@@ -95,8 +95,7 @@ method from_ast(
   HashRef $ast_node,
 ) :ReturnType(InstanceOf[__PACKAGE__]) {
   $self->new(
-    name => $ast_node->{name},
-    ($ast_node->{description} ? (description => $ast_node->{description}) : ()),
+    $self->_from_ast_named($ast_node),
     (
       $ast_node->{interfaces}
         ? (interfaces => sub {[map $name2type->{$_}, @{$ast_node->{interfaces}}]})

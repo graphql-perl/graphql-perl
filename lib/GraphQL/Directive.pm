@@ -105,8 +105,7 @@ method from_ast(
 ) :ReturnType(InstanceOf[__PACKAGE__]) {
   DEBUG and _debug('Directive.from_ast', $ast_node);
   $self->new(
-    name => $ast_node->{name},
-    ($ast_node->{description} ? (description => $ast_node->{description}) : ()),
+    $self->_from_ast_named($ast_node),
     locations => $ast_node->{locations},
     args => +{
       map $self->_make_field_def($name2type, $_, $ast_node->{args}{$_}),

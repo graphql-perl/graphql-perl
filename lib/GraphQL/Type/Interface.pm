@@ -55,8 +55,7 @@ method from_ast(
   HashRef $ast_node,
 ) :ReturnType(InstanceOf[__PACKAGE__]) {
   $self->new(
-    name => $ast_node->{name},
-    ($ast_node->{description} ? (description => $ast_node->{description}) : ()),
+    $self->_from_ast_named($ast_node),
     fields => sub { +{
       map $self->_make_field_def($name2type, $_, $ast_node->{fields}{$_}),
         keys %{$ast_node->{fields}}
