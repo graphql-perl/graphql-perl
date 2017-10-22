@@ -31,17 +31,19 @@ our $VERSION = '0.15';
   use GraphQL::Type::Scalar qw($String);
   use GraphQL::Execution qw(execute);
 
-  my $schema = GraphQL::Schema->new(query => GraphQL::Type::Object->new(
-    name => 'QueryRoot',
-    fields => {
-      helloWorld => { type => $String, resolve => sub { 'Hello world!' } },
-    },
-  ));
+  my $schema = GraphQL::Schema->from_doc(<<'EOF');
+  schema {
+    query: QueryRoot
+  }
+  type QueryRoot {
+    helloWorld: String
+  }
+  EOF
   post '/graphql' => sub {
     send_as JSON => execute(
       $schema,
       body_parameters->{query},
-      undef,
+      { helloWorld => 'Hello world!' },
       undef,
       body_parameters->{variables},
       body_parameters->{operationName},
@@ -130,6 +132,14 @@ To debug, set environment variable C<GRAPHQL_DEBUG> to a true value.
 None yet.
 
 =head1 SEE ALSO
+
+L<Sample Dancer 2 applet|https://github.com/graphql-perl/sample-dancer2>
+
+L<Sample Mojolicious applet|https://github.com/graphql-perl/sample-mojolicious>
+
+L<Dancer2::Plugin::GraphQL>
+
+L<Mojolicious::Plugin::GraphQL>
 
 L<http://facebook.github.io/graphql/> - GraphQL specification
 

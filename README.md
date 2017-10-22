@@ -17,17 +17,19 @@ GraphQL - Perl implementation of GraphQL
     use GraphQL::Type::Scalar qw($String);
     use GraphQL::Execution qw(execute);
 
-    my $schema = GraphQL::Schema->new(query => GraphQL::Type::Object->new(
-      name => 'QueryRoot',
-      fields => {
-        helloWorld => { type => $String, resolve => sub { 'Hello world!' } },
-      },
-    ));
+    my $schema = GraphQL::Schema->from_doc(<<'EOF');
+    schema {
+      query: QueryRoot
+    }
+    type QueryRoot {
+      helloWorld: String
+    }
+    EOF
     post '/graphql' => sub {
       send_as JSON => execute(
         $schema,
         body_parameters->{query},
-        undef,
+        { helloWorld => 'Hello world!' },
         undef,
         body_parameters->{variables},
         body_parameters->{operationName},
@@ -112,6 +114,14 @@ To debug, set environment variable `GRAPHQL_DEBUG` to a true value.
 None yet.
 
 # SEE ALSO
+
+[Sample Dancer 2 applet](https://github.com/graphql-perl/sample-dancer2)
+
+[Sample Mojolicious applet](https://github.com/graphql-perl/sample-mojolicious)
+
+[Dancer2::Plugin::GraphQL](https://metacpan.org/pod/Dancer2::Plugin::GraphQL)
+
+[Mojolicious::Plugin::GraphQL](https://metacpan.org/pod/Mojolicious::Plugin::GraphQL)
 
 [http://facebook.github.io/graphql/](http://facebook.github.io/graphql/) - GraphQL specification
 
