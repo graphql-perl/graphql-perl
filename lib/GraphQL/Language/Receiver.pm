@@ -69,11 +69,6 @@ method _locate_hash(HashRef $hash) {
   +{ %$hash, location => { line => $line, column => $column } };
 }
 
-method final (Any $param = undef) {
-  return $param if defined $param;
-  return {$self->{parser}{rule} => []};
-}
-
 fun _merge_hash (Any $param = undef, Any $arraykey = undef) {
   my %def = map %$_, grep ref eq 'HASH', @$param;
   if ($arraykey) {
@@ -148,10 +143,12 @@ method got_namedType (Any $param = undef) {
 
 method got_enumValueDefinition (Any $param = undef) {
   return unless defined $param;
-  my $value = shift @$param;
-  $param = $param->[0]; # only one item left, flatten one
-  my $rest = ref $param eq 'HASH' ? [ $param ] : $param;
-  my %def = (value => $value, map %$_, @$rest);
+  my @copy = @$param;
+  my $rest = pop @copy;
+  my $value = pop @copy;
+  my $description = $copy[0] // {};
+  $rest = ref $rest eq 'HASH' ? [ $rest ] : $rest;
+  my %def = (%$description, value => $value, map %$_, @$rest);
   return \%def;
 }
 
@@ -308,6 +305,17 @@ method got_operationTypeDefinition (Any $param = undef) {
   return { map { ref($_) ? values %$_ : $_ } @$param };
 }
 
+method got_comment (Any $param = undef) {
+  return unless defined $param;
+  return $param;
+}
+
+method got_description (Any $param = undef) {
+  return unless defined $param;
+  my $string = join "\n", @$param;
+  return $string ? {$self->{parser}{rule} => $string} : {};
+}
+
 method got_schema (Any $param = undef) {
   return unless defined $param;
   return {kind => $self->{parser}{rule}, node => $self->_locate_hash(_merge_hash($param->[0]))};
@@ -315,7 +323,10 @@ method got_schema (Any $param = undef) {
 
 method got_typeSystemDefinition (Any $param = undef) {
   return unless defined $param;
-  return @$param;
+  my @copy = @$param;
+  my $node = pop @copy;
+  my $description = $copy[0] // {};
+  +{ %$node, node => { %{$node->{node}}, %$description } };
 }
 
 method got_typeDefinition (Any $param = undef) {

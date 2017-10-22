@@ -88,4 +88,33 @@ EOF
   is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
 };
 
+subtest 'Supports descriptions' => sub {
+  my $doc = <<'EOF';
+schema {
+  query: Hello
+}
+
+# This is a directive
+directive @foo(
+  # It has an argument
+  arg: Int
+) on FIELD
+
+# With an enum
+enum Color {
+  BLUE
+  # Not a creative color
+  GREEN
+  RED
+}
+
+# What a great type
+type Hello {
+  # And a field to boot
+  str: String
+}
+EOF
+  is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
+};
+
 done_testing;

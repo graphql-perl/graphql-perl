@@ -130,9 +130,11 @@ spread: /\.{3}/ .(-)
 
 ws: / (: WS | \x{FEFF} | COMMA | comment ) /
 
-comment: / HASH BLANK* [^\r\n]* (: EOL | CR !NL | EOS ) / # CR is because MacOS 9
+comment: / HASH BLANK* ([^\r\n]*) (: EOL | CR !NL | EOS ) / # CR is because MacOS 9
 
-typeSystemDefinition: - (schema | typeDefinition | typeExtensionDefinition | directive)
+description: .(/ [ WS NL ]* /) comment+ .(/ [ WS NL ]* /) | .(-)
+
+typeSystemDefinition: description? (schema | typeDefinition | typeExtensionDefinition | directive)
 
 schema: .(/'schema' -/) directives? .(/- LCURLY -/) operationTypeDefinition+ .(/- RCURLY /)
 
@@ -149,11 +151,11 @@ type: .(/'type' -/) name .(-) implementsInterfaces? .(-) directives? .(/- LCURLY
 
 implementsInterfaces: .(/'implements' -/) namedType+
 
-fieldDefinition: - name .(-) argumentsDefinition? .(/- COLON -/) typedef .(-) directives?
+fieldDefinition: description? name .(-) argumentsDefinition? .(/- COLON -/) typedef .(-) directives?
 
 argumentsDefinition: .(/- LPAREN /) inputValueDefinition+ .(/- RPAREN /)
 
-inputValueDefinition: - name .(/- COLON -/) typedef .(-) defaultValue? .(-) directives? .(-)
+inputValueDefinition: description? name .(/- COLON -/) typedef .(-) defaultValue? .(-) directives? .(-)
 
 interface: .(/'interface' -/) name .(-) directives? .(/- LCURLY /) fieldDefinition+ .(/- RCURLY /)
 
@@ -163,7 +165,7 @@ unionMembers: namedType+ % .(/- PIPE -/)
 
 enumTypeDefinition: .(/'enum' -/) name .(-) directives? .(/- LCURLY /) enumValueDefinition+ .(/- RCURLY /)
 
-enumValueDefinition: - enumValue (.(-) directives)?
+enumValueDefinition: description? enumValue (.(-) directives)?
 
 input: .(/'input' -/) name .(-) directives? .(/- LCURLY /) inputValueDefinition+ .(/- RCURLY /)
 
