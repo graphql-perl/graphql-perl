@@ -1,5 +1,12 @@
 Revision history for GraphQL
 
+0.16	Sun Oct 22 07:09:44 BST 2017
+ - execute take AST as well as text
+ - error reporting improvements
+ - implement @skip and @include
+ - implement GraphQL::Schema->from_doc et al
+ - rework of graphql.pgx
+
 0.15	Mon Oct 16 00:13:31 BST 2017
  - introspection improvements
  - switch parse and execute from methods to functions
