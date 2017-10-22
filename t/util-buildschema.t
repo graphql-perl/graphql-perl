@@ -183,4 +183,37 @@ EOF
   is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
 };
 
+subtest 'Recursive type' => sub {
+  my $doc = <<'EOF';
+schema {
+  query: Recurse
+}
+
+type Recurse {
+  recurse: Recurse
+  str: String
+}
+EOF
+  is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
+};
+
+subtest 'Two types circular' => sub {
+  my $doc = <<'EOF';
+schema {
+  query: TypeOne
+}
+
+type TypeOne {
+  str: String
+  typeTwo: TypeTwo
+}
+
+type TypeTwo {
+  str: String
+  typeOne: TypeOne
+}
+EOF
+  is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
+};
+
 done_testing;
