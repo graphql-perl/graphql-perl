@@ -34,12 +34,13 @@ method _make_field_def(
   HashRef $field_def,
 ) {
   DEBUG and _debug('FieldsEither._make_field_def', $field_def);
+  require GraphQL::Schema;
   my %args;
   %args = (args => +{
     map $self->_make_field_def($name2type, $_, $field_def->{args}{$_}),
       keys %{$field_def->{args}}
   }) if $field_def->{args};
-  ($_ => { %$field_def, type => $name2type->{$field_def->{type}}, %args });
+  ($_ => { %$field_def, type => GraphQL::Schema::lookup_type($field_def, $name2type), %args });
 }
 
 __PACKAGE__->meta->make_immutable();

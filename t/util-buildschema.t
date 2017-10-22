@@ -166,4 +166,21 @@ EOF
   is $schema->name2directive->{deprecated}, $GraphQL::Directive::DEPRECATED;
 };
 
+subtest 'Type modifiers' => sub {
+  my $doc = <<'EOF';
+schema {
+  query: HelloScalars
+}
+
+type HelloScalars {
+  listOfNonNullStrs: [String!]
+  listOfStrs: [String]
+  nonNullListOfNonNullStrs: [String!]!
+  nonNullListOfStrs: [String]!
+  nonNullStr: String!
+}
+EOF
+  is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
+};
+
 done_testing;
