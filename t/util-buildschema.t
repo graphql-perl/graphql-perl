@@ -263,4 +263,56 @@ EOF
   is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
 };
 
+subtest 'Simple output enum' => sub {
+  my $doc = <<'EOF';
+schema {
+  query: OutputEnumRoot
+}
+
+enum Hello {
+  WORLD
+}
+
+type OutputEnumRoot {
+  hello: Hello
+}
+EOF
+  is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
+};
+
+subtest 'Simple input enum' => sub {
+  my $doc = <<'EOF';
+schema {
+  query: InputEnumRoot
+}
+
+enum Hello {
+  WORLD
+}
+
+type InputEnumRoot {
+  str(hello: Hello): String
+}
+EOF
+  is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
+};
+
+subtest 'Multiple value enum' => sub {
+  my $doc = <<'EOF';
+schema {
+  query: OutputEnumRoot
+}
+
+enum Hello {
+  RLD
+  WO
+}
+
+type OutputEnumRoot {
+  hello: Hello
+}
+EOF
+  is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
+};
+
 done_testing;
