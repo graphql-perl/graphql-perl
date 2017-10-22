@@ -215,6 +215,7 @@ my %kind2class = qw(
   interface GraphQL::Type::Interface
   union GraphQL::Type::Union
   scalar GraphQL::Type::Scalar
+  input GraphQL::Type::InputObject
 );
 my %class2kind = reverse %kind2class;
 method from_ast(

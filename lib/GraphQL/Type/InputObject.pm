@@ -8,7 +8,7 @@ use Types::Standard -all;
 use GraphQL::Type::Library -all;
 use Function::Parameters;
 use Return::Type;
-
+use GraphQL::Debug qw(_debug);
 extends qw(GraphQL::Type);
 with qw(
   GraphQL::Role::Input
@@ -16,9 +16,11 @@ with qw(
   GraphQL::Role::Named
   GraphQL::Role::FieldsInput
   GraphQL::Role::HashMappable
+  GraphQL::Role::FieldsEither
 );
 
 our $VERSION = '0.02';
+use constant DEBUG => $ENV{GRAPHQL_DEBUG};
 
 =head1 NAME
 
@@ -87,6 +89,33 @@ method graphql_to_perl(ExpectObject $item) :ReturnType(Maybe[HashRef]) {
   $self->hashmap($item, $fields, sub {
     $fields->{$_[0]}{type}->graphql_to_perl($_[1]);
   });
+}
+
+method from_ast(
+  HashRef $name2type,
+  HashRef $ast_node,
+) :ReturnType(InstanceOf[__PACKAGE__]) {
+  $self->new(
+    $self->_from_ast_named($ast_node),
+    $self->_from_ast_fields($name2type, $ast_node, 'fields'),
+  );
+}
+
+has to_doc => (is => 'lazy', isa => Str);
+sub _build_to_doc {
+  my ($self) = @_;
+  DEBUG and _debug('InputObject.to_doc', $self);
+  my @fieldlines = map {
+    (
+      ($_->[1] ? ("# $_->[1]") : ()),
+      $_->[0],
+    )
+  } $self->_make_fieldtuples($self->fields);
+  join '', map "$_\n",
+    ($self->description ? (map "# $_", split /\n/, $self->description) : ()),
+    "input @{[$self->name]} {",
+      (map "  $_", @fieldlines),
+    "}";
 }
 
 __PACKAGE__->meta->make_immutable();

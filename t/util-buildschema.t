@@ -372,4 +372,21 @@ EOF
   is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
 };
 
+subtest 'Input Object' => sub {
+  my $doc = <<'EOF';
+schema {
+  query: Root
+}
+
+input Input {
+  int: Int
+}
+
+type Root {
+  field(in: Input): String
+}
+EOF
+  is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
+};
+
 done_testing;
