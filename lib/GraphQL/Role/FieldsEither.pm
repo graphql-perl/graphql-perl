@@ -61,13 +61,16 @@ method _make_fieldtuples(
 ) {
   DEBUG and _debug('FieldsEither._make_fieldtuples', $fields);
   map {
+    my $field = $fields->{$_};
     my @argtuples = map $_->[0],
-      $self->_make_fieldtuples($fields->{$_}{args} || {});
+      $self->_make_fieldtuples($field->{args} || {});
+    my $type = $field->{type};
+    my $line = $_;
+    $line .= '('.join(', ', @argtuples).')' if @argtuples;
+    $line .= ': ' . $type->to_string;
     [
-      "$_@{[
-        @argtuples ? ('('.join(', ', @argtuples).')') : ''
-      ]}: @{[$fields->{$_}{type}->to_string]}",
-      $fields->{$_}{description},
+      $line,
+      $field->{description},
     ]
   } sort keys %$fields;
 }
