@@ -402,4 +402,45 @@ EOF
   is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
 };
 
+subtest 'Simple type with mutation' => sub {
+  my $doc = <<'EOF';
+schema {
+  query: HelloScalars
+  mutation: Mutation
+}
+
+type HelloScalars {
+  bool: Boolean
+  int: Int
+  str: String
+}
+
+type Mutation {
+  addHelloScalars(bool: Boolean, int: Int, str: String): HelloScalars
+}
+EOF
+  is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
+};
+
+# typo faithfully preserved
+subtest 'Simple type with subscription' => sub {
+  my $doc = <<'EOF';
+schema {
+  query: HelloScalars
+  subscription: Subscription
+}
+
+type HelloScalars {
+  bool: Boolean
+  int: Int
+  str: String
+}
+
+type Subscription {
+  sbscribeHelloScalars(bool: Boolean, int: Int, str: String): HelloScalars
+}
+EOF
+  is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
+};
+
 done_testing;
