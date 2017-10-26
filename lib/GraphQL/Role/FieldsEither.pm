@@ -8,6 +8,7 @@ use GraphQL::Debug qw(_debug);
 use Types::Standard -all;
 use Function::Parameters;
 use JSON::MaybeXS;
+with qw(GraphQL::Role::FieldDeprecation);
 
 our $VERSION = '0.02';
 use constant DEBUG => $ENV{GRAPHQL_DEBUG};
@@ -50,10 +51,11 @@ method _from_ast_fields(
   HashRef $ast_node,
   Str $key,
 ) {
+  my $fields = $ast_node->{$key};
+  $fields = $self->_from_ast_field_deprecate($_, $fields) for keys %$fields;
   (
     $key => sub { +{
-      map $self->_make_field_def($name2type, $_, $ast_node->{$key}{$_}),
-        keys %{$ast_node->{$key}}
+      map $self->_make_field_def($name2type, $_, $fields->{$_}), keys %$fields
     } },
   );
 }
@@ -74,7 +76,7 @@ method _make_fieldtuples(
       $type->perl_to_graphql($field->{default_value})
     ) if exists $field->{default_value};
     [
-      $line,
+      $self->_to_doc_field_deprecate($line, $field),
       $field->{description},
     ]
   } sort keys %$fields;

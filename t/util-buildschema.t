@@ -485,8 +485,8 @@ enum MyEnum {
 
 type Query {
   enum: MyEnum
-  field1: String
-  field2: Int
+  field1: String @deprecated
+  field2: Int @deprecated(reason: "Because I said so")
 }
 EOF
   is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
