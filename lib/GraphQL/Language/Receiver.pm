@@ -318,6 +318,10 @@ method got_description (Any $param = undef) {
 
 method got_schema (Any $param = undef) {
   return unless defined $param;
+  my %type2count;
+  $type2count{(keys %$_)[0]}++ for @{$param->[0]};
+  $type2count{$_} > 1 and die "Must provide only one $_ type in schema.\n"
+    for keys %type2count;
   return {kind => $self->{parser}{rule}, node => $self->_locate_hash(_merge_hash($param->[0]))};
 }
 

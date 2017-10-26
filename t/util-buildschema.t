@@ -538,4 +538,35 @@ type Hello { bar: Bar }
 EOF
 };
 
+subtest 'Requires a query type' => sub {
+  throws_ok { GraphQL::Schema->from_doc(<<'EOF') } qr/Must provide schema definition with query type or a type named Query./;
+schema { mutation: Hello }
+type Hello { bar: Bar }
+EOF
+};
+
+subtest 'Allows only a single query type' => sub {
+  throws_ok { GraphQL::Schema->from_doc(<<'EOF') } qr/Must provide only one query type in schema/;
+schema { query: Hello query: Yellow }
+type Hello { bar: Bar }
+type Yellow { isColor: Boolean }
+EOF
+};
+
+subtest 'Allows only a single mutation type' => sub {
+  throws_ok { GraphQL::Schema->from_doc(<<'EOF') } qr/Must provide only one mutation type in schema/;
+schema { query: Query mutation: Hello mutation: Yellow }
+type Hello { bar: Bar }
+type Yellow { isColor: Boolean }
+EOF
+};
+
+subtest 'Allows only a single subscription type' => sub {
+  throws_ok { GraphQL::Schema->from_doc(<<'EOF') } qr/Must provide only one subscription type in schema/;
+schema { query: Query subscription: Hello subscription: Yellow }
+type Hello { bar: Bar }
+type Yellow { isColor: Boolean }
+EOF
+};
+
 done_testing;
