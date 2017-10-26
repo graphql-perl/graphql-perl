@@ -7,9 +7,11 @@ use Moo::Role;
 use GraphQL::Debug qw(_debug);
 use Types::Standard -all;
 use Function::Parameters;
+use JSON::MaybeXS;
 
 our $VERSION = '0.02';
 use constant DEBUG => $ENV{GRAPHQL_DEBUG};
+my $JSON_noutf8 = JSON::MaybeXS->new->utf8(0)->allow_nonref;
 
 =head1 NAME
 
@@ -68,6 +70,9 @@ method _make_fieldtuples(
     my $line = $_;
     $line .= '('.join(', ', @argtuples).')' if @argtuples;
     $line .= ': ' . $type->to_string;
+    $line .= ' = ' . $JSON_noutf8->encode(
+      $type->perl_to_graphql($field->{default_value})
+    ) if exists $field->{default_value};
     [
       $line,
       $field->{description},

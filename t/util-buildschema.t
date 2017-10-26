@@ -389,4 +389,17 @@ EOF
   is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
 };
 
+subtest 'Simple argument field with default' => sub {
+  my $doc = <<'EOF';
+schema {
+  query: Hello
+}
+
+type Hello {
+  str(int: Int = 2): String
+}
+EOF
+  is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
+};
+
 done_testing;
