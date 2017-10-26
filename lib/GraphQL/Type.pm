@@ -142,7 +142,9 @@ method _from_ast_maptype(
   Str $key,
 ) {
   return if !$ast_node->{$key};
-  ($key => sub { [ map $name2type->{$_}, @{$ast_node->{$key}} ] });
+  ($key => sub { [
+    map { $name2type->{$_} // die "Unknown type '$_'.\n" } @{$ast_node->{$key}}
+  ] });
 }
 
 __PACKAGE__->meta->make_immutable();

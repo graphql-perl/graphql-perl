@@ -576,4 +576,11 @@ type Hello { bar: Bar }
 EOF
 };
 
+subtest 'Unknown type in interface list' => sub {
+  throws_ok { GraphQL::Schema->from_doc(<<'EOF') } qr/Unknown type 'Bar'/;
+schema { query: Hello }
+type Hello implements Bar { bar: String }
+EOF
+};
+
 done_testing;
