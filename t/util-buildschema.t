@@ -583,4 +583,12 @@ type Hello implements Bar { bar: String }
 EOF
 };
 
+subtest 'Unknown type in union list' => sub {
+  throws_ok { GraphQL::Schema->from_doc(<<'EOF') } qr/Unknown type 'Bar'/;
+schema { query: Hello }
+union TestUnion = Bar
+type Hello { testUnion: TestUnion }
+EOF
+};
+
 done_testing;
