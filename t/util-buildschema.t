@@ -460,4 +460,19 @@ EOF
   is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
 };
 
+subtest 'Unreferenced type implementing referenced union' => sub {
+  my $doc = <<'EOF';
+type Concrete {
+  key: String
+}
+
+type Query {
+  union: Union
+}
+
+union Union = Concrete
+EOF
+  is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
+};
+
 done_testing;
