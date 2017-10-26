@@ -605,4 +605,18 @@ type Hello { str: String }
 EOF
 };
 
+subtest 'Does not consider operation names' => sub {
+  throws_ok { GraphQL::Schema->from_doc(<<'EOF') } qr/Specified query type 'Foo' not found/;
+schema { query: Foo }
+query Foo { field }
+EOF
+};
+
+subtest 'Does not consider fragment names' => sub {
+  throws_ok { GraphQL::Schema->from_doc(<<'EOF') } qr/Specified query type 'Foo' not found/;
+schema { query: Foo }
+fragment Foo on Type { field }
+EOF
+};
+
 done_testing;
