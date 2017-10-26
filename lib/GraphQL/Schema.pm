@@ -227,6 +227,8 @@ method from_ast(
   die "Must provide only one schema definition.\n" if $e;
   my %name2type = %BUILTIN2TYPE;
   for (@type_nodes) {
+    die "Type '$_->{node}{name}' was defined more than once.\n"
+      if $name2type{$_->{node}{name}};
     require_module $kind2class{$_->{kind}};
     $name2type{$_->{node}{name}} = $kind2class{$_->{kind}}->from_ast(\%name2type, $_->{node});
   }

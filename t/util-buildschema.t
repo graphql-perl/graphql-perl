@@ -619,4 +619,12 @@ fragment Foo on Type { field }
 EOF
 };
 
+subtest 'Forbids duplicate type definitions' => sub {
+  throws_ok { GraphQL::Schema->from_doc(<<'EOF') } qr/Type 'Repeated' was defined more than once/;
+schema { query: Repeated }
+type Repeated { id: Int }
+type Repeated { id: String }
+EOF
+};
+
 done_testing;
