@@ -240,13 +240,15 @@ method from_ast(
     unless $schema_node->{query};
   my @directives = map GraphQL::Directive->from_ast(\%name2type, $_->{node}),
     grep $_->{kind} eq 'directive', @$ast;
-  $self->new(
+  my $schema = $self->new(
     (map {
       $schema_node->{$_} ? ($_ => $name2type{$schema_node->{$_}}) : ()
     } @TYPE_ATTRS),
     (@directives ? (directives => [ @GraphQL::Directive::SPECIFIED_DIRECTIVES, @directives ]) : ()),
     types => [ values %name2type ],
   );
+  $schema->name2type; # walks all types, fields, args - finds undefined types
+  $schema;
 }
 
 =head2 from_doc($doc)

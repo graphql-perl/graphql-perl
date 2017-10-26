@@ -569,4 +569,11 @@ type Yellow { isColor: Boolean }
 EOF
 };
 
+subtest 'Unknown type referenced' => sub {
+  throws_ok { GraphQL::Schema->from_doc(<<'EOF') } qr/Unknown type 'Bar'/;
+schema { query: Hello }
+type Hello { bar: Bar }
+EOF
+};
+
 done_testing;
