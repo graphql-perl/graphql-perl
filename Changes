@@ -1,5 +1,8 @@
 Revision history for GraphQL
 
+0.17	Thu Oct 26 19:58:00 BST 2017
+ - fill out Schema.to_doc include default if eg type Query
+
 0.16	Sun Oct 22 07:09:44 BST 2017
  - execute take AST as well as text
  - error reporting improvements
