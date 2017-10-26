@@ -34,7 +34,7 @@ our @EXPORT_OK = qw(
 );
 
 use constant DEBUG => $ENV{GRAPHQL_DEBUG};
-my $JSON = JSON::MaybeXS->new->allow_nonref;
+my $JSON_noutf8 = JSON::MaybeXS->new->utf8(0)->allow_nonref;
 
 =head1 SYNOPSIS
 
@@ -350,7 +350,7 @@ our $INPUT_VALUE_META_TYPE = GraphQL::Type::Object->new(
         return unless defined(my $value = $_[0]->{default_value});
         my $gql = $_[0]->{type}->perl_to_graphql($value);
         return $gql if $_[0]->{type}->isa('GraphQL::Type::Enum');
-        $JSON->encode($gql);
+        $JSON_noutf8->encode($gql);
       },
     },
   } },
