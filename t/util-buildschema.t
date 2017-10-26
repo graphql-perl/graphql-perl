@@ -443,4 +443,21 @@ EOF
   is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
 };
 
+subtest 'Unreferenced type implementing referenced interface' => sub {
+  my $doc = <<'EOF';
+type Concrete implements Iface {
+  key: String
+}
+
+interface Iface {
+  key: String
+}
+
+type Query {
+  iface: Iface
+}
+EOF
+  is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
+};
+
 done_testing;

@@ -224,11 +224,16 @@ method from_ast(
   DEBUG and _debug('Schema.from_ast', $ast);
   my @type_nodes = grep $kind2class{$_->{kind}}, @$ast;
   my ($schema_node) = map $_->{node}, grep $_->{kind} eq 'schema', @$ast;
-  die "No schema found in AST\n" unless $schema_node;
   my %name2type = %BUILTIN2TYPE;
   for (@type_nodes) {
     require_module $kind2class{$_->{kind}};
     $name2type{$_->{node}{name}} = $kind2class{$_->{kind}}->from_ast(\%name2type, $_->{node});
+  }
+  if (!$schema_node) {
+    # infer one
+    $schema_node = +{
+      map { $name2type{ucfirst $_} ? ($_ => ucfirst $_) : () } @TYPE_ATTRS
+    };
   }
   my @directives = map GraphQL::Directive->from_ast(\%name2type, $_->{node}),
     grep $_->{kind} eq 'directive', @$ast;
@@ -267,11 +272,14 @@ my %directive2builtin = map { ($_=>1) } @GraphQL::Directive::SPECIFIED_DIRECTIVE
 my %scalar2builtin = map { ($_->name=>1) } ($Int, $Float, $String, $Boolean, $ID);
 sub _build_to_doc {
   my ($self) = @_;
-  join "\n",
-    join('', map "$_\n",
-    "schema {",
+  my $schema_doc;
+  if (grep $self->$_->name ne ucfirst $_, grep $self->$_, @TYPE_ATTRS) {
+    $schema_doc = join('', map "$_\n", "schema {",
       (map "  $_: @{[$self->$_->name]}", grep $self->$_, @TYPE_ATTRS),
-    "}"),
+    "}");
+  }
+  join "\n", grep defined,
+    $schema_doc,
     (map $_->to_doc,
       sort { $a->name cmp $b->name }
       grep !$directive2builtin{$_},
