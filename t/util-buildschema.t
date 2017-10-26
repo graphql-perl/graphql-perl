@@ -475,4 +475,21 @@ EOF
   is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
 };
 
+subtest 'Supports @deprecated' => sub {
+  my $doc = <<'EOF';
+enum MyEnum {
+  OLD_VALUE @deprecated
+  OTHER_VALUE @deprecated(reason: "Terrible reasons")
+  VALUE
+}
+
+type Query {
+  enum: MyEnum
+  field1: String
+  field2: Int
+}
+EOF
+  is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
+};
+
 done_testing;

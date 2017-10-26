@@ -139,9 +139,11 @@ method from_ast(
   HashRef $name2type,
   HashRef $ast_node,
 ) :ReturnType(InstanceOf[__PACKAGE__]) {
+  my $values = +{ %{$ast_node->{values}} };
+  $values = $self->_from_ast_field_deprecate($_, $values) for keys %$values;
   $self->new(
     $self->_from_ast_named($ast_node),
-    values => $ast_node->{values},
+    values => $values,
   );
 }
 
@@ -152,7 +154,7 @@ sub _build_to_doc {
   my @valuelines = map {
     (
       ($v->{$_}{description} ? ("# $v->{$_}{description}") : ()),
-      $_
+      $self->_to_doc_field_deprecate($_, $v->{$_}),
     )
   } sort keys %$v;
   join '', map "$_\n",

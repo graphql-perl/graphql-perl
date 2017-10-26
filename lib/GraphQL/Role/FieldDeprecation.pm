@@ -4,8 +4,12 @@ use 5.014;
 use strict;
 use warnings;
 use Moo::Role;
+use Function::Parameters;
+use Types::Standard -all;
+use JSON::MaybeXS;
 
 our $VERSION = '0.02';
+my $JSON_noutf8 = JSON::MaybeXS->new->utf8(0)->allow_nonref;
 
 =head1 NAME
 
@@ -36,6 +40,35 @@ sub _fields_deprecation_apply {
     }
   }
 };
+
+method _from_ast_field_deprecate(
+  Str $key,
+  HashRef $values,
+) {
+  my $value = +{ %{$values->{$key}} };
+  my $directives = delete $value->{directives}; # ok as copy
+  return $values unless $directives and @$directives;
+  my ($deprecated) = grep $_->{name} eq 'deprecated', @$directives;
+  return $values unless $deprecated;
+  my $reason = $deprecated->{arguments}{reason}
+    // $GraphQL::Directive::DEPRECATED->args->{reason}{default_value};
+  +{
+    %$values,
+    $key => { %$value, deprecation_reason => $reason },
+  };
+}
+
+method _to_doc_field_deprecate(
+  Str $line,
+  HashRef $value,
+) {
+  return $line if !$value->{is_deprecated};
+  $line .= ' @deprecated';
+  $line .= '(reason: ' . $JSON_noutf8->encode($value->{deprecation_reason}) . ')'
+    if $value->{deprecation_reason} ne
+      $GraphQL::Directive::DEPRECATED->args->{reason}{default_value};
+  $line;
+}
 
 __PACKAGE__->meta->make_immutable();
 
