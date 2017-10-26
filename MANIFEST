@@ -50,6 +50,7 @@ t/kitchen-sink.graphql
 t/language-lexer.t
 t/language-parser.t
 t/language-schema-parser.t
+t/perl.t
 t/schema-kitchen-sink.graphql
 t/type-definition.t
 t/type-enum.t
