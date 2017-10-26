@@ -242,7 +242,10 @@ method from_ast(
     grep $_->{kind} eq 'directive', @$ast;
   my $schema = $self->new(
     (map {
-      $schema_node->{$_} ? ($_ => $name2type{$schema_node->{$_}}) : ()
+      $schema_node->{$_}
+        ? ($_ => $name2type{$schema_node->{$_}}
+          // die "Specified $_ type '$schema_node->{$_}' not found.\n")
+        : ()
     } @TYPE_ATTRS),
     (@directives ? (directives => [ @GraphQL::Directive::SPECIFIED_DIRECTIVES, @directives ]) : ()),
     types => [ values %name2type ],

@@ -591,4 +591,18 @@ type Hello { testUnion: TestUnion }
 EOF
 };
 
+subtest 'Unknown query type' => sub {
+  throws_ok { GraphQL::Schema->from_doc(<<'EOF') } qr/Specified query type 'Wat' not found/;
+schema { query: Wat }
+type Hello { str: String }
+EOF
+};
+
+subtest 'Unknown mutation|subscription type' => sub {
+  throws_ok { GraphQL::Schema->from_doc(<<EOF) } qr/Specified $_ type 'Wat' not found/ for qw(mutation subscription);
+schema { query: Hello $_: Wat }
+type Hello { str: String }
+EOF
+};
+
 done_testing;
