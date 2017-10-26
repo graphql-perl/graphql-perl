@@ -530,4 +530,12 @@ type Hello {
 EOF
 };
 
+subtest 'Allows only a single schema definition' => sub {
+  throws_ok { GraphQL::Schema->from_doc(<<'EOF') } qr/Must provide only one schema definition./;
+schema { query: Hello }
+schema { query: Hello }
+type Hello { bar: Bar }
+EOF
+};
+
 done_testing;
