@@ -492,4 +492,42 @@ EOF
   is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
 };
 
+# except it doesn't - just round-trip
+subtest 'Correctly assign AST nodes' => sub {
+  my $doc = <<'EOF';
+directive @test(arg: Int) on FIELD
+
+type Query {
+  testField(testArg: TestInput): TestUnion
+}
+
+enum TestEnum {
+  TEST_VALUE
+}
+
+input TestInput {
+  testInputField: TestEnum
+}
+
+interface TestInterface {
+  interfaceField: String
+}
+
+type TestType implements TestInterface {
+  interfaceField: String
+}
+
+union TestUnion = TestType
+EOF
+  is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
+};
+
+subtest 'Requires a schema definition or Query type' => sub {
+  throws_ok { GraphQL::Schema->from_doc(<<'EOF') } qr/Must provide schema definition with query type or a type named Query./;
+type Hello {
+  bar: Bar
+}
+EOF
+};
+
 done_testing;

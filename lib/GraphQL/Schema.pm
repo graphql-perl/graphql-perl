@@ -235,6 +235,8 @@ method from_ast(
       map { $name2type{ucfirst $_} ? ($_ => ucfirst $_) : () } @TYPE_ATTRS
     };
   }
+  die "Must provide schema definition with query type or a type named Query.\n"
+    unless $schema_node->{query};
   my @directives = map GraphQL::Directive->from_ast(\%name2type, $_->{node}),
     grep $_->{kind} eq 'directive', @$ast;
   $self->new(
