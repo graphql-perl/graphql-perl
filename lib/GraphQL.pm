@@ -133,6 +133,8 @@ None yet.
 
 =head1 SEE ALSO
 
+L<SQL::Translator::Producer::GraphQL> - produce GraphQL schemas from a L<DBIx::Class::Schema> (or in fact any SQL database)
+
 L<Sample Dancer 2 applet|https://github.com/graphql-perl/sample-dancer2>
 
 L<Sample Mojolicious applet|https://github.com/graphql-perl/sample-mojolicious>
