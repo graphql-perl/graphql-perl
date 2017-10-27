@@ -1,6 +1,6 @@
 Revision history for GraphQL
 
-0.18	
+0.18	Fri Oct 27 05:00:46 BST 2017
  - make AST not have "node"
 
 0.17	Thu Oct 26 19:58:00 BST 2017
