@@ -115,7 +115,7 @@ fun _build_context(
 ) :ReturnType(HashRef) {
   my %fragments = map {
     ($_->{name} => $_)
-  } map $_->{node}, grep $_->{kind} eq 'fragment', @$ast;
+  } grep $_->{kind} eq 'fragment', @$ast;
   my @operations = grep $_->{kind} eq 'operation', @$ast;
   die "No operations supplied.\n" if !@operations;
   die "Can only execute document containing fragments or operations\n"
@@ -126,10 +126,10 @@ fun _build_context(
     fragments => \%fragments,
     root_value => $root_value,
     context_value => $context_value,
-    operation => $operation->{node},
+    operation => $operation,
     variable_values => _variables_apply_defaults(
       $schema,
-      $operation->{node}{variables} || {},
+      $operation->{variables} || {},
       $variable_values || {},
     ),
     field_resolver => $field_resolver || \&_default_field_resolver,
@@ -175,7 +175,7 @@ fun _get_operation(
       if @$operations > 1;
     return $operations->[0];
   }
-  my @matching = grep $_->{node}{name} eq $operation_name, @$operations;
+  my @matching = grep $_->{name} eq $operation_name, @$operations;
   return $matching[0] if @matching == 1;
   die "No operations matching '$operation_name' found.\n";
 }
@@ -213,7 +213,7 @@ fun _collect_fields(
 ) {
   DEBUG and _debug('_collect_fields', $runtime_type->to_string, $fields_got, $selections);
   for my $selection (@$selections) {
-    my $node = $selection->{node};
+    my $node = $selection;
     next if !_should_include_node($context->{variable_values}, $node);
     if ($selection->{kind} eq 'field') {
       my $use_name = $node->{alias} || $node->{name};

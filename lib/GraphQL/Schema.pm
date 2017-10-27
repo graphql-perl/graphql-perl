@@ -223,14 +223,14 @@ method from_ast(
 ) :ReturnType(InstanceOf[__PACKAGE__]) {
   DEBUG and _debug('Schema.from_ast', $ast);
   my @type_nodes = grep $kind2class{$_->{kind}}, @$ast;
-  my ($schema_node, $e) = map $_->{node}, grep $_->{kind} eq 'schema', @$ast;
+  my ($schema_node, $e) = grep $_->{kind} eq 'schema', @$ast;
   die "Must provide only one schema definition.\n" if $e;
   my %name2type = %BUILTIN2TYPE;
   for (@type_nodes) {
-    die "Type '$_->{node}{name}' was defined more than once.\n"
-      if $name2type{$_->{node}{name}};
+    die "Type '$_->{name}' was defined more than once.\n"
+      if $name2type{$_->{name}};
     require_module $kind2class{$_->{kind}};
-    $name2type{$_->{node}{name}} = $kind2class{$_->{kind}}->from_ast(\%name2type, $_->{node});
+    $name2type{$_->{name}} = $kind2class{$_->{kind}}->from_ast(\%name2type, $_);
   }
   if (!$schema_node) {
     # infer one
@@ -240,7 +240,7 @@ method from_ast(
   }
   die "Must provide schema definition with query type or a type named Query.\n"
     unless $schema_node->{query};
-  my @directives = map GraphQL::Directive->from_ast(\%name2type, $_->{node}),
+  my @directives = map GraphQL::Directive->from_ast(\%name2type, $_),
     grep $_->{kind} eq 'directive', @$ast;
   my $schema = $self->new(
     (map {

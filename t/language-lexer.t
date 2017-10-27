@@ -131,404 +131,346 @@ sub string_lookup {
 
 sub query_lookup {
   my ($got, $type) = @_;
-  return $got->[0]{node}{selections}[0]{node}{arguments}{name};
+  return $got->[0]{selections}[0]{arguments}{name};
 }
 
 __DATA__
 [
   {
     'kind' => 'operation',
-    'node' => {
-      'location' => {
-        'column' => 1,
-        'line' => 29
-      },
-      'name' => 'queryName',
-      'operationType' => 'query',
-      'selections' => [
-        {
-          'kind' => 'field',
-          'node' => {
-            'alias' => 'whoever123is',
-            'arguments' => {
-              'id' => [
-                123,
-                456
-              ]
-            },
-            'location' => {
-              'column' => 1,
-              'line' => 27
-            },
-            'name' => 'node',
-            'selections' => [
-              {
-                'kind' => 'field',
-                'node' => {
-                  'location' => {
-                    'column' => 5,
-                    'line' => 11
-                  },
-                  'name' => 'id'
-                }
-              },
-              {
-                'kind' => 'inline_fragment',
-                'node' => {
-                  'directives' => [
-                    {
-                      'name' => 'defer'
-                    }
-                  ],
-                  'location' => {
-                    'column' => 5,
-                    'line' => 20
-                  },
-                  'on' => 'User',
-                  'selections' => [
-                    {
-                      'kind' => 'field',
-                      'node' => {
-                        'location' => {
-                          'column' => 5,
-                          'line' => 19
-                        },
-                        'name' => 'field2',
-                        'selections' => [
-                          {
-                            'kind' => 'field',
-                            'node' => {
-                              'location' => {
-                                'column' => 9,
-                                'line' => 14
-                              },
-                              'name' => 'id'
-                            }
-                          },
-                          {
-                            'kind' => 'field',
-                            'node' => {
-                              'alias' => 'alias',
-                              'arguments' => {
-                                'after' => \'foo',
-                                'first' => 10
-                              },
-                              'directives' => [
-                                {
-                                  'arguments' => {
-                                    'if' => \'foo'
-                                  },
-                                  'name' => 'include'
-                                }
-                              ],
-                              'location' => {
-                                'column' => 7,
-                                'line' => 18
-                              },
-                              'name' => 'field1',
-                              'selections' => [
-                                {
-                                  'kind' => 'field',
-                                  'node' => {
-                                    'location' => {
-                                      'column' => 11,
-                                      'line' => 16
-                                    },
-                                    'name' => 'id'
-                                  }
-                                },
-                                {
-                                  'kind' => 'fragment_spread',
-                                  'node' => {
-                                    'location' => {
-                                      'column' => 9,
-                                      'line' => 17
-                                    },
-                                    'name' => 'frag'
-                                  }
-                                }
-                              ]
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                'kind' => 'inline_fragment',
-                'node' => {
-                  'directives' => [
-                    {
-                      'arguments' => {
-                        'unless' => \'foo'
-                      },
-                      'name' => 'skip'
-                    }
-                  ],
-                  'location' => {
-                    'column' => 5,
-                    'line' => 23
-                  },
-                  'selections' => [
-                    {
-                      'kind' => 'field',
-                      'node' => {
-                        'location' => {
-                          'column' => 5,
-                          'line' => 22
-                        },
-                        'name' => 'id'
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                'kind' => 'inline_fragment',
-                'node' => {
-                  'location' => {
-                    'column' => 3,
-                    'line' => 26
-                  },
-                  'selections' => [
-                    {
-                      'kind' => 'field',
-                      'node' => {
-                        'location' => {
-                          'column' => 5,
-                          'line' => 25
-                        },
-                        'name' => 'id'
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      ],
-      'variables' => {
-        'foo' => {
-          'type' => 'ComplexType'
+    'location' => {
+      'column' => 1,
+      'line' => 29
+    },
+    'name' => 'queryName',
+    'operationType' => 'query',
+    'selections' => [
+      {
+        'alias' => 'whoever123is',
+        'arguments' => {
+          'id' => [
+            123,
+            456
+          ]
         },
-        'site' => {
-          'default_value' => \\'MOBILE',
-          'type' => 'Site'
-        }
-      }
-    }
-  },
-  {
-    'kind' => 'operation',
-    'node' => {
-      'location' => {
-        'column' => 1,
-        'line' => 37
-      },
-      'name' => 'likeStory',
-      'operationType' => 'mutation',
-      'selections' => [
-        {
-          'kind' => 'field',
-          'node' => {
-            'arguments' => {
-              'story' => 123
+        'kind' => 'field',
+        'location' => {
+          'column' => 1,
+          'line' => 27
+        },
+        'name' => 'node',
+        'selections' => [
+          {
+            'kind' => 'field',
+            'location' => {
+              'column' => 5,
+              'line' => 11
             },
+            'name' => 'id'
+          },
+          {
             'directives' => [
               {
                 'name' => 'defer'
               }
             ],
+            'kind' => 'inline_fragment',
             'location' => {
-              'column' => 1,
-              'line' => 35
+              'column' => 5,
+              'line' => 20
             },
-            'name' => 'like',
+            'on' => 'User',
             'selections' => [
               {
                 'kind' => 'field',
-                'node' => {
-                  'location' => {
-                    'column' => 3,
-                    'line' => 34
+                'location' => {
+                  'column' => 5,
+                  'line' => 19
+                },
+                'name' => 'field2',
+                'selections' => [
+                  {
+                    'kind' => 'field',
+                    'location' => {
+                      'column' => 9,
+                      'line' => 14
+                    },
+                    'name' => 'id'
                   },
-                  'name' => 'story',
-                  'selections' => [
-                    {
-                      'kind' => 'field',
-                      'node' => {
+                  {
+                    'alias' => 'alias',
+                    'arguments' => {
+                      'after' => \'foo',
+                      'first' => 10
+                    },
+                    'directives' => [
+                      {
+                        'arguments' => {
+                          'if' => \'foo'
+                        },
+                        'name' => 'include'
+                      }
+                    ],
+                    'kind' => 'field',
+                    'location' => {
+                      'column' => 7,
+                      'line' => 18
+                    },
+                    'name' => 'field1',
+                    'selections' => [
+                      {
+                        'kind' => 'field',
                         'location' => {
-                          'column' => 5,
-                          'line' => 33
+                          'column' => 11,
+                          'line' => 16
                         },
                         'name' => 'id'
+                      },
+                      {
+                        'kind' => 'fragment_spread',
+                        'location' => {
+                          'column' => 9,
+                          'line' => 17
+                        },
+                        'name' => 'frag'
                       }
-                    }
-                  ]
-                }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            'directives' => [
+              {
+                'arguments' => {
+                  'unless' => \'foo'
+                },
+                'name' => 'skip'
+              }
+            ],
+            'kind' => 'inline_fragment',
+            'location' => {
+              'column' => 5,
+              'line' => 23
+            },
+            'selections' => [
+              {
+                'kind' => 'field',
+                'location' => {
+                  'column' => 5,
+                  'line' => 22
+                },
+                'name' => 'id'
+              }
+            ]
+          },
+          {
+            'kind' => 'inline_fragment',
+            'location' => {
+              'column' => 3,
+              'line' => 26
+            },
+            'selections' => [
+              {
+                'kind' => 'field',
+                'location' => {
+                  'column' => 5,
+                  'line' => 25
+                },
+                'name' => 'id'
               }
             ]
           }
-        }
-      ]
+        ]
+      }
+    ],
+    'variables' => {
+      'foo' => {
+        'type' => 'ComplexType'
+      },
+      'site' => {
+        'default_value' => \\'MOBILE',
+        'type' => 'Site'
+      }
     }
   },
   {
     'kind' => 'operation',
-    'node' => {
-      'location' => {
-        'column' => 1,
-        'line' => 50
-      },
-      'name' => 'StoryLikeSubscription',
-      'operationType' => 'subscription',
-      'selections' => [
-        {
-          'kind' => 'field',
-          'node' => {
-            'arguments' => {
-              'input' => \'input'
-            },
+    'location' => {
+      'column' => 1,
+      'line' => 37
+    },
+    'name' => 'likeStory',
+    'operationType' => 'mutation',
+    'selections' => [
+      {
+        'arguments' => {
+          'story' => 123
+        },
+        'directives' => [
+          {
+            'name' => 'defer'
+          }
+        ],
+        'kind' => 'field',
+        'location' => {
+          'column' => 1,
+          'line' => 35
+        },
+        'name' => 'like',
+        'selections' => [
+          {
+            'kind' => 'field',
             'location' => {
-              'column' => 1,
-              'line' => 48
+              'column' => 3,
+              'line' => 34
             },
-            'name' => 'storyLikeSubscribe',
+            'name' => 'story',
             'selections' => [
               {
                 'kind' => 'field',
-                'node' => {
-                  'location' => {
-                    'column' => 3,
-                    'line' => 47
-                  },
-                  'name' => 'story',
-                  'selections' => [
-                    {
-                      'kind' => 'field',
-                      'node' => {
-                        'location' => {
-                          'column' => 7,
-                          'line' => 43
-                        },
-                        'name' => 'likers',
-                        'selections' => [
-                          {
-                            'kind' => 'field',
-                            'node' => {
-                              'location' => {
-                                'column' => 7,
-                                'line' => 42
-                              },
-                              'name' => 'count'
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      'kind' => 'field',
-                      'node' => {
-                        'location' => {
-                          'column' => 5,
-                          'line' => 46
-                        },
-                        'name' => 'likeSentence',
-                        'selections' => [
-                          {
-                            'kind' => 'field',
-                            'node' => {
-                              'location' => {
-                                'column' => 7,
-                                'line' => 45
-                              },
-                              'name' => 'text'
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
+                'location' => {
+                  'column' => 5,
+                  'line' => 33
+                },
+                'name' => 'id'
               }
             ]
           }
-        }
-      ],
-      'variables' => {
-        'input' => {
-          'type' => 'StoryLikeSubscribeInput'
-        }
+        ]
+      }
+    ]
+  },
+  {
+    'kind' => 'operation',
+    'location' => {
+      'column' => 1,
+      'line' => 50
+    },
+    'name' => 'StoryLikeSubscription',
+    'operationType' => 'subscription',
+    'selections' => [
+      {
+        'arguments' => {
+          'input' => \'input'
+        },
+        'kind' => 'field',
+        'location' => {
+          'column' => 1,
+          'line' => 48
+        },
+        'name' => 'storyLikeSubscribe',
+        'selections' => [
+          {
+            'kind' => 'field',
+            'location' => {
+              'column' => 3,
+              'line' => 47
+            },
+            'name' => 'story',
+            'selections' => [
+              {
+                'kind' => 'field',
+                'location' => {
+                  'column' => 7,
+                  'line' => 43
+                },
+                'name' => 'likers',
+                'selections' => [
+                  {
+                    'kind' => 'field',
+                    'location' => {
+                      'column' => 7,
+                      'line' => 42
+                    },
+                    'name' => 'count'
+                  }
+                ]
+              },
+              {
+                'kind' => 'field',
+                'location' => {
+                  'column' => 5,
+                  'line' => 46
+                },
+                'name' => 'likeSentence',
+                'selections' => [
+                  {
+                    'kind' => 'field',
+                    'location' => {
+                      'column' => 7,
+                      'line' => 45
+                    },
+                    'name' => 'text'
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    'variables' => {
+      'input' => {
+        'type' => 'StoryLikeSubscribeInput'
       }
     }
   },
   {
     'kind' => 'fragment',
-    'node' => {
-      'location' => {
-        'column' => 1,
-        'line' => 54
-      },
-      'name' => 'frag',
-      'on' => 'Friend',
-      'selections' => [
-        {
-          'kind' => 'field',
-          'node' => {
-            'arguments' => {
-              'bar' => \'b',
-              'obj' => {
-                'key' => 'value'
-              },
-              'size' => \'size'
-            },
-            'location' => {
-              'column' => 1,
-              'line' => 52
-            },
-            'name' => 'foo'
-          }
-        }
-      ]
-    }
+    'location' => {
+      'column' => 1,
+      'line' => 54
+    },
+    'name' => 'frag',
+    'on' => 'Friend',
+    'selections' => [
+      {
+        'arguments' => {
+          'bar' => \'b',
+          'obj' => {
+            'key' => 'value'
+          },
+          'size' => \'size'
+        },
+        'kind' => 'field',
+        'location' => {
+          'column' => 1,
+          'line' => 52
+        },
+        'name' => 'foo'
+      }
+    ]
   },
   {
     'kind' => 'operation',
-    'node' => {
-      'location' => {
-        'column' => 1,
-        'line' => 58
-      },
-      'selections' => [
-        {
-          'kind' => 'field',
-          'node' => {
-            'arguments' => {
-              'falsey' => bless( do{\(my $o = 0)}, 'JSON::PP::Boolean' ),
-              'nullish' => undef,
-              'truthy' => bless( do{\(my $o = 1)}, 'JSON::PP::Boolean' )
-            },
-            'location' => {
-              'column' => 3,
-              'line' => 56
-            },
-            'name' => 'unnamed'
-          }
+    'location' => {
+      'column' => 1,
+      'line' => 58
+    },
+    'selections' => [
+      {
+        'arguments' => {
+          'falsey' => bless( do{\(my $o = 0)}, 'JSON::PP::Boolean' ),
+          'nullish' => undef,
+          'truthy' => bless( do{\(my $o = 1)}, 'JSON::PP::Boolean' )
         },
-        {
-          'kind' => 'field',
-          'node' => {
-            'location' => {
-              'column' => 1,
-              'line' => 57
-            },
-            'name' => 'query'
-          }
-        }
-      ]
-    }
+        'kind' => 'field',
+        'location' => {
+          'column' => 3,
+          'line' => 56
+        },
+        'name' => 'unnamed'
+      },
+      {
+        'kind' => 'field',
+        'location' => {
+          'column' => 1,
+          'line' => 57
+        },
+        'name' => 'query'
+      }
+    ]
   }
 ]

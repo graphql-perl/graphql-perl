@@ -57,9 +57,9 @@ usable by GraphQL.
 method gotrule (Any $param = undef) {
   return unless defined $param;
   if ($KINDHASH21{$self->{parser}{rule}}) {
-    return {kind => $self->{parser}{rule}, node => $self->_locate_hash(_merge_hash($param))};
+    return {kind => $self->{parser}{rule}, %{$self->_locate_hash(_merge_hash($param))}};
   } elsif ($KINDFIELDS21{$self->{parser}{rule}}) {
-    return {kind => $self->{parser}{rule}, node => $self->_locate_hash(_merge_hash($param, 'fields'))};
+    return {kind => $self->{parser}{rule}, %{$self->_locate_hash(_merge_hash($param, 'fields'))}};
   }
   return {$self->{parser}{rule} => $param};
 }
@@ -176,7 +176,7 @@ method got_fieldDefinition (Any $param = undef) {
 
 method got_typeExtensionDefinition (Any $param = undef) {
   return unless defined $param;
-  return {kind => 'extend', node => $self->_locate_hash($param->{node})};
+  return {kind => 'extend', %{$self->_locate_hash($param)}};
 }
 
 method got_enumTypeDefinition (Any $param = undef) {
@@ -188,7 +188,7 @@ method got_enumTypeDefinition (Any $param = undef) {
     $values{$name} = $_;
   } @{(grep ref eq 'ARRAY', @$param)[0]};
   $def->{values} = \%values;
-  return {kind => 'enum', node => $self->_locate_hash($def)};
+  return {kind => 'enum', %{$self->_locate_hash($def)}};
 }
 
 method got_unionMembers (Any $param = undef) {
@@ -282,7 +282,7 @@ method got_selectionSet (Any $param = undef) {
 method got_operationDefinition (Any $param = undef) {
   return unless defined $param;
   $param = [ $param ] unless ref $param eq 'ARRAY'; # bare selectionSet
-  return {kind => 'operation', node => $self->_locate_hash(_merge_hash($param))};
+  return {kind => 'operation', %{$self->_locate_hash(_merge_hash($param))}};
 }
 
 method got_directives (Any $param = undef) {
@@ -322,7 +322,7 @@ method got_schema (Any $param = undef) {
   $type2count{(keys %$_)[0]}++ for @{$param->[0]};
   $type2count{$_} > 1 and die "Must provide only one $_ type in schema.\n"
     for keys %type2count;
-  return {kind => $self->{parser}{rule}, node => $self->_locate_hash(_merge_hash($param->[0]))};
+  return {kind => $self->{parser}{rule}, %{$self->_locate_hash(_merge_hash($param->[0]))}};
 }
 
 method got_typeSystemDefinition (Any $param = undef) {
@@ -330,7 +330,7 @@ method got_typeSystemDefinition (Any $param = undef) {
   my @copy = @$param;
   my $node = pop @copy;
   my $description = $copy[0] // {};
-  +{ %$node, node => { %{$node->{node}}, %$description } };
+  +{ %$node, %$description };
 }
 
 method got_typeDefinition (Any $param = undef) {

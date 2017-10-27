@@ -1,5 +1,8 @@
 Revision history for GraphQL
 
+0.18	
+ - make AST not have "node"
+
 0.17	Thu Oct 26 19:58:00 BST 2017
  - fill out Schema.to_doc include default if eg type Query
 

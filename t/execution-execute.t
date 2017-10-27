@@ -229,13 +229,13 @@ subtest 'provides info about current execution state' => sub {
   /];
   is $info->{field_name}, 'test';
   is scalar(@{ $info->{field_nodes} }), 1;
-  is_deeply $info->{field_nodes}[0], $ast->[0]{node}{selections}[0]{node};
+  is_deeply $info->{field_nodes}[0], $ast->[0]{selections}[0];
   is $info->{return_type}->name, $String->name;
   is $info->{parent_type}, $schema->query;
   is_deeply $info->{path}, [ 'result' ];
   is $info->{schema}, $schema;
   is $info->{root_value}, $rootValue;
-  is $info->{operation}, $ast->[0]{node};
+  is $info->{operation}, $ast->[0];
   is_deeply $info->{variable_values}, { var => {type => $String, value => '123'} };
 };
 
