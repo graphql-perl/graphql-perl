@@ -1,5 +1,8 @@
 Revision history for GraphQL
 
+0.19	Sun Oct 29 16:11:31 GMT 2017
+ - add DateTime as test dep, thanks @andk!
+
 0.18	Fri Oct 27 05:00:46 BST 2017
  - make AST not have "node"
 
