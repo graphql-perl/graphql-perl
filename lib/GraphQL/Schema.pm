@@ -334,6 +334,7 @@ fun lookup_type(
   (Map[StrNameValid, InstanceOf['GraphQL::Type']]) $name2type,
 ) :ReturnType(InstanceOf['GraphQL::Type']) {
   my $type = $typedef->{type};
+  die "Undefined type given\n" if !defined $type;
   return $name2type->{$type} // die "Unknown type '$type'.\n"
     if is_Str($type);
   my ($wrapper_type, $wrapped) = @$type;

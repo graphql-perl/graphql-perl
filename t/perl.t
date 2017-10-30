@@ -51,4 +51,24 @@ EOF
   );
 };
 
+subtest 'nice errors Schema.from_ast' => sub {
+  eval { GraphQL::Schema->from_ast([
+    {
+      'fields' => {
+        'subtitle' => { 'type' => undef },
+      },
+      'kind' => 'type',
+      'name' => 'Blog'
+    },
+    {
+      'fields' => {
+        'blog' => { 'type' => [ 'list', { 'type' => 'Blog' } ] },
+      },
+      'kind' => 'type',
+      'name' => 'Query'
+    },
+  ]) };
+  is $@, "Error in field 'subtitle': Undefined type given\n";
+};
+
 done_testing;

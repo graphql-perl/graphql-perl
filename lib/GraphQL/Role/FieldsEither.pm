@@ -59,7 +59,13 @@ method _from_ast_fields(
   $fields = $self->_from_ast_field_deprecate($_, $fields) for keys %$fields;
   (
     $key => sub { +{
-      map $self->_make_field_def($name2type, $_, $fields->{$_}), keys %$fields
+      map {
+        my @pair = eval {
+          $self->_make_field_def($name2type, $_, $fields->{$_})
+        };
+        die "Error in field '$_': $@" if $@;
+        @pair;
+      } keys %$fields
     } },
   );
 }
