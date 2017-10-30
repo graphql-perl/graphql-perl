@@ -43,7 +43,11 @@ method _make_field_def(
     map $self->_make_field_def($name2type, $_, $field_def->{args}{$_}),
       keys %{$field_def->{args}}
   }) if $field_def->{args};
-  ($_ => { %$field_def, type => GraphQL::Schema::lookup_type($field_def, $name2type), %args });
+  ($_ => {
+    %$field_def,
+    type => GraphQL::Schema::lookup_type($field_def, $name2type),
+    %args,
+  });
 }
 
 method _from_ast_fields(
