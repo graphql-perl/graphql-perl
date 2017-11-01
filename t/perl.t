@@ -35,7 +35,7 @@ type DateTime { ymd: String }
 type Query { dateTimeNow: DateTime }
 EOF
   my $root_value = { dateTimeNow => sub { DateTime->now } };
-  my @z = run_test([
+  run_test([
     $schema, "{ dateTimeNow { ymd } }", $root_value, (undef) x 3, sub {
       my ($root_value, $args, $context, $info) = @_;
       my $field_name = $info->{field_name};
@@ -69,6 +69,16 @@ subtest 'nice errors Schema.from_ast' => sub {
     },
   ]) };
   is $@, "Error in field 'subtitle': Undefined type given\n";
+};
+
+subtest 'test convert plugin' => sub {
+  require_ok 'GraphQL::Plugin::Convert::Test';
+  my $converted = GraphQL::Plugin::Convert::Test->to_graphql;
+  run_test([
+    $converted->{schema}, '{helloWorld}', $converted->{root_value}
+  ],
+    { data => { helloWorld => 'Hello, world!' } },
+  );
 };
 
 done_testing;
