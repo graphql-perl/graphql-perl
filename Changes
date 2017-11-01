@@ -1,5 +1,8 @@
 Revision history for GraphQL
 
+0.20	Wed Nov  1 03:59:54 GMT 2017
+ - add GraphQL::Plugin::Convert API
+
 0.19	Sun Oct 29 16:11:31 GMT 2017
  - add DateTime as test dep, thanks @andk!
 
