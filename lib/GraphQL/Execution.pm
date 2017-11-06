@@ -193,6 +193,7 @@ fun _execute_operation(
     {},
     {},
   );
+  DEBUG and _debug('_execute_operation(fields)', $fields, $root_value);
   my $path = [];
   my $execute = $op_type eq 'mutation'
     ? \&_execute_fields_serially : \&_execute_fields;
@@ -269,14 +270,19 @@ fun _resolve_field(
     $path,
     $nodes,
   );
-  my $result = _resolve_field_value_or_error(
+  my $resolve_node = _build_resolve_node(
     $context,
     $field_def,
     $nodes,
     $resolve,
-    $root_value,
     $info,
   );
+  my $result;
+  if (!GraphQL::Error->is($resolve_node)) {
+    $result = _resolve_field_value_or_error($resolve_node, $root_value);
+  } else {
+    $result = $resolve_node; # failed early
+  }
   _complete_value_catching_error(
     $context,
     $field_def->{type},
@@ -327,19 +333,32 @@ fun _build_resolve_info(
   };
 }
 
-fun _resolve_field_value_or_error(
+fun _build_resolve_node(
   HashRef $context,
   HashRef $field_def,
   ArrayRef[HashRef] $nodes,
   Maybe[CodeLike] $resolve,
-  Maybe[Any] $root_value,
   HashRef $info,
 ) {
-  DEBUG and _debug('_resolve_field_value_or_error', $nodes, $root_value, $field_def, eval { $JSON->encode($nodes->[0]) });
+  DEBUG and _debug('_build_resolve_node', $nodes, $field_def, eval { $JSON->encode($nodes->[0]) });
+  my $args = eval {
+    _get_argument_values($field_def, $nodes->[0], $context->{variable_values});
+  };
+  return GraphQL::Error->coerce($@) if $@;
+  DEBUG and _debug("_build_resolve_node(args)", $args, eval { $JSON->encode($args) });
+  {
+    args => [ $args, $context->{context_value}, $info ],
+    resolve => $resolve,
+  };
+}
+
+fun _resolve_field_value_or_error(
+  HashRef $resolve_node,
+  Maybe[Any] $root_value,
+) {
+  DEBUG and _debug('_resolve_field_value_or_error', $resolve_node);
   my $result = eval {
-    my $args = _get_argument_values($field_def, $nodes->[0], $context->{variable_values});
-    DEBUG and _debug("_resolve_field_value_or_error(resolve)", $args, $JSON->encode($args));
-    $resolve->($root_value, $args, $context->{context_value}, $info);
+    $resolve_node->{resolve}->($root_value, @{$resolve_node->{args}})
   };
   return GraphQL::Error->coerce($@) if $@;
   $result;
