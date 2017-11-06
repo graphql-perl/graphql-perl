@@ -183,16 +183,6 @@ method _complete_value(
     # TODO promise stuff
     die GraphQL::Error->new(message => "Expected a value of type '@{[$self->to_string]}' but received: '@{[ref($result)||$result]}'.") if !$is_type_of;
   }
-  $self->_collect_and_execute_subfields(@_);
-}
-
-method _collect_and_execute_subfields(
-  HashRef $context,
-  ArrayRef[HashRef] $nodes,
-  HashRef $info,
-  ArrayRef $path,
-  Any $result,
-) {
   my $subfield_nodes = {};
   my $visited_fragment_names = {};
   for (grep $_->{selections}, @$nodes) {
@@ -203,7 +193,7 @@ method _collect_and_execute_subfields(
       $visited_fragment_names,
     );
   }
-  DEBUG and _debug('_collect_and_execute_subfields', $self->to_string, $subfield_nodes, $result);
+  DEBUG and _debug('Object._complete_value', $self->to_string, $subfield_nodes, $result);
   GraphQL::Execution::_execute_fields($context, $self, $result, $path, $subfield_nodes);
 }
 
