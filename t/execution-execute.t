@@ -128,8 +128,7 @@ fragment c on DataType {
 EOF
   my $ast = parse($doc);
 
-  my $res = execute($schema, $ast, $data, undef, { size => 100 }, 'Example');
-  is_deeply $res, {
+  run_test([$schema, $ast, $data, undef, { size => 100 }, 'Example'], {
     data => {
       a => 'Apple',
       b => 'Banana',
@@ -149,7 +148,7 @@ EOF
         ],
       },
     },
-  };
+  });
 };
 
 subtest 'merges parallel fragments' => sub{
