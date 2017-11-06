@@ -409,8 +409,6 @@ fun _complete_value(
   }
   return ($result, $context) if !defined $result;
   return _complete_list_value(@_) if $return_type->isa('GraphQL::Type::List');
-  return (_complete_leaf_value($return_type, $result), $context)
-    if $return_type->DOES('GraphQL::Role::Leaf');
   return $return_type->_complete_value(
     $context,
     $nodes,
@@ -418,6 +416,7 @@ fun _complete_value(
     $path,
     $result,
   ) if $return_type->DOES('GraphQL::Role::Abstract')
+    or $return_type->DOES('GraphQL::Role::Leaf')
     or $return_type->isa('GraphQL::Type::Object');
   # shouldn't get here
   die GraphQL::Error->new(
@@ -448,16 +447,6 @@ fun _complete_list_value(
     $r;
   } @$result;
   (\@completed_results, $context);
-}
-
-fun _complete_leaf_value(
-  (ConsumerOf['GraphQL::Role::Leaf']) $return_type,
-  Any $result,
-) {
-  DEBUG and _debug('_complete_leaf_value', $return_type->to_string, $result);
-  my $serialised = $return_type->perl_to_graphql($result);
-  die GraphQL::Error->new(message => "Expected a value of type '@{[$return_type->to_string]}' but received: '$result'.\n$@") if $@;
-  $serialised;
 }
 
 fun _located_error(
