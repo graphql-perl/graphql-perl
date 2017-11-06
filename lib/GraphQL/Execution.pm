@@ -209,7 +209,7 @@ fun _execute_fields(
   Any $root_value,
   ArrayRef $path,
   Map[StrNameValid,ArrayRef[HashRef]] $fields,
-) :ReturnType(Map[StrNameValid,Any]){
+) :ReturnType(Map[StrNameValid,Any]) {
   my %results;
   DEBUG and _debug('_execute_fields', $parent_type->to_string, $fields, $root_value);
   map {
