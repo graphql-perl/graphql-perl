@@ -255,22 +255,11 @@ fun _should_include_node(
   HashRef $node,
 ) :ReturnType(Bool) {
   DEBUG and _debug('_should_include_node', $variables, $node);
-  my $skip = _get_directive_values($GraphQL::Directive::SKIP, $node, $variables);
+  my $skip = $GraphQL::Directive::SKIP->_get_directive_values($node, $variables);
   return '' if $skip and $skip->{if};
-  my $include = _get_directive_values($GraphQL::Directive::INCLUDE, $node, $variables);
+  my $include = $GraphQL::Directive::INCLUDE->_get_directive_values($node, $variables);
   return '' if $include and !$include->{if};
   1;
-}
-
-fun _get_directive_values(
-  (InstanceOf['GraphQL::Directive']) $directive,
-  HashRef $node,
-  HashRef $variables,
-) {
-  DEBUG and _debug('_get_directive_values', $directive->name, $node, $variables);
-  my ($d) = grep $_->{name} eq $directive->name, @{$node->{directives} || []};
-  return if !$d;
-  _get_argument_values($directive, $d, $variables);
 }
 
 fun _fragment_condition_match(

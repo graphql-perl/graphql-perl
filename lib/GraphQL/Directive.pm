@@ -212,6 +212,16 @@ in your schema:
   $GraphQL::Directive::DEPRECATED,
 );
 
+method _get_directive_values(
+  HashRef $node,
+  HashRef $variables,
+) {
+  DEBUG and _debug('_get_directive_values', $self->name, $node, $variables);
+  my ($d) = grep $_->{name} eq $self->name, @{$node->{directives} || []};
+  return if !$d;
+  GraphQL::Execution::_get_argument_values($self, $d, $variables);
+}
+
 __PACKAGE__->meta->make_immutable();
 
 1;
