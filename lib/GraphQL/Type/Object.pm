@@ -101,6 +101,76 @@ method from_ast(
   );
 }
 
+method _collect_fields(
+  HashRef $context,
+  ArrayRef $selections,
+  Map[StrNameValid,ArrayRef[HashRef]] $fields_got,
+  Map[StrNameValid,Bool] $visited_fragments,
+) {
+  DEBUG and _debug('_collect_fields', $self->to_string, $fields_got, $selections);
+  for my $selection (@$selections) {
+    my $node = $selection;
+    next if !_should_include_node($context->{variable_values}, $node);
+    if ($selection->{kind} eq 'field') {
+      my $use_name = $node->{alias} || $node->{name};
+      $fields_got = {
+        %$fields_got,
+        $use_name => [ @{$fields_got->{$use_name} || []}, $node ],
+      }; # like push but no mutation
+    } elsif ($selection->{kind} eq 'inline_fragment') {
+      next if !$self->_fragment_condition_match($context, $node);
+      ($fields_got, $visited_fragments) = $self->_collect_fields(
+        $context,
+        $node->{selections},
+        $fields_got,
+        $visited_fragments,
+      );
+    } elsif ($selection->{kind} eq 'fragment_spread') {
+      my $frag_name = $node->{name};
+      next if $visited_fragments->{$frag_name};
+      $visited_fragments = { %$visited_fragments, $frag_name => 1 }; # !mutate
+      my $fragment = $context->{fragments}{$frag_name};
+      next if !$fragment;
+      next if !$self->_fragment_condition_match($context, $fragment);
+      DEBUG and _debug('_collect_fields(fragment_spread)', $fragment);
+      ($fields_got, $visited_fragments) = $self->_collect_fields(
+        $context,
+        $fragment->{selections},
+        $fields_got,
+        $visited_fragments,
+      );
+    }
+  }
+  ($fields_got, $visited_fragments);
+}
+
+method _fragment_condition_match(
+  HashRef $context,
+  HashRef $node,
+) :ReturnType(Bool) {
+  DEBUG and _debug('_fragment_condition_match', $self->to_string, $node);
+  return 1 if !$node->{on};
+  return 1 if $node->{on} eq $self->name;
+  my $condition_type = $context->{schema}->name2type->{$node->{on}} //
+    die GraphQL::Error->new(
+      message => "Unknown type for fragment condition '$node->{on}'."
+    );
+  return '' if !$condition_type->DOES('GraphQL::Role::Abstract');
+  $context->{schema}->is_possible_type($condition_type, $self);
+}
+
+fun _should_include_node(
+  HashRef $variables,
+  HashRef $node,
+) :ReturnType(Bool) {
+  DEBUG and _debug('_should_include_node', $variables, $node);
+  my $skip = $GraphQL::Directive::SKIP->_get_directive_values($node, $variables);
+  return '' if $skip and $skip->{if};
+  my $include = $GraphQL::Directive::INCLUDE->_get_directive_values($node, $variables);
+  return '' if $include and !$include->{if};
+  1;
+}
+
 __PACKAGE__->meta->make_immutable();
 
 1;

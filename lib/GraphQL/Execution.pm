@@ -187,9 +187,8 @@ fun _execute_operation(
 ) {
   my $op_type = $operation->{operationType} || 'query';
   my $type = $context->{schema}->$op_type;
-  my ($fields) = _collect_fields(
+  my ($fields) = $type->_collect_fields(
     $context,
-    $type,
     $operation->{selections},
     {},
     {},
@@ -202,80 +201,6 @@ fun _execute_operation(
   };
   return ({}, _context_error($context, GraphQL::Error->coerce($@))) if $@;
   ($result, $context);
-}
-
-fun _collect_fields(
-  HashRef $context,
-  (InstanceOf['GraphQL::Type::Object']) $runtime_type,
-  ArrayRef $selections,
-  Map[StrNameValid,ArrayRef[HashRef]] $fields_got,
-  Map[StrNameValid,Bool] $visited_fragments,
-) {
-  DEBUG and _debug('_collect_fields', $runtime_type->to_string, $fields_got, $selections);
-  for my $selection (@$selections) {
-    my $node = $selection;
-    next if !_should_include_node($context->{variable_values}, $node);
-    if ($selection->{kind} eq 'field') {
-      my $use_name = $node->{alias} || $node->{name};
-      $fields_got = {
-        %$fields_got,
-        $use_name => [ @{$fields_got->{$use_name} || []}, $node ],
-      }; # like push but no mutation
-    } elsif ($selection->{kind} eq 'inline_fragment') {
-      next if !_fragment_condition_match($context, $node, $runtime_type);
-      ($fields_got, $visited_fragments) = _collect_fields(
-        $context,
-        $runtime_type,
-        $node->{selections},
-        $fields_got,
-        $visited_fragments,
-      );
-    } elsif ($selection->{kind} eq 'fragment_spread') {
-      my $frag_name = $node->{name};
-      next if $visited_fragments->{$frag_name};
-      $visited_fragments = { %$visited_fragments, $frag_name => 1 }; # !mutate
-      my $fragment = $context->{fragments}{$frag_name};
-      next if !$fragment;
-      next if !_fragment_condition_match($context, $fragment, $runtime_type);
-      DEBUG and _debug('_collect_fields(fragment_spread)', $fragment);
-      ($fields_got, $visited_fragments) = _collect_fields(
-        $context,
-        $runtime_type,
-        $fragment->{selections},
-        $fields_got,
-        $visited_fragments,
-      );
-    }
-  }
-  ($fields_got, $visited_fragments);
-}
-
-fun _should_include_node(
-  HashRef $variables,
-  HashRef $node,
-) :ReturnType(Bool) {
-  DEBUG and _debug('_should_include_node', $variables, $node);
-  my $skip = $GraphQL::Directive::SKIP->_get_directive_values($node, $variables);
-  return '' if $skip and $skip->{if};
-  my $include = $GraphQL::Directive::INCLUDE->_get_directive_values($node, $variables);
-  return '' if $include and !$include->{if};
-  1;
-}
-
-fun _fragment_condition_match(
-  HashRef $context,
-  HashRef $node,
-  (InstanceOf['GraphQL::Type']) $runtime_type,
-) :ReturnType(Bool) {
-  DEBUG and _debug('_fragment_condition_match', $runtime_type->to_string, $node);
-  return 1 if !$node->{on};
-  return 1 if $node->{on} eq $runtime_type->name;
-  my $condition_type = $context->{schema}->name2type->{$node->{on}} //
-    die GraphQL::Error->new(
-      message => "Unknown type for fragment condition '$node->{on}'."
-    );
-  return '' if !$condition_type->DOES('GraphQL::Role::Abstract');
-  $context->{schema}->is_possible_type($condition_type, $runtime_type);
 }
 
 fun _execute_fields(
@@ -628,9 +553,8 @@ fun _collect_and_execute_subfields(
   my $subfield_nodes = {};
   my $visited_fragment_names = {};
   for (grep $_->{selections}, @$nodes) {
-    ($subfield_nodes, $visited_fragment_names) = _collect_fields(
+    ($subfield_nodes, $visited_fragment_names) = $return_type->_collect_fields(
       $context,
-      $return_type,
       $_->{selections},
       $subfield_nodes,
       $visited_fragment_names,
