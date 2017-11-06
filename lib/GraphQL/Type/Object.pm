@@ -171,6 +171,42 @@ fun _should_include_node(
   1;
 }
 
+method _complete_value(
+  HashRef $context,
+  ArrayRef[HashRef] $nodes,
+  HashRef $info,
+  ArrayRef $path,
+  Any $result,
+) {
+  if ($self->is_type_of) {
+    my $is_type_of = $self->is_type_of->($result, $context->{context_value}, $info);
+    # TODO promise stuff
+    die GraphQL::Error->new(message => "Expected a value of type '@{[$self->to_string]}' but received: '@{[ref($result)||$result]}'.") if !$is_type_of;
+  }
+  $self->_collect_and_execute_subfields(@_);
+}
+
+method _collect_and_execute_subfields(
+  HashRef $context,
+  ArrayRef[HashRef] $nodes,
+  HashRef $info,
+  ArrayRef $path,
+  Any $result,
+) {
+  my $subfield_nodes = {};
+  my $visited_fragment_names = {};
+  for (grep $_->{selections}, @$nodes) {
+    ($subfield_nodes, $visited_fragment_names) = $self->_collect_fields(
+      $context,
+      $_->{selections},
+      $subfield_nodes,
+      $visited_fragment_names,
+    );
+  }
+  DEBUG and _debug('_collect_and_execute_subfields', $self->to_string, $subfield_nodes, $result);
+  GraphQL::Execution::_execute_fields($context, $self, $result, $path, $subfield_nodes);
+}
+
 __PACKAGE__->meta->make_immutable();
 
 1;

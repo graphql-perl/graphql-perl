@@ -412,7 +412,13 @@ fun _complete_value(
   return (_complete_leaf_value($return_type, $result), $context)
     if $return_type->DOES('GraphQL::Role::Leaf');
   return _complete_abstract_value(@_) if $return_type->DOES('GraphQL::Role::Abstract');
-  return _complete_object_value(@_) if $return_type->isa('GraphQL::Type::Object');
+  return $return_type->_complete_value(
+    $context,
+    $nodes,
+    $info,
+    $path,
+    $result,
+  ) if $return_type->isa('GraphQL::Type::Object');
   # shouldn't get here
   die GraphQL::Error->new(
     message => "Cannot complete value of unexpected type '@{[$return_type->to_string]}'."
@@ -466,16 +472,15 @@ fun _complete_abstract_value(
     $result, $context->{context_value}, $info, $return_type
   );
   # TODO promise stuff
-  _complete_object_value(
+  _ensure_valid_runtime_type(
+    $runtime_type,
     $context,
-    _ensure_valid_runtime_type(
-      $runtime_type,
-      $context,
-      $return_type,
-      $nodes,
-      $info,
-      $result,
-    ),
+    $return_type,
+    $nodes,
+    $info,
+    $result,
+  )->_complete_value(
+    $context,
     $nodes,
     $info,
     $path,
@@ -517,51 +522,6 @@ fun _default_resolve_type(
   my @possibles = @{ $info->{schema}->get_possible_types($abstract_type) };
   # TODO promise stuff
   (grep $_->is_type_of->($value, $context, $info), grep $_->is_type_of, @possibles)[0];
-}
-
-fun _complete_object_value(
-  HashRef $context,
-  (InstanceOf['GraphQL::Type::Object']) $return_type,
-  ArrayRef[HashRef] $nodes,
-  HashRef $info,
-  ArrayRef $path,
-  Any $result,
-) {
-  if ($return_type->is_type_of) {
-    my $is_type_of = $return_type->is_type_of->($result, $context->{context_value}, $info);
-    # TODO promise stuff
-    die GraphQL::Error->new(message => "Expected a value of type '@{[$return_type->to_string]}' but received: '@{[ref($result)||$result]}'.") if !$is_type_of;
-  }
-  _collect_and_execute_subfields(
-    $context,
-    $return_type,
-    $nodes,
-    $info,
-    $path,
-    $result,
-  );
-}
-
-fun _collect_and_execute_subfields(
-  HashRef $context,
-  (InstanceOf['GraphQL::Type::Object']) $return_type,
-  ArrayRef[HashRef] $nodes,
-  HashRef $info,
-  ArrayRef $path,
-  Any $result,
-) {
-  my $subfield_nodes = {};
-  my $visited_fragment_names = {};
-  for (grep $_->{selections}, @$nodes) {
-    ($subfield_nodes, $visited_fragment_names) = $return_type->_collect_fields(
-      $context,
-      $_->{selections},
-      $subfield_nodes,
-      $visited_fragment_names,
-    );
-  }
-  DEBUG and _debug('_collect_and_execute_subfields', $return_type->to_string, $subfield_nodes, $result);
-  _execute_fields($context, $return_type, $result, $path, $subfield_nodes);
 }
 
 fun _located_error(
