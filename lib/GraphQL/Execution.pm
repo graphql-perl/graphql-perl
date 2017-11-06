@@ -206,7 +206,7 @@ fun _execute_operation(
 
 fun _collect_fields(
   HashRef $context,
-  (InstanceOf['GraphQL::Type']) $runtime_type,
+  (InstanceOf['GraphQL::Type::Object']) $runtime_type,
   ArrayRef $selections,
   Map[StrNameValid,ArrayRef[HashRef]] $fields_got,
   Map[StrNameValid,Bool] $visited_fragments,
