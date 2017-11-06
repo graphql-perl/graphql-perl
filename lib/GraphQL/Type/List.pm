@@ -110,6 +110,30 @@ method graphql_to_perl(Maybe[ArrayRef] $item) :ReturnType(Maybe[ArrayRef]) {
   \@values;
 }
 
+method _complete_value(
+  HashRef $context,
+  ArrayRef[HashRef] $nodes,
+  HashRef $info,
+  ArrayRef $path,
+  ArrayRef $result,
+) {
+  # TODO promise stuff
+  my $item_type = $self->of;
+  my $index = 0;
+  my @completed_results = map {
+    (my $r, $context) = GraphQL::Execution::_complete_value_catching_error(
+      $context,
+      $item_type,
+      $nodes,
+      $info,
+      [ @$path, $index++ ],
+      $_,
+    );
+    $r;
+  } @$result;
+  (\@completed_results, $context);
+}
+
 __PACKAGE__->meta->make_immutable();
 
 1;

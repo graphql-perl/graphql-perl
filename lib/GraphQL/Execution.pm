@@ -408,7 +408,6 @@ fun _complete_value(
     return ($completed, $context);
   }
   return ($result, $context) if !defined $result;
-  return _complete_list_value(@_) if $return_type->isa('GraphQL::Type::List');
   return $return_type->_complete_value(
     $context,
     $nodes,
@@ -416,37 +415,13 @@ fun _complete_value(
     $path,
     $result,
   ) if $return_type->DOES('GraphQL::Role::Abstract')
+    or $return_type->isa('GraphQL::Type::List')
     or $return_type->DOES('GraphQL::Role::Leaf')
     or $return_type->isa('GraphQL::Type::Object');
   # shouldn't get here
   die GraphQL::Error->new(
     message => "Cannot complete value of unexpected type '@{[$return_type->to_string]}'."
   );
-}
-
-fun _complete_list_value(
-  HashRef $context,
-  (InstanceOf['GraphQL::Type::List']) $return_type,
-  ArrayRef[HashRef] $nodes,
-  HashRef $info,
-  ArrayRef $path,
-  ArrayRef $result,
-) {
-  # TODO promise stuff
-  my $item_type = $return_type->of;
-  my $index = 0;
-  my @completed_results = map {
-    (my $r, $context) = _complete_value_catching_error(
-      $context,
-      $item_type,
-      $nodes,
-      $info,
-      [ @$path, $index++ ],
-      $_,
-    );
-    $r;
-  } @$result;
-  (\@completed_results, $context);
 }
 
 fun _located_error(
