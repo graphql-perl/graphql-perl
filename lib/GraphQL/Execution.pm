@@ -390,37 +390,17 @@ fun _complete_value(
   ArrayRef $path,
   Any $result,
 ) {
-  DEBUG and _debug('_complete_value', $return_type->to_string, $result);
+  DEBUG and _debug('_complete_value', $return_type->to_string, $path, $result);
   # TODO promise stuff
   die $result if GraphQL::Error->is($result);
-  if ($return_type->isa('GraphQL::Type::NonNull')) {
-    (my $completed, $context) = _complete_value(
-      $context,
-      $return_type->of,
-      $nodes,
-      $info,
-      $path,
-      $result,
-    );
-    die GraphQL::Error->new(
-      message => "Cannot return null for non-nullable field @{[$info->{parent_type}->name]}.@{[$info->{field_name}]}."
-    ) if !defined $completed;
-    return ($completed, $context);
-  }
-  return ($result, $context) if !defined $result;
-  return $return_type->_complete_value(
+  return ($result, $context) if !defined $result
+    and !$return_type->isa('GraphQL::Type::NonNull');
+  $return_type->_complete_value(
     $context,
     $nodes,
     $info,
     $path,
     $result,
-  ) if $return_type->DOES('GraphQL::Role::Abstract')
-    or $return_type->isa('GraphQL::Type::List')
-    or $return_type->DOES('GraphQL::Role::Leaf')
-    or $return_type->isa('GraphQL::Type::Object');
-  # shouldn't get here
-  die GraphQL::Error->new(
-    message => "Cannot complete value of unexpected type '@{[$return_type->to_string]}'."
   );
 }
 
