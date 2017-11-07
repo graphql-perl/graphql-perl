@@ -159,8 +159,11 @@ fun _variables_apply_defaults(
     my $parsed_value;
     my $maybe_value = $variable_values->{$_} // $opvar->{default_value};
     eval { $parsed_value = $opvar_type->graphql_to_perl($maybe_value) };
-    die "Variable '\$$_' got invalid value @{[$JSON->canonical->encode($maybe_value)]}.\n$@"
-      if $@;
+    if ($@) {
+      my $error = $@;
+      $error =~ s#\s+at.*line\s+\d+\.#.#;
+      die "Variable '\$$_' got invalid value @{[$JSON->canonical->encode($maybe_value)]}.\n$error";
+    }
     ($_ => { value => $parsed_value, type => $opvar_type })
   } keys %$operation_variables };
 }
@@ -507,10 +510,12 @@ fun _get_argument_values(
     eval { $coerced_values{$name} = $arg_type->graphql_to_perl($coerced_values{$name}) };
     DEBUG and _debug("_get_argument_values($name after coerce)", $JSON->encode(\%coerced_values));
     if ($@) {
+      my $error = $@;
+      $error =~ s#\s+at.*line\s+\d+\.#.#;
       die GraphQL::Error->new(
         message => "Argument '$name' got invalid value"
           . " @{[$JSON->encode($coerced_values{$name})]}.\nExpected '"
-          . $arg_type->to_string . "'.",
+          . $arg_type->to_string . "'.\n$error",
         nodes => [ $node ],
       );
     }

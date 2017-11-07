@@ -153,7 +153,7 @@ subtest 'Handles objects and nullability', sub {
         {
           data => { fieldWithObjectInput => undef },
           errors => [ { message =>
-            qq{Argument 'input' got invalid value ["foo","bar","baz"].\nExpected 'TestInputObject'.},
+            qq{Argument 'input' got invalid value ["foo","bar","baz"].\nExpected 'TestInputObject'.\nIn method graphql_to_perl: parameter 1 (\$item): found not an object.\n},
             locations => [ { line => 3, column => 7 } ],
             path => [ 'fieldWithObjectInput' ],
           } ],
@@ -231,13 +231,12 @@ subtest 'Handles objects and nullability', sub {
     };
 
     subtest 'errors on incorrect type', sub {
-      local $TODO = 'Function::Parameters not allow suppress fragile "at" in exceptions';
       my $vars = { input => 'foo bar' };
       run_test(
         [$schema, $doc, undef, undef, $vars],
         { errors => [ { message =>
 q{Variable '$input' got invalid value "foo bar".
-In method graphql_to_perl: parameter 1 ($item): found not an object at (eval 252) line 11.
+In method graphql_to_perl: parameter 1 ($item): found not an object.
 }
         } ] },
       );
