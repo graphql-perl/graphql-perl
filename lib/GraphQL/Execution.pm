@@ -217,13 +217,40 @@ fun _execute_fields(
     my $result_name = $_;
     my $result;
     eval {
-      ($result, $context) = _resolve_field(
+      my $nodes = $fields->{$result_name};
+      my $field_node = $nodes->[0];
+      my $field_name = $field_node->{name};
+      DEBUG and _debug('_execute_fields(resolve)', $parent_type->to_string, $nodes, $root_value);
+      my $field_def = _get_field_def($context->{schema}, $parent_type, $field_name);
+      my $resolve = $field_def->{resolve} || $context->{field_resolver};
+      my $info = _build_resolve_info(
         $context,
         $parent_type,
-        $root_value,
+        $field_def,
         [ @$path, $result_name ],
-        $fields->{$result_name},
+        $nodes,
       );
+      my $resolve_node = _build_resolve_node(
+        $context,
+        $field_def,
+        $nodes,
+        $resolve,
+        $info,
+      );
+      if (!GraphQL::Error->is($resolve_node)) {
+        $result = _resolve_field_value_or_error($resolve_node, $root_value);
+      } else {
+        $result = $resolve_node; # failed early
+      }
+      ($result, $context) = _complete_value_catching_error(
+        $context,
+        $field_def->{type},
+        $nodes,
+        $info,
+        [ @$path, $result_name ],
+        $result,
+      );
+      DEBUG and _debug('_execute_fields(complete)', $result);
     };
     if ($@) {
       $context = _context_error(
@@ -235,6 +262,7 @@ fun _execute_fields(
       # TODO promise stuff
     }
   } keys %$fields; # TODO ordering of fields
+  DEBUG and _debug('_execute_fields(done)', \%results);
   (\%results, $context);
 }
 
@@ -248,49 +276,6 @@ fun _execute_fields_serially(
   DEBUG and _debug('_execute_fields_serially', $parent_type->to_string, $fields, $root_value);
   # TODO implement
   goto &_execute_fields;
-}
-
-# NB same ordering as _execute_fields - graphql-js switches last 2
-fun _resolve_field(
-  HashRef $context,
-  (InstanceOf['GraphQL::Type']) $parent_type,
-  Any $root_value,
-  ArrayRef $path,
-  ArrayRef[HashRef] $nodes,
-) {
-  my $field_node = $nodes->[0];
-  my $field_name = $field_node->{name};
-  DEBUG and _debug('_resolve_field', $parent_type->to_string, $nodes, $root_value);
-  my $field_def = _get_field_def($context->{schema}, $parent_type, $field_name);
-  my $resolve = $field_def->{resolve} || $context->{field_resolver};
-  my $info = _build_resolve_info(
-    $context,
-    $parent_type,
-    $field_def,
-    $path,
-    $nodes,
-  );
-  my $resolve_node = _build_resolve_node(
-    $context,
-    $field_def,
-    $nodes,
-    $resolve,
-    $info,
-  );
-  my $result;
-  if (!GraphQL::Error->is($resolve_node)) {
-    $result = _resolve_field_value_or_error($resolve_node, $root_value);
-  } else {
-    $result = $resolve_node; # failed early
-  }
-  _complete_value_catching_error(
-    $context,
-    $field_def->{type},
-    $nodes,
-    $info,
-    $path,
-    $result,
-  );
 }
 
 use constant FIELDNAME2SPECIAL => {
