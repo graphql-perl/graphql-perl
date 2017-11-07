@@ -389,8 +389,6 @@ EOF
 # };
 
 subtest 'Full response path is included for non-nullable fields' => sub {
-  plan skip_all => 'FAILS';
-
   my $A; $A = GraphQL::Type::Object->new(
     name => 'A',
     fields => sub { {
@@ -404,14 +402,12 @@ subtest 'Full response path is included for non-nullable fields' => sub {
       },
       throws => {
         type  => $String->non_null,
-        resolve => sub {
-          die GraphQL::Error->coerce('Catch me if you can');
-        },
+        resolve => sub { die GraphQL::Error->coerce('Catch me if you can') },
       },
     } },
   );
   my $queryType = GraphQL::Type::Object->new(
-    name   => 'query',
+    name => 'query',
     fields => sub { {
       nullableA => {
         type  => $A,
@@ -422,34 +418,32 @@ subtest 'Full response path is included for non-nullable fields' => sub {
   my $schema = GraphQL::Schema->new(
     query => $queryType,
   );
-
   my $query = <<EOF;
-    query {
-    nullableA {
-      aliasedA: nullableA {
+query {
+  nullableA {
+    aliasedA: nullableA {
       nonNullA {
         anotherA: nonNullA {
-        throws
+          throws
         }
       }
-      }
     }
-    }
+  }
+}
 EOF
-
   my $result = execute($schema, parse($query));
   is_deeply $result, {
     data => {
       nullableA => {
-        aliasedA => undef,
+        aliasedA => { nonNullA => { anotherA => {} } },
       },
     },
     errors => [{
       message => 'Catch me if you can',
-      locations => [{ line => 7, column => 17 }],
+      locations => [{ line => 7, column => 9 }],
       path => ['nullableA', 'aliasedA', 'nonNullA', 'anotherA', 'throws'],
     }],
-  };
+  } or diag nice_dump $result;
 };
 
 subtest 'uses the inline operation if no operation name is provided' => sub {
