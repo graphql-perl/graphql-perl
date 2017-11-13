@@ -94,7 +94,7 @@ method uplift(Any $item) :ReturnType(Any) {
   [ $item ];
 }
 
-method graphql_to_perl(Maybe[ArrayRef] $item) :ReturnType(Maybe[ArrayRef]) {
+method graphql_to_perl(Any $item) :ReturnType(Maybe[ArrayRef]) {
   return $item if !defined $item;
   $item = $self->uplift($item);
   my $of = $self->of;
