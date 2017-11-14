@@ -17,7 +17,6 @@ WriteMakefile(
     'Test::More' => '0.88', # done_testing
     'Test::Exception' => '0.42',
     'Test::Deep' => '1.127',
-    'DateTime' => 0,
   },
   PREREQ_PM => {
     'Moo' => '0',
@@ -28,6 +27,8 @@ WriteMakefile(
     'MooX::Thunking' => '0.07', # takes care of Thunk in isa
     'JSON::MaybeXS' => '1.003009', # is_bool, also . @INC
     'JSON::PP' => '2.92', # number detection
+    'DateTime' => 0,
+    'DateTime::Format::ISO8601' => 0,
   },
   dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
   clean => { FILES => 'GraphQL-*' },

@@ -8,6 +8,7 @@ use GraphQL::Type::Library -all;
 use GraphQL::Debug qw(_debug);
 use Types::Standard -all;
 use JSON::MaybeXS qw(JSON is_bool);
+use DateTime::Format::ISO8601;
 use Exporter 'import';
 extends qw(GraphQL::Type);
 with qw(
@@ -22,7 +23,7 @@ use Return::Type;
 use GraphQL::Debug qw(_debug);
 
 our $VERSION = '0.02';
-our @EXPORT_OK = qw($Int $Float $String $Boolean $ID);
+our @EXPORT_OK = qw($Int $Float $String $Boolean $ID $DateTime);
 
 use constant DEBUG => $ENV{GRAPHQL_DEBUG};
 my $JSON = JSON::MaybeXS->new->allow_nonref->canonical;
@@ -194,6 +195,21 @@ our $ID = GraphQL::Type::Scalar->new(
     '(such as `4`) input value will be accepted as an ID.',
   serialize => sub { defined $_[0] and Str->(@_); $_[0] },
   parse_value => sub { defined $_[0] and Str->(@_); $_[0] },
+);
+
+=head2 $DateTime
+
+=cut
+
+my $iso8601 = DateTime::Format::ISO8601->new;
+our $DateTime = GraphQL::Type::Scalar->new(
+  name => 'DateTime',
+  description =>
+    'The `DateTime` scalar type represents a point in time. ' .
+    'Canonically represented using ISO 8601 format, e.g. 20171114T07:41:10, ' .
+    'which is 14 November 2017 at 07:41am.',
+  serialize => sub { return if !defined $_[0]; $_[0].'' },
+  parse_value => sub { return if !defined $_[0]; $iso8601->parse_datetime(@_); },
 );
 
 __PACKAGE__->meta->make_immutable();

@@ -51,6 +51,18 @@ EOF
   );
 };
 
+subtest 'DateTime type' => sub {
+  require DateTime;
+  my $schema = GraphQL::Schema->from_doc(<<'EOF');
+type Query { dateTimeNow: DateTime }
+EOF
+  my $now = DateTime->now;
+  my $root_value = { dateTimeNow => sub { $now } };
+  run_test([ $schema, "{ dateTimeNow }", $root_value, (undef) x 3 ],
+    { data => { dateTimeNow => $now.'' } },
+  );
+};
+
 subtest 'nice errors Schema.from_ast' => sub {
   eval { GraphQL::Schema->from_ast([
     {

@@ -11,7 +11,7 @@ use Function::Parameters;
 use GraphQL::Debug qw(_debug);
 use GraphQL::Directive;
 use GraphQL::Introspection qw($SCHEMA_META_TYPE);
-use GraphQL::Type::Scalar qw($Int $Float $String $Boolean $ID);
+use GraphQL::Type::Scalar qw($Int $Float $String $Boolean $ID $DateTime);
 use GraphQL::Language::Parser qw(parse);
 use Module::Runtime qw(require_module);
 use Exporter 'import';
@@ -19,7 +19,7 @@ use Exporter 'import';
 our $VERSION = '0.02';
 our @EXPORT_OK = qw(lookup_type);
 use constant DEBUG => $ENV{GRAPHQL_DEBUG};
-my %BUILTIN2TYPE = map { ($_->name => $_) } ($Int, $Float, $String, $Boolean, $ID);
+my %BUILTIN2TYPE = map { ($_->name => $_) } ($Int, $Float, $String, $Boolean, $ID, $DateTime);
 my @TYPE_ATTRS = qw(query mutation subscription);
 
 =head1 NAME
