@@ -105,7 +105,8 @@ method from_ast(
   DEBUG and _debug('Scalar.from_ast', $ast_node);
   $self->new(
     $self->_from_ast_named($ast_node),
-    serialize => sub {}, # fake
+    serialize => sub { require Carp; Carp::croak "Fake serialize called" },
+    parse_value => sub { require Carp; Carp::croak "Fake parse_value called" },
   );
 }
 
