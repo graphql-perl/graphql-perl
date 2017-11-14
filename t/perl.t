@@ -30,11 +30,11 @@ sub nice_dump {
 subtest 'DateTime->now as resolve' => sub {
   require DateTime;
   my $schema = GraphQL::Schema->from_doc(<<'EOF');
-schema { query: Query }
-type DateTime { ymd: String }
-type Query { dateTimeNow: DateTime }
+type DateTimeObj { ymd: String }
+type Query { dateTimeNow: DateTimeObj }
 EOF
-  my $root_value = { dateTimeNow => sub { DateTime->now } };
+  my $now = DateTime->now;
+  my $root_value = { dateTimeNow => sub { $now } };
   run_test([
     $schema, "{ dateTimeNow { ymd } }", $root_value, (undef) x 3, sub {
       my ($root_value, $args, $context, $info) = @_;
@@ -47,7 +47,7 @@ EOF
       $property;
     }
   ],
-    { data => { dateTimeNow => { ymd => scalar DateTime->now->ymd } } },
+    { data => { dateTimeNow => { ymd => scalar $now->ymd } } },
   );
 };
 
