@@ -1,5 +1,10 @@
 Revision history for GraphQL
 
+0.21	Thu Nov 16 05:22:53 GMT 2017
+ - add DateTime scalar type
+ - allow class overrides in Schema.from_ast
+ - add and use _complete_value to the Type classes
+
 0.20	Wed Nov  1 03:59:54 GMT 2017
  - add GraphQL::Plugin::Convert API
 
