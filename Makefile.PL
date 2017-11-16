@@ -21,6 +21,7 @@ WriteMakefile(
   PREREQ_PM => {
     'Moo' => '0',
     'Type::Tiny' => '0',
+    'Module::Runtime' => '0',
     'Function::Parameters' => '2.001001',
     'Return::Type' => '0',
     'Pegex' => '0',
