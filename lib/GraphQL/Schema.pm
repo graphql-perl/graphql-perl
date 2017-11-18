@@ -335,11 +335,11 @@ method register_resolver(
   Str $type_name,
   Str $field_name,
   CodeRef $resolver
-) :ReturnType[InstanceOf[__PACKAGE__]] {
-  if (my $field = lookup_type({ type => $type_name }, $self->name2type)->fields->{$type}) {
+) :ReturnType(InstanceOf[__PACKAGE__]) {
+  if (my $field = lookup_type({ type => $type_name }, $self->name2type)->fields->{$field_name}) {
     $field->{resolve} = $resolver;
   } else {
-    die "Unknown field '$field_name' in $type\n";
+    die "Unknown field '$field_name' in $type_name\n";
   }
   return $self;
 }
