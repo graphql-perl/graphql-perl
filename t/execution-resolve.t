@@ -98,4 +98,91 @@ subtest 'uses provided resolve function', sub {
   done_testing;
 };
 
+subtest 'uses instrument with resolver' => sub {
+  {
+    package GQLInst::Query;
+    use Moo;
+    with qw(GraphQL::Role::Instrument);
+
+    sub instrument {
+      my ($self, $field, $type) = @_;
+      my $resolver = $field->{resolve} || sub {};
+      $field->{resolve} = sub {
+        my ($root_value, $args, $context, $info) = @_;
+        push @{ $context->{stacktrace} }, [ ref($self), 'start'];
+        my $res = $resolver->(@_);
+        push @{ $context->{stacktrace} }, [ ref($self), 'end'];
+        return $res;
+      };
+    }
+  }
+  {
+    package GQLInst::Field;
+    use Moo;
+    with qw(GraphQL::Role::Instrument);
+
+    sub instrument {
+      my ($self, $field, $type) = @_;
+      my $resolver = $field->{resolve} || sub {};
+      $field->{resolve} = sub {
+        my ($root_value, $args, $context, $info) = @_;
+        push @{ $context->{stacktrace} }, [ ref($self), 'start'];
+        my $res = $resolver->(@_);
+        push @{ $context->{stacktrace} }, [ ref($self), 'end'];
+        return $res;
+      };
+    }
+  }
+
+  my $res_type = GraphQL::Type::Object->new(
+    name   => 'Foo',
+    fields => {
+      test1 => { type => $String },
+      test2 => { type => $String },
+    }
+  );
+
+  my $schema = GraphQL::Schema->new(
+    query => GraphQL::Type::Object->new(
+      name => 'Query',
+      fields => {
+        test => { type => $res_type },
+      },
+    ),
+    query_instruments => [
+      GQLInst::Query->new
+    ],
+    field_instruments => [
+      GQLInst::Field->new
+    ]
+  );
+  $schema->register_resolver(Query => test => sub {
+    my ($root_value, $args, $context, $info) = @_;
+    push @{ $context->{stacktrace} }, ['Query.test', 'field'];
+    return {};
+  });
+  $schema->register_resolver(Foo => test1 => sub {
+    return 'test1_response';
+  });
+  $schema->register_resolver(Foo => test2 => sub {
+    return 'test2_response';
+  });
+
+
+  my $stacktrace = [];
+  run_test(
+    [$schema, '{ test { test1 test2 } }', undef, { stacktrace => $stacktrace }],
+    { data => { test => { test1 => 'test1_response', test2 => 'test2_response' } } },
+  );
+  is_deeply $stacktrace, [
+    ['GQLInst::Query', 'start'],
+    ['Query.test', 'field'],
+    ['GQLInst::Query', 'end'],
+    ['GQLInst::Field', 'start'],
+    ['GQLInst::Field', 'end'],
+    ['GQLInst::Field', 'start'],
+    ['GQLInst::Field', 'end'],
+  ] or note explain $stacktrace;
+};
+
 done_testing;
