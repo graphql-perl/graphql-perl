@@ -116,6 +116,10 @@ to update/create/delete data. This requires some thought for return types,
 to ensure you can get all the information you need to proceed to avoid
 extra round-trips.
 
+The easiest way to achieve these things is to make a
+L<GraphQL::Plugin::Convert> subclass, to encapsulate the specifics of
+your system. See the documentation for further information.
+
 Finally, you should consider whether you need "subscriptions". These
 are designed to hook into WebSockets. Apollo has a L<JavaScript
 module|https://github.com/apollographql/graphql-subscriptions> for this.
