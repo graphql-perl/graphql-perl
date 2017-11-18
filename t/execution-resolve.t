@@ -78,11 +78,13 @@ subtest 'uses provided resolve function', sub {
   my $schema = make_schema({
     type => $String,
     args => { aStr => { type => $String }, aInt => { type => $Int } },
-    resolve => sub {
-      my ($root_value, $args, $context, $info) = @_;
-      $JSON->encode([$root_value, $args]);
-    },
   });
+
+  $schema->register_resolver(Query => test => sub {
+    my ($root_value, $args, $context, $info) = @_;
+    $JSON->encode([$root_value, $args]);
+  });
+
   run_test([$schema, '{ test }'], { data => { test => '[null,{}]' } });
   run_test([$schema, '{ test }', '!'], { data => { test => '["!",{}]' } });
   run_test(
