@@ -324,6 +324,27 @@ method _build_name2directive() {
   +{ map { ($_->name => $_) } @{ $self->directives } };
 }
 
+
+=head2 register_resolver($type_name, $field_name, $resolver)
+
+Set function as resolver in field definition.
+
+=cut
+
+method register_resolver(
+  Str $type_name,
+  Str $field_name,
+  CodeRef $resolver
+) :ReturnType[InstanceOf[__PACKAGE__]] {
+  if (my $field = lookup_type({ type => $type_name }, $self->name2type)->fields->{$type}) {
+    $field->{resolve} = $resolver;
+  } else {
+    die "Unknown field '$field_name' in $type\n";
+  }
+  return $self;
+}
+
+
 =head1 FUNCTIONS
 
 =head2 lookup_type($typedef, $name2type)
