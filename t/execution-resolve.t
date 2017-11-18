@@ -2,6 +2,7 @@
 use 5.014;
 use strict;
 use warnings;
+use Test::Deep;
 use Test::More;
 use Test::Exception;
 use JSON::MaybeXS;
@@ -126,9 +127,9 @@ subtest 'uses instrument with resolver' => sub {
       my $resolver = $field->{resolve} || sub {};
       $field->{resolve} = sub {
         my ($root_value, $args, $context, $info) = @_;
-        push @{ $context->{stacktrace} }, [ ref($self), 'start'];
+        push @{ $context->{stacktrace} }, [ ref($self), 'start', join('/', @{ $info->{path} })];
         my $res = $resolver->(@_);
-        push @{ $context->{stacktrace} }, [ ref($self), 'end'];
+        push @{ $context->{stacktrace} }, [ ref($self), 'end', join('/', @{ $info->{path} })];
         return $res;
       };
     }
@@ -174,14 +175,17 @@ subtest 'uses instrument with resolver' => sub {
     [$schema, '{ test { test1 test2 } }', undef, { stacktrace => $stacktrace }],
     { data => { test => { test1 => 'test1_response', test2 => 'test2_response' } } },
   );
-  is_deeply $stacktrace, [
+  my @query_trace = splice @$stacktrace, 0, 3;
+  is_deeply \@query_trace, [
     ['GQLInst::Query', 'start'],
     ['Query.test', 'field'],
     ['GQLInst::Query', 'end'],
-    ['GQLInst::Field', 'start'],
-    ['GQLInst::Field', 'end'],
-    ['GQLInst::Field', 'start'],
-    ['GQLInst::Field', 'end'],
+  ];
+  cmp_bag $stacktrace, [
+    ['GQLInst::Field', 'start', 'test/test1'],
+    ['GQLInst::Field', 'end', 'test/test1'],
+    ['GQLInst::Field', 'start', 'test/test2'],
+    ['GQLInst::Field', 'end', 'test/test2'],
   ] or note explain $stacktrace;
 };
 
