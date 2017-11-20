@@ -56,6 +56,41 @@ Executes a GraphQL query, returns results.
     $field_resolver,
   );
 
+=over
+
+=item $schema
+
+A L<GraphQL::Schema>.
+
+=item $doc
+
+Either a GraphQL query document to be fed in to
+L<GraphQL::Language::Parser/parse>, or a return value from that.
+
+=item $root_value
+
+A root value that can be used by field-resolvers. The default one needs
+a code-ref, a hash-ref or an object.
+
+=item $context_value
+
+A per-request scalar, that will be passed to field-resolvers.
+
+=item $variable_values
+
+A hash-ref, typically the decoded JSON object supplied by a client.
+
+=item $operation_name
+
+A string (or C<undef>) that if given will be the name of one of the
+operations in the query.
+
+=item $field_resolver
+
+A code-ref to be used instead of the default field-resolver.
+
+=back
+
 =cut
 
 fun execute(
