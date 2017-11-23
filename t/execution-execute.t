@@ -340,7 +340,7 @@ subtest 'nulls out error subtrees' => sub {
     syncRawError => undef,
     syncReturnError => undef,
     syncReturnErrorList => ['sync0', undef, 'sync2', undef],
-  } or diag nice_dump($got->{data});
+  } or diag nice_dump($got);
   is_deeply [ sort { $a->{message} cmp $b->{message} } @{ $got->{errors} } ], [
     {
       message   => "Error getting syncError\n",
