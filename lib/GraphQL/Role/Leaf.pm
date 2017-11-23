@@ -39,7 +39,7 @@ method _complete_value(
   DEBUG and _debug('Leaf._complete_value', $self->to_string, $result);
   my $serialised = $self->perl_to_graphql($result);
   die GraphQL::Error->new(message => "Expected a value of type '@{[$self->to_string]}' but received: '$result'.\n$@") if $@;
-  ($serialised, $context);
+  +{ data => $serialised };
 }
 
 __PACKAGE__->meta->make_immutable();

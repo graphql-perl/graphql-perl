@@ -5,12 +5,16 @@ use strict;
 use warnings;
 use Type::Library
   -base,
-  -declare => qw( StrNameValid FieldMapInput ValuesMatchTypes );
+  -declare => qw(
+    StrNameValid FieldMapInput ValuesMatchTypes DocumentLocation JSONable
+  );
 use Type::Utils -all;
 use Types::TypeTiny -all;
 use Types::Standard -all;
+use JSON::MaybeXS;
 
 our $VERSION = '0.02';
+my $JSON = JSON::MaybeXS->new->allow_nonref;
 
 =head1 NAME
 
@@ -332,6 +336,35 @@ declare "DocumentLocation",
   as Dict[
     line => Int,
     column => Int,
+  ];
+
+=head2 ExecutionResult
+
+Hash-ref that has keys C<data> and/or C<errors>.
+
+The C<errors>, if present, will be an array-ref of hashes, with keys
+C<message>, C<location>, C<path>.
+
+The C<data> if present will be the return data, being a hash-ref whose
+values are either further hashes, array-refs, or scalars. It will be
+JSON-able.
+
+=cut
+
+declare "JSONable",
+  as Any,
+  where { $JSON->encode($_); 1 };
+
+declare "ExecutionResult",
+  as Dict[
+    data => Optional[JSONable],
+    errors => Optional[ArrayRef[
+      Dict[
+        message => Str,
+        path => Optional[ArrayRef[Str]],
+        locations => Optional[ArrayRef[DocumentLocation]],
+      ]
+    ]],
   ];
 
 =head1 AUTHOR

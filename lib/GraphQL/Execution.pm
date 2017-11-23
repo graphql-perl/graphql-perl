@@ -101,7 +101,7 @@ fun execute(
   Maybe[HashRef] $variable_values = undef,
   Maybe[Str] $operation_name = undef,
   Maybe[CodeLike] $field_resolver = undef,
-) :ReturnType(HashRef) {
+) :ReturnType(ExecutionResult) {
   my $context = eval {
     my $ast = ref($doc) ? $doc : parse($doc);
     _build_context(
@@ -114,29 +114,22 @@ fun execute(
       $field_resolver,
     );
   };
-  return { errors => [ GraphQL::Error->coerce($@)->to_json ] } if $@;
-  (my $result, $context) = eval {
+  return _wrap_error($@) if $@;
+  my $result = eval {
     _execute_operation(
       $context,
       $context->{operation},
       $root_value,
     );
   };
-  $context = _context_error($context, GraphQL::Error->coerce($@)) if $@;
-  my $wrapped = { data => $result };
-  if (@{ $context->{errors} || [] }) {
-    return { errors => [ map $_->to_json, @{$context->{errors}} ], %$wrapped };
-  } else {
-    return $wrapped;
-  }
+  return _wrap_error($@) if $@;
+  $result;
 }
 
-fun _context_error(
-  HashRef $context,
+fun _wrap_error(
   Any $error,
-) :ReturnType(HashRef) {
-  # like push but no mutation
-  +{ %$context, errors => [ @{$context->{errors} || []}, $error ] };
+) :ReturnType(ExecutionResult) {
+  +{ errors => [ GraphQL::Error->coerce($error)->to_json ] };
 }
 
 fun _build_context(
@@ -168,7 +161,6 @@ fun _build_context(
       $variable_values || {},
     ),
     field_resolver => $field_resolver || \&_default_field_resolver,
-    errors => [],
   };
 }
 
@@ -222,7 +214,7 @@ fun _execute_operation(
   HashRef $context,
   HashRef $operation,
   Any $root_value,
-) {
+) :ReturnType(ExecutionResult) {
   my $op_type = $operation->{operationType} || 'query';
   my $type = $context->{schema}->$op_type;
   my ($fields) = $type->_collect_fields(
@@ -235,11 +227,11 @@ fun _execute_operation(
   my $path = [];
   my $execute = $op_type eq 'mutation'
     ? \&_execute_fields_serially : \&_execute_fields;
-  (my $result, $context) = eval {
+  my $result = eval {
     $execute->($context, $type, $root_value, $path, $fields);
   };
-  return ({}, _context_error($context, GraphQL::Error->coerce($@))) if $@;
-  ($result, $context);
+  return _wrap_error($@) if $@;
+  $result;
 }
 
 fun _execute_fields(
@@ -248,8 +240,8 @@ fun _execute_fields(
   Any $root_value,
   ArrayRef $path,
   Map[StrNameValid,ArrayRef[HashRef]] $fields,
-) :ReturnType(Map[StrNameValid,Any]) {
-  my %results;
+) :ReturnType(ExecutionResult) {
+  my (%results, @errors);
   DEBUG and _debug('_execute_fields', $parent_type->to_string, $fields, $root_value);
   map {
     my $result_name = $_;
@@ -280,7 +272,7 @@ fun _execute_fields(
       } else {
         $result = $resolve_node; # failed early
       }
-      ($result, $context) = _complete_value_catching_error(
+      $result = _complete_value_catching_error(
         $context,
         $field_def->{type},
         $nodes,
@@ -291,17 +283,17 @@ fun _execute_fields(
       DEBUG and _debug('_execute_fields(complete)', $result);
     };
     if ($@) {
-      $context = _context_error(
-        $context,
-        _located_error($@, $fields->{$result_name}, [ @$path, $result_name ])
-      );
+      push @errors, _located_error(
+        $@, $fields->{$result_name}, [ @$path, $result_name ]
+      )->to_json;
     } else {
-      $results{$result_name} = $result;
+      push @errors, @{ $result->{errors} || [] };
+      $results{$result_name} = $result->{data};
       # TODO promise stuff
     }
   } keys %$fields; # TODO ordering of fields
-  DEBUG and _debug('_execute_fields(done)', \%results);
-  (\%results, $context);
+  DEBUG and _debug('_execute_fields(done)', \%results, \@errors);
+  +{ data => \%results, @errors ? (errors => \@errors) : () };
 }
 
 fun _execute_fields_serially(
@@ -394,17 +386,17 @@ fun _complete_value_catching_error(
   HashRef $info,
   ArrayRef $path,
   Any $result,
-) {
+) :ReturnType(ExecutionResult) {
   if ($return_type->isa('GraphQL::Type::NonNull')) {
     return _complete_value_with_located_error(@_);
   }
   my $result = eval {
-    (my $completed, $context) = _complete_value_with_located_error(@_);
+    _complete_value_with_located_error(@_);
     # TODO promise stuff
-    $completed;
   };
-  return (undef, _context_error($context, GraphQL::Error->coerce($@))) if $@;
-  ($result, $context);
+  DEBUG and _debug('_complete_value_catching_error', $result, $@);
+  return _wrap_error($@) if $@;
+  $result;
 }
 
 fun _complete_value_with_located_error(
@@ -414,14 +406,13 @@ fun _complete_value_with_located_error(
   HashRef $info,
   ArrayRef $path,
   Any $result,
-) {
+) :ReturnType(ExecutionResult) {
   my $result = eval {
-    (my $completed, $context) = _complete_value(@_);
+    _complete_value(@_);
     # TODO promise stuff
-    $completed;
   };
   die _located_error($@, $nodes, $path) if $@;
-  ($result, $context);
+  $result;
 }
 
 fun _complete_value(
@@ -431,11 +422,11 @@ fun _complete_value(
   HashRef $info,
   ArrayRef $path,
   Any $result,
-) {
+) :ReturnType(ExecutionResult) {
   DEBUG and _debug('_complete_value', $return_type->to_string, $path, $result);
   # TODO promise stuff
   die $result if GraphQL::Error->is($result);
-  return ($result, $context) if !defined $result
+  return { data => undef } if !defined $result
     and !$return_type->isa('GraphQL::Type::NonNull');
   $return_type->_complete_value(
     $context,

@@ -88,7 +88,7 @@ method _complete_value(
   ArrayRef $path,
   Any $result,
 ) {
-  (my $completed, $context) = $self->of->_complete_value(
+  my $completed = $self->of->_complete_value(
     $context,
     $nodes,
     $info,
@@ -98,7 +98,7 @@ method _complete_value(
   die GraphQL::Error->new(
     message => "Cannot return null for non-nullable field @{[$info->{parent_type}->name]}.@{[$info->{field_name}]}."
   ) if !defined $completed;
-  ($completed, $context);
+  $completed;
 }
 
 __PACKAGE__->meta->make_immutable();

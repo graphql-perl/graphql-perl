@@ -120,8 +120,9 @@ method _complete_value(
   # TODO promise stuff
   my $item_type = $self->of;
   my $index = 0;
-  my @completed_results = map {
-    (my $r, $context) = GraphQL::Execution::_complete_value_catching_error(
+  my @errors;
+  my @data = map {
+    my $r = GraphQL::Execution::_complete_value_catching_error(
       $context,
       $item_type,
       $nodes,
@@ -129,9 +130,10 @@ method _complete_value(
       [ @$path, $index++ ],
       $_,
     );
-    $r;
+    push @errors, @{ $r->{errors} || [] };
+    $r->{data};
   } @$result;
-  (\@completed_results, $context);
+  +{ data => \@data, @errors ? (errors => \@errors) : () };
 }
 
 __PACKAGE__->meta->make_immutable();
