@@ -253,7 +253,7 @@ fun _execute_fields(
   ArrayRef $path,
   Map[StrNameValid,ArrayRef[HashRef]] $fields,
 ) :ReturnType(ExecutionPartialResult) {
-  my (%results, @errors);
+  my (%name2executionresult, @errors);
   DEBUG and _debug('_execute_fields', $parent_type->to_string, $fields, $root_value);
   for my $result_name (keys %$fields) { # TODO ordering of fields
     my $nodes = $fields->{$result_name};
@@ -288,13 +288,18 @@ fun _execute_fields(
       $result,
     );
     DEBUG and _debug('_execute_fields(complete)', $result);
-    push @errors, @{ $result->{errors} || [] };
-    $results{$result_name} = $result->{data};
-    # TODO promise stuff
+    $name2executionresult{$result_name} = $result;
   }
-  DEBUG and _debug('_execute_fields(done)', \%results, \@errors);
+  # still might be promises here
+  # TODO promise stuff
+  my %name2data = map {
+    my $result = $name2executionresult{$_};
+    push @errors, @{ $result->{errors} || [] };
+    ($_ => $result->{data});
+  } keys %name2executionresult;
+  DEBUG and _debug('_execute_fields(done)', \%name2executionresult, \@errors);
   +{
-    %results ? (data => \%results) : (),
+    %name2data ? (data => \%name2data) : (),
     @errors ? (errors => \@errors) : ()
   };
 }
