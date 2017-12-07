@@ -68,6 +68,8 @@ WriteMakefile(
 );
 
 sub MY::postamble {
+  my $container = 'graphqlperl/graphql';
+  my $prereq = "${container}-prereq";
   <<EOF;
 lib/GraphQL/Language/Grammar.pm : graphql.pgx
 \t\$(PERL) -Ilib -MGraphQL::Language::Grammar=compile
@@ -76,5 +78,17 @@ pure_all :: README.md
 
 README.md : lib/GraphQL.pm
 \tpod2markdown \$< >\$\@
+
+containerprereq :
+\tdocker build -f Dockerfile.prereq -t $prereq .
+
+containerprereqpush :
+\tdocker push $prereq
+
+container :
+\tdocker build -t $container:\$(VERSION) .
+
+containerpush :
+\tdocker push $container:\$(VERSION)
 EOF
 }
