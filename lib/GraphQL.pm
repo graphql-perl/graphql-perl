@@ -142,6 +142,8 @@ a L<DBIx::Class::Schema>
 L<GraphQL::Plugin::Convert::OpenAPI> - produce working GraphQL schema
 from an OpenAPI specification
 
+L<Sample Mojolicious OpenAPI to GraphQL applet|https://github.com/graphql-perl/sample-mojolicious-openapi>
+
 L<Sample Dancer 2 applet|https://github.com/graphql-perl/sample-dancer2>
 
 L<Sample Mojolicious applet|https://github.com/graphql-perl/sample-mojolicious>
