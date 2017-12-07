@@ -32,10 +32,7 @@ our $VERSION = '0.21';
   use GraphQL::Execution qw(execute);
 
   my $schema = GraphQL::Schema->from_doc(<<'EOF');
-  schema {
-    query: QueryRoot
-  }
-  type QueryRoot {
+  type Query {
     helloWorld: String
   }
   EOF
