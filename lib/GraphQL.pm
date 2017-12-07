@@ -156,6 +156,8 @@ L<http://facebook.github.io/graphql/> - GraphQL specification
 
 L<http://graphql.org/graphql-js/> - Tutorial on the JavaScript version,
 highly recommended.
+L<Translation to
+graphql-perl|http://blogs.perl.org/users/ed_j/2017/10/graphql-perl---graphql-js-tutorial-translation-to-graphql-perl-and-mojoliciousplugingraphql.html>.
 
 =head1 AUTHOR
 

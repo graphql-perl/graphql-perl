@@ -138,6 +138,8 @@ from an OpenAPI specification
 
 [http://graphql.org/graphql-js/](http://graphql.org/graphql-js/) - Tutorial on the JavaScript version,
 highly recommended.
+[Translation to
+graphql-perl](http://blogs.perl.org/users/ed_j/2017/10/graphql-perl---graphql-js-tutorial-translation-to-graphql-perl-and-mojoliciousplugingraphql.html).
 
 # AUTHOR
 
