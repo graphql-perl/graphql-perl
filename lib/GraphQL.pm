@@ -136,6 +136,12 @@ None yet.
 
 L<SQL::Translator::Producer::GraphQL> - produce GraphQL schemas from a L<DBIx::Class::Schema> (or in fact any SQL database)
 
+L<GraphQL::Plugin::Convert::DBIC> - produce working GraphQL schema from
+a L<DBIx::Class::Schema>
+
+L<GraphQL::Plugin::Convert::OpenAPI> - produce working GraphQL schema
+from an OpenAPI specification
+
 L<Sample Dancer 2 applet|https://github.com/graphql-perl/sample-dancer2>
 
 L<Sample Mojolicious applet|https://github.com/graphql-perl/sample-mojolicious>

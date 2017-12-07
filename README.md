@@ -118,6 +118,12 @@ None yet.
 
 [SQL::Translator::Producer::GraphQL](https://metacpan.org/pod/SQL::Translator::Producer::GraphQL) - produce GraphQL schemas from a [DBIx::Class::Schema](https://metacpan.org/pod/DBIx::Class::Schema) (or in fact any SQL database)
 
+[GraphQL::Plugin::Convert::DBIC](https://metacpan.org/pod/GraphQL::Plugin::Convert::DBIC) - produce working GraphQL schema from
+a [DBIx::Class::Schema](https://metacpan.org/pod/DBIx::Class::Schema)
+
+[GraphQL::Plugin::Convert::OpenAPI](https://metacpan.org/pod/GraphQL::Plugin::Convert::OpenAPI) - produce working GraphQL schema
+from an OpenAPI specification
+
 [Sample Dancer 2 applet](https://github.com/graphql-perl/sample-dancer2)
 
 [Sample Mojolicious applet](https://github.com/graphql-perl/sample-mojolicious)
