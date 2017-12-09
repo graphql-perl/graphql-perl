@@ -88,7 +88,7 @@ method _make_fieldtuples(
     [
       $self->_to_doc_field_deprecate($line, $field),
       $field->{description}
-        ? map { length ? "# $_" : "#" } split /\n/, $field->{description}
+        ? map { length() ? "# $_" : "#" } split /\n/, $field->{description}
         : (),
     ]
   } sort keys %$fields;
