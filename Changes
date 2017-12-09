@@ -1,5 +1,8 @@
 Revision history for GraphQL
 
+0.23	Sat  9 Dec 17:48:42 GMT 2017
+ - fix 5.14 bug with "?" ambiguity
+
 0.22	Sat  9 Dec 06:44:51 GMT 2017
  - basic Dockerfile makes 5.26.1 image with GraphQL
  - multi-line descriptions parsed and round-tripped right
