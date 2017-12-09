@@ -76,9 +76,10 @@ sub _build_to_doc {
   my ($self) = @_;
   DEBUG and _debug('Object.to_doc', $self);
   my @fieldlines = map {
+    my ($main, @description) = @$_;
     (
-      ($_->[1] ? ("# $_->[1]") : ()),
-      $_->[0],
+      @description,
+      $main,
     )
   } $self->_make_fieldtuples($self->fields);
   my $implements = join ', ', map $_->name, @{ $self->interfaces || [] };

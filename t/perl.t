@@ -93,4 +93,23 @@ subtest 'test convert plugin' => sub {
   );
 };
 
+subtest 'multi-line description' => sub {
+  my $doc = <<'EOF';
+type Query {
+  # first line
+  #
+  # second bit
+  hello: String
+}
+EOF
+  my $got = eval { GraphQL::Schema->from_doc($doc)->to_doc };
+  SKIP: {
+    if ($@) {
+      is ref($@) ? $@->message : $@, '';
+      skip 1;
+    }
+    is $got, $doc;
+  }
+};
+
 done_testing;

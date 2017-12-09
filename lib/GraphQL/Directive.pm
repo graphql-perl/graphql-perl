@@ -130,9 +130,9 @@ sub _build_to_doc {
   join '', map "$_\n",
     @start,
       (map {
+        my ($main, @description) = @$_;
         (
-          ($_->[1] ? (map "  # $_", split /\n/, $_->[1]) : ()),
-          "  $_->[0]",
+          map "  $_", @description, $main,
         )
       } @argtuples),
     $end;

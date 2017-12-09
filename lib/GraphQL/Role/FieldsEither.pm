@@ -87,7 +87,9 @@ method _make_fieldtuples(
     ) if exists $field->{default_value};
     [
       $self->_to_doc_field_deprecate($line, $field),
-      $field->{description},
+      $field->{description}
+        ? map { length ? "# $_" : "#" } split /\n/, $field->{description}
+        : (),
     ]
   } sort keys %$fields;
 }
