@@ -1,5 +1,10 @@
 Revision history for GraphQL
 
+0.22	Sat  9 Dec 06:44:51 GMT 2017
+ - basic Dockerfile makes 5.26.1 image with GraphQL
+ - multi-line descriptions parsed and round-tripped right
+ - doc updates
+
 0.21	Thu Nov 16 05:22:53 GMT 2017
  - add DateTime scalar type
  - allow class overrides in Schema.from_ast
