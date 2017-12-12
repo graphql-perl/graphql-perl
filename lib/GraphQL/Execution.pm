@@ -532,9 +532,9 @@ fun _get_argument_values(
       $coerced_values{$name} = $argument_node;
     }
     next if !exists $coerced_values{$name};
-    DEBUG and _debug("_get_argument_values($name after initial)", $arg_def, $arg_type, $argument_node, $default_value, $JSON->encode(\%coerced_values));
+    DEBUG and _debug("_get_argument_values($name after initial)", $arg_def, $arg_type, $argument_node, $default_value, eval { $JSON->encode(\%coerced_values) });
     eval { $coerced_values{$name} = $arg_type->graphql_to_perl($coerced_values{$name}) };
-    DEBUG and _debug("_get_argument_values($name after coerce)", $JSON->encode(\%coerced_values));
+    DEBUG and do { local $@; _debug("_get_argument_values($name after coerce)", eval { $JSON->encode(\%coerced_values) }) };
     if ($@) {
       my $error = $@;
       $error =~ s#\s+at.*line\s+\d+\.#.#;
