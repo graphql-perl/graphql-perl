@@ -524,12 +524,11 @@ fun _get_argument_values(
         ($variable_values && $variable_values->{$$argument_node} && $variable_values->{$$argument_node}{value})
         // $default_value;
       next;
-    } elsif (ref($argument_node) eq 'REF') {
-      # double ref means it's an enum value. JSON land, needs convert/validate
-      $coerced_values{$name} = $$$argument_node;
     } else {
-      # query literal. JSON land, needs convert/validate
-      $coerced_values{$name} = $argument_node;
+      # query literal or variable. JSON land, needs convert/validate
+      $coerced_values{$name} = _coerce_value(
+        $argument_node, $variable_values, $default_value
+      );
     }
     next if !exists $coerced_values{$name};
     DEBUG and _debug("_get_argument_values($name after initial)", $arg_def, $arg_type, $argument_node, $default_value, eval { $JSON->encode(\%coerced_values) });
@@ -547,6 +546,32 @@ fun _get_argument_values(
     }
   }
   \%coerced_values;
+}
+
+fun _coerce_value(
+  Any $argument_node,
+  Maybe[HashRef] $variable_values,
+  Any $default_value,
+) {
+  if (ref($argument_node) eq 'SCALAR') {
+    # scalar ref means it's a variable. already validated perl but
+    # revalidate again as may be in middle of array which would need
+    # validate
+    return
+      ($variable_values && $variable_values->{$$argument_node} && $variable_values->{$$argument_node}{value})
+      // $default_value;
+  } elsif (ref($argument_node) eq 'REF') {
+    # double ref means it's an enum value. JSON land, needs convert/validate
+    return $$$argument_node;
+  } elsif (ref($argument_node) eq 'ARRAY') {
+    # list. recurse
+    return [ map _coerce_value(
+      $_, $variable_values, $default_value
+    ), @$argument_node ];
+  } else {
+    # query literal. JSON land, needs convert/validate
+    return $argument_node;
+  }
 }
 
 fun _type_will_accept(
