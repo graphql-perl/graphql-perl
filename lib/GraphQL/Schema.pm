@@ -88,6 +88,36 @@ has directives => (
   default => sub { \@GraphQL::Directive::SPECIFIED_DIRECTIVES },
 );
 
+=head2 query_instruments
+
+=cut
+
+has query_instruments => (
+  is => 'ro',
+  isa => ArrayRef[ConsumerOf['GraphQL::Role::Instrument']],
+  default => sub { [] }
+);
+
+=head2 mutation_instruments
+
+=cut
+
+has mutation_instruments => (
+  is => 'ro',
+  isa => ArrayRef[ConsumerOf['GraphQL::Role::Instrument']],
+  default => sub { [] }
+);
+
+=head2 field_instruments
+
+=cut
+
+has field_instruments => (
+  is => 'ro',
+  isa => ArrayRef[ConsumerOf['GraphQL::Role::Instrument']],
+  default => sub { [] }
+);
+
 =head1 METHODS
 
 =head2 name2type
@@ -323,6 +353,42 @@ has name2directive => (is => 'lazy', isa => Map[StrNameValid, InstanceOf['GraphQ
 method _build_name2directive() {
   +{ map { ($_->name => $_) } @{ $self->directives } };
 }
+
+
+=head2 register_resolver($type_name, $field_name, $resolver)
+
+Set function as resolver in field definition.
+
+=cut
+
+method register_resolver(
+  Str $type_name,
+  Str $field_name,
+  CodeRef $resolver
+) :ReturnType(InstanceOf[__PACKAGE__]) {
+  my $type = lookup_type({ type => $type_name }, $self->name2type);
+  my $field = $type->fields->{$field_name};
+  unless ($field) {
+    die "Unknown field '$field_name' in $type_name\n";
+  }
+  $field->{resolve} = $resolver;
+
+  my @instruments;
+  if ($self->query->name eq $type_name) {
+    @instruments = @{ $self->query_instruments };
+  } elsif ($self->mutation && $self->mutation->name eq $type_name) {
+    @instruments = @{ $self->mutation_instruments };
+  } else {
+    @instruments = @{ $self->field_instruments };
+  }
+
+  for my $inst (@instruments) {
+      $inst->instrument($field, $type);
+  }
+
+  return $self;
+}
+
 
 =head1 FUNCTIONS
 
