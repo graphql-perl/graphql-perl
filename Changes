@@ -1,5 +1,8 @@
 Revision history for GraphQL
 
+0.24	Tue 12 Dec 03:57:18 GMT 2017
+ - handle array of enum
+
 0.23	Sat  9 Dec 17:48:42 GMT 2017
  - fix 5.14 bug with "?" ambiguity
 

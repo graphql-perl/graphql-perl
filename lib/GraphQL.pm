@@ -10,7 +10,7 @@ GraphQL - Perl implementation of GraphQL
 
 =cut
 
-our $VERSION = '0.23';
+our $VERSION = '0.24';
 
 =begin markdown
 
