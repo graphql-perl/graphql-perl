@@ -1,11 +1,5 @@
-use 5.014;
-use strict;
-use warnings;
-use Test::More;
-use Test::Exception;
-use Test::Deep;
-use JSON::MaybeXS;
-use Data::Dumper;
+use lib 't/lib';
+use GQLTest;
 
 my $JSON = JSON::MaybeXS->new->allow_nonref->canonical;
 
@@ -15,19 +9,6 @@ BEGIN {
   use_ok( 'GraphQL::Type::Scalar', qw($String $Int $Boolean) ) || print "Bail out!\n";
   use_ok( 'GraphQL::Execution', qw(execute) ) || print "Bail out!\n";
   use_ok( 'GraphQL::Language::Parser', qw(parse) ) || print "Bail out!\n";
-}
-
-sub run_test {
-  my ($args, $expected) = @_;
-  my $got = execute(@$args);
-  is_deeply $got, $expected or diag nice_dump($got);
-}
-
-sub nice_dump {
-  my ($got) = @_;
-  local ($Data::Dumper::Sortkeys, $Data::Dumper::Indent, $Data::Dumper::Terse);
-  $Data::Dumper::Sortkeys = $Data::Dumper::Indent = $Data::Dumper::Terse = 1;
-  Dumper $got;
 }
 
 my $schema = GraphQL::Schema->new(

@@ -1,22 +1,15 @@
-use strict;
-use warnings;
-use Test::More;
-use Test::Exception;
+use lib 't/lib';
+use GQLTest;
 use GraphQL::Language::Parser qw(parse);
-use Pegex::Tree::Wrap;
-use Pegex::Input;
-use Data::Dumper;
-use JSON::MaybeXS;
 
 open my $fh, '<', 't/kitchen-sink.graphql';
 my $got = parse(join('', <$fh>));
 my $expected_text = join '', <DATA>;
 $expected_text =~ s#bless\(\s*do\{\\\(my\s*\$o\s*=\s*(.)\)\},\s*'JSON::PP::Boolean'\s*\)#'JSON->' . ($1 ? 'true' : 'false')#ge;
 my $expected = eval $expected_text;
-local $Data::Dumper::Indent = $Data::Dumper::Sortkeys = $Data::Dumper::Terse = 1;
-#open $fh, '>', 'tf'; print $fh Dumper $got; # uncomment to regenerate
+#open $fh, '>', 'tf'; print $fh nice_dump $got; # uncomment to regenerate
 
-is_deeply $got, $expected, 'lex big doc correct' or diag Dumper $got;
+is_deeply $got, $expected, 'lex big doc correct' or diag nice_dump $got;
 
 dies_ok { parse("\x{0007}") };
 like $@->message, qr/Parse document failed for some reason/, 'invalid char';
@@ -27,10 +20,10 @@ dies_ok { parse("\n\n    ?  \n\n\n") };
 is_deeply [ map $@->locations->[0]->{$_}, qw(line column) ], [3,5], 'error respects whitespace';
 
 $got = parse(string_make(' x '));
-is string_lookup($got), ' x ', 'string preserve whitespace' or diag Dumper $got;
+is string_lookup($got), ' x ', 'string preserve whitespace' or diag nice_dump $got;
 
 $got = parse(string_make('quote \\"'));
-is string_lookup($got), 'quote \\"', 'string quote kept' or diag Dumper $got; # not de-quoted by lexer
+is string_lookup($got), 'quote \\"', 'string quote kept' or diag nice_dump $got; # not de-quoted by lexer
 
 dies_ok { parse(string_make('quote \\')) };
 is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,21], 'error on unterminated string';
@@ -99,14 +92,14 @@ is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,26], 'error on inv
 
 my $multibyte = "Has a \x{0A0A} multi-byte character.";
 $got = parse(string_make($multibyte));
-is string_lookup($got), $multibyte, 'multibyte kept' or diag Dumper $got;
+is string_lookup($got), $multibyte, 'multibyte kept' or diag nice_dump $got;
 
 done_testing;
 
 sub number_test {
   my ($text, $type, $label) = @_;
   my $got = parse(number_make($text));
-  cmp_ok query_lookup($got, $type), '==', $text, $label or diag Dumper $got;
+  cmp_ok query_lookup($got, $type), '==', $text, $label or diag nice_dump $got;
 }
 
 sub number_make {

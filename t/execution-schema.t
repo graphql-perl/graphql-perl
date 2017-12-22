@@ -1,11 +1,5 @@
-#!perl -T
-use 5.014;
-use strict;
-use warnings;
-use Test::More;
-use Test::Exception;
-use JSON::MaybeXS;
-use Data::Dumper;
+use lib 't/lib';
+use GQLTest;
 
 # differences from js version:
 #  no try to treat true as string
@@ -130,14 +124,6 @@ fragment articleFields on Article {
   title,
   body,
 }';
-
-sub run_test {
-  my ($args, $expected) = @_;
-  my $got = execute(@$args);
-  local ($Data::Dumper::Sortkeys, $Data::Dumper::Indent, $Data::Dumper::Terse);
-  $Data::Dumper::Sortkeys = $Data::Dumper::Indent = $Data::Dumper::Terse = 1;
-  is_deeply $got, $expected or diag Dumper $got;
-}
 
 subtest 'executes using a schema', sub {
   run_test(

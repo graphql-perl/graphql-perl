@@ -1,11 +1,5 @@
-#!perl -T
-use 5.014;
-use strict;
-use warnings;
-use Test::More;
-use Test::Exception;
-use JSON::MaybeXS;
-use Data::Dumper;
+use lib 't/lib';
+use GQLTest;
 
 BEGIN {
   use_ok( 'GraphQL::Schema' ) || print "Bail out!\n";
@@ -14,7 +8,6 @@ BEGIN {
   use_ok( 'GraphQL::Execution', qw(execute) ) || print "Bail out!\n";
 }
 
-$Data::Dumper::Sortkeys = $Data::Dumper::Indent = $Data::Dumper::Terse = 1;
 my $JSON = JSON::MaybeXS->new->allow_nonref->canonical;
 
 sub make_schema {
@@ -25,12 +18,6 @@ sub make_schema {
       fields => { test => $field },
     ),
   );
-}
-
-sub run_test {
-  my ($args, $expected) = @_;
-  my $got = execute(@$args);
-  is_deeply $got, $expected or diag Dumper $got;
 }
 
 subtest 'default function accesses properties', sub {

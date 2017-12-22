@@ -1,11 +1,5 @@
-#!perl -T
-use 5.014;
-use strict;
-use warnings;
-use Test::More;
-use Test::Exception;
-use JSON::MaybeXS;
-use Data::Dumper;
+use lib 't/lib';
+use GQLTest;
 
 BEGIN {
   use_ok( 'GraphQL::Type::Scalar', qw($String) ) || print "Bail out!\n";
@@ -15,7 +9,6 @@ BEGIN {
   use_ok( 'GraphQL::Execution', qw(execute) ) || print "Bail out!\n";
 }
 
-$Data::Dumper::Sortkeys = $Data::Dumper::Indent = $Data::Dumper::Terse = 1;
 my $JSON = JSON::MaybeXS->new->allow_nonref->canonical;
 
 my $TestComplexScalar = GraphQL::Type::Scalar->new(
@@ -713,9 +706,3 @@ In method graphql_to_perl: parameter 1 ($item): found not an object.
 };
 
 done_testing;
-
-sub run_test {
-  my ($args, $expected) = @_;
-  my $got = execute(@$args);
-  is_deeply $got, $expected or diag Dumper $got;
-}

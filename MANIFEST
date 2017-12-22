@@ -54,6 +54,7 @@ t/kitchen-sink.graphql
 t/language-lexer.t
 t/language-parser.t
 t/language-schema-parser.t
+t/lib/GQLTest.pm
 t/perl.t
 t/schema-kitchen-sink.graphql
 t/type-definition.t

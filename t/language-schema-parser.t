@@ -1,11 +1,5 @@
-#!perl
-use 5.014;
-use strict;
-use warnings;
-use Test::More;
-use Test::Exception;
-use Data::Dumper;
-use JSON::MaybeXS;
+use lib 't/lib';
+use GQLTest;
 
 BEGIN {
   use_ok( 'GraphQL::Language::Parser', qw(parse) ) || print "Bail out!\n";
@@ -41,9 +35,8 @@ my $got = parse(join('', <$fh>));
 my $expected_text = join '', <DATA>;
 $expected_text =~ s#bless\(\s*do\{\\\(my\s*\$o\s*=\s*(.)\)\},\s*'JSON::PP::Boolean'\s*\)#'JSON->' . ($1 ? 'true' : 'false')#ge;
 my $expected = eval $expected_text;
-local $Data::Dumper::Indent = $Data::Dumper::Sortkeys = $Data::Dumper::Terse = 1;
-#open $fh, '>', 'tf'; print $fh Dumper $got; # uncomment this line to regen
-is_deeply $got, $expected, 'lex big doc correct' or diag Dumper $got;
+#open $fh, '>', 'tf'; print $fh nice_dump $got; # uncomment this line to regen
+is_deeply $got, $expected, 'lex big doc correct' or diag nice_dump $got;
 
 done_testing;
 

@@ -1,10 +1,5 @@
-#!perl -T
-use 5.014;
-use strict;
-use warnings;
-use Test::More;
-use Test::Exception;
-use Data::Dumper;
+use lib 't/lib';
+use GQLTest;
 
 BEGIN {
   use_ok( 'GraphQL::Schema' ) || print "Bail out!\n";
@@ -105,14 +100,6 @@ my $schema = GraphQL::Schema->new(
   mutation => $MutationType,
   subscription => $SubscriptionType,
 );
-
-sub run_test {
-  my ($args, $expected) = @_;
-  my $got = execute(@$args);
-  local ($Data::Dumper::Sortkeys, $Data::Dumper::Indent, $Data::Dumper::Terse);
-  $Data::Dumper::Sortkeys = $Data::Dumper::Indent = $Data::Dumper::Terse = 1;
-  is_deeply $got, $expected or diag Dumper $got;
-}
 
 subtest 'accepts enum literals as input', sub {
   run_test(
