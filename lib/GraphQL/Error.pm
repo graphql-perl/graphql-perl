@@ -79,6 +79,7 @@ it will be preserved as C<original_error>.
 
 method coerce(Any $item) :ReturnType(InstanceOf[__PACKAGE__]) {
   return $item if $self->is($item);
+  $item ||= 'Unknown error';
   is_InstanceOf($item)
     ? $self->new(message => $item.'', original_error => $item)
     : $self->new(message => $item);
