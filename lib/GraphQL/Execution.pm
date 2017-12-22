@@ -122,6 +122,7 @@ fun execute(
       $root_value,
     );
   };
+  DEBUG and _debug('execute(result)', $result, $@);
   return _wrap_error($@) if $@;
   $result;
 }
