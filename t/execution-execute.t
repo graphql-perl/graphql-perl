@@ -396,11 +396,7 @@ query {
 }
 EOF
   run_test([$schema, parse($query)], {
-    data => {
-      nullableA => {
-        aliasedA => { nonNullA => { anotherA => {} } },
-      },
-    },
+    data => { nullableA => { aliasedA => undef } },
     errors => [{
       message => 'Catch me if you can',
       locations => [{ line => 7, column => 9 }],
@@ -642,7 +638,7 @@ subtest 'does not include illegal fields in output' => sub {
   );
 
   run_test([$schema, $ast], {
-    data => {},
+    data => undef,
     errors => [ {
       locations => [ { 'column' => 3, 'line' => 3 } ],
       message => 'No field M.thisIsIllegalDontIncludeMe.',
