@@ -114,7 +114,7 @@ fun execute(
       $field_resolver,
     );
   };
-  return _wrap_error($@) if $@;
+  return _build_response(_wrap_error($@)) if $@;
   my $result = eval {
     _execute_operation(
       $context,
@@ -123,14 +123,22 @@ fun execute(
     );
   };
   DEBUG and _debug('execute(result)', $result, $@);
-  return _wrap_error($@) if $@;
-  $result;
+  return _build_response(_wrap_error($@)) if $@;
+  _build_response($result);
+}
+
+fun _build_response(
+  ExecutionPartialResult $result,
+) :ReturnType(ExecutionResult) {
+  return $result if !@{$result->{errors} || []};
+  +{ %$result, errors => [ map $_->to_json, @{$result->{errors}} ] };
 }
 
 fun _wrap_error(
-  Any $error,
-) :ReturnType(ExecutionResult) {
-  +{ errors => [ GraphQL::Error->coerce($error)->to_json ] };
+  (Str | Undef | InstanceOf['GraphQL::Error'] | ExecutionPartialResult) $error,
+) :ReturnType(ExecutionPartialResult) {
+  return $error if is_ExecutionPartialResult($error);
+  +{ errors => [ GraphQL::Error->coerce($error) ] };
 }
 
 fun _build_context(
@@ -215,7 +223,7 @@ fun _execute_operation(
   HashRef $context,
   HashRef $operation,
   Any $root_value,
-) :ReturnType(ExecutionResult) {
+) :ReturnType(ExecutionPartialResult) {
   my $op_type = $operation->{operationType} || 'query';
   my $type = $context->{schema}->$op_type;
   my ($fields) = $type->_collect_fields(
@@ -241,7 +249,7 @@ fun _execute_fields(
   Any $root_value,
   ArrayRef $path,
   Map[StrNameValid,ArrayRef[HashRef]] $fields,
-) :ReturnType(ExecutionResult) {
+) :ReturnType(ExecutionPartialResult) {
   my (%results, @errors);
   DEBUG and _debug('_execute_fields', $parent_type->to_string, $fields, $root_value);
   map {
@@ -286,7 +294,7 @@ fun _execute_fields(
     if ($@) {
       push @errors, _located_error(
         $@, $fields->{$result_name}, [ @$path, $result_name ]
-      )->to_json;
+      );
     } else {
       push @errors, @{ $result->{errors} || [] };
       $results{$result_name} = $result->{data};
@@ -387,7 +395,7 @@ fun _complete_value_catching_error(
   HashRef $info,
   ArrayRef $path,
   Any $result,
-) :ReturnType(ExecutionResult) {
+) :ReturnType(ExecutionPartialResult) {
   if ($return_type->isa('GraphQL::Type::NonNull')) {
     return _complete_value_with_located_error(@_);
   }
@@ -407,7 +415,7 @@ fun _complete_value_with_located_error(
   HashRef $info,
   ArrayRef $path,
   Any $result,
-) :ReturnType(ExecutionResult) {
+) :ReturnType(ExecutionPartialResult) {
   my $result = eval {
     _complete_value(@_);
     # TODO promise stuff
@@ -423,7 +431,7 @@ fun _complete_value(
   HashRef $info,
   ArrayRef $path,
   Any $result,
-) :ReturnType(ExecutionResult) {
+) :ReturnType(ExecutionPartialResult) {
   DEBUG and _debug('_complete_value', $return_type->to_string, $path, $result);
   # TODO promise stuff
   die $result if GraphQL::Error->is($result);

@@ -374,6 +374,20 @@ declare "ExecutionResult",
     errors => Optional[ArrayRef[ErrorResult]],
   ];
 
+=head2 ExecutionPartialResult
+
+Hash-ref that has keys C<data> and/or C<errors>. Like L</ExecutionResult>
+above, but the C<errors>, if present, will be an array-ref of
+L<GraphQL::Error> objects.
+
+=cut
+
+declare "ExecutionPartialResult",
+  as Dict[
+    data => Optional[JSONable],
+    errors => Optional[ArrayRef[InstanceOf['GraphQL::Error']]],
+  ];
+
 =head1 AUTHOR
 
 Ed J, C<< <etj at cpan.org> >>
