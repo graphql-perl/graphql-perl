@@ -7,6 +7,7 @@ use Moo;
 use Types::Standard -all;
 use Function::Parameters;
 use Return::Type;
+use GraphQL::Debug qw(_debug);
 extends qw(GraphQL::Type);
 with qw(GraphQL::Role::Nullable);
 
@@ -17,6 +18,7 @@ my @TAKE_ON_ME = qw(
 );
 
 our $VERSION = '0.02';
+use constant DEBUG => $ENV{GRAPHQL_DEBUG};
 
 =head1 NAME
 
@@ -130,6 +132,7 @@ method _complete_value(
       [ @$path, $index++ ],
       $_,
     );
+    DEBUG and _debug("List._complete_value($index)", $r);
     push @errors, @{ $r->{errors} || [] };
     $r->{data};
   } @$result;
