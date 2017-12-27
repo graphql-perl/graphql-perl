@@ -48,6 +48,7 @@ t/execution-abstract.t
 t/execution-directives.t
 t/execution-execute.t
 t/execution-lists.t
+t/execution-nonnull.t
 t/execution-resolve.t
 t/execution-schema.t
 t/execution-variables.t
