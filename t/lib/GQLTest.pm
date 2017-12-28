@@ -28,7 +28,7 @@ sub import {
 sub run_test {
   my ($args, $expected) = @_;
   my $got = execute(@$args);
-  is_deeply $got, $expected or diag nice_dump($got);
+  cmp_deeply $got, $expected or diag nice_dump($got);
 }
 
 sub nice_dump {

@@ -314,41 +314,42 @@ subtest 'nulls out error subtrees' => sub {
       }
     )
   );
-  my $got = execute($schema, $ast, $data);
-  is_deeply $got->{data}, {
-    sync => 'sync',
-    syncError => undef,
-    syncRawError => undef,
-    syncReturnError => undef,
-    syncReturnErrorList => ['sync0', undef, 'sync2', undef],
-  } or diag nice_dump($got);
-  is_deeply [ sort { $a->{message} cmp $b->{message} } @{ $got->{errors} } ], [
-    {
-      message   => "Error getting syncError\n",
-      locations => [{ line => 4, column => 5 }],
-      path    => ['syncError']
+  run_test([$schema, $ast, $data], {
+    data => {
+      sync => 'sync',
+      syncError => undef,
+      syncRawError => undef,
+      syncReturnError => undef,
+      syncReturnErrorList => ['sync0', undef, 'sync2', undef],
     },
-    {
-      message   => "Error getting syncRawError\n",
-      locations => [{ line => 5, column => 5 }],
-      path    => ['syncRawError']
-    },
-    {
-      message   => "Error getting syncReturnError",
-      locations => [{ line => 6, column => 5 }],
-      path    => ['syncReturnError']
-    },
-    {
-      message   => "Error getting syncReturnErrorList1",
-      locations => [{ line => 7, column => 3 }],
-      path    => ['syncReturnErrorList', 1]
-    },
-    {
-      message   => "Error getting syncReturnErrorList3",
-      locations => [{ line => 7, column => 3 }],
-      path    => ['syncReturnErrorList', 3]
-    },
-  ] or diag nice_dump($got->{errors});
+    errors => bag(
+      {
+        message   => "Error getting syncError\n",
+        locations => [{ line => 4, column => 5 }],
+        path    => ['syncError']
+      },
+      {
+        message   => "Error getting syncRawError\n",
+        locations => [{ line => 5, column => 5 }],
+        path    => ['syncRawError']
+      },
+      {
+        message   => "Error getting syncReturnError",
+        locations => [{ line => 6, column => 5 }],
+        path    => ['syncReturnError']
+      },
+      {
+        message   => "Error getting syncReturnErrorList1",
+        locations => [{ line => 7, column => 3 }],
+        path    => ['syncReturnErrorList', 1]
+      },
+      {
+        message   => "Error getting syncReturnErrorList3",
+        locations => [{ line => 7, column => 3 }],
+        path    => ['syncReturnErrorList', 3]
+      },
+    ),
+  });
 };
 
 subtest 'Full response path is included for non-nullable fields' => sub {
@@ -394,8 +395,7 @@ query {
   }
 }
 EOF
-  my $result = execute($schema, parse($query));
-  is_deeply $result, {
+  run_test([$schema, parse($query)], {
     data => {
       nullableA => {
         aliasedA => { nonNullA => { anotherA => {} } },
@@ -406,7 +406,7 @@ EOF
       locations => [{ line => 7, column => 9 }],
       path => ['nullableA', 'aliasedA', 'nonNullA', 'anotherA', 'throws'],
     }],
-  } or diag nice_dump $result;
+  });
 };
 
 subtest 'uses the inline operation if no operation name is provided' => sub {

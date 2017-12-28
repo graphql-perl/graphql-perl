@@ -87,9 +87,7 @@ fragment TypeRef on __Type {
   }
 }
 EOQ
-
-  my $got = execute($schema, $request);
-  cmp_deeply $got, {
+  run_test([$schema, $request], {
     data => {
       __schema => {
         types => supersetof(
@@ -133,7 +131,7 @@ EOQ
         )
       }
     }
-  } or diag nice_dump($got);
+  });
 };
 
 subtest 'supports the __type root field'=> sub {
@@ -396,15 +394,13 @@ subtest 'fails as expected on the __type root field without an arg'=> sub {
   }
 }
 EOQ
-
-  my $got = execute($schema, $request);
-  cmp_deeply $got, {
+  run_test([$schema, $request], {
     data => { __type => undef },
     errors => [noclass(superhashof({
       message => 'Argument \'name\' of type \'String!\' not given.',
       locations => [{ line => 5, column => 1 }],
     }))]
-  } or diag nice_dump($got);
+  });
 };
 
 subtest 'exposes descriptions on types and fields'=> sub {
@@ -429,8 +425,7 @@ subtest 'exposes descriptions on types and fields'=> sub {
 }
 EOQ
 
-  my $got = execute($schema, $request);
-  cmp_deeply $got, {
+  run_test([$schema, $request], {
     data => {
       schemaType => {
         name => '__Schema',
@@ -459,7 +454,7 @@ EOQ
         )
       }
     }
-  } or diag nice_dump($got);
+  });
 };
 
 subtest 'exposes descriptions on enums'=> sub {
@@ -484,8 +479,7 @@ subtest 'exposes descriptions on enums'=> sub {
 }
 EOQ
 
-  my $got = execute($schema, $request);
-  cmp_deeply $got, {
+  run_test([$schema, $request], {
     data => {
       typeKindType => {
         name => '__TypeKind',
@@ -526,7 +520,7 @@ EOQ
         )
       }
     }
-  } or diag nice_dump($got);
+  });
 };
 
 done_testing;
