@@ -121,14 +121,19 @@ fun execute(
     $root_value,
   );
   DEBUG and _debug('execute(result)', $result, $@);
-  _build_response($result);
+  _build_response($result, 1);
 }
 
 fun _build_response(
   ExecutionPartialResult $result,
+  Bool $force_data = 0,
 ) :ReturnType(ExecutionResult) {
   return $result if !@{$result->{errors} || []};
-  +{ %$result, errors => [ map $_->to_json, @{$result->{errors}} ] };
+  +{
+    $force_data ? (data => undef) : (), # default if none given
+    %$result,
+    errors => [ map $_->to_json, @{$result->{errors}} ],
+  };
 }
 
 fun _wrap_error(
@@ -299,7 +304,10 @@ fun _execute_fields(
     }
   } keys %$fields; # TODO ordering of fields
   DEBUG and _debug('_execute_fields(done)', \%results, \@errors);
-  +{ data => \%results, @errors ? (errors => \@errors) : () };
+  +{
+    %results ? (data => \%results) : (),
+    @errors ? (errors => \@errors) : ()
+  };
 }
 
 fun _execute_fields_serially(
