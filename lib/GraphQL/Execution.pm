@@ -396,6 +396,7 @@ fun _complete_value_catching_error(
   ArrayRef $path,
   Any $result,
 ) :ReturnType(ExecutionPartialResult) {
+  DEBUG and _debug('_complete_value_catching_error(before)', $result, $@);
   if ($return_type->isa('GraphQL::Type::NonNull')) {
     return _complete_value_with_located_error(@_);
   }
@@ -403,7 +404,7 @@ fun _complete_value_catching_error(
     _complete_value_with_located_error(@_);
     # TODO promise stuff
   };
-  DEBUG and _debug('_complete_value_catching_error', $result, $@);
+  DEBUG and _debug('_complete_value_catching_error(after)', $result, $@);
   return _wrap_error($@) if $@;
   $result;
 }
@@ -435,8 +436,22 @@ fun _complete_value(
   DEBUG and _debug('_complete_value', $return_type->to_string, $path, $result);
   # TODO promise stuff
   die $result if GraphQL::Error->is($result);
-  return { data => undef } if !defined $result
-    and !$return_type->isa('GraphQL::Type::NonNull');
+  if ($return_type->isa('GraphQL::Type::NonNull')) {
+    my $completed = _complete_value(
+      $context,
+      $return_type->of,
+      $nodes,
+      $info,
+      $path,
+      $result,
+    );
+    DEBUG and _debug('_complete_value(NonNull)', $return_type->to_string, $completed);
+    die GraphQL::Error->coerce(
+      "Cannot return null for non-nullable field @{[$info->{parent_type}->name]}.@{[$info->{field_name}]}."
+    ) if !defined $completed->{data};
+    return $completed;
+  }
+  return { data => undef } if !defined $result;
   $return_type->_complete_value(
     $context,
     $nodes,

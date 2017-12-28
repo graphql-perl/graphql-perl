@@ -81,26 +81,6 @@ method graphql_to_perl(Any $item) :ReturnType(Any) {
   $of->graphql_to_perl($item) // die $self->to_string . " given null value.\n";
 }
 
-method _complete_value(
-  HashRef $context,
-  ArrayRef[HashRef] $nodes,
-  HashRef $info,
-  ArrayRef $path,
-  Any $result,
-) {
-  my $completed = $self->of->_complete_value(
-    $context,
-    $nodes,
-    $info,
-    $path,
-    $result,
-  );
-  die GraphQL::Error->new(
-    message => "Cannot return null for non-nullable field @{[$info->{parent_type}->name]}.@{[$info->{field_name}]}."
-  ) if !defined $completed;
-  $completed;
-}
-
 __PACKAGE__->meta->make_immutable();
 
 1;
