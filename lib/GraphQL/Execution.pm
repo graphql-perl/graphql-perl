@@ -115,15 +115,12 @@ fun execute(
     );
   };
   return _build_response(_wrap_error($@)) if $@;
-  my $result = eval {
-    _execute_operation(
-      $context,
-      $context->{operation},
-      $root_value,
-    );
-  };
+  my $result = _execute_operation(
+    $context,
+    $context->{operation},
+    $root_value,
+  );
   DEBUG and _debug('execute(result)', $result, $@);
-  return _build_response(_wrap_error($@)) if $@;
   _build_response($result);
 }
 
