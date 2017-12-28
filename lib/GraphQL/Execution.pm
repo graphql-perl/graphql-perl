@@ -396,7 +396,7 @@ fun _complete_value_catching_error(
   ArrayRef $path,
   Any $result,
 ) :ReturnType(ExecutionPartialResult) {
-  DEBUG and _debug('_complete_value_catching_error(before)', $result, $@);
+  DEBUG and _debug('_complete_value_catching_error(before)', $return_type->to_string, $result);
   if ($return_type->isa('GraphQL::Type::NonNull')) {
     return _complete_value_with_located_error(@_);
   }
@@ -404,7 +404,7 @@ fun _complete_value_catching_error(
     _complete_value_with_located_error(@_);
     # TODO promise stuff
   };
-  DEBUG and _debug('_complete_value_catching_error(after)', $result, $@);
+  DEBUG and _debug('_complete_value_catching_error(after)', $return_type->to_string, $result, $@);
   return _wrap_error($@) if $@;
   $result;
 }
@@ -421,6 +421,7 @@ fun _complete_value_with_located_error(
     _complete_value(@_);
     # TODO promise stuff
   };
+  DEBUG and _debug('_complete_value_with_located_error(after)', $return_type->to_string, $result, $@);
   die _located_error($@, $nodes, $path) if $@;
   $result;
 }
@@ -466,6 +467,8 @@ fun _located_error(
   ArrayRef[HashRef] $nodes,
   ArrayRef $path,
 ) {
+  $error = GraphQL::Error->coerce($error);
+  return $error if $error->locations;
   GraphQL::Error->coerce($error)->but(
     locations => [ map $_->{location}, @$nodes ],
     path => $path,
