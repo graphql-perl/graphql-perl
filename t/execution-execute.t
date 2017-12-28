@@ -637,14 +637,7 @@ subtest 'does not include illegal fields in output' => sub {
     ),
   );
 
-  run_test([$schema, $ast], {
-    data => undef,
-    errors => [ {
-      locations => [ { 'column' => 3, 'line' => 3 } ],
-      message => 'No field M.thisIsIllegalDontIncludeMe.',
-      path => [ 'thisIsIllegalDontIncludeMe' ],
-    } ],
-  });
+  run_test([$schema, $ast], { data => undef });
 };
 
 subtest 'does not include arguments that were not set' => sub {

@@ -128,11 +128,11 @@ fun _build_response(
   ExecutionPartialResult $result,
   Bool $force_data = 0,
 ) :ReturnType(ExecutionResult) {
-  return $result if !@{$result->{errors} || []};
+  my @errors = @{$result->{errors} || []};
   +{
     $force_data ? (data => undef) : (), # default if none given
     %$result,
-    errors => [ map $_->to_json, @{$result->{errors}} ],
+    @errors ? (errors => [ map $_->to_json, @{$result->{errors}} ]) : (),
   };
 }
 
@@ -254,23 +254,23 @@ fun _execute_fields(
 ) :ReturnType(ExecutionPartialResult) {
   my (%results, @errors);
   DEBUG and _debug('_execute_fields', $parent_type->to_string, $fields, $root_value);
-  map {
-    my $result_name = $_;
+  for my $result_name (keys %$fields) { # TODO ordering of fields
     my $result;
+    my $nodes = $fields->{$result_name};
+    my $field_node = $nodes->[0];
+    my $field_name = $field_node->{name};
+    my $field_def = _get_field_def($context->{schema}, $parent_type, $field_name);
+    DEBUG and _debug('_execute_fields(resolve)', $parent_type->to_string, $nodes, $root_value, $field_def);
+    next if !$field_def;
+    my $resolve = $field_def->{resolve} || $context->{field_resolver};
+    my $info = _build_resolve_info(
+      $context,
+      $parent_type,
+      $field_def,
+      [ @$path, $result_name ],
+      $nodes,
+    );
     eval {
-      my $nodes = $fields->{$result_name};
-      my $field_node = $nodes->[0];
-      my $field_name = $field_node->{name};
-      DEBUG and _debug('_execute_fields(resolve)', $parent_type->to_string, $nodes, $root_value);
-      my $field_def = _get_field_def($context->{schema}, $parent_type, $field_name);
-      my $resolve = $field_def->{resolve} || $context->{field_resolver};
-      my $info = _build_resolve_info(
-        $context,
-        $parent_type,
-        $field_def,
-        [ @$path, $result_name ],
-        $nodes,
-      );
       my $resolve_node = _build_resolve_node(
         $context,
         $field_def,
@@ -302,7 +302,7 @@ fun _execute_fields(
       $results{$result_name} = $result->{data};
       # TODO promise stuff
     }
-  } keys %$fields; # TODO ordering of fields
+  }
   DEBUG and _debug('_execute_fields(done)', \%results, \@errors);
   +{
     %results ? (data => \%results) : (),
@@ -329,15 +329,12 @@ fun _get_field_def(
   (InstanceOf['GraphQL::Schema']) $schema,
   (InstanceOf['GraphQL::Type']) $parent_type,
   StrNameValid $field_name,
-) :ReturnType(HashRef) {
+) :ReturnType(Maybe[HashRef]) {
   return $TYPE_NAME_META_FIELD_DEF
     if $field_name eq $TYPE_NAME_META_FIELD_DEF->{name};
   return FIELDNAME2SPECIAL->{$field_name}
     if FIELDNAME2SPECIAL->{$field_name} and $parent_type == $schema->query;
-  $parent_type->fields->{$field_name} //
-    die GraphQL::Error->new(
-      message => "No field @{[$parent_type->name]}.$field_name."
-    );
+  $parent_type->fields->{$field_name};
 }
 
 # NB similar ordering as _execute_fields - graphql-js switches
