@@ -108,7 +108,7 @@ fun execute(
   Maybe[Str] $operation_name = undef,
   Maybe[CodeLike] $field_resolver = undef,
   Maybe[PromiseCode] $promise_code = undef,
-) :ReturnType(ExecutionResult) {
+) :ReturnType(ExecutionResult | Promise) {
   my $context = eval {
     my $ast = ref($doc) ? $doc : parse($doc);
     _build_context(
@@ -134,9 +134,9 @@ fun execute(
 }
 
 fun _build_response(
-  ExecutionPartialResult $result,
+  ExecutionPartialResult | Promise $result,
   Bool $force_data = 0,
-) :ReturnType(ExecutionResult) {
+) :ReturnType(ExecutionResult | Promise) {
   my @errors = @{$result->{errors} || []};
   +{
     $force_data ? (data => undef) : (), # default if none given
@@ -236,7 +236,7 @@ fun _execute_operation(
   HashRef $context,
   HashRef $operation,
   Any $root_value,
-) :ReturnType(ExecutionPartialResult) {
+) :ReturnType(ExecutionPartialResult | Promise) {
   my $op_type = $operation->{operationType} || 'query';
   my $type = $context->{schema}->$op_type;
   my ($fields) = $type->_collect_fields(
@@ -262,7 +262,7 @@ fun _execute_fields(
   Any $root_value,
   ArrayRef $path,
   Map[StrNameValid,ArrayRef[HashRef]] $fields,
-) :ReturnType(ExecutionPartialResult) {
+) :ReturnType(ExecutionPartialResult | Promise) {
   my (%name2executionresult, @errors);
   DEBUG and _debug('_execute_fields', $parent_type->to_string, $fields, $root_value);
   for my $result_name (keys %$fields) { # TODO ordering of fields
@@ -405,7 +405,7 @@ fun _complete_value_catching_error(
   HashRef $info,
   ArrayRef $path,
   Any $result,
-) :ReturnType(ExecutionPartialResult) {
+) :ReturnType(ExecutionPartialResult | Promise) {
   DEBUG and _debug('_complete_value_catching_error(before)', $return_type->to_string, $result);
   if ($return_type->isa('GraphQL::Type::NonNull')) {
     return _complete_value_with_located_error(@_);
@@ -426,7 +426,7 @@ fun _complete_value_with_located_error(
   HashRef $info,
   ArrayRef $path,
   Any $result,
-) :ReturnType(ExecutionPartialResult) {
+) :ReturnType(ExecutionPartialResult | Promise) {
   my $result = eval {
     _complete_value(@_);
     # TODO promise stuff
@@ -443,7 +443,7 @@ fun _complete_value(
   HashRef $info,
   ArrayRef $path,
   Any $result,
-) :ReturnType(ExecutionPartialResult) {
+) :ReturnType(ExecutionPartialResult | Promise) {
   DEBUG and _debug('_complete_value', $return_type->to_string, $path, $result);
   # TODO promise stuff
   die $result if GraphQL::Error->is($result);
