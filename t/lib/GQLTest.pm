@@ -26,8 +26,23 @@ sub import {
 }
 
 sub run_test {
-  my ($args, $expected) = @_;
-  my $got = execute(@$args);
+  my ($args, $expected, $force_promise) = @_;
+  my @args = @$args;
+  $args[7] ||= fake_promise_code() if !defined $force_promise or $force_promise;
+  my $got = execute(@args);
+  if (!defined $force_promise) {
+    if (ref $got eq 'FakePromise') {
+      $got = eval { $got->get };
+      is $@, '' or diag(nice_dump($@)), return;
+    }
+  } elsif ($force_promise) {
+    isa_ok $got, 'FakePromise' or return;
+    $got = eval { $got->get };
+    is $@, '' or diag(nice_dump($@)), return;
+  } else {
+    # specified did not want promise
+    isnt ref($got), 'FakePromise' or return;
+  }
   cmp_deeply $got, $expected or diag nice_dump($got);
 }
 
