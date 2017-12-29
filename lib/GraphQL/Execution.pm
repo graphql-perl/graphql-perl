@@ -54,6 +54,7 @@ Executes a GraphQL query, returns results.
     $variable_values,
     $operation_name,
     $field_resolver,
+    $promise_code,
   );
 
 =over
@@ -89,6 +90,11 @@ operations in the query.
 
 A code-ref to be used instead of the default field-resolver.
 
+=item $promise_code
+
+If you need to return a promise, supply a hash-ref matching
+L<GraphQL::Type::Library/PromiseCode>.
+
 =back
 
 =cut
@@ -101,6 +107,7 @@ fun execute(
   Maybe[HashRef] $variable_values = undef,
   Maybe[Str] $operation_name = undef,
   Maybe[CodeLike] $field_resolver = undef,
+  Maybe[PromiseCode] $promise_code = undef,
 ) :ReturnType(ExecutionResult) {
   my $context = eval {
     my $ast = ref($doc) ? $doc : parse($doc);
