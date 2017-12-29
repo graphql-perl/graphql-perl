@@ -5,6 +5,7 @@ use strict;
 use warnings;
 use Moo;
 use Types::Standard -all;
+use GraphQL::Type::Library -all;
 use Function::Parameters;
 use Return::Type;
 use GraphQL::Debug qw(_debug);
@@ -123,20 +124,41 @@ method _complete_value(
   my $item_type = $self->of;
   my $index = 0;
   my @errors;
-  my @data = map {
-    my $r = GraphQL::Execution::_complete_value_catching_error(
-      $context,
-      $item_type,
-      $nodes,
-      $info,
-      [ @$path, $index++ ],
-      $_,
-    );
-    DEBUG and _debug("List._complete_value($index)", $r);
-    push @errors, @{ $r->{errors} || [] };
-    $r->{data};
-  } @$result;
+  my @completed = map GraphQL::Execution::_complete_value_catching_error(
+    $context,
+    $item_type,
+    $nodes,
+    $info,
+    [ @$path, $index++ ],
+    $_,
+  ), @$result;
+  DEBUG and _debug("List._complete_value(done)", \@completed);
+  (grep is_Promise($_), @completed)
+    ? _promise_for_list($context, \@completed)
+    : _merge_list(\@completed);
+}
+
+fun _merge_list(
+  ArrayRef[ExecutionPartialResult] $list,
+) :ReturnType(ExecutionPartialResult) {
+  DEBUG and _debug("List._merge_list", $list);
+  my @errors = map @{ $_->{errors} || [] }, @$list;
+  my @data = map $_->{data}, @$list;
+  DEBUG and _debug("List._merge_list(after)", \@data, \@errors);
   +{ data => \@data, @errors ? (errors => \@errors) : () };
+}
+
+fun _promise_for_list(
+  HashRef $context,
+  ArrayRef $list,
+) :ReturnType(Promise) {
+  DEBUG and _debug('_promise_for_list', $list);
+  die "Given a promise in list but no PromiseCode given\n"
+    if !$context->{promise_code};
+  return $context->{promise_code}{all}->(@$list)->then(sub {
+    DEBUG and _debug('_promise_for_list(all)', @_);
+    _merge_list(\@_);
+  });
 }
 
 __PACKAGE__->meta->make_immutable();

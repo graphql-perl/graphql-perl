@@ -137,6 +137,7 @@ fun _build_response(
   ExecutionPartialResult | Promise $result,
   Bool $force_data = 0,
 ) :ReturnType(ExecutionResult | Promise) {
+  return $result->then(sub { _build_response(@_) }) if is_Promise($result);
   my @errors = @{$result->{errors} || []};
   +{
     $force_data ? (data => undef) : (), # default if none given
@@ -250,7 +251,13 @@ fun _execute_operation(
   my $execute = $op_type eq 'mutation'
     ? \&_execute_fields_serially : \&_execute_fields;
   my $result = eval {
-    $execute->($context, $type, $root_value, $path, $fields);
+    my $result = $execute->($context, $type, $root_value, $path, $fields);
+    return $result if !is_Promise($result);
+    $result->then(undef, sub {
+      $context->{promise_code}{resolve}->(
+        +{ data => undef, %{_wrap_error($_[0])} }
+      );
+    });
   };
   return _wrap_error($@) if $@;
   $result;
@@ -264,6 +271,7 @@ fun _execute_fields(
   Map[StrNameValid,ArrayRef[HashRef]] $fields,
 ) :ReturnType(ExecutionPartialResult | Promise) {
   my (%name2executionresult, @errors);
+  my $promise_present;
   DEBUG and _debug('_execute_fields', $parent_type->to_string, $fields, $root_value);
   for my $result_name (keys %$fields) { # TODO ordering of fields
     my $nodes = $fields->{$result_name};
@@ -297,12 +305,13 @@ fun _execute_fields(
       [ @$path, $result_name ],
       $result,
     );
-    DEBUG and _debug('_execute_fields(complete)', $result);
+    $promise_present ||= is_Promise($result);
+    DEBUG and _debug("_execute_fields(complete)($result_name)", $result);
     $name2executionresult{$result_name} = $result;
   }
-  DEBUG and _debug('_execute_fields(done)', \%name2executionresult, \@errors);
-  # still might be promises here
-  # TODO promise stuff
+  DEBUG and _debug('_execute_fields(done)', \%name2executionresult, \@errors, $promise_present);
+  return _promise_for_hash($context, \%name2executionresult, \@errors)
+    if $promise_present;
   _merge_hash(
     [ keys %name2executionresult ],
     [ values %name2executionresult ],
@@ -321,11 +330,26 @@ fun _merge_hash(
   for (my $i = @$values - 1; $i >= 0; $i--) {
     $name2data{$keys->[$i]} = $values->[$i]{data};
   }
-  DEBUG and _debug('_merge_hash(after)', \%name2data);
+  DEBUG and _debug('_merge_hash(after)', \%name2data, \@errors);
   +{
     %name2data ? (data => \%name2data) : (),
     @errors ? (errors => \@errors) : ()
   };
+}
+
+fun _promise_for_hash(
+  HashRef $context,
+  HashRef $hash,
+  (ArrayRef[InstanceOf['GraphQL::Error']]) $errors,
+) :ReturnType(Promise) {
+  my ($keys, $values) = ([ keys %$hash ], [ values %$hash ]);
+  DEBUG and _debug('_promise_for_hash', $keys);
+  die "Given a promise in object but no PromiseCode given\n"
+    if !$context->{promise_code};
+  $context->{promise_code}{all}->(@$values)->then(sub {
+    DEBUG and _debug('_promise_for_hash(all)', \@_);
+    _merge_hash($keys, [ @_ ], $errors);
+  });
 }
 
 fun _execute_fields_serially(
@@ -411,10 +435,13 @@ fun _complete_value_catching_error(
     return _complete_value_with_located_error(@_);
   }
   my $result = eval {
-    _complete_value_with_located_error(@_);
-    # TODO promise stuff
+    my $c = _complete_value_with_located_error(@_);
+    return $c if !is_Promise($c);
+    $c->then(undef, sub {
+      $context->{promise_code}{resolve}->(_wrap_error(@_))
+    });
   };
-  DEBUG and _debug('_complete_value_catching_error(after)', $return_type->to_string, $result, $@);
+  DEBUG and _debug("_complete_value_catching_error(after)(@{[$return_type->to_string]})", $return_type->to_string, $result, $@);
   return _wrap_error($@) if $@;
   $result;
 }
@@ -428,8 +455,13 @@ fun _complete_value_with_located_error(
   Any $result,
 ) :ReturnType(ExecutionPartialResult | Promise) {
   my $result = eval {
-    _complete_value(@_);
-    # TODO promise stuff
+    my $c = _complete_value(@_);
+    return $c if !is_Promise($c);
+    $c->then(undef, sub {
+      $context->{promise_code}{reject}->(
+        _located_error($_[0], $nodes, $path)
+      )
+    });
   };
   DEBUG and _debug('_complete_value_with_located_error(after)', $return_type->to_string, $result, $@);
   die _located_error($@, $nodes, $path) if $@;
@@ -445,7 +477,10 @@ fun _complete_value(
   Any $result,
 ) :ReturnType(ExecutionPartialResult | Promise) {
   DEBUG and _debug('_complete_value', $return_type->to_string, $path, $result);
-  # TODO promise stuff
+  if (is_Promise($result)) {
+    my @outerargs = @_[0..4];
+    return $result->then(sub { _complete_value(@outerargs, $_[0]) });
+  }
   die $result if GraphQL::Error->is($result);
   if ($return_type->isa('GraphQL::Type::NonNull')) {
     my $completed = _complete_value(
@@ -457,9 +492,11 @@ fun _complete_value(
       $result,
     );
     DEBUG and _debug('_complete_value(NonNull)', $return_type->to_string, $completed);
+    # The !is_Promise is necessary unlike in the JS because there the
+    # null-check will work fine on either a promise or a real value.
     die GraphQL::Error->coerce(
       "Cannot return null for non-nullable field @{[$info->{parent_type}->name]}.@{[$info->{field_name}]}."
-    ) if !defined $completed->{data};
+    ) if !is_Promise($completed) and !defined $completed->{data};
     return $completed;
   }
   return { data => undef } if !defined $result;
@@ -477,6 +514,7 @@ fun _located_error(
   ArrayRef[HashRef] $nodes,
   ArrayRef $path,
 ) {
+  DEBUG and _debug('_located_error', $error);
   $error = GraphQL::Error->coerce($error);
   return $error if $error->locations;
   GraphQL::Error->coerce($error)->but(
