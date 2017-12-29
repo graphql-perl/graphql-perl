@@ -24,8 +24,8 @@ subtest 'throws if no document is provided' => sub {
 };
 
 subtest 'executes arbitrary code' => sub {
-  my $deep_data;
-  my $data = {
+  my ($deep_data, $data);
+  $data = {
     a => sub { 'Apple' },
     b => sub { 'Banana' },
     c => sub { 'Cookie' },
@@ -37,6 +37,7 @@ subtest 'executes arbitrary code' => sub {
       return 'Pic of size: ' . ($size || 50);
     },
     deep => sub { $deep_data },
+    promise => sub { FakePromise->resolve($data) },
   };
 
   $deep_data = {
@@ -46,8 +47,8 @@ subtest 'executes arbitrary code' => sub {
     deeper => sub { [$data, undef, $data] }
   };
 
-  my $DeepDataType;
-  my $DataType = GraphQL::Type::Object->new(
+  my ($DeepDataType, $DataType);
+  $DataType = GraphQL::Type::Object->new(
     name => 'DataType',
     fields => sub { {
       a => { type => $String },
@@ -65,6 +66,7 @@ subtest 'executes arbitrary code' => sub {
         }
       },
       deep => { type => $DeepDataType },
+      promise => { type => $DataType },
     } }
   );
 
@@ -91,6 +93,9 @@ query Example($size: Int) {
   f
   ...on DataType {
     pic(size: $size)
+    promise {
+      a
+    }
   }
   deep {
     a
@@ -118,6 +123,7 @@ EOF
       e => 'Egg',
       f => 'Fish',
       pic => 'Pic of size: 100',
+      promise => { a => 'Apple' },
       deep => {
         a => 'Already Been Done',
         b => 'Boring',
@@ -287,6 +293,13 @@ subtest 'nulls out error subtrees' => sub {
     syncRawError
     syncReturnError
     syncReturnErrorList
+    async
+    # asyncReject - no because Perl no "Error" exception class
+    asyncRawReject
+    asyncEmptyReject
+    # asyncError - no because Perl no "Error" exception class
+    asyncRawError
+    # asyncReturnError - no because Perl no "Error" exception class
   }';
   my $data = {
     sync => sub { 'sync' },
@@ -301,6 +314,14 @@ subtest 'nulls out error subtrees' => sub {
         GraphQL::Error->coerce('Error getting syncReturnErrorList3')
       ];
     },
+    async => sub { FakePromise->resolve('async') },
+    asyncRawError => sub {
+      FakePromise->resolve('')->then(sub {
+        die "Error getting asyncRawError\n"
+      })
+    },
+    asyncRawReject => sub { FakePromise->reject('Error getting asyncRawReject') },
+    asyncEmptyReject => sub { FakePromise->reject },
   };
   my $ast = parse($doc);
   my $schema = GraphQL::Schema->new(
@@ -312,6 +333,10 @@ subtest 'nulls out error subtrees' => sub {
         syncRawError => { type => $String },
         syncReturnError => { type => $String },
         syncReturnErrorList => { type => $String->list },
+        async => { type => $String },
+        asyncRawReject => { type => $String },
+        asyncRawError => { type => $String },
+        asyncEmptyReject => { type => $String },
       }
     )
   );
@@ -322,8 +347,22 @@ subtest 'nulls out error subtrees' => sub {
       syncRawError => undef,
       syncReturnError => undef,
       syncReturnErrorList => ['sync0', undef, 'sync2', undef],
+      async => 'async',
+      asyncRawError => undef,
+      asyncRawReject => undef,
+      asyncEmptyReject => undef,
     },
     errors => bag(
+      {
+        'locations' => [{ 'column' => 3, 'line' => 14 }],
+        'message' => "Error getting asyncRawError\n",
+        'path' => [ 'asyncRawError' ]
+      },
+      {
+        'locations' => [{ 'column' => 5, 'line' => 10 }],
+        'message' => 'Error getting asyncRawReject',
+        'path' => [ 'asyncRawReject' ]
+      },
       {
         message   => "Error getting syncError\n",
         locations => [{ line => 4, column => 5 }],
@@ -341,15 +380,53 @@ subtest 'nulls out error subtrees' => sub {
       },
       {
         message   => "Error getting syncReturnErrorList1",
-        locations => [{ line => 7, column => 3 }],
+        locations => [{ line => 7, column => 5 }],
         path    => ['syncReturnErrorList', 1]
       },
       {
         message   => "Error getting syncReturnErrorList3",
-        locations => [{ line => 7, column => 3 }],
+        locations => [{ line => 7, column => 5 }],
         path    => ['syncReturnErrorList', 3]
       },
+      {
+        'locations' => [{ 'column' => 5, 'line' => 12 }],
+        'message' => "Unknown error",
+        'path' => [ 'asyncEmptyReject' ]
+      },
     ),
+  });
+};
+
+subtest 'nulls error subtree for promise rejection #1071' => sub {
+  my $doc = '{
+    foods {
+      name
+    }
+  }';
+  my $ast = parse($doc);
+  my $schema = GraphQL::Schema->new(
+    query => GraphQL::Type::Object->new(
+      name => 'Query',
+      fields => {
+        foods => {
+          type => GraphQL::Type::Object->new(
+            name => 'Food',
+            fields => { name => { type => $String } },
+          )->list,
+          resolve => sub { FakePromise->reject('Dangit') },
+        },
+      },
+    )
+  );
+  my $got = run_test([ $schema, $ast ], {
+    data => { foods => undef },
+    errors => [
+      {
+        'locations' => [{ 'column' => 3, 'line' => 5 }],
+        'message' => "Dangit",
+        'path' => [ 'foods' ]
+      },
+    ]
   });
 };
 
