@@ -117,139 +117,148 @@ subtest 'nulls a synchronously returned object that contains a non-nullable fiel
   });
 };
 
-#subtest 'nulls an object returned in a promise that contains a non-nullable field' => sub {
-#  check('query Q { promiseNest { syncNonNull } }', 0, {
-#    data => { promiseNest => undef },
-#    errors => [
-#      {
-#        message =>
-#          'Cannot return null for non-nullable field DataType.syncNonNull.',
-#        locations => [{ line => 8, column => 19 }],
-#        path => [qw(syncNest syncNonNullNest promiseNonNullNest
-#          syncNonNullNest promiseNonNullNest syncNonNull)],
-#      },
-#    },
-#  },
-#  {
-#    errors => [
-#      {
-#        message => "nonNullError\n",
-#        locations => [{ line=>1, column=>23 }],
-#        path => [qw(promiseNest syncNonNull)],
-#      }
-#    ],
-#  });
-#};
+subtest 'nulls an object returned in a promise that contains a non-nullable field' => sub {
+  check('query Q { promiseNest { syncNonNull } }', 0, {
+    data => { promiseNest => undef },
+    errors => [
+      {
+        message =>
+          'Cannot return null for non-nullable field DataType.syncNonNull.',
+        locations => [{ line=>1, column=>37 }],
+        path => [qw(promiseNest syncNonNull)],
+      },
+    ],
+  },
+  {
+    errors => [
+      {
+        message => "nonNullError\n",
+        locations => [{ line=>1, column=>37 }],
+        path => [qw(promiseNest syncNonNull)],
+      }
+    ],
+  });
+};
 
 subtest 'nulls a complex tree of nullable fields' => sub {
   my $doc = <<'EOF';
 query Q {
   syncNest {
     sync
-#    promise
+    promise
     syncNest {
       sync
-#      promise
+      promise
     }
-#    promiseNest {
-#      sync
-#      promise
-#    }
+    promiseNest {
+      sync
+      promise
+    }
   }
-#  promiseNest {
-#    sync
-#    promise
-#    syncNest {
-#      sync
-#      promise
-#    }
-#    promiseNest {
-#      sync
-#      promise
-#    }
-#  }
+  promiseNest {
+    sync
+    promise
+    syncNest {
+      sync
+      promise
+    }
+    promiseNest {
+      sync
+      promise
+    }
+  }
 }
 EOF
   check($doc, 1, {
     data => {
       syncNest => {
         sync => undef,
-#        promise => undef,
+        promise => undef,
         syncNest => {
           sync => undef,
-#          promise => undef,
+          promise => undef,
         },
-#        promiseNest => {
-#          sync => undef,
-#          promise => undef,
-#        },
+        promiseNest => {
+          sync => undef,
+          promise => undef,
+        },
       },
-#      promiseNest => {
-#        sync => undef,
-#        promise => undef,
-#        syncNest => {
-#          sync => undef,
-#          promise => undef,
-#        },
-#        promiseNest => {
-#          sync => undef,
-#          promise => undef,
-#        },
-#      },
+      promiseNest => {
+        sync => undef,
+        promise => undef,
+        syncNest => {
+          sync => undef,
+          promise => undef,
+        },
+        promiseNest => {
+          sync => undef,
+          promise => undef,
+        },
+      },
     },
   },
   {
     errors => bag(
       {
         message => "error\n",
+        locations => [{ line => 17, column => 5 }],
+        path => [qw(promiseNest promise)],
+      },
+      {
+        message => "error\n",
+        locations => [{ line => 24, column => 5 }],
+        path => [qw(promiseNest promiseNest promise)],
+      },
+      {
+        message => "error\n",
+        locations => [{ line => 23, column => 7 }],
+        path => [qw(promiseNest promiseNest sync)],
+      },
+      {
+        message => "error\n",
+        locations => [{ line => 16, column => 5 }],
+        path => [qw(promiseNest sync)],
+      },
+      {
+        message => "error\n",
+        locations => [{ line => 20, column => 5 }],
+        path => [qw(promiseNest syncNest promise)],
+      },
+      {
+        message => "error\n",
         locations => [{ line => 5, column => 5 }],
+        path => [qw(syncNest promise)],
+      },
+      {
+        message => "error\n",
+        locations => [{ line => 19, column => 7 }],
+        path => [qw(promiseNest syncNest sync)],
+      },
+      {
+        message => "error\n",
+        locations => [{ line => 12, column => 5 }],
+        path => [qw(syncNest promiseNest promise)],
+      },
+      {
+        message => "error\n",
+        locations => [{ line => 11, column => 7 }],
+        path => [qw(syncNest promiseNest sync)],
+      },
+      {
+        message => "error\n",
+        locations => [{ line => 4, column => 5 }],
         path => [qw(syncNest sync)],
       },
-#      {
-#        message => "error\n",
-#        locations => [{ line => 7, column => 13 }],
-#      },
       {
         message => "error\n",
         locations => [{ line => 8, column => 5 }],
+        path => [qw(syncNest syncNest promise)],
+      },
+      {
+        message => "error\n",
+        locations => [{ line => 7, column => 7 }],
         path => [qw(syncNest syncNest sync)],
       },
-#      {
-#        message => "error\n",
-#        locations => [{ line => 16, column => 11 }],
-#      },
-#      {
-#        message => "error\n",
-#        locations => [{ line => 19, column => 13 }],
-#      },
-#      {
-#        message => "error\n",
-#        locations => [{ line => 23, column => 13 }],
-#      },
-#      {
-#        message => "error\n",
-#        locations => [{ line => 5, column => 11 }],
-#      },
-#      {
-#        message => "error\n",
-#        locations => [{ line => 8, column => 13 }],
-#      },
-#      {
-#        message => "error\n",
-#        locations => [{ line => 12, column => 13 }],
-#      },
-#      {
-#        message => "error\n",
-#        locations => [{ line => 17, column => 11 }],
-#      },
-#      {
-#        message => "error\n",
-#        locations => [{ line => 20, column => 13 }],
-#      },
-#      {
-#        message => "error\n",
-#        locations => [{ line => 24, column => 13 }],
-#      },
     ),
   });
 };
@@ -257,91 +266,141 @@ EOF
 subtest 'nulls the first nullable object after a field in a long chain of non-null fields' => sub {
   my $doc = <<'EOF';
 query Q {
-  syncNest {
+syncNest {
+  syncNonNullNest {
+      promiseNonNullNest {
+      syncNonNullNest {
+          promiseNonNullNest {
+          syncNonNull
+          }
+      }
+      }
+  }
+}
+  promiseNest {
     syncNonNullNest {
-#      promiseNonNullNest {
+      promiseNonNullNest {
         syncNonNullNest {
-#          promiseNonNullNest {
+          promiseNonNullNest {
             syncNonNull
-#          }
+          }
         }
-#      }
+      }
     }
   }
-#  promiseNest {
-#    syncNonNullNest {
-#      promiseNonNullNest {
-#        syncNonNullNest {
-#          promiseNonNullNest {
-#            syncNonNull
-#          }
-#        }
-#      }
-#    }
-#  }
-#  anotherNest: syncNest {
-#    syncNonNullNest {
-#      promiseNonNullNest {
-#        syncNonNullNest {
-#          promiseNonNullNest {
-#            promiseNonNull
-#          }
-#        }
-#      }
-#    }
-#  }
-#  anotherPromiseNest: promiseNest {
-#    syncNonNullNest {
-#      promiseNonNullNest {
-#        syncNonNullNest {
-#          promiseNonNullNest {
-#            promiseNonNull
-#          }
-#        }
-#      }
-#    }
-#  }
+  anotherNest: syncNest {
+    syncNonNullNest {
+      promiseNonNullNest {
+        syncNonNullNest {
+          promiseNonNullNest {
+            promiseNonNull
+          }
+        }
+      }
+    }
+  }
+  anotherPromiseNest: promiseNest {
+    syncNonNullNest {
+      promiseNonNullNest {
+        syncNonNullNest {
+          promiseNonNullNest {
+            promiseNonNull
+          }
+        }
+      }
+    }
+  }
 }
 EOF
   check($doc, 1, {
     data => {
       syncNest => undef,
-#      promiseNest => undef,
-#      anotherNest => undef,
-#      anotherPromiseNest => undef,
+      promiseNest => undef,
+      anotherNest => undef,
+      anotherPromiseNest => undef,
     },
-    errors => [
-      {
-        message =>
-            'Cannot return null for non-nullable field DataType.syncNonNull.',
-        locations => [{ line=>9, column=>9 }],
-        path => [qw(syncNest syncNonNullNest syncNonNullNest syncNonNull)],
-      }
-    ],
+    errors => bag(
+     {
+       'locations' => [ { 'column' => 11, 'line' => 30 } ],
+       'message' => 'Cannot return null for non-nullable field DataType.promiseNonNull.',
+       'path' => [
+         'anotherNest',
+         'syncNonNullNest',
+         'promiseNonNullNest',
+         'syncNonNullNest',
+         'promiseNonNullNest',
+         'promiseNonNull'
+       ]
+     },
+     {
+       'locations' => [ { 'column' => 11, 'line' => 41 } ],
+       'message' => 'Cannot return null for non-nullable field DataType.promiseNonNull.',
+       'path' => [
+         'anotherPromiseNest',
+         'syncNonNullNest',
+         'promiseNonNullNest',
+         'syncNonNullNest',
+         'promiseNonNullNest',
+         'promiseNonNull'
+       ]
+     },
+     {
+       'locations' => [ { 'column' => 11, 'line' => 19 } ],
+       'message' => 'Cannot return null for non-nullable field DataType.syncNonNull.',
+       'path' => [
+         'promiseNest',
+         'syncNonNullNest',
+         'promiseNonNullNest',
+         'syncNonNullNest',
+         'promiseNonNullNest',
+         'syncNonNull'
+       ]
+     },
+     {
+       'locations' => [ { 'column' => 11, 'line' => 8 } ],
+       'message' => 'Cannot return null for non-nullable field DataType.syncNonNull.',
+       'path' => [
+         'syncNest',
+         'syncNonNullNest',
+         'promiseNonNullNest',
+         'syncNonNullNest',
+         'promiseNonNullNest',
+         'syncNonNull'
+       ],
+     },
+    ),
   },
   {
-    errors => [
+    errors => bag(
       {
         message => "nonNullError\n",
-        locations => [{ line=>9, column=>9 }],
-        path => [qw(syncNest syncNonNullNest syncNonNullNest syncNonNull)],
+        locations => [{ line=>19, column=>11 }],
+        path => [qw(promiseNest
+        syncNonNullNest promiseNonNullNest syncNonNullNest promiseNonNullNest
+        syncNonNull)],
       },
-#      {
-#        message =>
-#          "nonNullError\n",
-#        locations => [{ line => 19, column => 19 }],
-#      },
-#      {
-#        message =>
-#          "nonNullError\n",
-#        locations => [{ line => 30, column => 19 }],
-#      },
-#      {
-#        message =>
-#          "nonNullError\n",
-#        locations => [{ line => 41, column => 19 }],
-#      },
-    ],
+      {
+        message => "nonNullError\n",
+        locations => [{ line => 41, column => 11 }],
+        path => [qw(anotherPromiseNest
+        syncNonNullNest promiseNonNullNest syncNonNullNest promiseNonNullNest
+        promiseNonNull)],
+      },
+      {
+        message => "nonNullError\n",
+        locations => [{ line => 8, column => 11 }],
+        path => [qw(syncNest
+        syncNonNullNest promiseNonNullNest syncNonNullNest promiseNonNullNest
+        syncNonNull)],
+      },
+      {
+        message => "nonNullError\n",
+        locations => [{ line => 30, column => 11 }],
+        path => [qw(anotherNest
+        syncNonNullNest promiseNonNullNest syncNonNullNest promiseNonNullNest
+        promiseNonNull)],
+      },
+    ),
   });
 };
 
