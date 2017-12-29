@@ -202,6 +202,7 @@ subtest 'provides info about current execution state' => sub {
     operation
     parent_type
     path
+    promise_code
     return_type
     root_value
     schema

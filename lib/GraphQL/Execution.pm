@@ -374,6 +374,7 @@ fun _build_resolve_info(
     root_value => $context->{root_value},
     operation => $context->{operation},
     variable_values => $context->{variable_values},
+    promise_code => $context->{promise_code},
   };
 }
 

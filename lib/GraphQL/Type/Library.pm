@@ -228,6 +228,10 @@ A hash-ref describing the operation (C<query>, etc) being executed.
 the operation's arguments, filled out with the variables hash supplied
 to the request.
 
+=item promise_code
+
+A hash-ref. The relevant value supplied to the C<execute> function.
+
 =back
 
 =back
