@@ -1,5 +1,9 @@
 Revision history for GraphQL
 
+0.25	Fri Dec 29 12:47:13 GMT 2017
+ - more-correct handle of lists and non-null
+ - handles Promises if give helper code-refs (type PromiseCode)
+
 0.24	Tue 12 Dec 03:57:18 GMT 2017
  - handle array of enum
 
