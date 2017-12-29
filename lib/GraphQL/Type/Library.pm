@@ -388,6 +388,30 @@ declare "ExecutionPartialResult",
     errors => Optional[ArrayRef[InstanceOf['GraphQL::Error']]],
   ];
 
+=head2 Promise
+
+An object that has a C<then> method.
+
+=cut
+
+declare "Promise",
+  as HasMethods['then'];
+
+=head2 PromiseCode
+
+A hash-ref with three keys: C<resolve>, C<all>, C<reject>. The values are
+all code-refs that take one value (for C<all>, an array-ref), and create
+the given kind of Promise.
+
+=cut
+
+declare "PromiseCode",
+  as Dict[
+    resolve => CodeLike,
+    all => CodeLike,
+    reject => CodeLike,
+  ];
+
 =head1 AUTHOR
 
 Ed J, C<< <etj at cpan.org> >>
