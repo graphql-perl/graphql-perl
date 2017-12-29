@@ -114,6 +114,7 @@ fun execute(
       $field_resolver,
     );
   };
+  DEBUG and _debug('execute', $context, $@);
   return _build_response(_wrap_error($@)) if $@;
   my $result = _execute_operation(
     $context,
@@ -277,6 +278,7 @@ fun _execute_fields(
       $root_value,
       $info,
     );
+    DEBUG and _debug('_execute_fields(resolved)', $parent_type->to_string, $result);
     $result = _complete_value_catching_error(
       $context,
       $field_def->{type},
