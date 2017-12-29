@@ -42,6 +42,33 @@ sub all_checks {
       check($type, undef, $expected{returns_null});
     };
   };
+
+  subtest 'Promise<Array<T>>' => sub {
+    subtest 'Contains values' => sub {
+      check($type, rsv([1, 2]), $expected{contains_values});
+    };
+    subtest 'Contains null' => sub {
+      check($type, rsv([1, undef, 2]), $expected{contains_null});
+    };
+    subtest 'Returns null' => sub {
+      check($type, rsv(undef), $expected{returns_null});
+    };
+    subtest 'Rejected' => sub {
+      check($type, rj('bad'), $expected{rejected});
+    };
+  };
+
+  subtest 'Array<Promise<T>>' => sub {
+    subtest 'Contains values' => sub {
+      check($type, [rsv(1), rsv(2)], $expected{contains_values});
+    };
+    subtest 'Contains null' => sub {
+      check($type, [map rsv($_), 1, undef, 2], $expected{contains_null});
+    };
+    subtest 'Contains rejected' => sub {
+      check($type, [rsv(1), rj('bad'), rsv(2)], $expected{contains_rejected});
+    };
+  };
 }
 
 my $data_ok = { nest => { test => [1, 2] } };
@@ -102,8 +129,8 @@ subtest '[T!]' => sub {
       contains_values => { data => $data_ok },
       contains_null => { data => $data_null1, errors => $errors_null1 },
       returns_null => { data => $data_null1 },
-      rejected => { data => $data_null0, errors => $errors_bad0 },
-      contains_rejected => { data => $data_null_ok, errors => $errors_bad1 },
+      rejected => { data => $data_null1, errors => $errors_bad0 },
+      contains_rejected => { data => $data_null1, errors => $errors_bad1 },
     },
   );
 };
