@@ -119,6 +119,7 @@ fun execute(
       $variable_values,
       $operation_name,
       $field_resolver,
+      $promise_code,
     );
   };
   DEBUG and _debug('execute', $context, $@);
@@ -159,6 +160,7 @@ fun _build_context(
   Maybe[HashRef] $variable_values,
   Maybe[Str] $operation_name,
   Maybe[CodeLike] $field_resolver,
+  Maybe[PromiseCode] $promise_code,
 ) :ReturnType(HashRef) {
   my %fragments = map {
     ($_->{name} => $_)
@@ -180,6 +182,7 @@ fun _build_context(
       $variable_values || {},
     ),
     field_resolver => $field_resolver || \&_default_field_resolver,
+    promise_code => $promise_code,
   };
 }
 
