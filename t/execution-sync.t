@@ -86,4 +86,24 @@ subtest 'test the tests' => sub {
   promise_test($p, ["^>yo!\n"], "");
 };
 
+subtest 'does not return a Promise for initial errors' => sub {
+  run_test([
+    $schema, "fragment Example on Query { syncField }", 'rootValue',
+  ], +{ errors => [ {
+    message => "No operations supplied.\n",
+  } ] }, 0);
+};
+
+subtest 'does not return a Promise if fields are all synchronous' => sub {
+  run_test([
+    $schema, "query Example { syncField }", 'rootValue',
+  ], +{ data => { syncField => 'rootValue' } }, 0);
+};
+
+subtest 'returns a Promise if any field is asynchronous' => sub {
+  run_test([
+    $schema, "query Example { asyncField }", 'rootValue',
+  ], +{ data => { asyncField => 'rootValue' } }, 1);
+};
+
 done_testing;
