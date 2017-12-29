@@ -290,14 +290,28 @@ fun _execute_fields(
     DEBUG and _debug('_execute_fields(complete)', $result);
     $name2executionresult{$result_name} = $result;
   }
+  DEBUG and _debug('_execute_fields(done)', \%name2executionresult, \@errors);
   # still might be promises here
   # TODO promise stuff
-  my %name2data = map {
-    my $result = $name2executionresult{$_};
-    push @errors, @{ $result->{errors} || [] };
-    ($_ => $result->{data});
-  } keys %name2executionresult;
-  DEBUG and _debug('_execute_fields(done)', \%name2executionresult, \@errors);
+  _merge_hash(
+    [ keys %name2executionresult ],
+    [ values %name2executionresult ],
+    \@errors,
+  );
+}
+
+fun _merge_hash(
+  ArrayRef[Str] $keys,
+  ArrayRef[ExecutionPartialResult] $values,
+  (ArrayRef[InstanceOf['GraphQL::Error']]) $errors,
+) :ReturnType(ExecutionPartialResult) {
+  DEBUG and _debug('_merge_hash', $keys, $values, $errors);
+  my @errors = (@$errors, map @{$_->{errors} || []}, @$values);
+  my %name2data;
+  for (my $i = @$values - 1; $i >= 0; $i--) {
+    $name2data{$keys->[$i]} = $values->[$i]{data};
+  }
+  DEBUG and _debug('_merge_hash(after)', \%name2data);
   +{
     %name2data ? (data => \%name2data) : (),
     @errors ? (errors => \@errors) : ()
