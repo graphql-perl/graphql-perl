@@ -80,12 +80,12 @@ it will be preserved as C<original_error>.
 =cut
 
 method coerce(
-  (Undef | Str | InstanceOf[__PACKAGE__]) $item
+  Any $item
 ) :ReturnType(InstanceOf[__PACKAGE__]) {
   DEBUG and _debug('Error.coerce', $item);
   return $item if __PACKAGE__->is($item);
   $item ||= 'Unknown error';
-  is_InstanceOf($item)
+  !is_Str($item)
     ? $self->new(message => $item.'', original_error => $item)
     : $self->new(message => $item);
 }

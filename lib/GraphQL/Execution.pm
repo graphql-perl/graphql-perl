@@ -147,7 +147,7 @@ fun _build_response(
 }
 
 fun _wrap_error(
-  (Str | Undef | InstanceOf['GraphQL::Error'] | ExecutionPartialResult) $error,
+  Any $error,
 ) :ReturnType(ExecutionPartialResult) {
   return $error if is_ExecutionPartialResult($error);
   +{ errors => [ GraphQL::Error->coerce($error) ] };

@@ -113,4 +113,31 @@ EOF
   );
 };
 
+subtest 'arbitrary object as exception' => sub {
+  {
+    package MyException;
+    use overload '""' => sub { join ' ', @{ $_[0] } };
+    sub new { my $class = shift; bless [ @_ ], $class; }
+  }
+  my $schema = GraphQL::Schema->from_doc(<<'EOF');
+type Query {
+  hello(arg: String): String
+}
+EOF
+  run_test([
+    $schema, '{hello(arg: "Hi")}', {
+      hello => sub { die MyException->new(qw(oh no)) }
+    }
+  ], {
+    'data' => { 'hello' => undef },
+    'errors' => [
+      {
+        'locations' => [ { 'column' => 18, 'line' => 1 } ],
+        'message' => 'oh no',
+        'path' => [ 'hello' ],
+      },
+    ],
+  });
+};
+
 done_testing;
