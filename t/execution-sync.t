@@ -1,4 +1,6 @@
 use lib 't/lib';
+use strict;
+use warnings;
 use GQLTest;
 
 my $JSON = JSON::MaybeXS->new->allow_nonref->canonical;
@@ -47,7 +49,7 @@ subtest 'test the tests' => sub {
   promise_test($p, [], "f\n");
   $p = FakePromise->resolve("yo\n")->then(sub { die shift })->catch(sub { shift });
   promise_test($p, ["yo\n"], "");
-  my $p = FakePromise->resolve('yo')->then(sub { FakePromise->resolve('y2') });
+  $p = FakePromise->resolve('yo')->then(sub { FakePromise->resolve('y2') });
   promise_test($p, ["y2"], "");
   $p = FakePromise->resolve("s\n")->then(sub { FakePromise->reject(shift) });
   promise_test($p, [], "s\n");
