@@ -157,7 +157,7 @@ fun _promise_for_list(
     if !$context->{promise_code};
   return $context->{promise_code}{all}->(@$list)->then(sub {
     DEBUG and _debug('_promise_for_list(all)', @_);
-    _merge_list(\@_);
+    _merge_list([ map $_->[0], @_ ]);
   });
 }
 

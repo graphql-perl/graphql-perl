@@ -128,7 +128,7 @@ sub fake_promise_code {
     if ($self->{all}) {
       for (@{$self->{all}}) {
         if (ref $_ ne __PACKAGE__) {
-          push @values, $_;
+          push @values, [ $_ ];
           next;
         }
         my ($e, @r) = _safe_call(sub { $_->get });
@@ -137,7 +137,7 @@ sub fake_promise_code {
           @values = ($e);
           last;
         }
-        push @values, @r;
+        push @values, [ @r ];
       }
     } else {
       @values = $self->values;

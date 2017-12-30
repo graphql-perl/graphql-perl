@@ -348,7 +348,7 @@ fun _promise_for_hash(
     if !$context->{promise_code};
   $context->{promise_code}{all}->(@$values)->then(sub {
     DEBUG and _debug('_promise_for_hash(all)', \@_);
-    _merge_hash($keys, [ @_ ], $errors);
+    _merge_hash($keys, [ map $_->[0], @_ ], $errors);
   });
 }
 

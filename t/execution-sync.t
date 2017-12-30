@@ -57,17 +57,19 @@ subtest 'test the tests' => sub {
   promise_test($p, ["s\n"], "");
   $p = FakePromise->all(FakePromise->reject("s\n"))->catch(sub { shift });
   promise_test($p, ["s\n"], "");
-  $p = FakePromise->all('hi', FakePromise->resolve("yo"));
+  $p = FakePromise->all('hi', FakePromise->resolve("yo"))->then(sub {
+    map @$_, @_
+  });
   promise_test($p, [qw(hi yo)], "");
   $p = FakePromise->all(
     'hi',
     FakePromise->resolve("yo")->then(sub { "$_[0]!" }),
-  )->then(sub { map ucfirst, @_ }),;
+  )->then(sub { map ucfirst $_->[0], @_ }),;
   promise_test($p, [qw(Hi Yo!)], "");
   $p = FakePromise->all(
     FakePromise->resolve("hi")->then(sub { "$_[0]!" }),
     FakePromise->resolve("yo")->then(sub { "$_[0]!" }),
-  )->then(sub { map ucfirst, @_ }),;
+  )->then(sub { map ucfirst $_->[0], @_ }),;
   promise_test($p, [qw(Hi! Yo!)], "");
   $p = FakePromise->all(
     FakePromise->all(
