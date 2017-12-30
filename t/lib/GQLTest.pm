@@ -57,8 +57,10 @@ sub nice_dump {
 sub promise_test {
   my ($p, $fulfilled, $rejected) = @_;
   local $Test::Builder::Level = $Test::Builder::Level + 1;
-  is_deeply [ eval { $p->get } ], $fulfilled;
-  is $@, $rejected;
+  my $got = [ eval { $p->get } ];
+  is_deeply $got, $fulfilled or diag 'got: ', nice_dump $got;
+  my $e = $@;
+  is $e, $rejected or diag 'got: ', nice_dump $e;
 }
 
 sub fake_promise_code {
