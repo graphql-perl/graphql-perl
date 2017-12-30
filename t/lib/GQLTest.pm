@@ -27,6 +27,7 @@ sub import {
 
 sub run_test {
   my ($args, $expected, $force_promise) = @_;
+  local $Test::Builder::Level = $Test::Builder::Level + 1;
   my @args = @$args;
   $args[7] ||= fake_promise_code() if !defined $force_promise or $force_promise;
   my $got = execute(@args);
@@ -55,6 +56,7 @@ sub nice_dump {
 
 sub promise_test {
   my ($p, $fulfilled, $rejected) = @_;
+  local $Test::Builder::Level = $Test::Builder::Level + 1;
   is_deeply [ eval { $p->get } ], $fulfilled;
   is $@, $rejected;
 }
