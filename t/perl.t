@@ -6,6 +6,8 @@ my $JSON = JSON::MaybeXS->new->allow_nonref->canonical;
 BEGIN {
   use_ok( 'GraphQL::Schema' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Execution', qw(execute) ) || print "Bail out!\n";
+  use_ok( 'GraphQL::Type::Scalar', qw($String) ) || print "Bail out!\n";
+  use_ok( 'GraphQL::Type::Object' ) || print "Bail out!\n";
 }
 
 subtest 'DateTime->now as resolve' => sub {
@@ -137,6 +139,29 @@ EOF
         'path' => [ 'hello' ],
       },
     ],
+  });
+};
+
+subtest 'list in query params' => sub {
+#  my $schema = GraphQL::Schema->from_doc(<<'EOF');
+#type Query { hello(arg: [String]): String }
+#EOF
+  my $schema = GraphQL::Schema->new(
+    query => GraphQL::Type::Object->new(
+      name => 'Query',
+      fields => {
+        hello => {
+          type => $String,
+          args => { arg => { type => GraphQL::Type::List->new(of => $String) } }
+        },
+      }
+    ),
+  );
+  run_test([
+    $schema, 'query q($a: [String]) {hello(arg: $a)}', { hello => "yo" },
+    undef, { a => [ 'there' ] },
+  ], {
+    'data' => { 'hello' => "yo" },
   });
 };
 

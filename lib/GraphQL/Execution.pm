@@ -657,6 +657,7 @@ fun _type_will_accept(
   $arg_type = $arg_type->of if $arg_type->isa('GraphQL::Type::NonNull');
   $var_type = $var_type->of if $var_type->isa('GraphQL::Type::NonNull');
   return 1 if $arg_type == $var_type;
+  return 1 if $arg_type->to_string eq $var_type->to_string;
   '';
 }
 
