@@ -1,6 +1,9 @@
 Revision history for GraphQL
 
-0.25	Sat Dec 30 08:45:37 GMT 2017
+0.27	Fri Feb  9 18:13:35 GMT 2018
+ - fix input type-check bug #9
+
+0.26	Sat Dec 30 08:45:37 GMT 2017
  - the "then" of ->all will get each result as array-ref
 
 0.25	Fri Dec 29 12:47:13 GMT 2017
