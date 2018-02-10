@@ -1,5 +1,8 @@
 Revision history for GraphQL
 
+0.28	Sat Feb 10 18:26:29 GMT 2018
+ - fix Enum type-check bug #10
+
 0.27	Fri Feb  9 18:13:35 GMT 2018
  - fix input type-check bug #9
 
