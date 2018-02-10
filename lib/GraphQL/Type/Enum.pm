@@ -108,7 +108,7 @@ method is_valid(Any $item) :ReturnType(Bool) {
   !!$self->_value2name->{$item};
 }
 
-method graphql_to_perl(Str $item) {
+method graphql_to_perl(Maybe[Str] $item) {
   DEBUG and _debug('graphql_to_perl', $item, $self->_name2value);
   return undef if !defined $item;
   $self->_name2value->{$item} // die "Expected type '@{[$self->to_string]}', found $item.\n";

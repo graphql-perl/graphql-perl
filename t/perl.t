@@ -143,9 +143,6 @@ EOF
 };
 
 subtest 'list in query params' => sub {
-#  my $schema = GraphQL::Schema->from_doc(<<'EOF');
-#type Query { hello(arg: [String]): String }
-#EOF
   my $schema = GraphQL::Schema->new(
     query => GraphQL::Type::Object->new(
       name => 'Query',
@@ -160,6 +157,21 @@ subtest 'list in query params' => sub {
   run_test([
     $schema, 'query q($a: [String]) {hello(arg: $a)}', { hello => "yo" },
     undef, { a => [ 'there' ] },
+  ], {
+    'data' => { 'hello' => "yo" },
+  });
+};
+
+subtest 'input object with null value' => sub {
+  my $schema = GraphQL::Schema->from_doc(<<'EOF');
+enum E1 { A, B }
+enum E2 { C, D }
+input TestInput { f1: E1, f2: E2 }
+type Query { hello(arg: TestInput): String }
+EOF
+  run_test([
+    $schema, 'query q($a: TestInput) {hello(arg: $a)}', { hello => "yo" },
+    undef, { a => { f1 => 'A' } },
   ], {
     'data' => { 'hello' => "yo" },
   });
