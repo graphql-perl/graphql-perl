@@ -1,5 +1,8 @@
 Revision history for GraphQL
 
+0.29	Thu Feb 15 03:40:12 GMT 2018
+ - Pegex version that gets line_column right
+
 0.28	Sat Feb 10 18:26:29 GMT 2018
  - fix Enum type-check bug #10
 
