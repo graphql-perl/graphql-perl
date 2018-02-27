@@ -212,7 +212,9 @@ fun _variables_apply_defaults(
     if ($@) {
       my $error = $@;
       $error =~ s#\s+at.*line\s+\d+\.#.#;
-      die "Variable '\$$_' got invalid value @{[$JSON->canonical->encode($maybe_value)]}.\n$error";
+      # JSON cannot encode scalar references
+      my $jsonable = _coerce_for_error($maybe_value);
+      die "Variable '\$$_' got invalid value @{[$JSON->canonical->encode($jsonable)]}.\n$error";
     }
     ($_ => { value => $parsed_value, type => $opvar_type })
   } keys %$operation_variables };
@@ -612,15 +614,39 @@ fun _get_argument_values(
     if ($@) {
       my $error = $@;
       $error =~ s#\s+at.*line\s+\d+\.#.#;
+      # JSON can't encode scalar references
+      my $jsonable = _coerce_for_error($coerced_values{$name});
       die GraphQL::Error->new(
         message => "Argument '$name' got invalid value"
-          . " @{[$JSON->encode($coerced_values{$name})]}.\nExpected '"
+          . " @{[$JSON->encode($jsonable)]}.\nExpected '"
           . $arg_type->to_string . "'.\n$error",
         nodes => [ $node ],
       );
     }
   }
   \%coerced_values;
+}
+
+fun _coerce_for_error(Any $value) {
+#   my ($value) = @_;
+  
+  my $ret;
+  
+  if ( 'ARRAY' eq ref $value ) {
+    $ret = [
+      map { 'SCALAR' eq ref($_) ? $$_ : $_ } @$value
+    ];
+  }
+  elsif ( 'HASH' eq ref $value ) {
+    $ret = {
+      map { $_ => 'SCALAR' eq ref($value->{$_}) ? ${ $value->{$_} } : $value->{$_} } keys %$value
+    };
+  }
+  else {
+    $ret = $value;
+  }
+  
+  return $ret;
 }
 
 fun _coerce_value(

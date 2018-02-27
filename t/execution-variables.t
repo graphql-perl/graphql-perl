@@ -154,6 +154,24 @@ subtest 'Handles objects and nullability', sub {
       );
     };
 
+    subtest 'errors on incorrect query input', sub {
+      my $doc = '
+        query q($id: String) {
+          fieldWithObjectInput(input: { id: $id })
+        }';
+      run_test(
+        [$schema, $doc],
+        {
+          data => { fieldWithObjectInput => undef },
+          errors => [ { message =>
+          q{Argument 'input' got invalid value {"id":"id"}.}
+          ."\n"."Expected 'TestInputObject'.\nIn field \"id\": Unknown field.\n",
+          locations => [{ column => 9, line => 4 }],
+          path => ['fieldWithObjectInput'],
+        } ] },
+      );
+    };
+
     subtest 'properly runs parseLiteral on complex scalar types', sub {
       my $doc = '{
         fieldWithObjectInput(input: {c: "foo", d: "SerializedValue"})
