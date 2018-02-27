@@ -628,8 +628,6 @@ fun _get_argument_values(
 }
 
 fun _coerce_for_error(Any $value) {
-#   my ($value) = @_;
-  
   my $ret;
   
   if ( 'ARRAY' eq ref $value ) {
