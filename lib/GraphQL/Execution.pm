@@ -628,21 +628,12 @@ fun _get_argument_values(
 }
 
 fun _coerce_for_error(Any $value) {
-  my $ret;
-  
-  if ( 'ARRAY' eq ref $value ) {
-    $ret = [
-      map { 'SCALAR' eq ref($_) ? $$_ : $_ } @$value
-    ];
-  }
-  elsif ( 'HASH' eq ref $value ) {
-    $ret = {
-      map { $_ => 'SCALAR' eq ref($value->{$_}) ? ${ $value->{$_} } : $value->{$_} } keys %$value
-    };
-  }
-  else {
-    $ret = $value;
-  }
+  my $ref = ref $value;
+  my $ret = 'SCALAR' eq $ref ? $$value
+          : 'ARRAY'  eq $ref ? [ map { _coerce_for_error($_) } @$value ]
+          : 'HASH'   eq $ref ? { map { $_ => _coerce_for_error($value->{$_}) } keys %$value }
+          :                    $value
+          ;
   
   return $ret;
 }
