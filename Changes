@@ -1,5 +1,8 @@
 Revision history for GraphQL
 
+0.30	Wed 28 Feb 04:29:50 GMT 2018
+ - make variable-type errors JSONable for returning - thanks @nohuhu
+
 0.29	Thu Feb 15 03:40:12 GMT 2018
  - Pegex version that gets line_column right
 
