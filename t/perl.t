@@ -177,4 +177,41 @@ EOF
   });
 };
 
+subtest 'errors on incorrect query input', sub {
+  my $doc = '
+    query q($id: String) {
+      fieldWithObjectInput(input: { id: $id })
+    }';
+  my $TestInputObject = GraphQL::Type::InputObject->new(
+    name => 'TestInputObject',
+    fields => {
+      a => { type => $String },
+      b => { type => $String->list },
+      c => { type => $String->non_null },
+    },
+  );
+  my $TestType = GraphQL::Type::Object->new(
+    name => 'TestType',
+    fields => {
+      fieldWithObjectInput => {
+        type => $String,
+        args => { input => { type => $TestInputObject } },
+        resolve => sub { $_[1]->{input} && $JSON->encode($_[1]->{input}) },
+      },
+    },
+  );
+  my $schema = GraphQL::Schema->new(query => $TestType);
+  run_test(
+    [$schema, $doc],
+    {
+      data => { fieldWithObjectInput => undef },
+      errors => [ { message =>
+      q{Argument 'input' got invalid value {"id":"id"}.}
+      ."\n"."Expected 'TestInputObject'.\nIn field \"id\": Unknown field.\n",
+      locations => [{ column => 5, line => 4 }],
+      path => ['fieldWithObjectInput'],
+    } ] },
+  );
+};
+
 done_testing;
