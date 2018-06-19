@@ -3,6 +3,7 @@ use GQLTest;
 
 BEGIN {
   use_ok( 'GraphQL::Type::Scalar', qw($String) ) || print "Bail out!\n";
+  use_ok( 'GraphQL::Type::Enum' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::InputObject' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::Object' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Schema' ) || print "Bail out!\n";
@@ -41,6 +42,11 @@ my $TestNestedInputObject = GraphQL::Type::InputObject->new(
   },
 );
 
+my $TestEnum = GraphQL::Type::Enum->new(
+  name => 'Enum',
+  values => { A => {}, B => {} },
+);
+
 my $TestType = GraphQL::Type::Object->new(
   name => 'TestType',
   fields => {
@@ -57,6 +63,11 @@ my $TestType = GraphQL::Type::Object->new(
     fieldWithNonNullableStringInput => {
       type => $String,
       args => { input => { type => $String->non_null } },
+      resolve => sub { $_[1]->{input} && $JSON->encode($_[1]->{input}) },
+    },
+    fieldWithNonNullableEnumInput => {
+      type => $String,
+      args => { input => { type => $TestEnum->non_null } },
       resolve => sub { $_[1]->{input} && $JSON->encode($_[1]->{input}) },
     },
     fieldWithDefaultArgumentValue => {
@@ -414,6 +425,16 @@ In method graphql_to_perl: parameter 1 ($item): found not an object.
       run_test(
         [$schema, $doc],
         { data => { fieldWithNonNullableStringInput => '"a"' } },
+      );
+    };
+
+    subtest 'allows non-nullable enum inputs to be set to a value directly', sub {
+      my $doc = '
+        { fieldWithNonNullableEnumInput(input: A) }
+      ';
+      run_test(
+        [$schema, $doc],
+        { data => { fieldWithNonNullableEnumInput => '"A"' } },
       );
     };
 
