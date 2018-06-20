@@ -115,6 +115,26 @@ EOF
   );
 };
 
+subtest 'non-nullable enum as arg' => sub {
+  my $schema = GraphQL::Schema->from_doc(<<'EOF');
+enum E {
+  available
+  pending
+}
+
+type Query {
+  hello(arg: E!): String
+}
+EOF
+  run_test([
+    $schema, '{hello(arg: available)}', {
+      hello => sub { 'Hello, '.shift->{arg} }
+    }
+  ],
+    { data => { hello => 'Hello, available' } },
+  );
+};
+
 subtest 'arbitrary object as exception' => sub {
   {
     package MyException;
