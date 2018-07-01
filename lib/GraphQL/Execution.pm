@@ -565,7 +565,8 @@ fun _get_argument_values(
   my @enumfail = grep {
     ref($arg_nodes->{$_}) eq 'REF' and
     ref(${$arg_nodes->{$_}}) eq 'SCALAR' and
-    !$arg_defs->{$_}{type}->isa('GraphQL::Type::Enum')
+    !$arg_defs->{$_}{type}->isa('GraphQL::Type::Enum') and
+    !($arg_defs->{$_}{type}->isa('GraphQL::Type::NonNull') and $arg_defs->{$_}{type}->of->isa('GraphQL::Type::Enum'))
   } keys %$arg_defs;
   die GraphQL::Error->new(
     message => "Argument '$enumfail[0]' of type ".
