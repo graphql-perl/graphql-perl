@@ -1,5 +1,8 @@
 Revision history for GraphQL
 
+0.31	Sun  1 Jul 23:10:59 BST 2018
+ - Fix non-nullable Enum being misdetected - thanks @mechairoi
+
 0.30	Wed 28 Feb 04:29:50 GMT 2018
  - make variable-type errors JSONable for returning - thanks @nohuhu
 
