@@ -16,7 +16,7 @@ before_install:
   - build-perl
   - local-lib cache
   - perl -V
-  - if [ "$RELEASE_TESTING" = 1 ]; then prove -l xt; fi
+  - if [ "$RELEASE_TESTING" = 1 ]; then cpan-install --deps; prove -l xt; fi
   - build-dist
   - cd $BUILD_DIR             # $BUILD_DIR is set by the build-dist command
 install:
