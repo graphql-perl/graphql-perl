@@ -11,7 +11,7 @@ WriteMakefile(
   LICENSE          => 'artistic_2',
   MIN_PERL_VERSION => '5.014',
   CONFIGURE_REQUIRES => {
-    'ExtUtils::MakeMaker' => '0',
+    'ExtUtils::MakeMaker' => '6.64', # TEST_REQUIRES
   },
   TEST_REQUIRES => {
     'Test::More' => '0.88', # done_testing
