@@ -25,6 +25,8 @@ install:
   - cpan-install --coverage   # installs converage prereqs, if enabled
 before_script:
   - coverage-setup
+  # this is a workaround for https://github.com/pjcj/Devel--Cover/issues/164
+  - export HARNESS_PERL_SWITCHES="-M\"5; BEGIN{ require B::Deparse; *B::Deparse::const = sub { goto &B::Deparse::const_dumper; } }\" $HARNESS_PERL_SWITCHES"
 script:
   - prove -l -j$(test-jobs) $(test-files)   # parallel testing
 after_success:
