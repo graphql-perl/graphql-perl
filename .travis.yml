@@ -4,8 +4,8 @@ matrix:
   include:
     - perl: "5.14.0"
     - perl: "5.26"
-      env: AUTHOR_TESTING=1 RELEASE_TESTING=1
-    # separate from author testing else cover_db blows up xt/manifest.t
+      env: RELEASE_TESTING=1
+    # separate from release testing else cover_db blows up xt/manifest.t
     - perl: "5.26"
       env: COVERAGE=1
 before_install:
@@ -15,7 +15,7 @@ before_install:
   - build-perl
   - local-lib cache
   - perl -V
-  - if [ "$AUTHOR_TESTING" = 1 ]; then prove -l xt; fi
+  - if [ "$RELEASE_TESTING" = 1 ]; then prove -l xt; fi
   - build-dist
   - cd $BUILD_DIR             # $BUILD_DIR is set by the build-dist command
 install:
