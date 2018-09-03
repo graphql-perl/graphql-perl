@@ -77,7 +77,7 @@ lib/GraphQL/Language/Grammar.pm : graphql.pgx
 
 pure_all :: README.md
 
-README.md : lib/GraphQL.pm
+README.md : \$(VERSION_FROM)
 \tpod2markdown \$< >\$\@
 
 containerprereq :
