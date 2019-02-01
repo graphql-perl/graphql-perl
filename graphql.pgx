@@ -83,7 +83,9 @@ directives: directiveactual+
 
 directiveactual: .(/- AT/) name arguments?
 
-string: /
+string: blockStringValue | stringValue
+
+stringValue: /
   DOUBLE
     (
       (:
@@ -106,6 +108,19 @@ string: /
       )*
     )
   DOUBLE
+/
+
+blockStringValue: /
+  DOUBLE DOUBLE DOUBLE
+    (
+      (:
+        (: BACK DOUBLE DOUBLE DOUBLE ) |
+        [^ CONTROLS DOUBLE ] |
+        [ TAB NL CR ] |
+	(: DOUBLE (?!"") )
+      )*
+    )
+  DOUBLE DOUBLE DOUBLE
 /
 
 float: /(
@@ -132,7 +147,7 @@ ws: / (: WS | \x{FEFF} | COMMA | comment ) /
 
 comment: / BLANK* HASH BLANK* ([^\r\n]*) (: EOL | CR !NL | EOS ) / # CR is because MacOS 9
 
-description: .(/ [ WS NL ]* /) comment+ .(/ [ WS NL ]* /) | .(-)
+description: .(/ [ WS NL ]* /) ( comment+ | string ) .(/ [ WS NL ]* /) | .(-)
 
 typeSystemDefinition: description? (schema | typeDefinition | typeExtensionDefinition | directive)
 

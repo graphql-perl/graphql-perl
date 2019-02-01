@@ -54,6 +54,7 @@ t/execution-schema.t
 t/execution-sync.t
 t/execution-variables.t
 t/kitchen-sink.graphql
+t/language-block-string-value.t
 t/language-lexer.t
 t/language-parser.t
 t/language-schema-parser.t
