@@ -23,7 +23,7 @@ $got = parse(string_make(' x '));
 is string_lookup($got), ' x ', 'string preserve whitespace' or diag nice_dump $got;
 
 $got = parse(string_make('quote \\"'));
-is string_lookup($got), 'quote \\"', 'string quote kept' or diag nice_dump $got; # not de-quoted by lexer
+is string_lookup($got), 'quote "', 'string quote kept' or diag nice_dump $got;
 
 dies_ok { parse(string_make('quote \\')) };
 is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,21], 'error on unterminated string';
