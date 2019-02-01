@@ -81,6 +81,12 @@ fun _merge_hash (Any $param = undef, Any $arraykey = undef) {
   \%def;
 }
 
+fun _unescape (Str $str) {
+  # https://facebook.github.io/graphql/June2018/#EscapedCharacter
+  $str =~ s|\\(["\\/bfnrt])|"qq!\\$1!"|gee;
+  return $str;
+}
+
 method got_arguments (Any $param = undef) {
   return unless defined $param;
   my %args = map { ($_->[0]{name} => $_->[1]) } @$param;
@@ -208,7 +214,7 @@ method got_null (Any $param = undef) {
 
 method got_string (Any $param = undef) {
   return unless defined $param;
-  return $param;
+  return _unescape($param);
 }
 
 method got_int (Any $param = undef) {
