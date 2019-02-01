@@ -87,6 +87,33 @@ fun _unescape (Str $str) {
   return $str;
 }
 
+fun _blockstring_value (Str $str) {
+  # https://facebook.github.io/graphql/June2018/#BlockStringValue()
+  my @lines = split(/(?:\n|\r(?!\r)|\r\n)/s, $str);
+  if (1 < @lines) {
+    my $common_indent;
+    for my $line (@lines[1..$#lines]) {
+      my $length = length($line);
+      my $indent = length(($line =~ /^([\t ]*)/)[0] || '');
+      if ($indent < $length && (!defined($common_indent) || $indent < $common_indent)) {
+        $common_indent = $indent;
+      }
+    }
+    if (defined $common_indent) {
+      for my $line (@lines[1..$#lines]) {
+        $line =~ s/^[\t ]{$common_indent}//;
+      }
+    }
+  }
+  my ($start, $end);
+  for ($start = 0; $start < @lines && $lines[$start] =~ /^[\t ]*$/; ++$start) {}
+  for ($end = $#lines; $end >= 0 && $lines[$end] =~ /^[\t ]*$/; --$end) {}
+  @lines = @lines[$start..$end];
+  my $formatted = join("\n", @lines);
+  $formatted =~ s/\\"""/"""/g;
+  return $formatted;
+}
+
 method got_arguments (Any $param = undef) {
   return unless defined $param;
   my %args = map { ($_->[0]{name} => $_->[1]) } @$param;
@@ -214,7 +241,17 @@ method got_null (Any $param = undef) {
 
 method got_string (Any $param = undef) {
   return unless defined $param;
+  return $param;
+}
+
+method got_stringValue (Any $param = undef) {
+  return unless defined $param;
   return _unescape($param);
+}
+
+method got_blockStringValue (Any $param = undef) {
+  return unless defined $param;
+  return _blockstring_value($param);
 }
 
 method got_int (Any $param = undef) {
@@ -318,7 +355,7 @@ method got_comment (Any $param = undef) {
 
 method got_description (Any $param = undef) {
   return unless defined $param;
-  my $string = join "\n", @$param;
+  my $string = ref($param) eq 'ARRAY' ? join("\n", @$param) : $param;
   return $string ? {$self->{parser}{rule} => $string} : {};
 }
 
