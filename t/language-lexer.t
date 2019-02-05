@@ -131,10 +131,15 @@ sub query_lookup {
 __DATA__
 [
   {
+    'directives' => [
+      {
+        'name' => 'onQuery'
+      }
+    ],
     'kind' => 'operation',
     'location' => {
       'column' => 1,
-      'line' => 29
+      'line' => 27
     },
     'name' => 'queryName',
     'operationType' => 'query',
@@ -150,7 +155,7 @@ __DATA__
         'kind' => 'field',
         'location' => {
           'column' => 1,
-          'line' => 27
+          'line' => 25
         },
         'name' => 'node',
         'selections' => [
@@ -158,20 +163,20 @@ __DATA__
             'kind' => 'field',
             'location' => {
               'column' => 5,
-              'line' => 11
+              'line' => 9
             },
             'name' => 'id'
           },
           {
             'directives' => [
               {
-                'name' => 'defer'
+                'name' => 'onInlineFragment'
               }
             ],
             'kind' => 'inline_fragment',
             'location' => {
               'column' => 5,
-              'line' => 20
+              'line' => 18
             },
             'on' => 'User',
             'selections' => [
@@ -179,7 +184,7 @@ __DATA__
                 'kind' => 'field',
                 'location' => {
                   'column' => 5,
-                  'line' => 19
+                  'line' => 17
                 },
                 'name' => 'field2',
                 'selections' => [
@@ -187,7 +192,7 @@ __DATA__
                     'kind' => 'field',
                     'location' => {
                       'column' => 9,
-                      'line' => 14
+                      'line' => 12
                     },
                     'name' => 'id'
                   },
@@ -208,7 +213,7 @@ __DATA__
                     'kind' => 'field',
                     'location' => {
                       'column' => 7,
-                      'line' => 18
+                      'line' => 16
                     },
                     'name' => 'field1',
                     'selections' => [
@@ -216,15 +221,20 @@ __DATA__
                         'kind' => 'field',
                         'location' => {
                           'column' => 11,
-                          'line' => 16
+                          'line' => 14
                         },
                         'name' => 'id'
                       },
                       {
+                        'directives' => [
+                          {
+                            'name' => 'onFragmentSpread'
+                          }
+                        ],
                         'kind' => 'fragment_spread',
                         'location' => {
-                          'column' => 9,
-                          'line' => 17
+                          'column' => 0,
+                          'line' => 14
                         },
                         'name' => 'frag'
                       }
@@ -246,14 +256,14 @@ __DATA__
             'kind' => 'inline_fragment',
             'location' => {
               'column' => 5,
-              'line' => 23
+              'line' => 21
             },
             'selections' => [
               {
                 'kind' => 'field',
                 'location' => {
                   'column' => 5,
-                  'line' => 22
+                  'line' => 20
                 },
                 'name' => 'id'
               }
@@ -263,14 +273,14 @@ __DATA__
             'kind' => 'inline_fragment',
             'location' => {
               'column' => 3,
-              'line' => 26
+              'line' => 24
             },
             'selections' => [
               {
                 'kind' => 'field',
                 'location' => {
                   'column' => 5,
-                  'line' => 25
+                  'line' => 23
                 },
                 'name' => 'id'
               }
@@ -290,10 +300,15 @@ __DATA__
     }
   },
   {
+    'directives' => [
+      {
+        'name' => 'onMutation'
+      }
+    ],
     'kind' => 'operation',
     'location' => {
       'column' => 1,
-      'line' => 37
+      'line' => 35
     },
     'name' => 'likeStory',
     'operationType' => 'mutation',
@@ -304,13 +319,13 @@ __DATA__
         },
         'directives' => [
           {
-            'name' => 'defer'
+            'name' => 'onField'
           }
         ],
         'kind' => 'field',
         'location' => {
           'column' => 1,
-          'line' => 35
+          'line' => 33
         },
         'name' => 'like',
         'selections' => [
@@ -318,15 +333,20 @@ __DATA__
             'kind' => 'field',
             'location' => {
               'column' => 3,
-              'line' => 34
+              'line' => 32
             },
             'name' => 'story',
             'selections' => [
               {
+                'directives' => [
+                  {
+                    'name' => 'onField'
+                  }
+                ],
                 'kind' => 'field',
                 'location' => {
-                  'column' => 5,
-                  'line' => 33
+                  'column' => 0,
+                  'line' => 30
                 },
                 'name' => 'id'
               }
@@ -337,6 +357,11 @@ __DATA__
     ]
   },
   {
+    'directives' => [
+      {
+        'name' => 'onSubscription'
+      }
+    ],
     'kind' => 'operation',
     'location' => {
       'column' => 1,
@@ -412,10 +437,15 @@ __DATA__
     }
   },
   {
+    'directives' => [
+      {
+        'name' => 'onFragmentDefinition'
+      }
+    ],
     'kind' => 'fragment',
     'location' => {
       'column' => 1,
-      'line' => 54
+      'line' => 58
     },
     'name' => 'frag',
     'on' => 'Friend',
@@ -424,6 +454,7 @@ __DATA__
         'arguments' => {
           'bar' => \'b',
           'obj' => {
+            'block' => 'block string uses """',
             'key' => 'value'
           },
           'size' => \'size'
@@ -431,7 +462,7 @@ __DATA__
         'kind' => 'field',
         'location' => {
           'column' => 1,
-          'line' => 52
+          'line' => 56
         },
         'name' => 'foo'
       }
@@ -441,7 +472,7 @@ __DATA__
     'kind' => 'operation',
     'location' => {
       'column' => 1,
-      'line' => 58
+      'line' => 63
     },
     'selections' => [
       {
@@ -453,7 +484,7 @@ __DATA__
         'kind' => 'field',
         'location' => {
           'column' => 3,
-          'line' => 56
+          'line' => 60
         },
         'name' => 'unnamed'
       },
@@ -461,9 +492,27 @@ __DATA__
         'kind' => 'field',
         'location' => {
           'column' => 1,
-          'line' => 57
+          'line' => 61
         },
         'name' => 'query'
+      }
+    ]
+  },
+  {
+    'kind' => 'operation',
+    'location' => {
+      'column' => 1,
+      'line' => 64
+    },
+    'operationType' => 'query',
+    'selections' => [
+      {
+        'kind' => 'field',
+        'location' => {
+          'column' => 20,
+          'line' => 63
+        },
+        'name' => '__typename'
       }
     ]
   }
