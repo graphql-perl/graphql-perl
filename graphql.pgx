@@ -176,7 +176,7 @@ interface: .(/'interface' -/) name .(-) directives? .(/- LCURLY /) fieldDefiniti
 
 union: .(/'union' -/) name .(-) directives? .(/- EQUAL -/) unionMembers
 
-unionMembers: namedType+ % .(/- PIPE -/)
+unionMembers: .(/- PIPE -/)? namedType+ % .(/- PIPE -/)
 
 enumTypeDefinition: .(/'enum' -/) name .(-) directives? .(/- LCURLY /) enumValueDefinition+ .(/- RCURLY /)
 
@@ -188,4 +188,4 @@ typeExtensionDefinition: .(/'extend' -/) type
 
 directive: .(/'directive' - AT -/) name .(-) argumentsDefinition? .(/- 'on' -/) directiveLocations
 
-directiveLocations: name+ % .(/- PIPE -/)
+directiveLocations: .(/- PIPE -/)? name+ % .(/- PIPE -/)

@@ -50,13 +50,13 @@ interface AnnotatedInterface @onInterface {
 }
 
 union Feed =
-  Story
+  | Story
   | Article
   | Advert
 
 union AnnotatedUnion @onUnion = A | B
 
-union AnnotatedUnionTwo @onUnion = A | B
+union AnnotatedUnionTwo @onUnion = | A | B
 
 scalar CustomScalar
 
@@ -102,6 +102,6 @@ directive @include(if: Boolean!)
    | INLINE_FRAGMENT
 
 directive @include2(if: Boolean!) on
-  FIELD
+  | FIELD
   | FRAGMENT_SPREAD
   | INLINE_FRAGMENT

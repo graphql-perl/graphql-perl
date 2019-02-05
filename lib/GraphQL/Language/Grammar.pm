@@ -208,18 +208,27 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.70)
     'directiveLocations' => {
       '.all' => [
         {
-          '.ref' => 'name'
+          '+max' => 1,
+          '-skip' => 1,
+          '.rgx' => qr/\G(?:\s|\x{FEFF}|,|[\ \t]*\#[\ \t]*([^\r\n]*)(?:\r?\n|\r!NL|\z))*\|(?:\s|\x{FEFF}|,|[\ \t]*\#[\ \t]*([^\r\n]*)(?:\r?\n|\r!NL|\z))*/
         },
         {
-          '+min' => 0,
-          '-flat' => 1,
           '.all' => [
             {
-              '-skip' => 1,
-              '.rgx' => qr/\G(?:\s|\x{FEFF}|,|[\ \t]*\#[\ \t]*([^\r\n]*)(?:\r?\n|\r!NL|\z))*\|(?:\s|\x{FEFF}|,|[\ \t]*\#[\ \t]*([^\r\n]*)(?:\r?\n|\r!NL|\z))*/
+              '.ref' => 'name'
             },
             {
-              '.ref' => 'name'
+              '+min' => 0,
+              '-flat' => 1,
+              '.all' => [
+                {
+                  '-skip' => 1,
+                  '.rgx' => qr/\G(?:\s|\x{FEFF}|,|[\ \t]*\#[\ \t]*([^\r\n]*)(?:\r?\n|\r!NL|\z))*\|(?:\s|\x{FEFF}|,|[\ \t]*\#[\ \t]*([^\r\n]*)(?:\r?\n|\r!NL|\z))*/
+                },
+                {
+                  '.ref' => 'name'
+                }
+              ]
             }
           ]
         }
@@ -1104,18 +1113,27 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.70)
     'unionMembers' => {
       '.all' => [
         {
-          '.ref' => 'namedType'
+          '+max' => 1,
+          '-skip' => 1,
+          '.rgx' => qr/\G(?:\s|\x{FEFF}|,|[\ \t]*\#[\ \t]*([^\r\n]*)(?:\r?\n|\r!NL|\z))*\|(?:\s|\x{FEFF}|,|[\ \t]*\#[\ \t]*([^\r\n]*)(?:\r?\n|\r!NL|\z))*/
         },
         {
-          '+min' => 0,
-          '-flat' => 1,
           '.all' => [
             {
-              '-skip' => 1,
-              '.rgx' => qr/\G(?:\s|\x{FEFF}|,|[\ \t]*\#[\ \t]*([^\r\n]*)(?:\r?\n|\r!NL|\z))*\|(?:\s|\x{FEFF}|,|[\ \t]*\#[\ \t]*([^\r\n]*)(?:\r?\n|\r!NL|\z))*/
+              '.ref' => 'namedType'
             },
             {
-              '.ref' => 'namedType'
+              '+min' => 0,
+              '-flat' => 1,
+              '.all' => [
+                {
+                  '-skip' => 1,
+                  '.rgx' => qr/\G(?:\s|\x{FEFF}|,|[\ \t]*\#[\ \t]*([^\r\n]*)(?:\r?\n|\r!NL|\z))*\|(?:\s|\x{FEFF}|,|[\ \t]*\#[\ \t]*([^\r\n]*)(?:\r?\n|\r!NL|\z))*/
+                },
+                {
+                  '.ref' => 'namedType'
+                }
+              ]
             }
           ]
         }
