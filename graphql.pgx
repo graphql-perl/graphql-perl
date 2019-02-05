@@ -177,7 +177,7 @@ union: .(/'union' -/) name .(-) directives? .(/- EQUAL -/) unionMembers
 
 unionMembers: .(/- PIPE -/)? namedType+ % .(/- PIPE -/)
 
-enumTypeDefinition: .(/'enum' -/) name .(-) directives? .(/- LCURLY /) enumValueDefinition+ .(/- RCURLY /)
+enumTypeDefinition: .(/'enum' -/) name .(-) directives? ( .(/- LCURLY /) enumValueDefinition+ .(/- RCURLY /) )?
 
 enumValueDefinition: description? enumValue (.(-) directives)?
 

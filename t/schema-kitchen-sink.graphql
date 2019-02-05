@@ -82,6 +82,8 @@ enum AnnotatedEnum @onEnum {
   OTHER_VALUE
 }
 
+enum UndefinedEnum
+
 input InputType {
   key: String!
   answer: Int = 42

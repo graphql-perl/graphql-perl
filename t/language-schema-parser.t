@@ -39,7 +39,7 @@ lives_ok {
   my $expected = eval $expected_text;
   #open $fh, '>', 'tf'; print $fh nice_dump $got; # uncomment this line to regen
   is_deeply $got, $expected, 'lex big doc correct' or diag nice_dump $got;
-} or diag explain $@;
+} 'parse lives' or diag explain $@;
 
 done_testing;
 
@@ -386,6 +386,15 @@ of the `Foo` type.',
     }
   },
   {
+    'kind' => 'enum',
+    'location' => {
+      'column' => 1,
+      'line' => 87
+    },
+    'name' => 'UndefinedEnum',
+    'values' => {}
+  },
+  {
     'fields' => {
       'answer' => {
         'default_value' => 42,
@@ -403,7 +412,7 @@ of the `Foo` type.',
     'kind' => 'input',
     'location' => {
       'column' => 0,
-      'line' => 88
+      'line' => 90
     },
     'name' => 'InputType'
   },
@@ -426,7 +435,7 @@ of the `Foo` type.',
     'kind' => 'input',
     'location' => {
       'column' => 0,
-      'line' => 92
+      'line' => 94
     },
     'name' => 'AnnotatedInput'
   },
@@ -435,7 +444,7 @@ of the `Foo` type.',
     'kind' => 'input',
     'location' => {
       'column' => 1,
-      'line' => 96
+      'line' => 98
     },
     'name' => 'UndefinedInput'
   },
@@ -459,7 +468,7 @@ of the `Foo` type.',
     'kind' => 'directive',
     'location' => {
       'column' => 0,
-      'line' => 101
+      'line' => 103
     },
     'locations' => [
       'FIELD',
@@ -482,7 +491,7 @@ of the `Foo` type.',
     'kind' => 'directive',
     'location' => {
       'column' => 0,
-      'line' => 106
+      'line' => 108
     },
     'locations' => [
       'FIELD',
@@ -505,7 +514,7 @@ of the `Foo` type.',
     'kind' => 'directive',
     'location' => {
       'column' => 0,
-      'line' => 111
+      'line' => 113
     },
     'locations' => [
       'FIELD',
