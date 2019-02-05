@@ -12,7 +12,7 @@ schema {
 This is a description
 of the `Foo` type.
 """
-type Foo implements Bar {
+type Foo implements Bar & Baz {
   "Description of the `one` field."
   one: Type
   """

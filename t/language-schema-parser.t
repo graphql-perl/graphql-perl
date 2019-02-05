@@ -9,7 +9,8 @@ lives_ok { parse('type Hello { world: String }') } 'simple schema';
 lives_ok { parse('extend type Hello { world: String }') } 'simple extend';
 lives_ok { parse('type Hello { world: String! }') } 'non-null';
 lives_ok { parse('type Hello implements World { }') } 'implements';
-lives_ok { parse('type Hello implements Wo, rld { }') } 'implements multi';
+lives_ok { parse('type Hello implements Wo & rld { }') } 'implements multi &';
+lives_ok { parse('type Hello implements & Wo & rld { }') } 'implements multi and leading &';
 lives_ok { parse('enum Hello { WORLD }') } 'single enum';
 lives_ok { parse('enum Hello { WO, RLD }') } 'multi enum';
 dies_ok { parse('enum Hello { true }') };
@@ -140,7 +141,8 @@ of the `Foo` type.',
       }
     },
     'interfaces' => [
-      'Bar'
+      'Bar',
+      'Baz'
     ],
     'kind' => 'type',
     'location' => {

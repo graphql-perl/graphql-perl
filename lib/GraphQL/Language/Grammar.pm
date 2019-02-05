@@ -466,8 +466,29 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.70)
           '.rgx' => qr/\Gimplements(?:\s|\x{FEFF}|,|[\ \t]*\#[\ \t]*([^\r\n]*)(?:\r?\n|\r!NL|\z))*/
         },
         {
-          '+min' => 1,
-          '.ref' => 'namedType'
+          '+max' => 1,
+          '-skip' => 1,
+          '.rgx' => qr/\G(?:\s|\x{FEFF}|,|[\ \t]*\#[\ \t]*([^\r\n]*)(?:\r?\n|\r!NL|\z))*&(?:\s|\x{FEFF}|,|[\ \t]*\#[\ \t]*([^\r\n]*)(?:\r?\n|\r!NL|\z))*/
+        },
+        {
+          '.all' => [
+            {
+              '.ref' => 'namedType'
+            },
+            {
+              '+min' => 0,
+              '-flat' => 1,
+              '.all' => [
+                {
+                  '-skip' => 1,
+                  '.rgx' => qr/\G(?:\s|\x{FEFF}|,|[\ \t]*\#[\ \t]*([^\r\n]*)(?:\r?\n|\r!NL|\z))*&(?:\s|\x{FEFF}|,|[\ \t]*\#[\ \t]*([^\r\n]*)(?:\r?\n|\r!NL|\z))*/
+                },
+                {
+                  '.ref' => 'namedType'
+                }
+              ]
+            }
+          ]
         }
       ]
     },

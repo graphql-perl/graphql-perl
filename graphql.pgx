@@ -164,7 +164,7 @@ scalar: .(/'scalar' -/) name .(-) directives?
 # aka objectTypeDefinition
 type: .(/'type' -/) name .(-) implementsInterfaces? .(-) directives? .(/- LCURLY /) fieldDefinition* .(/- RCURLY /)
 
-implementsInterfaces: .(/'implements' -/) namedType+
+implementsInterfaces: .(/'implements' -/) .(/- AMP -/)? (namedType+ % .(/- AMP -/))
 
 fieldDefinition: description? name .(-) argumentsDefinition? .(/- COLON -/) typedef .(-) directives?
 
