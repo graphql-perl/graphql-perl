@@ -8,8 +8,8 @@ lives_ok {
   my $expected_text = join '', <DATA>;
   $expected_text =~ s#bless\(\s*do\{\\\(my\s*\$o\s*=\s*(.)\)\},\s*'JSON::PP::Boolean'\s*\)#'JSON->' . ($1 ? 'true' : 'false')#ge;
   my $expected = eval $expected_text;
-  #open $fh, '>', 'tf'; print $fh nice_dump $got; # uncomment to regenerate
-  is_deeply $got, $expected, 'lex big doc correct' or diag nice_dump $got;
+  #open $fh, '>', 'tf'; print $fh explain $got; # uncomment to regenerate
+  is_deeply $got, $expected, 'lex big doc correct' or diag explain $got;
 } or diag explain $@;
 
 dies_ok { parse("\x{0007}") };
@@ -21,10 +21,10 @@ dies_ok { parse("\n\n    ?  \n\n\n") };
 is_deeply [ map $@->locations->[0]->{$_}, qw(line column) ], [3,5], 'error respects whitespace';
 
 $got = parse(string_make(' x '));
-is string_lookup($got), ' x ', 'string preserve whitespace' or diag nice_dump $got;
+is string_lookup($got), ' x ', 'string preserve whitespace' or diag explain $got;
 
 $got = parse(string_make('quote \\"'));
-is string_lookup($got), 'quote "', 'string quote kept' or diag nice_dump $got;
+is string_lookup($got), 'quote "', 'string quote kept' or diag explain $got;
 
 dies_ok { parse(string_make('quote \\')) };
 is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,21], 'error on unterminated string';
@@ -93,14 +93,14 @@ is_deeply [map $@->locations->[0]->{$_}, qw(line column)], [1,26], 'error on inv
 
 my $multibyte = "Has a \x{0A0A} multi-byte character.";
 $got = parse(string_make($multibyte));
-is string_lookup($got), $multibyte, 'multibyte kept' or diag nice_dump $got;
+is string_lookup($got), $multibyte, 'multibyte kept' or diag explain $got;
 
 done_testing;
 
 sub number_test {
   my ($text, $type, $label) = @_;
   my $got = parse(number_make($text));
-  cmp_ok query_lookup($got, $type), '==', $text, $label or diag nice_dump $got;
+  cmp_ok query_lookup($got, $type), '==', $text, $label or diag explain $got;
 }
 
 sub number_make {

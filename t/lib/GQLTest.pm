@@ -16,7 +16,7 @@ do { eval "use $_; 1" or die $@ } for @IMPORT;
 use Data::Dumper;
 
 our @EXPORT = qw(
-  run_test nice_dump fake_promise_code promise_test
+  run_test fake_promise_code promise_test
 );
 
 sub import {
@@ -34,33 +34,26 @@ sub run_test {
   if (!defined $force_promise) {
     if (ref $got eq 'FakePromise') {
       $got = eval { $got->get };
-      is $@, '' or diag(nice_dump($@)), return;
+      is $@, '' or diag(explain $@), return;
     }
   } elsif ($force_promise) {
     isa_ok $got, 'FakePromise' or return;
     $got = eval { $got->get };
-    is $@, '' or diag(nice_dump($@)), return;
+    is $@, '' or diag(explain $@), return;
   } else {
     # specified did not want promise
     isnt ref($got), 'FakePromise' or return;
   }
-  cmp_deeply $got, $expected or diag nice_dump($got);
-}
-
-sub nice_dump {
-  my ($got) = @_;
-  local ($Data::Dumper::Sortkeys, $Data::Dumper::Indent, $Data::Dumper::Terse);
-  $Data::Dumper::Sortkeys = $Data::Dumper::Indent = $Data::Dumper::Terse = 1;
-  Dumper $got;
+  cmp_deeply $got, $expected or diag explain $got;
 }
 
 sub promise_test {
   my ($p, $fulfilled, $rejected) = @_;
   local $Test::Builder::Level = $Test::Builder::Level + 1;
   my $got = [ eval { $p->get } ];
-  is_deeply $got, $fulfilled or diag 'got: ', nice_dump $got;
+  is_deeply $got, $fulfilled or diag 'got: ', explain $got;
   my $e = $@;
-  is $e, $rejected or diag 'got: ', nice_dump $e;
+  is $e, $rejected or diag 'got: ', explain $e;
 }
 
 sub fake_promise_code {

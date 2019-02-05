@@ -37,8 +37,8 @@ lives_ok {
   my $expected_text = join '', <DATA>;
   $expected_text =~ s#bless\(\s*do\{\\\(my\s*\$o\s*=\s*(.)\)\},\s*'JSON::PP::Boolean'\s*\)#'JSON->' . ($1 ? 'true' : 'false')#ge;
   my $expected = eval $expected_text;
-  #open $fh, '>', 'tf'; print $fh nice_dump $got; # uncomment this line to regen
-  is_deeply $got, $expected, 'lex big doc correct' or diag nice_dump $got;
+  #open $fh, '>', 'tf'; print $fh explain $got; # uncomment this line to regen
+  is_deeply $got, $expected, 'lex big doc correct' or diag explain $got;
 } 'parse lives' or diag explain $@;
 
 done_testing;

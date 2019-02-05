@@ -64,7 +64,7 @@ done_testing;
 sub blockstring_test {
   my ($raw, $expect, $msg) = @_;
   my $got = parse(string_make(join("\n", @$raw)));
-  is string_lookup($got), join("\n", @$expect), $msg or diag nice_dump $got;
+  is string_lookup($got), join("\n", @$expect), $msg or diag explain $got;
 }
 
 sub string_make {
