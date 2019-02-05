@@ -1,5 +1,12 @@
 Revision history for GraphQL
 
+0.32	Tue  5 Feb 02:37:20 GMT 2019
+ - metadata and test updates
+ - unescape string literals - thanks @chazmcgarvey
+ - add block strings - thanks @chazmcgarvey
+ - update SDL parsing to current graphql-js, including empty defs of most types
+ - make to_doc produce new-style descriptions while from_doc still understands old, so can convert
+
 0.31	Sun  1 Jul 23:10:59 BST 2018
  - Fix non-nullable Enum being misdetected - thanks @mechairoi
 
