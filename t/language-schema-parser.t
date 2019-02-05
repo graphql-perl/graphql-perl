@@ -686,5 +686,30 @@ of the `Foo` type.',
       'INLINE_FRAGMENT'
     ],
     'name' => 'include2'
+  },
+  {
+    'directives' => [
+      {
+        'name' => 'onSchema'
+      }
+    ],
+    'kind' => 'schema',
+    'location' => {
+      'column' => 0,
+      'line' => 145
+    }
+  },
+  {
+    'directives' => [
+      {
+        'name' => 'onSchema'
+      }
+    ],
+    'kind' => 'schema',
+    'location' => {
+      'column' => 0,
+      'line' => 149
+    },
+    'subscription' => 'SubscriptionType'
   }
 ]

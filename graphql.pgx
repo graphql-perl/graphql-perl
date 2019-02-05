@@ -151,7 +151,7 @@ description: .(/ [ WS NL ]* /) ( comment+ | string ) .(/ [ WS NL ]* /) | .(-)
 
 typeSystemDefinition: description? (schema | typeDefinition | typeExtensionDefinition | directive)
 
-schema: .(/'schema' -/) directives? .(/- LCURLY -/) operationTypeDefinition+ .(/- RCURLY /)
+schema: .(/'schema' -/) directives? ( .(/- LCURLY -/) operationTypeDefinition+ .(/- RCURLY /) )?
 
 operationTypeDefinition: operationType .(/- COLON -/) namedType .(-)
 

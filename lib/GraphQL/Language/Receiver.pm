@@ -361,11 +361,16 @@ method got_description (Any $param = undef) {
 
 method got_schema (Any $param = undef) {
   return unless defined $param;
+  my $directives = {};
+  if (ref $param->[1] eq 'ARRAY') {
+    # got directives
+    $directives = shift @$param;
+  }
   my %type2count;
   $type2count{(keys %$_)[0]}++ for @{$param->[0]};
   $type2count{$_} > 1 and die "Must provide only one $_ type in schema.\n"
     for keys %type2count;
-  return {kind => $self->{parser}{rule}, %{$self->_locate_hash(_merge_hash($param->[0]))}};
+  return {kind => $self->{parser}{rule}, %{$self->_locate_hash(_merge_hash($param->[0]))}, %$directives};
 }
 
 method got_typeSystemDefinition (Any $param = undef) {
