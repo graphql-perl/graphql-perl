@@ -161,7 +161,7 @@ sub _build_to_doc {
   join '', map "$_\n",
     $self->_description_doc_lines($self->description),
     "enum @{[$self->name]} {",
-      (map "  $_", @valuelines),
+      (map length() ? "  $_" : "", @valuelines),
     "}";
 }
 

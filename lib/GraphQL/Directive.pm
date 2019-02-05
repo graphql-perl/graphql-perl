@@ -132,7 +132,7 @@ sub _build_to_doc {
       (map {
         my ($main, @description) = @$_;
         (
-          map "  $_", @description, $main,
+          map length() ? "  $_" : "", @description, $main,
         )
       } @argtuples),
     $end;

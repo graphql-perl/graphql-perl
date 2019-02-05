@@ -74,7 +74,7 @@ sub _build_to_doc {
   join '', map "$_\n",
     $self->_description_doc_lines($self->description),
     "interface @{[$self->name]} {",
-      (map "  $_", @fieldlines),
+      (map length() ? "  $_" : "", @fieldlines),
     "}";
 }
 

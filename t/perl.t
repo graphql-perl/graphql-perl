@@ -81,7 +81,7 @@ subtest 'multi-line description' => sub {
 type Query {
   """
   first line
-  
+
   second bit
   """
   hello: String
