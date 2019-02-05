@@ -273,6 +273,9 @@ Class method. Takes text that is a Schema Definition Language (SDL) (aka
 Interface Definition Language) document and returns a schema object. Will
 not be a complete schema since it will have only default resolvers.
 
+As of v0.32, this accepts both old-style "meaningful comments" and
+new-style string values, as field or type descriptions.
+
 =cut
 
 method from_doc(
@@ -285,6 +288,9 @@ method from_doc(
 
 Returns Schema Definition Language (SDL) document that describes this
 schema object.
+
+As of v0.32, this produces the new-style descriptions that are string
+values, rather than old-style "meaningful comments".
 
 =cut
 

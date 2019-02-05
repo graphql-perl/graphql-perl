@@ -75,23 +75,23 @@ schema {
   query: Hello
 }
 
-# This is a directive
+"This is a directive"
 directive @foo(
-  # It has an argument
+  "It has an argument"
   arg: Int
 ) on FIELD
 
-# With an enum
+"With an enum"
 enum Color {
   BLUE
-  # Not a creative color
+  "Not a creative color"
   GREEN
   RED
 }
 
-# What a great type
+"What a great type"
 type Hello {
-  # And a field to boot
+  "And a field to boot"
   str: String
 }
 EOF

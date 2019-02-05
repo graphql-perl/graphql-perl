@@ -70,6 +70,24 @@ method _from_ast_fields(
   );
 }
 
+method _description_doc_lines(
+  Maybe[Str] $description,
+) {
+  DEBUG and _debug('FieldsEither._description_doc_lines', $description);
+  return if !$description;
+  my @lines = $description ? split /\n/, $description : ();
+  return if !@lines;
+  if (@lines == 1) {
+    return '"' . ($lines[0] =~ s#"#\\"#gr) . '"';
+  } elsif (@lines > 1) {
+    return (
+      '"""',
+      (map s#"""#\\"""#gr, @lines),
+      '"""',
+    );
+  }
+}
+
 method _make_fieldtuples(
   HashRef $fields,
 ) {
@@ -87,9 +105,7 @@ method _make_fieldtuples(
     ) if exists $field->{default_value};
     [
       $self->_to_doc_field_deprecate($line, $field),
-      $field->{description}
-        ? map { length() ? "# $_" : "#" } split /\n/, $field->{description}
-        : (),
+      $self->_description_doc_lines($field->{description}),
     ]
   } sort keys %$fields;
 }

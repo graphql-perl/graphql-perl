@@ -105,7 +105,7 @@ sub _build_to_doc {
     )
   } $self->_make_fieldtuples($self->fields);
   join '', map "$_\n",
-    ($self->description ? (map "# $_", split /\n/, $self->description) : ()),
+    $self->_description_doc_lines($self->description),
     "input @{[$self->name]} {",
       (map "  $_", @fieldlines),
     "}";

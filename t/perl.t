@@ -79,9 +79,11 @@ subtest 'test convert plugin' => sub {
 subtest 'multi-line description' => sub {
   my $doc = <<'EOF';
 type Query {
-  # first line
-  #
-  # second bit
+  """
+  first line
+  
+  second bit
+  """
   hello: String
 }
 EOF

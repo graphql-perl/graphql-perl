@@ -117,7 +117,7 @@ sub _build_to_doc {
   my ($self) = @_;
   DEBUG and _debug('Directive.to_doc', $self);
   my @start = (
-    ($self->description ? (map "# $_", split /\n/, $self->description) : ()),
+    $self->_description_doc_lines($self->description),
     "directive \@@{[$self->name]}(",
   );
   my @argtuples = $self->_make_fieldtuples($self->args);

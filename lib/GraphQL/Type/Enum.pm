@@ -17,6 +17,7 @@ with qw(
   GraphQL::Role::Nullable
   GraphQL::Role::Named
   GraphQL::Role::FieldDeprecation
+  GraphQL::Role::FieldsEither
 );
 
 our $VERSION = '0.02';
@@ -153,12 +154,12 @@ sub _build_to_doc {
   my $v = $self->values;
   my @valuelines = map {
     (
-      ($v->{$_}{description} ? ("# $v->{$_}{description}") : ()),
+      $self->_description_doc_lines($v->{$_}{description}),
       $self->_to_doc_field_deprecate($_, $v->{$_}),
     )
   } sort keys %$v;
   join '', map "$_\n",
-    ($self->description ? (map "# $_", split /\n/, $self->description) : ()),
+    $self->_description_doc_lines($self->description),
     "enum @{[$self->name]} {",
       (map "  $_", @valuelines),
     "}";
