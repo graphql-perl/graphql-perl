@@ -183,7 +183,7 @@ enumValueDefinition: description? enumValue (.(-) directives)?
 
 input: .(/'input' -/) name .(-) directives? ( .(/- LCURLY /) inputValueDefinition+ .(/- RCURLY /) )?
 
-typeExtensionDefinition: .(/'extend' -/) type
+typeExtensionDefinition: .(/'extend' -/) (schema | typeDefinition)
 
 directive: .(/'directive' - AT -/) name .(-) argumentsDefinition? .(/- 'on' -/) directiveLocations
 

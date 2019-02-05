@@ -1063,7 +1063,14 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.70)
           '.rgx' => qr/\Gextend(?:\s|\x{FEFF}|,|[\ \t]*\#[\ \t]*([^\r\n]*)(?:\r?\n|\r!NL|\z))*/
         },
         {
-          '.ref' => 'type'
+          '.any' => [
+            {
+              '.ref' => 'schema'
+            },
+            {
+              '.ref' => 'typeDefinition'
+            }
+          ]
         }
       ]
     },
