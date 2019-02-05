@@ -45,21 +45,21 @@ done_testing;
 __DATA__
 [
   {
-    'description' => 'Copyright (c) 2015, Facebook, Inc.
-All rights reserved.
+    'description' => 'Copyright (c) 2015-present, Facebook, Inc.
 
-This source code is licensed under the BSD-style license found in the
-LICENSE file in the root directory of this source tree. An additional grant
-of patent rights can be found in the PATENTS file in the same directory.',
+This source code is licensed under the MIT license found in the
+LICENSE file in the root directory of this source tree.',
     'kind' => 'schema',
     'location' => {
       'column' => 0,
-      'line' => 11
+      'line' => 9
     },
     'mutation' => 'MutationType',
     'query' => 'QueryType'
   },
   {
+    'description' => 'This is a description
+of the `Foo` type.',
     'fields' => {
       'five' => {
         'args' => {
@@ -88,6 +88,7 @@ of patent rights can be found in the PATENTS file in the same directory.',
         'type' => 'String'
       },
       'one' => {
+        'description' => 'Description of the `one` field.',
         'type' => 'Type'
       },
       'seven' => {
@@ -119,11 +120,13 @@ of patent rights can be found in the PATENTS file in the same directory.',
             'type' => 'String'
           }
         },
+        'description' => 'This is a description of the `three` field.',
         'type' => 'Int'
       },
       'two' => {
         'args' => {
           'argument' => {
+            'description' => 'This is a description of the `argument` argument.',
             'type' => [
               'non_null',
               {
@@ -132,6 +135,7 @@ of patent rights can be found in the PATENTS file in the same directory.',
             ]
           }
         },
+        'description' => 'This is a description of the `two` field.',
         'type' => 'Type'
       }
     },
@@ -141,7 +145,7 @@ of patent rights can be found in the PATENTS file in the same directory.',
     'kind' => 'type',
     'location' => {
       'column' => 0,
-      'line' => 21
+      'line' => 33
     },
     'name' => 'Foo'
   },
@@ -161,7 +165,7 @@ of patent rights can be found in the PATENTS file in the same directory.',
             'default_value' => 'default',
             'directives' => [
               {
-                'name' => 'onArg'
+                'name' => 'onArgumentDefinition'
               }
             ],
             'type' => 'Type'
@@ -178,9 +182,32 @@ of patent rights can be found in the PATENTS file in the same directory.',
     'kind' => 'type',
     'location' => {
       'column' => 0,
-      'line' => 25
+      'line' => 37
     },
     'name' => 'AnnotatedObject'
+  },
+  {
+    'fields' => {
+      'seven' => {
+        'args' => {
+          'argument' => {
+            'type' => [
+              'list',
+              {
+                'type' => 'String'
+              }
+            ]
+          }
+        },
+        'type' => 'Type'
+      }
+    },
+    'kind' => 'type',
+    'location' => {
+      'column' => 0,
+      'line' => 41
+    },
+    'name' => 'Foo'
   },
   {
     'fields' => {
@@ -200,7 +227,7 @@ of patent rights can be found in the PATENTS file in the same directory.',
     'kind' => 'interface',
     'location' => {
       'column' => 0,
-      'line' => 30
+      'line' => 46
     },
     'name' => 'Bar'
   },
@@ -216,7 +243,7 @@ of patent rights can be found in the PATENTS file in the same directory.',
           'arg' => {
             'directives' => [
               {
-                'name' => 'onArg'
+                'name' => 'onArgumentDefinition'
               }
             ],
             'type' => 'Type'
@@ -233,7 +260,7 @@ of patent rights can be found in the PATENTS file in the same directory.',
     'kind' => 'interface',
     'location' => {
       'column' => 0,
-      'line' => 34
+      'line' => 50
     },
     'name' => 'AnnotatedInterface'
   },
@@ -241,7 +268,7 @@ of patent rights can be found in the PATENTS file in the same directory.',
     'kind' => 'union',
     'location' => {
       'column' => 1,
-      'line' => 38
+      'line' => 57
     },
     'name' => 'Feed',
     'types' => [
@@ -259,9 +286,26 @@ of patent rights can be found in the PATENTS file in the same directory.',
     'kind' => 'union',
     'location' => {
       'column' => 1,
-      'line' => 40
+      'line' => 59
     },
     'name' => 'AnnotatedUnion',
+    'types' => [
+      'A',
+      'B'
+    ]
+  },
+  {
+    'directives' => [
+      {
+        'name' => 'onUnion'
+      }
+    ],
+    'kind' => 'union',
+    'location' => {
+      'column' => 1,
+      'line' => 61
+    },
+    'name' => 'AnnotatedUnionTwo',
     'types' => [
       'A',
       'B'
@@ -271,7 +315,7 @@ of patent rights can be found in the PATENTS file in the same directory.',
     'kind' => 'scalar',
     'location' => {
       'column' => 1,
-      'line' => 42
+      'line' => 63
     },
     'name' => 'CustomScalar'
   },
@@ -284,7 +328,7 @@ of patent rights can be found in the PATENTS file in the same directory.',
     'kind' => 'scalar',
     'location' => {
       'column' => 0,
-      'line' => 42
+      'line' => 63
     },
     'name' => 'AnnotatedScalar'
   },
@@ -292,12 +336,19 @@ of patent rights can be found in the PATENTS file in the same directory.',
     'kind' => 'enum',
     'location' => {
       'column' => 0,
-      'line' => 47
+      'line' => 76
     },
     'name' => 'Site',
     'values' => {
-      'DESKTOP' => {},
-      'MOBILE' => {}
+      'DESKTOP' => {
+        'description' => 'This is a description of the `DESKTOP` value'
+      },
+      'MOBILE' => {
+        'description' => 'This is a description of the `MOBILE` value'
+      },
+      'WEB' => {
+        'description' => 'This is a description of the `WEB` value'
+      }
     }
   },
   {
@@ -309,7 +360,7 @@ of patent rights can be found in the PATENTS file in the same directory.',
     'kind' => 'enum',
     'location' => {
       'column' => 0,
-      'line' => 52
+      'line' => 81
     },
     'name' => 'AnnotatedEnum',
     'values' => {
@@ -341,21 +392,21 @@ of patent rights can be found in the PATENTS file in the same directory.',
     'kind' => 'input',
     'location' => {
       'column' => 0,
-      'line' => 57
+      'line' => 86
     },
     'name' => 'InputType'
   },
   {
     'directives' => [
       {
-        'name' => 'onInputObjectType'
+        'name' => 'onInputObject'
       }
     ],
     'fields' => {
       'annotatedField' => {
         'directives' => [
           {
-            'name' => 'onField'
+            'name' => 'onInputFieldDefinition'
           }
         ],
         'type' => 'Type'
@@ -364,59 +415,18 @@ of patent rights can be found in the PATENTS file in the same directory.',
     'kind' => 'input',
     'location' => {
       'column' => 0,
-      'line' => 61
+      'line' => 90
     },
     'name' => 'AnnotatedInput'
   },
   {
-    'fields' => {
-      'seven' => {
-        'args' => {
-          'argument' => {
-            'type' => [
-              'list',
-              {
-                'type' => 'String'
-              }
-            ]
-          }
-        },
-        'type' => 'Type'
-      }
-    },
-    'kind' => 'type',
-    'location' => {
-      'column' => 0,
-      'line' => 65
-    },
-    'name' => 'Foo'
-  },
-  {
-    'directives' => [
-      {
-        'name' => 'onType'
-      }
-    ],
-    'fields' => {},
-    'kind' => 'type',
-    'location' => {
-      'column' => 0,
-      'line' => 67
-    },
-    'name' => 'Foo'
-  },
-  {
-    'fields' => {},
-    'kind' => 'type',
-    'location' => {
-      'column' => 0,
-      'line' => 69
-    },
-    'name' => 'NoFields'
-  },
-  {
     'args' => {
       'if' => {
+        'directives' => [
+          {
+            'name' => 'onArgumentDefinition'
+          }
+        ],
         'type' => [
           'non_null',
           {
@@ -425,10 +435,11 @@ of patent rights can be found in the PATENTS file in the same directory.',
         ]
       }
     },
+    'description' => 'This is a description of the `@skip` directive',
     'kind' => 'directive',
     'location' => {
       'column' => 0,
-      'line' => 71
+      'line' => 97
     },
     'locations' => [
       'FIELD',
@@ -451,7 +462,7 @@ of patent rights can be found in the PATENTS file in the same directory.',
     'kind' => 'directive',
     'location' => {
       'column' => 0,
-      'line' => 76
+      'line' => 102
     },
     'locations' => [
       'FIELD',
@@ -459,5 +470,28 @@ of patent rights can be found in the PATENTS file in the same directory.',
       'INLINE_FRAGMENT'
     ],
     'name' => 'include'
+  },
+  {
+    'args' => {
+      'if' => {
+        'type' => [
+          'non_null',
+          {
+            'type' => 'Boolean'
+          }
+        ]
+      }
+    },
+    'kind' => 'directive',
+    'location' => {
+      'column' => 0,
+      'line' => 107
+    },
+    'locations' => [
+      'FIELD',
+      'FRAGMENT_SPREAD',
+      'INLINE_FRAGMENT'
+    ],
+    'name' => 'include2'
   }
 ]
