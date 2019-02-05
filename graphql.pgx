@@ -171,9 +171,9 @@ argumentsDefinition: .(/- LPAREN /) inputValueDefinition+ .(/- RPAREN /)
 
 inputValueDefinition: description? name .(/- COLON -/) typedef .(-) defaultValue? .(-) directives? .(-)
 
-interface: .(/'interface' -/) name .(-) directives? .(/- LCURLY /) fieldDefinition+ .(/- RCURLY /)
+interface: .(/'interface' -/) name .(-) directives? ( .(/- LCURLY /) fieldDefinition+ .(/- RCURLY /) )?
 
-union: .(/'union' -/) name .(-) directives? .(/- EQUAL -/) unionMembers
+union: .(/'union' -/) name .(-) directives? ( .(/- EQUAL -/) unionMembers )?
 
 unionMembers: .(/- PIPE -/)? namedType+ % .(/- PIPE -/)
 

@@ -276,10 +276,19 @@ of the `Foo` type.',
     'name' => 'AnnotatedInterface'
   },
   {
+    'fields' => {},
+    'kind' => 'interface',
+    'location' => {
+      'column' => 1,
+      'line' => 56
+    },
+    'name' => 'UndefinedInterface'
+  },
+  {
     'kind' => 'union',
     'location' => {
       'column' => 1,
-      'line' => 59
+      'line' => 61
     },
     'name' => 'Feed',
     'types' => [
@@ -297,7 +306,7 @@ of the `Foo` type.',
     'kind' => 'union',
     'location' => {
       'column' => 1,
-      'line' => 61
+      'line' => 63
     },
     'name' => 'AnnotatedUnion',
     'types' => [
@@ -314,7 +323,7 @@ of the `Foo` type.',
     'kind' => 'union',
     'location' => {
       'column' => 1,
-      'line' => 63
+      'line' => 65
     },
     'name' => 'AnnotatedUnionTwo',
     'types' => [
@@ -323,10 +332,18 @@ of the `Foo` type.',
     ]
   },
   {
+    'kind' => 'union',
+    'location' => {
+      'column' => 1,
+      'line' => 67
+    },
+    'name' => 'UndefinedUnion'
+  },
+  {
     'kind' => 'scalar',
     'location' => {
       'column' => 1,
-      'line' => 65
+      'line' => 69
     },
     'name' => 'CustomScalar'
   },
@@ -339,7 +356,7 @@ of the `Foo` type.',
     'kind' => 'scalar',
     'location' => {
       'column' => 0,
-      'line' => 65
+      'line' => 69
     },
     'name' => 'AnnotatedScalar'
   },
@@ -347,7 +364,7 @@ of the `Foo` type.',
     'kind' => 'enum',
     'location' => {
       'column' => 0,
-      'line' => 78
+      'line' => 82
     },
     'name' => 'Site',
     'values' => {
@@ -371,7 +388,7 @@ of the `Foo` type.',
     'kind' => 'enum',
     'location' => {
       'column' => 0,
-      'line' => 83
+      'line' => 87
     },
     'name' => 'AnnotatedEnum',
     'values' => {
@@ -389,7 +406,7 @@ of the `Foo` type.',
     'kind' => 'enum',
     'location' => {
       'column' => 1,
-      'line' => 87
+      'line' => 91
     },
     'name' => 'UndefinedEnum',
     'values' => {}
@@ -412,7 +429,7 @@ of the `Foo` type.',
     'kind' => 'input',
     'location' => {
       'column' => 0,
-      'line' => 90
+      'line' => 94
     },
     'name' => 'InputType'
   },
@@ -435,7 +452,7 @@ of the `Foo` type.',
     'kind' => 'input',
     'location' => {
       'column' => 0,
-      'line' => 94
+      'line' => 98
     },
     'name' => 'AnnotatedInput'
   },
@@ -444,7 +461,7 @@ of the `Foo` type.',
     'kind' => 'input',
     'location' => {
       'column' => 1,
-      'line' => 98
+      'line' => 102
     },
     'name' => 'UndefinedInput'
   },
@@ -468,7 +485,7 @@ of the `Foo` type.',
     'kind' => 'directive',
     'location' => {
       'column' => 0,
-      'line' => 103
+      'line' => 107
     },
     'locations' => [
       'FIELD',
@@ -491,7 +508,7 @@ of the `Foo` type.',
     'kind' => 'directive',
     'location' => {
       'column' => 0,
-      'line' => 108
+      'line' => 112
     },
     'locations' => [
       'FIELD',
@@ -514,7 +531,7 @@ of the `Foo` type.',
     'kind' => 'directive',
     'location' => {
       'column' => 0,
-      'line' => 113
+      'line' => 117
     },
     'locations' => [
       'FIELD',

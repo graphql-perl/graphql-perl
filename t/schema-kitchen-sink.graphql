@@ -51,6 +51,8 @@ interface AnnotatedInterface @onInterface {
   annotatedField(arg: Type @onArgumentDefinition): Type @onField
 }
 
+interface UndefinedInterface
+
 union Feed =
   | Story
   | Article
@@ -59,6 +61,8 @@ union Feed =
 union AnnotatedUnion @onUnion = A | B
 
 union AnnotatedUnionTwo @onUnion = | A | B
+
+union UndefinedUnion
 
 scalar CustomScalar
 
