@@ -82,7 +82,7 @@ sub _build_to_doc {
       $main,
     )
   } $self->_make_fieldtuples($self->fields);
-  my $implements = join ', ', map $_->name, @{ $self->interfaces || [] };
+  my $implements = join ' & ', map $_->name, @{ $self->interfaces || [] };
   $implements &&= 'implements ' . $implements . ' ';
   join '', map "$_\n",
     $self->_description_doc_lines($self->description),
