@@ -36,6 +36,8 @@ type AnnotatedObject @onObject(arg: "value") {
   annotatedField(arg: Type = "default" @onArgumentDefinition): Type @onField
 }
 
+type UndefinedType
+
 extend type Foo {
   seven(argument: [String]): Type
 }
@@ -88,6 +90,8 @@ input InputType {
 input AnnotatedInput @onInputObject {
   annotatedField: Type @onInputFieldDefinition
 }
+
+input UndefinedInput
 
 """
 This is a description of the `@skip` directive

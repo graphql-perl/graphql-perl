@@ -8,9 +8,9 @@ BEGIN {
 lives_ok { parse('type Hello { world: String }') } 'simple schema';
 lives_ok { parse('extend type Hello { world: String }') } 'simple extend';
 lives_ok { parse('type Hello { world: String! }') } 'non-null';
-lives_ok { parse('type Hello implements World { }') } 'implements';
-lives_ok { parse('type Hello implements Wo & rld { }') } 'implements multi &';
-lives_ok { parse('type Hello implements & Wo & rld { }') } 'implements multi and leading &';
+lives_ok { parse('type Hello implements World') } 'implements';
+lives_ok { parse('type Hello implements Wo & rld') } 'implements multi &';
+lives_ok { parse('type Hello implements & Wo & rld') } 'implements multi and leading &';
 lives_ok { parse('enum Hello { WORLD }') } 'single enum';
 lives_ok { parse('enum Hello { WO, RLD }') } 'multi enum';
 dies_ok { parse('enum Hello { true }') };
@@ -189,6 +189,15 @@ of the `Foo` type.',
     'name' => 'AnnotatedObject'
   },
   {
+    'fields' => {},
+    'kind' => 'type',
+    'location' => {
+      'column' => 1,
+      'line' => 41
+    },
+    'name' => 'UndefinedType'
+  },
+  {
     'fields' => {
       'seven' => {
         'args' => {
@@ -207,7 +216,7 @@ of the `Foo` type.',
     'kind' => 'type',
     'location' => {
       'column' => 0,
-      'line' => 41
+      'line' => 43
     },
     'name' => 'Foo'
   },
@@ -229,7 +238,7 @@ of the `Foo` type.',
     'kind' => 'interface',
     'location' => {
       'column' => 0,
-      'line' => 46
+      'line' => 48
     },
     'name' => 'Bar'
   },
@@ -262,7 +271,7 @@ of the `Foo` type.',
     'kind' => 'interface',
     'location' => {
       'column' => 0,
-      'line' => 50
+      'line' => 52
     },
     'name' => 'AnnotatedInterface'
   },
@@ -270,7 +279,7 @@ of the `Foo` type.',
     'kind' => 'union',
     'location' => {
       'column' => 1,
-      'line' => 57
+      'line' => 59
     },
     'name' => 'Feed',
     'types' => [
@@ -288,7 +297,7 @@ of the `Foo` type.',
     'kind' => 'union',
     'location' => {
       'column' => 1,
-      'line' => 59
+      'line' => 61
     },
     'name' => 'AnnotatedUnion',
     'types' => [
@@ -305,7 +314,7 @@ of the `Foo` type.',
     'kind' => 'union',
     'location' => {
       'column' => 1,
-      'line' => 61
+      'line' => 63
     },
     'name' => 'AnnotatedUnionTwo',
     'types' => [
@@ -317,7 +326,7 @@ of the `Foo` type.',
     'kind' => 'scalar',
     'location' => {
       'column' => 1,
-      'line' => 63
+      'line' => 65
     },
     'name' => 'CustomScalar'
   },
@@ -330,7 +339,7 @@ of the `Foo` type.',
     'kind' => 'scalar',
     'location' => {
       'column' => 0,
-      'line' => 63
+      'line' => 65
     },
     'name' => 'AnnotatedScalar'
   },
@@ -338,7 +347,7 @@ of the `Foo` type.',
     'kind' => 'enum',
     'location' => {
       'column' => 0,
-      'line' => 76
+      'line' => 78
     },
     'name' => 'Site',
     'values' => {
@@ -362,7 +371,7 @@ of the `Foo` type.',
     'kind' => 'enum',
     'location' => {
       'column' => 0,
-      'line' => 81
+      'line' => 83
     },
     'name' => 'AnnotatedEnum',
     'values' => {
@@ -394,7 +403,7 @@ of the `Foo` type.',
     'kind' => 'input',
     'location' => {
       'column' => 0,
-      'line' => 86
+      'line' => 88
     },
     'name' => 'InputType'
   },
@@ -417,9 +426,18 @@ of the `Foo` type.',
     'kind' => 'input',
     'location' => {
       'column' => 0,
-      'line' => 90
+      'line' => 92
     },
     'name' => 'AnnotatedInput'
+  },
+  {
+    'fields' => {},
+    'kind' => 'input',
+    'location' => {
+      'column' => 1,
+      'line' => 96
+    },
+    'name' => 'UndefinedInput'
   },
   {
     'args' => {
@@ -441,7 +459,7 @@ of the `Foo` type.',
     'kind' => 'directive',
     'location' => {
       'column' => 0,
-      'line' => 97
+      'line' => 101
     },
     'locations' => [
       'FIELD',
@@ -464,7 +482,7 @@ of the `Foo` type.',
     'kind' => 'directive',
     'location' => {
       'column' => 0,
-      'line' => 102
+      'line' => 106
     },
     'locations' => [
       'FIELD',
@@ -487,7 +505,7 @@ of the `Foo` type.',
     'kind' => 'directive',
     'location' => {
       'column' => 0,
-      'line' => 107
+      'line' => 111
     },
     'locations' => [
       'FIELD',

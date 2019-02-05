@@ -160,9 +160,8 @@ typeDefinition: scalar | type | interface | union | enumTypeDefinition | input
 # aka scalarTypeDefinition
 scalar: .(/'scalar' -/) name .(-) directives?
 
-# fieldDefinition is "*" not "+" because JS implementation test allows
 # aka objectTypeDefinition
-type: .(/'type' -/) name .(-) implementsInterfaces? .(-) directives? .(/- LCURLY /) fieldDefinition* .(/- RCURLY /)
+type: .(/'type' -/) name .(-) implementsInterfaces? .(-) directives? ( .(/- LCURLY /) fieldDefinition+ .(/- RCURLY /) )?
 
 implementsInterfaces: .(/'implements' -/) .(/- AMP -/)? (namedType+ % .(/- AMP -/))
 
@@ -182,7 +181,7 @@ enumTypeDefinition: .(/'enum' -/) name .(-) directives? .(/- LCURLY /) enumValue
 
 enumValueDefinition: description? enumValue (.(-) directives)?
 
-input: .(/'input' -/) name .(-) directives? .(/- LCURLY /) inputValueDefinition+ .(/- RCURLY /)
+input: .(/'input' -/) name .(-) directives? ( .(/- LCURLY /) inputValueDefinition+ .(/- RCURLY /) )?
 
 typeExtensionDefinition: .(/'extend' -/) type
 
