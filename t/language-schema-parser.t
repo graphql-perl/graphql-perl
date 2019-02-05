@@ -31,12 +31,14 @@ dies_ok { parse('input Hello { world(foo: Int): String }') };
 like $@->message, qr/Parse document failed/, 'input with arg should fail';
 
 open my $fh, '<', 't/schema-kitchen-sink.graphql';
-my $got = parse(join('', <$fh>));
-my $expected_text = join '', <DATA>;
-$expected_text =~ s#bless\(\s*do\{\\\(my\s*\$o\s*=\s*(.)\)\},\s*'JSON::PP::Boolean'\s*\)#'JSON->' . ($1 ? 'true' : 'false')#ge;
-my $expected = eval $expected_text;
-#open $fh, '>', 'tf'; print $fh nice_dump $got; # uncomment this line to regen
-is_deeply $got, $expected, 'lex big doc correct' or diag nice_dump $got;
+lives_ok {
+  my $got = parse(join('', <$fh>));
+  my $expected_text = join '', <DATA>;
+  $expected_text =~ s#bless\(\s*do\{\\\(my\s*\$o\s*=\s*(.)\)\},\s*'JSON::PP::Boolean'\s*\)#'JSON->' . ($1 ? 'true' : 'false')#ge;
+  my $expected = eval $expected_text;
+  #open $fh, '>', 'tf'; print $fh nice_dump $got; # uncomment this line to regen
+  is_deeply $got, $expected, 'lex big doc correct' or diag nice_dump $got;
+} or diag explain $@;
 
 done_testing;
 

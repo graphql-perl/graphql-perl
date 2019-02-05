@@ -4,12 +4,13 @@ use GraphQL::Language::Parser qw(parse);
 
 open my $fh, '<', 't/kitchen-sink.graphql';
 my $got = parse(join('', <$fh>));
-my $expected_text = join '', <DATA>;
-$expected_text =~ s#bless\(\s*do\{\\\(my\s*\$o\s*=\s*(.)\)\},\s*'JSON::PP::Boolean'\s*\)#'JSON->' . ($1 ? 'true' : 'false')#ge;
-my $expected = eval $expected_text;
-#open $fh, '>', 'tf'; print $fh nice_dump $got; # uncomment to regenerate
-
-is_deeply $got, $expected, 'lex big doc correct' or diag nice_dump $got;
+lives_ok {
+  my $expected_text = join '', <DATA>;
+  $expected_text =~ s#bless\(\s*do\{\\\(my\s*\$o\s*=\s*(.)\)\},\s*'JSON::PP::Boolean'\s*\)#'JSON->' . ($1 ? 'true' : 'false')#ge;
+  my $expected = eval $expected_text;
+  #open $fh, '>', 'tf'; print $fh nice_dump $got; # uncomment to regenerate
+  is_deeply $got, $expected, 'lex big doc correct' or diag nice_dump $got;
+} or diag explain $@;
 
 dies_ok { parse("\x{0007}") };
 like $@->message, qr/Parse document failed for some reason/, 'invalid char';
