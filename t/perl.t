@@ -165,13 +165,15 @@ EOF
 };
 
 subtest 'list in query params' => sub {
+  my $stringlist = GraphQL::Type::List->new(of => $String);
+  is $stringlist->is_valid([ 'string' ]), 1, 'is_valid works';
   my $schema = GraphQL::Schema->new(
     query => GraphQL::Type::Object->new(
       name => 'Query',
       fields => {
         hello => {
           type => $String,
-          args => { arg => { type => GraphQL::Type::List->new(of => $String) } }
+          args => { arg => { type => $stringlist } }
         },
       }
     ),
