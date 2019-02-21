@@ -236,4 +236,18 @@ subtest 'errors on incorrect query input', sub {
   );
 };
 
+subtest 'test _debug', sub {
+  require GraphQL::Debug;
+  my @diags;
+  {
+    local *Test::More::diag = sub { push @diags, @_ };
+    GraphQL::Debug::_debug('message', +{ key => 1 });
+  }
+  is_deeply \@diags, ['message: ', <<EOF], 'debug output correct' or diag explain \@diags;
+{
+  'key' => 1
+}
+EOF
+};
+
 done_testing;
