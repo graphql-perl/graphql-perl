@@ -214,7 +214,7 @@ subtest 'includes nested input objects in the map', sub {
     subscription => $SomeSubscription,
   );
   is_deeply [ sort keys %{$schema->name2type} ], [
-    qw(Article Author Boolean Image Int NestedInputObject Query SomeInputObject SomeMutation SomeSubscription String),
+    qw(Article Author Boolean DateTime Image Int NestedInputObject Query SomeInputObject SomeMutation SomeSubscription String),
     qw(__Directive __DirectiveLocation __EnumValue __Field __InputValue __Schema __Type __TypeKind)
   ] or diag explain [ sort keys %{$schema->name2type} ];
 };

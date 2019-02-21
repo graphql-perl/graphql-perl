@@ -11,15 +11,17 @@ use Function::Parameters;
 use GraphQL::Debug qw(_debug);
 use GraphQL::Directive;
 use GraphQL::Introspection qw($SCHEMA_META_TYPE);
-use GraphQL::Type::Scalar qw($Int $Float $String $Boolean $ID $DateTime);
+use GraphQL::Type::Scalar qw($Int $Float $String $Boolean $ID);
+use GraphQL::Plugin::Type::DateTime;
 use GraphQL::Language::Parser qw(parse);
+use GraphQL::Plugin::Type;
 use Module::Runtime qw(require_module);
 use Exporter 'import';
 
 our $VERSION = '0.02';
 our @EXPORT_OK = qw(lookup_type);
 use constant DEBUG => $ENV{GRAPHQL_DEBUG};
-my %BUILTIN2TYPE = map { ($_->name => $_) } ($Int, $Float, $String, $Boolean, $ID, $DateTime);
+my %BUILTIN2TYPE = map { ($_->name => $_) } ($Int, $Float, $String, $Boolean, $ID);
 my @TYPE_ATTRS = qw(query mutation subscription);
 
 =head1 NAME
@@ -70,12 +72,18 @@ has subscription => (is => 'ro', isa => InstanceOf['GraphQL::Type::Object']);
 
 =head2 types
 
+Defaults to the types returned by
+L<GraphQL::Plugin::Type/registered>. Note that this includes
+the non-standard C<DateTime> type, which is always loaded by
+L<GraphQL::Type::Scalar>. If you wish to supply an overriding value for
+this attribute, bear that in mind.
+
 =cut
 
 has types => (
   is => 'ro',
   isa => ArrayRef[ConsumerOf['GraphQL::Role::Named']],
-  default => sub { [] },
+  default => sub { [ GraphQL::Plugin::Type->registered ] },
 );
 
 =head2 directives
@@ -217,6 +225,9 @@ C<%GraphQL::Schema::KIND2CLASS>. E.g.
     { %GraphQL::Schema::KIND2CLASS, type => 'GraphQL::Type::Object::DBIC' }
   );
 
+Makes available the additional types returned by
+L<GraphQL::Plugin::Type/registered>.
+
 =cut
 
 our %KIND2CLASS = qw(
@@ -236,7 +247,10 @@ method from_ast(
   my @type_nodes = grep $kind2class->{$_->{kind}}, @$ast;
   my ($schema_node, $e) = grep $_->{kind} eq 'schema', @$ast;
   die "Must provide only one schema definition.\n" if $e;
-  my %name2type = %BUILTIN2TYPE;
+  my %name2type = (
+    %BUILTIN2TYPE,
+    (map { $_->name => $_ } GraphQL::Plugin::Type->registered),
+  );
   for (@type_nodes) {
     die "Type '$_->{name}' was defined more than once.\n"
       if $name2type{$_->{name}};
@@ -292,6 +306,10 @@ schema object.
 As of v0.32, this produces the new-style descriptions that are string
 values, rather than old-style "meaningful comments".
 
+As of v0.33, will not return a description of types supplied with the
+attribute L</types>. Obviously, by default this includes types returned
+by L<GraphQL::Plugin::Type/registered>.
+
 =cut
 
 has to_doc => (is => 'lazy', isa => Str);
@@ -304,6 +322,7 @@ sub _build_to_doc {
       (map "  $_: @{[$self->$_->name]}", grep $self->$_, @TYPE_ATTRS),
     "}");
   }
+  my %supplied_type = (map {$_->name => 1} GraphQL::Plugin::Type->registered);
   join "\n", grep defined,
     $schema_doc,
     (map $_->to_doc,
@@ -314,6 +333,7 @@ sub _build_to_doc {
       grep !/^__/,
       grep !$BUILTIN2TYPE{$_},
       grep $CLASS2KIND{ref $self->name2type->{$_}},
+      grep !$supplied_type{$_},
       sort keys %{$self->name2type}),
     ;
 }

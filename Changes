@@ -3,6 +3,7 @@ Revision history for GraphQL
 0.33	
  - update Plugin::Convert docs - thanks @aksonov
  - zap "meaningful comment" as description
+ - implement GraphQL::Plugin::Type API, switch DateTime to that
 
 0.32	Tue  5 Feb 02:37:20 GMT 2019
  - metadata and test updates
