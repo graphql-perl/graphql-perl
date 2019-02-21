@@ -17,6 +17,7 @@ with qw(
   GraphQL::Role::Leaf
   GraphQL::Role::Nullable
   GraphQL::Role::Named
+  GraphQL::Role::FieldsEither
 );
 use Function::Parameters;
 use Return::Type;
@@ -116,7 +117,7 @@ sub _build_to_doc {
   my ($self) = @_;
   DEBUG and _debug('Scalar.to_doc', $self);
   join '', map "$_\n",
-    ($self->description ? (map "# $_", split /\n/, $self->description) : ()),
+    $self->_description_doc_lines($self->description),
     "scalar @{[$self->name]}";
 }
 

@@ -256,10 +256,11 @@ subtest 'test String.is_valid' => sub {
   is $String->is_valid('string'), 1, 'is_valid works';
 };
 
-subtest 'test Scalar.from_ast' => sub {
-  my $scalar = GraphQL::Type::Scalar->from_ast({}, { name => 's' });
+subtest 'test Scalar methods' => sub {
+  my $scalar = GraphQL::Type::Scalar->from_ast({}, { name => 's', description => 'd' });
   throws_ok { $scalar->serialize->('string') } qr{Fake}, 'fake serialize';
   throws_ok { $scalar->parse_value->('string') } qr{Fake}, 'fake parse_value';
+  is $scalar->to_doc, qq{"d"\nscalar s\n}, 'to_doc';
 };
 
 done_testing;
