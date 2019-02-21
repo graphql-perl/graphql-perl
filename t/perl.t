@@ -6,7 +6,7 @@ my $JSON = JSON::MaybeXS->new->allow_nonref->canonical;
 BEGIN {
   use_ok( 'GraphQL::Schema' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Execution', qw(execute) ) || print "Bail out!\n";
-  use_ok( 'GraphQL::Type::Scalar', qw($String) ) || print "Bail out!\n";
+  use_ok( 'GraphQL::Type::Scalar', qw($String $Boolean) ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::Object' ) || print "Bail out!\n";
 }
 
@@ -261,6 +261,8 @@ subtest 'test Scalar methods' => sub {
   throws_ok { $scalar->serialize->('string') } qr{Fake}, 'fake serialize';
   throws_ok { $scalar->parse_value->('string') } qr{Fake}, 'fake parse_value';
   is $scalar->to_doc, qq{"d"\nscalar s\n}, 'to_doc';
+  is $Boolean->serialize->(1), 1, 'Boolean serialize';
+  is $Boolean->parse_value->(1), 1, 'Boolean parse_value';
 };
 
 done_testing;
