@@ -30,11 +30,8 @@ values given will be passed through L<Data::Dumper/Dumper>.
 # TODO make log instead of diag
 sub _debug {
   my $func = shift;
-  require Data::Dumper;
   require Test::More;
-  local ($Data::Dumper::Sortkeys, $Data::Dumper::Indent, $Data::Dumper::Terse);
-  $Data::Dumper::Sortkeys = $Data::Dumper::Indent = $Data::Dumper::Terse = 1;
-  Test::More::diag("$func: ", Data::Dumper::Dumper([ @_ ]));
+  Test::More::diag("$func: ", Test::More::explain(@_ == 1 ? @_ : [ @_ ]));
 }
 
 1;
