@@ -252,4 +252,8 @@ subtest 'test _debug', sub {
 EOF
 };
 
+subtest 'test String.is_valid' => sub {
+  is $String->is_valid('string'), 1, 'is_valid works';
+};
+
 done_testing;
