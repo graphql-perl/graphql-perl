@@ -279,9 +279,7 @@ subtest 'may be internally represented with complex values', sub {
 
 subtest 'can be introspected without error', sub {
   my $got = execute($schema, $GraphQL::Introspection::QUERY);
-  local ($Data::Dumper::Sortkeys, $Data::Dumper::Indent, $Data::Dumper::Terse);
-  $Data::Dumper::Sortkeys = $Data::Dumper::Indent = $Data::Dumper::Terse = 1;
-  ok !$got->{errors}, 'no query errors' or diag Dumper $got;
+  ok !$got->{errors}, 'no query errors' or diag explain $got;
   done_testing;
 };
 
