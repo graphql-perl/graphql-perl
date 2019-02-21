@@ -20,7 +20,7 @@ GraphQL::Plugin::Convert - GraphQL plugin API abstract class
   use Schema;
   use GraphQL::Plugin::Convert::DBIC;
   helper db => sub { Schema->connect('dbi:SQLite:test.db') };
-  my $converted = GraphQL::Plugin::Convert::DBIC->to_graphql(app->db);
+  my $converted = GraphQL::Plugin::Convert::DBIC->to_graphql(sub { app->db });
   plugin GraphQL => {
     map { $_ => $converted->{$_} }
       qw(schema resolver root_value)
@@ -31,7 +31,7 @@ GraphQL::Plugin::Convert - GraphQL plugin API abstract class
   use Mojolicious::Lite;
   use Schema;
   helper db => sub { Schema->connect('dbi:SQLite:test.db') };
-  plugin GraphQL => { convert => [ 'DBIC', app->db ] };
+  plugin GraphQL => { convert => [ 'DBIC', sub { app->db } ] };
 
 =head1 DESCRIPTION
 
