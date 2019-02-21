@@ -8,6 +8,7 @@ BEGIN {
   use_ok( 'GraphQL::Execution', qw(execute) ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::Scalar', qw($String $Boolean) ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::Object' ) || print "Bail out!\n";
+  use_ok( 'GraphQL::Type::Interface' ) || print "Bail out!\n";
 }
 
 subtest 'DateTime->now as resolve' => sub {
@@ -263,6 +264,62 @@ subtest 'test Scalar methods' => sub {
   is $scalar->to_doc, qq{"d"\nscalar s\n}, 'to_doc';
   is $Boolean->serialize->(1), 1, 'Boolean serialize';
   is $Boolean->parse_value->(1), 1, 'Boolean parse_value';
+};
+
+subtest 'exercise __type root field more'=> sub {
+  my $TestType = GraphQL::Type::Object->new(
+    name => 'TestType',
+    fields => {
+      testField => {
+        type => $String,
+      }
+    }
+  );
+  my $abstract = GraphQL::Type::Interface->new(
+    name => 'i',
+    fields => {
+      testField => {
+        type => $String,
+      }
+    }
+  );
+
+  my $schema = GraphQL::Schema->new(query => $TestType, types => [$abstract]);
+  my $request = <<'EOQ';
+{
+  __type(name: "TestType") {
+    name
+    kind
+    fields {
+      name
+    }
+    interfaces
+  }
+  i: __type(name: "i") {
+    name
+    possibleTypes
+  }
+}
+EOQ
+
+  run_test([$schema, $request], {
+    data => {
+      __type => {
+        fields => [
+          {
+            name => 'testField'
+          },
+        ],
+        interfaces => [],
+        kind => 'OBJECT',
+        name => 'TestType',
+      },
+      i => {
+        name => 'i',
+        possibleTypes => [],
+      }
+    }
+  });
 };
 
 done_testing;
