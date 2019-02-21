@@ -20,7 +20,7 @@ with qw(
 );
 use Function::Parameters;
 use Return::Type;
-use GraphQL::Debug qw(_debug);
+use GraphQL::Plugin::Type;
 
 our $VERSION = '0.02';
 our @EXPORT_OK = qw($Int $Float $String $Boolean $ID);
@@ -196,6 +196,8 @@ our $ID = GraphQL::Type::Scalar->new(
   serialize => sub { defined $_[0] and Str->(@_); $_[0] },
   parse_value => sub { defined $_[0] and Str->(@_); $_[0] },
 );
+
+GraphQL::Plugin::Type->register($_) for ($Int, $Float, $String, $Boolean, $ID);
 
 __PACKAGE__->meta->make_immutable();
 

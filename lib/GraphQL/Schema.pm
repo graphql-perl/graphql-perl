@@ -11,7 +11,6 @@ use Function::Parameters;
 use GraphQL::Debug qw(_debug);
 use GraphQL::Directive;
 use GraphQL::Introspection qw($SCHEMA_META_TYPE);
-use GraphQL::Type::Scalar qw($Int $Float $String $Boolean $ID);
 use GraphQL::Plugin::Type::DateTime;
 use GraphQL::Language::Parser qw(parse);
 use GraphQL::Plugin::Type;
@@ -21,7 +20,6 @@ use Exporter 'import';
 our $VERSION = '0.02';
 our @EXPORT_OK = qw(lookup_type);
 use constant DEBUG => $ENV{GRAPHQL_DEBUG};
-my %BUILTIN2TYPE = map { ($_->name => $_) } ($Int, $Float, $String, $Boolean, $ID);
 my @TYPE_ATTRS = qw(query mutation subscription);
 
 =head1 NAME
@@ -72,11 +70,10 @@ has subscription => (is => 'ro', isa => InstanceOf['GraphQL::Type::Object']);
 
 =head2 types
 
-Defaults to the types returned by
-L<GraphQL::Plugin::Type/registered>. Note that this includes
-the non-standard C<DateTime> type, which is always loaded by
-L<GraphQL::Type::Scalar>. If you wish to supply an overriding value for
-this attribute, bear that in mind.
+Defaults to the types returned by L<GraphQL::Plugin::Type/registered>.
+Note that this includes the non-standard C<DateTime> type, and the
+standard scalar types, always loaded by L<GraphQL::Type::Scalar>. If you
+wish to supply an overriding value for this attribute, bear that in mind.
 
 =cut
 
@@ -247,10 +244,7 @@ method from_ast(
   my @type_nodes = grep $kind2class->{$_->{kind}}, @$ast;
   my ($schema_node, $e) = grep $_->{kind} eq 'schema', @$ast;
   die "Must provide only one schema definition.\n" if $e;
-  my %name2type = (
-    %BUILTIN2TYPE,
-    (map { $_->name => $_ } GraphQL::Plugin::Type->registered),
-  );
+  my %name2type = (map { $_->name => $_ } GraphQL::Plugin::Type->registered);
   for (@type_nodes) {
     die "Type '$_->{name}' was defined more than once.\n"
       if $name2type{$_->{name}};
@@ -331,7 +325,6 @@ sub _build_to_doc {
       @{ $self->directives }),
     (map $self->name2type->{$_}->to_doc,
       grep !/^__/,
-      grep !$BUILTIN2TYPE{$_},
       grep $CLASS2KIND{ref $self->name2type->{$_}},
       grep !$supplied_type{$_},
       sort keys %{$self->name2type}),
