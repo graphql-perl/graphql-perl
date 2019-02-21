@@ -3,13 +3,11 @@ use GQLTest;
 
 my $JSON = JSON::MaybeXS->new->allow_nonref->canonical;
 
-BEGIN {
-  use_ok( 'GraphQL::Schema' ) || print "Bail out!\n";
-  use_ok( 'GraphQL::Execution', qw(execute) ) || print "Bail out!\n";
-  use_ok( 'GraphQL::Type::Scalar', qw($String $Boolean) ) || print "Bail out!\n";
-  use_ok( 'GraphQL::Type::Object' ) || print "Bail out!\n";
-  use_ok( 'GraphQL::Type::Interface' ) || print "Bail out!\n";
-}
+use GraphQL::Schema;
+use GraphQL::Execution qw(execute);
+use GraphQL::Type::Scalar qw($String $Boolean);
+use GraphQL::Type::Object;
+use GraphQL::Type::Interface;
 
 subtest 'DateTime->now as resolve' => sub {
   require DateTime;
