@@ -38,7 +38,12 @@ GraphQL type object of which this is a non-null version.
 
 =cut
 
-has of => (is => 'ro', isa => InstanceOf['GraphQL::Type'], required => 1);
+has of => (
+  is => 'ro',
+  isa => InstanceOf['GraphQL::Type'],
+  required => 1,
+  handles => [ qw(name) ],
+);
 
 =head1 METHODS
 
@@ -80,6 +85,12 @@ method graphql_to_perl(Any $item) :ReturnType(Any) {
   my $of = $self->of;
   $of->graphql_to_perl($item) // die $self->to_string . " given null value.\n";
 }
+
+=head2 name
+
+The C<name> of the type this object is a non-null version of.
+
+=cut
 
 __PACKAGE__->meta->make_immutable();
 

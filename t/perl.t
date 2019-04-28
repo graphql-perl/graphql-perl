@@ -320,4 +320,9 @@ EOQ
   });
 };
 
+subtest 'test List->name' => sub {
+  my $stringlist = GraphQL::Type::List->new(of => $String);
+  is $stringlist->name, 'String';
+};
+
 done_testing;

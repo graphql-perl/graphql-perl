@@ -44,7 +44,12 @@ GraphQL type object of which this is a list.
 
 =cut
 
-has of => (is => 'ro', isa => InstanceOf['GraphQL::Type'], required => 1);
+has of => (
+  is => 'ro',
+  isa => InstanceOf['GraphQL::Type'],
+  required => 1,
+  handles => [ qw(name) ],
+);
 
 =head1 METHODS
 
@@ -160,6 +165,12 @@ fun _promise_for_list(
     _merge_list([ map $_->[0], @_ ]);
   });
 }
+
+=head2 name
+
+The C<name> of the type this object is a list of.
+
+=cut
 
 __PACKAGE__->meta->make_immutable();
 

@@ -443,7 +443,13 @@ $TYPE_META_TYPE = GraphQL::Type::Object->new(
       type => $TYPE_KIND_META_TYPE->non_null,
       resolve => sub { my $c = ref $_[0]; $c =~ s#__.*##; CLASS2KIND->{$c} // die "Unknown kind of type => ".ref $_[0] },
     },
-    _make_moo_field(name => $String),
+    name => { resolve => sub {
+      my ($root_value, $args, $context, $info) = @_;
+      # if not a "real" name
+      return undef if $root_value->can('of');
+      my @passon = %$args ? ($args) : ();
+      $root_value->name(@passon);
+    }, type => $String },
     _make_moo_field(description => $String),
     fields => {
       type => $FIELD_META_TYPE->non_null->list,
