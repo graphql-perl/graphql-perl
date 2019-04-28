@@ -274,8 +274,8 @@ sub _make_moo_field {
   my ($field_name, $type) = @_;
   ($field_name => { resolve => sub {
     my ($root_value, $args, $context, $info) = @_;
-    my @passon = %$args ? ($args) : ();
     return undef unless $root_value->can($field_name);
+    my @passon = %$args ? ($args) : ();
     $root_value->$field_name(@passon);
   }, type => $type });
 }
