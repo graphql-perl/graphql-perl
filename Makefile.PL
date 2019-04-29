@@ -68,14 +68,12 @@ WriteMakefile(
 );
 
 sub MY::postamble {
-  my $text = <<EOF;
-\$(VERSION_FROM) : graphql.pgx
-\t\$(PERL) -Ilib -MGraphQL::Language::Grammar=compile
-EOF
-  return $text if !-e '.git';
+  return '' if !-e '.git';
   my $container = 'graphqlperl/graphql';
   my $prereq = "${container}-prereq";
-  $text .= <<EOF;
+  <<EOF;
+\$(VERSION_FROM) : graphql.pgx
+\t\$(PERL) -Ilib -MGraphQL::Language::Grammar=compile
 
 pure_all :: README.md
 
@@ -94,5 +92,4 @@ container :
 containerpush :
 \tdocker push $container:\$(VERSION)
 EOF
-  $text;
 }
