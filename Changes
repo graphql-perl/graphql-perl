@@ -1,3 +1,6 @@
+0.35 2019-04-29
+ - remove author-mode stuff from affecting make in distro
+
 0.34 2019-04-28
  - List now has "name" that is its "of"'s name
 
