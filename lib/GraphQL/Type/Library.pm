@@ -193,7 +193,8 @@ The real name of this field.
 The array of Abstract Syntax Tree (AST) nodes that refer to this field
 in this "selection set" (set of fields) on this object. There may be
 more than one such set for a given field, if it is requested with more
-than one name - i.e. with an alias.
+than once with a given name (not with an alias) - the results will
+be combined into one reply.
 
 =item return_type
 
