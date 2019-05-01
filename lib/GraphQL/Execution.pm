@@ -73,6 +73,43 @@ L<GraphQL::Language::Parser/parse>, or a return value from that.
 A root value that can be used by field-resolvers. The default one needs
 a code-ref, a hash-ref or an object.
 
+For instance:
+
+  my $schema = GraphQL::Schema->from_doc(<<'EOF');
+  type Query { dateTimeNow: String, hi: String }
+  EOF
+  my $root_value = {
+    dateTimeNow => sub { DateTime->now->ymd },
+    hi => "Bob",
+  };
+  my $data = execute($schema, "{ dateTimeNow hi }", $root_value);
+
+will return:
+
+    {
+      data => {
+        dateTimeNow => { ymd => '20190501' },
+        hi => 'Bob',
+      }
+    }
+
+Be aware that with the default field-resolver, when it calls a method,
+that method will get called with L<GraphQL::Type::Library/$args>
+L<GraphQL::Type::Library/$context>, L<GraphQL::Type::Library/$info>. To
+override that to pass no parameters, this is suitable as a
+C<$field_resolver> parameters:
+
+    sub {
+      my ($root_value, $args, $context, $info) = @_;
+      my $field_name = $info->{field_name};
+      my $property = ref($root_value) eq 'HASH'
+        ? $root_value->{$field_name}
+        : $root_value;
+      return $property->($args, $context, $info) if ref $property eq 'CODE';
+      return $root_value->$field_name if ref $property; # no args
+      $property;
+    }
+
 =item $context_value
 
 A per-request scalar, that will be passed to field-resolvers.
