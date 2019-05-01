@@ -79,7 +79,22 @@ A per-request scalar, that will be passed to field-resolvers.
 
 =item $variable_values
 
-A hash-ref, typically the decoded JSON object supplied by a client.
+A hash-ref, typically the decoded JSON object supplied by a
+client. E.g. for this query:
+
+  query q($input: TestInputObject) {
+    fieldWithObjectInput(input: $input)
+  }
+
+The C<$variable_values> will need to be a JSON object with a
+key C<input>, whose value will need to conform to the L<input
+type|GraphQL::Type::InputObject> C<TestInputObject>.
+
+The purpose of this is to avoid needing to hard-code input values in
+your query. This aids in, among other things, being able to whitelist
+individual queries as acceptable, non-abusive queries to your system;
+and being able to generate client-side code for client-side validation
+rather than including the full GraphQL system in client code.
 
 =item $operation_name
 
