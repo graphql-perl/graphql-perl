@@ -135,6 +135,16 @@ Code-ref to return a given property from a given source-object.
 A key concept is to remember that the "object" on which these fields
 exist, were themselves returned by other fields.
 
+There are no restrictions on what you can return, so long as it is a
+scalar, and if your return type is a L<list|GraphQL::Type::List>, that
+scalar is an array-ref.
+
+Emphasis has been put on there being Perl values here. Conversion
+between Perl and GraphQL values is taken care of by
+L<scalar|GraphQL::Type::Scalar> types, and it is only scalar information
+that will be returned to the client, albeit in the shape dictated by
+the object types.
+
 An example function that takes a name and GraphQL type, and returns a
 field definition, with a resolver that calls read-only L<Moo> accessors,
 suitable for placing (several of) inside the hash-ref defining a type's
@@ -158,25 +168,23 @@ fields:
 
 The code-ref will be called with these parameters:
 
-=over
-
-=item $source
+=head4 $source
 
 The Perl entity (possibly a blessed object) returned by the resolver
 that conjured up this GraphQL object.
 
-=item $args
+=head4 $args
 
 Hash-ref of the arguments passed to the field. The values will be
 Perl values.
 
-=item $context
+=head4 $context
 
 The "context" value supplied to the call to
 L<GraphQL::Execution/execute>. Can be used for authenticated user
 information, or a per-request cache.
 
-=item $info
+=head4 $info
 
 A hash-ref with these keys:
 
@@ -232,18 +240,6 @@ to the request.
 A hash-ref. The relevant value supplied to the C<execute> function.
 
 =back
-
-=back
-
-There are no restrictions on what you can return, so long as it is a
-scalar, and if your return type is a L<list|GraphQL::Type::List>, that
-scalar is an array-ref.
-
-Emphasis has been put on there being Perl values here. Conversion
-between Perl and GraphQL values is taken care of by
-L<scalar|GraphQL::Type::Scalar> types, and it is only scalar information
-that will be returned to the client, albeit in the shape dictated by
-the object types.
 
 =head3 subscribe
 
