@@ -129,6 +129,19 @@ GraphQL output type for the field.
 
 A L</FieldMapInput>.
 
+=head3 subscribe
+
+Code-ref to return a given property from a given source-object.
+
+=head3 deprecation_reason
+
+Reason if deprecated. If given, also sets a boolean key of
+C<is_deprecated> to true.
+
+=head3 description
+
+Description.
+
 =head3 resolve
 
 Code-ref to return a given property from a given source-object.
@@ -240,19 +253,6 @@ to the request.
 A hash-ref. The relevant value supplied to the C<execute> function.
 
 =back
-
-=head3 subscribe
-
-Code-ref to return a given property from a given source-object.
-
-=head3 deprecation_reason
-
-Reason if deprecated. If given, also sets a boolean key of
-C<is_deprecated> to true.
-
-=head3 description
-
-Description.
 
 =cut
 
