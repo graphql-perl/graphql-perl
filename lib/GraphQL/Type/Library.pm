@@ -121,17 +121,15 @@ declare "FieldMapInput", as Map[
 Hash-ref mapping field names to a hash-ref
 description. Description keys, all optional except C<type>:
 
-=over
-
-=item type
+=head3 type
 
 GraphQL output type for the field.
 
-=item args
+=head3 args
 
 A L</FieldMapInput>.
 
-=item resolve
+=head3 resolve
 
 Code-ref to return a given property from a given source-object.
 A key concept is to remember that the "object" on which these fields
@@ -247,20 +245,18 @@ L<scalar|GraphQL::Type::Scalar> types, and it is only scalar information
 that will be returned to the client, albeit in the shape dictated by
 the object types.
 
-=item subscribe
+=head3 subscribe
 
 Code-ref to return a given property from a given source-object.
 
-=item deprecation_reason
+=head3 deprecation_reason
 
 Reason if deprecated. If given, also sets a boolean key of
 C<is_deprecated> to true.
 
-=item description
+=head3 description
 
 Description.
-
-=back
 
 =cut
 
