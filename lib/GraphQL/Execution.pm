@@ -184,12 +184,12 @@ fun execute(
   DEBUG and _debug('execute(result)', $result, $@);
   _build_response($result, 1);
 }
-
+use Future;
 fun _build_response(
   ExecutionPartialResult | Promise $result,
   Bool $force_data = 0,
 ) :ReturnType(ExecutionResult | Promise) {
-  return $result->then(sub { _build_response(@_) }) if is_Promise($result);
+  return $result->then(sub { $result->can('wrap') ? Future->wrap(_build_response(@_)) : _build_response(@_) }) if is_Promise($result);
   my @errors = @{$result->{errors} || []};
   +{
     $force_data ? (data => undef) : (), # default if none given
@@ -402,7 +402,7 @@ fun _promise_for_hash(
     if !$context->{promise_code};
   $context->{promise_code}{all}->(@$values)->then(sub {
     DEBUG and _debug('_promise_for_hash(all)', \@_);
-    _merge_hash($keys, [ map $_->[0], @_ ], $errors);
+    Future->wrap( _merge_hash($keys, [ map {  ( (ref($_)||'') eq 'ARRAY') ? $_->[0] : $_ } @_ ], $errors) );
   });
 }
 
@@ -533,7 +533,11 @@ fun _complete_value(
   DEBUG and _debug('_complete_value', $return_type->to_string, $path, $result);
   if (is_Promise($result)) {
     my @outerargs = @_[0..4];
-    return $result->then(sub { _complete_value(@outerargs, $_[0]) });
+    return $result->then( sub {
+      $result->can('wrap') ? 
+      Future->wrap(_complete_value(@outerargs, $_[0])) : 
+      _complete_value(@outerargs, $_[0])
+    });
   }
   die $result if GraphQL::Error->is($result);
   if ($return_type->isa('GraphQL::Type::NonNull')) {
