@@ -69,6 +69,7 @@ t/type-interface.t
 t/type-introspection.t
 t/type-schema.t
 t/util-buildschema.t
+xt/future.t
 xt/manifest.t
 xt/pod-coverage.t
 xt/pod.t
