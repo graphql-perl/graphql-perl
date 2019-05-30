@@ -405,7 +405,7 @@ declare "PromiseCode",
     resolve => CodeLike,
     all => CodeLike,
     reject => CodeLike,
-    then => Maybe[CodeLike]
+    then => Optional[CodeLike]
   ];
 
 =head1 AUTHOR
