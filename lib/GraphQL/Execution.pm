@@ -161,6 +161,10 @@ fun execute(
   Maybe[CodeLike] $field_resolver = undef,
   Maybe[PromiseCode] $promise_code = undef,
 ) :ReturnType(ExecutionResult | Promise) {
+  my $then = ($promise_code && $promise_code->{then}) ?
+    $promise_code->{then} :
+    sub { shift->then(@_) };
+
   my $context = eval {
     my $ast = ref($doc) ? $doc : parse($doc);
     _build_context(
@@ -174,22 +178,24 @@ fun execute(
       $promise_code,
     );
   };
+
   DEBUG and _debug('execute', $context, $@);
-  return _build_response(_wrap_error($@)) if $@;
+  return _build_response(_wrap_error($@), $then) if $@;
   my $result = _execute_operation(
     $context,
     $context->{operation},
-    $root_value,
+    $root_value
   );
   DEBUG and _debug('execute(result)', $result, $@);
-  _build_response($result, 1);
+  _build_response($result, $then, 1);
 }
-use Future;
+
 fun _build_response(
   ExecutionPartialResult | Promise $result,
-  Bool $force_data = 0,
+  CodeLike $then,
+  Bool $force_data = 0
 ) :ReturnType(ExecutionResult | Promise) {
-  return $result->then(sub { $result->can('wrap') ? Future->wrap(_build_response(@_)) : _build_response(@_) }) if is_Promise($result);
+  return $result->$then(sub { _build_response(@_, $then) }) if is_Promise($result);
   my @errors = @{$result->{errors} || []};
   +{
     $force_data ? (data => undef) : (), # default if none given
@@ -400,9 +406,14 @@ fun _promise_for_hash(
   DEBUG and _debug('_promise_for_hash', $keys);
   die "Given a promise in object but no PromiseCode given\n"
     if !$context->{promise_code};
-  $context->{promise_code}{all}->(@$values)->then(sub {
+
+  my $then = $context->{promise_code}{then} ?
+    $context->{promise_code}{then} :
+    sub { shift->then(@_) };
+
+  $context->{promise_code}{all}->(@$values)->$then(sub {
     DEBUG and _debug('_promise_for_hash(all)', \@_);
-    Future->wrap( _merge_hash($keys, [ map {  ( (ref($_)||'') eq 'ARRAY') ? $_->[0] : $_ } @_ ], $errors) );
+    _merge_hash($keys, [ map $_->[0], @_ ] , $errors);
   });
 }
 
@@ -533,11 +544,10 @@ fun _complete_value(
   DEBUG and _debug('_complete_value', $return_type->to_string, $path, $result);
   if (is_Promise($result)) {
     my @outerargs = @_[0..4];
-    return $result->then( sub {
-      $result->can('wrap') ? 
-      Future->wrap(_complete_value(@outerargs, $_[0])) : 
-      _complete_value(@outerargs, $_[0])
-    });
+    my $then = ($context->{promise_code} && $context->{promise_code}{then}) ?
+      $context->{promise_code}{then} :
+      sub { shift->then(@_) };
+    return $result->$then(sub { _complete_value(@outerargs, $_[0]) });
   }
   die $result if GraphQL::Error->is($result);
   if ($return_type->isa('GraphQL::Type::NonNull')) {
