@@ -59,7 +59,6 @@ my $q = q<
   }
 >;
 
-use Devel::Dwarn;
-Dwarn(execute($schema, $q, \%root_value));
+ok execute($schema, $q, \%root_value);
 
 done_testing;
