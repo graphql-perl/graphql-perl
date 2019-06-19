@@ -46,6 +46,7 @@ MANIFEST			This list of files
 README.md
 t/00-load.t
 t/00-report-prereqs.t
+t/directives.t
 t/execution-abstract.t
 t/execution-directives.t
 t/execution-execute.t
