@@ -61,6 +61,15 @@ the path from the top operation (being either fields, or a List offset).
 
 has path => (is => 'ro', isa => ArrayRef[StrNameValid | Int]);
 
+=head2 extensions
+
+Hash-ref of L<GraphQL::Type::Library/JSONable>s providing additional
+information.
+
+=cut
+
+has extensions => (is => 'ro', isa => Optional[HashRef[JSONable]]);
+
 =head1 METHODS
 
 =head2 is
