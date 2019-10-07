@@ -334,9 +334,19 @@ declare "DocumentLocation",
     column => Int,
   ];
 
+=head2 JSONable
+
+A value that will be JSON-able.
+
+=cut
+
+declare "JSONable",
+  as Any,
+    where { $JSON->encode($_); 1 };
+
 =head2 ErrorResult
 
-Hash-ref that has keys C<message>, C<location>, C<path>.
+Hash-ref that has keys C<message>, C<location>, C<path>, C<extensions>.
 
 =cut
 
@@ -345,6 +355,7 @@ declare "ErrorResult",
     message => Str,
     path => Optional[ArrayRef[Str]],
     locations => Optional[ArrayRef[DocumentLocation]],
+    extensions => Optional[HashRef[JSONable]],
   ];
 
 =head2 ExecutionResult
@@ -358,10 +369,6 @@ values are either further hashes, array-refs, or scalars. It will be
 JSON-able.
 
 =cut
-
-declare "JSONable",
-  as Any,
-  where { $JSON->encode($_); 1 };
 
 declare "ExecutionResult",
   as Dict[
