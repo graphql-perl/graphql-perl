@@ -710,6 +710,11 @@ fun _coerce_value(
     return [ map _coerce_value(
       $_, $variable_values, $default_value
     ), @$argument_node ];
+  } elsif (ref($argument_node) eq 'HASH') {
+    # hash. recurse
+    return +{ map { $_ => _coerce_value(
+      $argument_node->{$_}, $variable_values, $default_value
+    ) } keys %$argument_node };
   } else {
     # query literal. JSON land, needs convert/validate
     return $argument_node;

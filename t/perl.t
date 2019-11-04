@@ -229,7 +229,7 @@ subtest 'errors on incorrect query input', sub {
     {
       data => { fieldWithObjectInput => undef },
       errors => [ { message =>
-      q{Argument 'input' got invalid value {"id":"id"}.}
+      q{Argument 'input' got invalid value {"id":null}.}
       ."\n"."Expected 'TestInputObject'.\nIn field \"id\": Unknown field.\n",
       locations => [{ column => 5, line => 4 }],
       path => ['fieldWithObjectInput'],
@@ -349,6 +349,29 @@ EOF
       ymd => scalar $now->ymd,
       dmy => scalar $now->dmy,
     } } },
+  );
+};
+
+subtest 'literal input object with $var as value' => sub {
+  my $schema = GraphQL::Schema->from_doc(<<'EOF');
+input AuditFilter {
+  resource: String
+  resource_id: String
+}
+
+type Query {
+  allAudits(filter: AuditFilter): String
+}
+EOF
+  my $now = DateTime->now;
+  my $root_value = { allAudits => 'yo' };
+  run_test([
+    $schema,
+    'query q($device: String!) { allAudits(filter: {resource: "device", resource_id: $device}) }',
+    $root_value, undef,
+    { device => 'e0c05156-c623-459d-9535-f645fdd04f3c' },
+  ],
+    { data => $root_value },
   );
 };
 
