@@ -1,3 +1,5 @@
+- Support field directives - thanks @yigarashi-9
+
 0.37 2019-11-04
  - fix literal input-object coercion problem - thanks @ccakes
  - add "extensions" field to GraphQL::Error - thanks @cockscomb

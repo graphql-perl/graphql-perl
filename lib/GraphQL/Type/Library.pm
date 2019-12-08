@@ -262,7 +262,7 @@ declare "FieldMapOutput", as Map[
     args => Optional[FieldMapInput],
     resolve => Optional[CodeRef],
     subscribe => Optional[CodeRef],
-    directives => Optional[ArrayRef],
+    directives => Optional[ArrayRef[HashRef]],
     deprecation_reason => Optional[Str],
     description => Optional[Str],
   ]

@@ -105,11 +105,10 @@ method _make_fieldtuples(
     ) if exists $field->{default_value};
     my @directives = map {
       my $args = $_->{arguments};
-      my @argtuples = map { $_ . ': ' . $JSON_noutf8->encode($args->{$_}) } keys %$args;
-      my $directive = '@' . $_->{name};
-      @argtuples ? $directive . '(' . join(', ', @argtuples) . ')' : $directive;
-    } @{ $field->{directives} };
-    $line .= join(' ', ('', @directives)) if exists $field->{directives};
+      my @argtuples = map { "$_: " . $JSON_noutf8->encode($args->{$_}) } keys %$args;
+      '@' . $_->{name} . (@argtuples ? '(' . join(', ', @argtuples) . ')' : '');
+    } @{ $field->{directives} || [] };
+    $line .= join(' ', ('', @directives)) if @directives;
     [
       $self->_to_doc_field_deprecate($line, $field),
       $self->_description_doc_lines($field->{description}),
