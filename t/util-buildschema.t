@@ -473,6 +473,24 @@ EOF
   is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
 };
 
+subtest 'Supports directives on field' => sub {
+  my $doc = <<'EOF';
+input DirectiveInput {
+  field: String @directive
+}
+
+interface DirectiveInterface {
+  field: String @directive
+}
+
+type Query {
+  field1: String @directive1
+  field2: Int @directive2(arg: true)
+}
+EOF
+  is(GraphQL::Schema->from_doc($doc)->to_doc, $doc);
+};
+
 # except it doesn't - just round-trip
 subtest 'Correctly assign AST nodes' => sub {
   my $doc = <<'EOF';

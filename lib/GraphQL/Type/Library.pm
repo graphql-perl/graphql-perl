@@ -112,6 +112,7 @@ declare "FieldMapInput", as Map[
   Dict[
     type => ConsumerOf['GraphQL::Role::Input'],
     default_value => Optional[Any],
+    directives => Optional[ArrayRef[HashRef]],
     description => Optional[Str],
   ]
 ] & ValuesMatchTypes['default_value', 'type' ];
@@ -261,6 +262,7 @@ declare "FieldMapOutput", as Map[
     args => Optional[FieldMapInput],
     resolve => Optional[CodeRef],
     subscribe => Optional[CodeRef],
+    directives => Optional[ArrayRef],
     deprecation_reason => Optional[Str],
     description => Optional[Str],
   ]

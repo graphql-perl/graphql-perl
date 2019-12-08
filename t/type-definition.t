@@ -181,6 +181,71 @@ subtest 'defines an object type with deprecated field', sub {
   };
 };
 
+subtest 'define definitions including fields with directives', sub {
+  my $TypeWithFieldWithDirective = GraphQL::Type::Object->new(
+    name => 'foo',
+    fields => {
+      bar => {
+        type => $String,
+        directives => [
+          {
+            name => 'directive',
+            arguments => { arg => 'value' },
+          }
+        ]
+      }
+    },
+  );
+  is_deeply $TypeWithFieldWithDirective->fields->{bar}->{directives}, [
+    {
+      name => 'directive',
+      arguments => { arg => 'value' },
+    }
+  ];
+
+  my $InterfaceWithFieldWithDirective = GraphQL::Type::Interface->new(
+    name => 'foo',
+    fields => {
+      bar => {
+        type => $String,
+        directives => [
+          {
+            name => 'directive',
+            arguments => { arg => 'value' },
+          }
+        ]
+      }
+    },
+  );
+  is_deeply $InterfaceWithFieldWithDirective->fields->{bar}->{directives}, [
+    {
+      name => 'directive',
+      arguments => { arg => 'value' },
+    }
+  ];
+
+  my $InputWithFieldWithDirective = GraphQL::Type::InputObject->new(
+    name => 'foo',
+    fields => {
+      bar => {
+        type => $String,
+        directives => [
+          {
+            name => 'directive',
+            arguments => { arg => 'value' },
+          }
+        ]
+      }
+    },
+  );
+  is_deeply $InputWithFieldWithDirective->fields->{bar}->{directives}, [
+    {
+      name => 'directive',
+      arguments => { arg => 'value' },
+    }
+  ];
+};
+
 subtest 'includes nested input objects in the map', sub {
   my $NestedInputObject = GraphQL::Type::InputObject->new(
     name => 'NestedInputObject',
