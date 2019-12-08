@@ -14,6 +14,7 @@ our $VERSION = '0.02';
 
 use constant DEBUG => $ENV{GRAPHQL_DEBUG};
 my %NONENUM = map { ($_ => 1) } qw(original_error);
+use overload '""' => 'to_string';
 
 =head1 NAME
 
@@ -117,7 +118,7 @@ Converts to string.
 
 =cut
 
-method to_string() :ReturnType(Str) {
+method to_string(@ignore) :ReturnType(Str) {
   $self->message;
 }
 

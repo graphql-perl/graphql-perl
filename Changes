@@ -1,3 +1,4 @@
+- error objects now stringify - thanks @jjn1056 for idea
 - more tests for directives - thanks @jjn1056
 - Support field directives - thanks @yigarashi-9
 

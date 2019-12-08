@@ -375,4 +375,10 @@ EOF
   );
 };
 
+subtest 'error objects stringify' => sub {
+  my $msg = 'Something is not right...';
+  my $error = GraphQL::Error->new(message => $msg);
+  is $error.'', $msg;
+};
+
 done_testing;
