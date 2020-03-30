@@ -1,5 +1,6 @@
 - type-checking now only when Devel::StrictMode STRICT (#31) - thanks @ccakes
 - can give default values to enums in queries (#33) - thanks @ccakes
+- eliminate tail-call in type expansion - thanks @ccakes
 
 0.46 2021-01-27
 - PromiseCode example to interoperate with Promises - thanks @hitode909

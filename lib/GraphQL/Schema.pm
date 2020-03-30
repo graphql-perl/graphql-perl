@@ -122,7 +122,7 @@ fun _expand_type(
   (Map[StrNameValid, ConsumerOf['GraphQL::Role::Named']]) $map,
   (InstanceOf['GraphQL::Type']) $type,
 ) :ReturnType(ArrayRef[ConsumerOf['GraphQL::Role::Named']]) {
-  return _expand_type($map, $type->of) if $type->can('of');
+  @_ = ($map, $type->of), goto &_expand_type if $type->can('of'); # avoid blowing out the stack
   my $name = $type->name if $type->can('name');
   return [] if $name and $map->{$name} and $map->{$name} == $type; # seen
   die "Duplicate type $name" if $map->{$name};
