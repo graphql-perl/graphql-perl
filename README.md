@@ -45,6 +45,8 @@ It now supports Promises, allowing asynchronous operation. See
 [Mojolicious::Plugin::GraphQL](https://metacpan.org/pod/Mojolicious::Plugin::GraphQL) for an example of how to take advantage
 of this.
 
+As of 0.39, supports GraphQL subscriptions.
+
 See [GraphQL::Type](https://metacpan.org/pod/GraphQL::Type) for description of how to create GraphQL types.
 
 ## Introduction to GraphQL
@@ -167,6 +169,9 @@ The creation of this work has been sponsored by Perl Careers:
 
 Artur Khabibullin `<rtkh at cpan.org>` contributed valuable ports
 of the JavaScript tests.
+
+The creation of the subscriptions functionality in this work has been
+sponsored by Sanctus.app: [https://sanctus.app](https://sanctus.app).
 
 # LICENSE AND COPYRIGHT
 

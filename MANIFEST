@@ -66,6 +66,7 @@ t/language-schema-parser.t
 t/lib/GQLTest.pm
 t/perl.t
 t/schema-kitchen-sink.graphql
+t/subscribe.t
 t/type-definition.t
 t/type-enum.t
 t/type-interface.t
