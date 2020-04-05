@@ -296,7 +296,7 @@ subtest 'nulls out error subtrees' => sub {
     async
     # asyncReject - no because Perl no "Error" exception class
     asyncRawReject
-    asyncEmptyReject
+    # asyncEmptyReject - no because now FakePromise uses die more
     # asyncError - no because Perl no "Error" exception class
     asyncRawError
     # asyncReturnError - no because Perl no "Error" exception class
@@ -320,8 +320,7 @@ subtest 'nulls out error subtrees' => sub {
         die "Error getting asyncRawError\n"
       })
     },
-    asyncRawReject => sub { FakePromise->reject('Error getting asyncRawReject') },
-    asyncEmptyReject => sub { FakePromise->reject },
+    asyncRawReject => sub { FakePromise->reject("Error getting asyncRawReject\n") },
   };
   my $ast = parse($doc);
   my $schema = GraphQL::Schema->new(
@@ -336,7 +335,6 @@ subtest 'nulls out error subtrees' => sub {
         async => { type => $String },
         asyncRawReject => { type => $String },
         asyncRawError => { type => $String },
-        asyncEmptyReject => { type => $String },
       }
     )
   );
@@ -350,7 +348,6 @@ subtest 'nulls out error subtrees' => sub {
       async => 'async',
       asyncRawError => undef,
       asyncRawReject => undef,
-      asyncEmptyReject => undef,
     },
     errors => bag(
       {
@@ -359,8 +356,8 @@ subtest 'nulls out error subtrees' => sub {
         'path' => [ 'asyncRawError' ]
       },
       {
-        'locations' => [{ 'column' => 5, 'line' => 10 }],
-        'message' => 'Error getting asyncRawReject',
+        'locations' => [{ 'column' => 5, 'line' => 12 }],
+        'message' => "Error getting asyncRawReject\n",
         'path' => [ 'asyncRawReject' ]
       },
       {
@@ -388,11 +385,6 @@ subtest 'nulls out error subtrees' => sub {
         locations => [{ line => 7, column => 5 }],
         path    => ['syncReturnErrorList', 3]
       },
-      {
-        'locations' => [{ 'column' => 5, 'line' => 12 }],
-        'message' => "Unknown error",
-        'path' => [ 'asyncEmptyReject' ]
-      },
     ),
   });
 };
@@ -413,7 +405,7 @@ subtest 'nulls error subtree for promise rejection #1071' => sub {
             name => 'Food',
             fields => { name => { type => $String } },
           )->list,
-          resolve => sub { FakePromise->reject('Dangit') },
+          resolve => sub { FakePromise->reject("Dangit\n") },
         },
       },
     )
@@ -423,7 +415,7 @@ subtest 'nulls error subtree for promise rejection #1071' => sub {
     errors => [
       {
         'locations' => [{ 'column' => 3, 'line' => 5 }],
-        'message' => "Dangit",
+        'message' => "Dangit\n",
         'path' => [ 'foods' ]
       },
     ]

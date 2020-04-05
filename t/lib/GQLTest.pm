@@ -75,54 +75,42 @@ sub fake_promise_code {
     return $self->{status} unless @_;
     $self->{status} = shift;
   }
-  sub steps {
-    # hash-ref with then and/or catch
-    my $self = shift;
-    return $self->{steps} unless @_;
-    die "steps is read-only\n";
-  }
   sub values {
     my $self = shift;
-    return @{$self->{values}} unless @_;
-    $self->{values} = [ @_ ];
+    return @{$self->{values}} if $self->{values}; # has local values
+    return $self->{parent}->get; # is chained
   }
   sub new {
     my ($class, %attrs) = @_;
-    bless +{ %attrs, steps => [] }, $class;
+    $class = ref($class) || $class; # object method too
+    bless \%attrs, $class;
   }
   sub resolve { shift->new(status => 'fulfilled', values => [ @_ ]) }
   sub reject { shift->new(status => 'rejected', values => [ @_ ]) }
   sub all { shift->new(status => 'fulfilled', all => [ @_ ]) }
   sub then {
     my $self = shift;
-    push @{$self->steps}, +{ then => shift, catch => shift };
-    $self;
+    $self->new(parent => $self, handlers => +{ then => shift, catch => shift });
   }
   sub catch { shift->then(undef, @_) }
   sub _safe_call { my @r = eval { $_[0]->() }; ($@, @r); }
-  sub _onestep {
-    die "_onestep not in array context" if !wantarray;
-    my ($e, @r) = _safe_call($_[0]);
-    return ('catch', $e) if $e;
-    return ('then', @r) if ref $r[0] ne __PACKAGE__;
-    # real package would deal with still-pending
-    @_ = sub { $r[0]->get }; goto &_onestep; # tail recursion
-  }
-  sub _mapsteps {
-    my ($self, $key, @values) = @_;
-    for (@{$self->steps}) {
-      next if !$_->{$key};
-      ($key, @values) = _onestep(sub { $_->{$key}->(@values) });
+  sub _safe_call_setvalues {
+    my ($self, $func) = @_;
+    my ($e, @r) = _safe_call($func);
+    $self->{values} = $e ? [ $e ] : \@r;
+    $self->status($e ? 'rejected' : 'fulfilled');
+    if (ref $self->{values}[0] eq __PACKAGE__) {
+      # handler returned a promise, get value
+      $e = $self->_safe_call_setvalues(sub { $self->{values}[0]->get });
     }
-    $self->status($key eq 'then' ? 'fulfilled' : 'rejected');
-    @values;
+    $e;
   }
   sub _settle {
     my $self = shift;
     return if $self->{_settled};
     $self->{_settled} = 1;
-    my @values;
     if ($self->{all}) {
+      my @values;
       for (@{$self->{all}}) {
         if (ref $_ ne __PACKAGE__) {
           push @values, [ $_ ];
@@ -136,15 +124,18 @@ sub fake_promise_code {
         }
         push @values, [ @r ];
       }
-    } else {
-      @values = $self->values;
+      $self->{values} = \@values;
+    } elsif (my $h = $self->{handlers}) {
+      # chained promise
+      my $e = $self->_safe_call_setvalues(sub { $self->values });
+      if (!$e and $h->{then}) {
+        $e = $self->_safe_call_setvalues(sub { $h->{then}->($self->values) });
+      }
+      if ($e) {
+        return if !$h->{catch};
+        $e = $self->_safe_call_setvalues(sub { $h->{catch}->($self->values) });
+      }
     }
-    if ($self->status eq 'fulfilled') {
-      @values = $self->_mapsteps('then', @values);
-    } elsif ($self->status eq 'rejected') {
-      @values = $self->_mapsteps('catch', @values);
-    }
-    $self->values(@values);
   }
   sub get {
     my $self = shift;
