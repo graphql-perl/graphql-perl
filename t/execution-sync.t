@@ -41,8 +41,8 @@ subtest 'test the tests' => sub {
   is $p->get, 'yoga'; # check can re-get
   $p = FakePromise->reject("yo\n");
   promise_test($p, [], "yo\n");
-  $p = FakePromise->reject("f")->catch(sub { shift });
-  promise_test($p, ['f'], "");
+  $p = FakePromise->reject("f\n")->catch(sub { shift });
+  promise_test($p, ["f\n"], "");
   $p = FakePromise->resolve("yo\n")->then(sub { die shift });
   promise_test($p, [], "yo\n");
   $p = FakePromise->reject("f\n")->catch(sub { shift })->then(sub { die shift });
@@ -73,7 +73,7 @@ subtest 'test the tests' => sub {
   promise_test($p, [qw(Hi! Yo!)], "");
   $p = FakePromise->all(
     FakePromise->all(
-      FakePromise->reject("yo")->then(
+      FakePromise->reject("yo\n")->then(
         # simulates rejection that will skip first "then"
         sub { "$_[0]/" }
       )->then(
@@ -87,7 +87,7 @@ subtest 'test the tests' => sub {
       ),
     ),
   )->then(undef, sub { map "^$_", @_ }),;
-  promise_test($p, ["^>yo!\n"], "");
+  promise_test($p, ["^>yo\n!\n"], "");
 };
 
 subtest 'does not return a Promise for initial errors' => sub {
