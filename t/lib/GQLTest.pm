@@ -53,9 +53,9 @@ sub promise_test {
   my ($p, $fulfilled, $rejected) = @_;
   local $Test::Builder::Level = $Test::Builder::Level + 1;
   my $got = [ eval { $p->get } ];
-  is_deeply $got, $fulfilled or diag 'got: ', explain $got;
+  is_deeply $got, $fulfilled or diag 'got unexpected result: ', explain $got;
   my $e = $@;
-  is $e, $rejected or diag 'got: ', explain $e;
+  is $e, $rejected or diag 'got unexpected error: ', explain $e;
 }
 
 sub fake_promise_code {
