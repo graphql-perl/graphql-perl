@@ -12,6 +12,7 @@ BEGIN {
 
 sub check {
   my ($test_type, $test_data, $expected) = @_;
+  local $Test::Builder::Level = $Test::Builder::Level + 1;
   my $data = +{ test => $test_data };
   my $data_type;
   $data_type = GraphQL::Type::Object->new(
