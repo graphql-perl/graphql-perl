@@ -117,8 +117,10 @@ sub fake_promise_code {
     $self->status($key eq 'then' ? 'fulfilled' : 'rejected');
     @values;
   }
-  sub _finalise {
+  sub _settle {
     my $self = shift;
+    return if $self->{_settled};
+    $self->{_settled} = 1;
     my @values;
     if ($self->{all}) {
       for (@{$self->{all}}) {
@@ -142,13 +144,12 @@ sub fake_promise_code {
     } elsif ($self->status eq 'rejected') {
       @values = $self->_mapsteps('catch', @values);
     }
-    $self->{_settled} = 1;
     $self->values(@values);
   }
   sub get {
     my $self = shift;
-    $self->_finalise if !$self->{_settled};
-    my @values = $self->values; # must be settled ie fulfilled or rejected
+    $self->_settle;
+    my @values = $self->values;
     die @values if $self->status eq 'rejected';
     die "Tried to scalar-get but >1 value" if !wantarray and @values > 1;
     return $values[0] if !wantarray;
