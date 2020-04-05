@@ -1,3 +1,5 @@
+use strict;
+use warnings;
 use base 'Exporter';
 
 my @IMPORT;
