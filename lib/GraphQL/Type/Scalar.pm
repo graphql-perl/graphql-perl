@@ -131,14 +131,8 @@ our $Int = GraphQL::Type::Scalar->new(
   description =>
     'The `Int` scalar type represents non-fractional signed whole numeric ' .
     'values. Int can represent values between -(2^31) and 2^31 - 1.',
-  serialize => sub { return undef if !defined $_[0]; Int32Signed->(@_); $_[0]+0 },
-  parse_value => sub {
-    DEBUG and _debug('Int.parse_value', @_, $JSON->encode({ intval => $_[0] }));
-    return undef if !defined $_[0];
-    Int32Signed->(@_);
-    DEBUG and _debug('Int.parse_value(after asserts)', @_, $JSON->encode({ intval => $_[0] }));
-    $_[0]+0
-  },
+  serialize => sub { defined $_[0] and !is_Int32Signed($_[0]) and die "Not an Int.\n"; $_[0]+0 },
+  parse_value => sub { defined $_[0] and !is_Int32Signed($_[0]) and die "Not an Int.\n"; $_[0]+0 },
 );
 
 =head2 $Float
@@ -151,8 +145,8 @@ our $Float = GraphQL::Type::Scalar->new(
     'The `Float` scalar type represents signed double-precision fractional ' .
     'values as specified by ' .
     '[IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point).',
-  serialize => sub { return undef if !defined $_[0]; Num->(@_); $_[0]+0 },
-  parse_value => sub { return undef if !defined $_[0]; Num->(@_); $_[0]+0 },
+  serialize => sub { defined $_[0] and !is_Num($_[0]) and die "Not a Float.\n"; $_[0]+0 },
+  parse_value => sub { defined $_[0] and !is_Num($_[0]) and die "Not a Float.\n"; $_[0]+0 },
 );
 
 =head2 $String

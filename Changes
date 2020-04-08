@@ -1,3 +1,5 @@
+- simplify Int and Float implementations
+
 0.38 2019-12-08
 - error objects now stringify - thanks @jjn1056 for idea
 - more tests for directives - thanks @jjn1056
