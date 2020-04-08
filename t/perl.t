@@ -261,7 +261,7 @@ subtest 'test Scalar methods' => sub {
   throws_ok { $scalar->parse_value->('string') } qr{Fake}, 'fake parse_value';
   is $scalar->to_doc, qq{"d"\nscalar s\n}, 'to_doc';
   is $Boolean->serialize->(1), 1, 'Boolean serialize';
-  is $Boolean->parse_value->(1), 1, 'Boolean parse_value';
+  is $Boolean->parse_value->(JSON->true), 1, 'Boolean parse_value';
 };
 
 subtest 'exercise __type root field more'=> sub {
