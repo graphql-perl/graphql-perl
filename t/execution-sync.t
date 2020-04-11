@@ -88,6 +88,10 @@ subtest 'test the tests' => sub {
     ),
   )->then(undef, sub { map "^$_", @_ }),;
   promise_test($p, ["^>yo\n!\n"], "");
+  $p = FakePromise->new;
+  is !!$p->settled, '';
+  $p->resolve('hi');
+  promise_test($p, ["hi"], "");
 };
 
 subtest 'does not return a Promise for initial errors' => sub {

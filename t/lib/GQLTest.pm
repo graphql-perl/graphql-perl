@@ -68,7 +68,6 @@ sub fake_promise_code {
 
 {
   package FakePromise;
-  # no API-compatible new method, as not going to hook into IO loop etc
   sub status {
     # status = undef/'fulfilled'/'rejected'
     my $self = shift;
@@ -78,15 +77,55 @@ sub fake_promise_code {
   sub values {
     my $self = shift;
     return @{$self->{values}} if $self->{values}; # has local values
-    return $self->{parent}->get; # is chained
+    if ($self->{all}) {
+      my @values;
+      for (@{$self->{all}}) {
+        if (ref $_ ne __PACKAGE__) {
+          push @values, [ $_ ];
+          next;
+        }
+        my ($e, @r) = _safe_call(sub { $_->get });
+        if ($e) {
+          $self->status('rejected');
+          @values = ($e);
+          last;
+        }
+        push @values, [ @r ];
+      }
+      $self->{values} = \@values;
+    } elsif (my $p = $self->{parent}) {
+      # chained promise
+      my $e = $self->_safe_call_setvalues(sub { $p->get });
+    }
+    if (my $h = $self->{handlers}) {
+      my @values = @{$self->{values}};
+      my $e = $self->status eq 'rejected' ? $values[0] : '';
+      if (!$e and $h->{then}) {
+        $e = $self->_safe_call_setvalues(sub { $h->{then}->(@values) });
+      }
+      if ($e and $h->{catch}) {
+        $e = $self->_safe_call_setvalues(sub { $h->{catch}->($e) });
+      }
+    }
+    @{$self->{values}};
   }
   sub new {
     my ($class, %attrs) = @_;
     $class = ref($class) || $class; # object method too
     bless \%attrs, $class;
   }
-  sub resolve { shift->new(status => 'fulfilled', values => [ @_ ]) }
-  sub reject { shift->new(status => 'rejected', values => [ @_ ]) }
+  sub resolve {
+    my $self = shift;
+    $self = $self->new if !ref $self;
+    $self->settle('fulfilled', @_);
+    $self;
+  }
+  sub reject {
+    my $self = shift;
+    $self = $self->new if !ref $self;
+    $self->settle('rejected', @_);
+    $self;
+  }
   sub all { shift->new(status => 'fulfilled', all => [ @_ ]) }
   sub then {
     my $self = shift;
@@ -105,41 +144,23 @@ sub fake_promise_code {
     }
     $e;
   }
-  sub _settle {
+  sub settle {
     my $self = shift;
-    return if $self->{_settled};
+    die "Error: tried to settle an already-settled promise"
+      if $self->settled;
     $self->{_settled} = 1;
-    if ($self->{all}) {
-      my @values;
-      for (@{$self->{all}}) {
-        if (ref $_ ne __PACKAGE__) {
-          push @values, [ $_ ];
-          next;
-        }
-        my ($e, @r) = _safe_call(sub { $_->get });
-        if ($e) {
-          $self->status('rejected');
-          @values = ($e);
-          last;
-        }
-        push @values, [ @r ];
-      }
-      $self->{values} = \@values;
-    } elsif (my $h = $self->{handlers}) {
-      # chained promise
-      my $e = $self->_safe_call_setvalues(sub { $self->values });
-      if (!$e and $h->{then}) {
-        $e = $self->_safe_call_setvalues(sub { $h->{then}->($self->values) });
-      }
-      if ($e) {
-        return if !$h->{catch};
-        $e = $self->_safe_call_setvalues(sub { $h->{catch}->($self->values) });
-      }
-    }
+    my $status = shift;
+    $self->status($status);
+    $self->{values} = [ @_ ];
+  }
+  sub settled {
+    my $self = shift;
+    $self->{_settled};
   }
   sub get {
     my $self = shift;
-    $self->_settle;
+    die "Error: tried to 'get' a non-settled orphan promise"
+      if !$self->settled and !$self->{parent} and !$self->{all};
     my @values = $self->values;
     die @values if $self->status eq 'rejected';
     die "Tried to scalar-get but >1 value" if !wantarray and @values > 1;
