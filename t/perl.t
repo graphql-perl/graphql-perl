@@ -1,3 +1,5 @@
+use strict;
+use warnings;
 use lib 't/lib';
 use GQLTest;
 
@@ -241,6 +243,7 @@ subtest 'test _debug', sub {
   require GraphQL::Debug;
   my @diags;
   {
+    no warnings 'redefine';
     local *Test::More::diag = sub { push @diags, @_ };
     GraphQL::Debug::_debug('message', +{ key => 1 });
   }
