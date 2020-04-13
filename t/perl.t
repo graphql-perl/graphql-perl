@@ -515,4 +515,46 @@ subtest 'pubsub' => sub {
   is_deeply [ $normal_cb_counter, $error_cb_called ], [ 2, 1 ], 'error_cb called';
 };
 
+subtest 'asynciterator' => sub {
+  my $ai = fake_promise_iterator();
+  my $promised_value = $ai->next_p;
+  $ai->publish('hi');
+  promise_test($promised_value, ["hi"], "");
+  $ai->publish('yo');
+  promise_test($ai->next_p, ["yo"], "");
+  $ai->publish(1);
+  $ai->publish(2);
+  promise_test($ai->next_p, [1], "");
+  promise_test($ai->next_p, [2], "");
+  $ai->publish(3);
+  $ai->error("9\n");
+  $ai->publish(4);
+  promise_test($ai->next_p, [3], "");
+  promise_test($ai->next_p, [], "9\n");
+  my ($callcount1, $callcount2) = (0, 0);
+  my $ai2 = $ai->map_then(sub { $callcount1++; $_[0] + 100 });
+  my $ai3 = $ai2->map_then(sub { $callcount2++; $_[0] * 2 });
+  promise_test($ai->next_p, [4], "");
+  promise_test($ai2->next_p, [104], "");
+  promise_test($ai3->next_p, [208], "");
+  is $callcount1, 1;
+  is $callcount2, 1;
+  $promised_value = $ai3->next_p;
+  $ai->publish(5);
+  promise_test($ai->next_p, [5], "");
+  promise_test($ai2->next_p, [105], "");
+  is $callcount1, 2;
+  is $callcount2, 2;
+  promise_test($promised_value, [210], "");
+  $ai->close_tap;
+  is $ai->next_p, undef;
+  throws_ok { $ai->publish(6) } qr{closed}, 'publish to closed off';
+  is $ai2->next_p, undef; # close_tap propagates to children
+  $ai = fake_promise_iterator();
+  $ai2 = $ai->map_then(sub { $_[0] + 100 });
+  $ai2->close_tap;
+  is $ai2->next_p, undef;
+  is $ai->next_p, undef; # close_tap propagates to parents
+};
+
 done_testing;

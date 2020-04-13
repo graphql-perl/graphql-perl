@@ -394,18 +394,22 @@ declare "ExecutionPartialResult",
 
 =head2 Promise
 
-An object that has a C<then> method.
+An object that has C<then>, C<resolve>, C<reject> methods.
 
 =cut
 
 declare "Promise",
-  as HasMethods['then'];
+  as HasMethods[qw(then resolve reject)];
 
 =head2 PromiseCode
 
 A hash-ref with three keys: C<resolve>, C<all>, C<reject>. The values are
 all code-refs that take one value (for C<all>, an array-ref), and create
 the given kind of Promise.
+
+Must also have a C<new> key for use with L<GraphQL::Subscription>,
+with code returning a promise that can then have C<resolve> or C<reject>
+called on it.
 
 =cut
 
@@ -414,7 +418,17 @@ declare "PromiseCode",
     resolve => CodeLike,
     all => CodeLike,
     reject => CodeLike,
+    new => Optional[CodeLike],
   ];
+
+=head2 AsyncIterator
+
+An instance of L<GraphQL::AsyncIterator>.
+
+=cut
+
+declare "AsyncIterator",
+  as InstanceOf['GraphQL::AsyncIterator'];
 
 =head1 AUTHOR
 

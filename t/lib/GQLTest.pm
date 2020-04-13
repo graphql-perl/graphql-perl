@@ -63,7 +63,15 @@ sub fake_promise_code {
     resolve => FakePromise->curry::resolve,
     reject => FakePromise->curry::reject,
     all => FakePromise->curry::all,
+    new => FakePromise->curry::new,
   };
+}
+
+sub fake_promise_iterator {
+  require GraphQL::AsyncIterator;
+  GraphQL::AsyncIterator->new(
+    promise_code => fake_promise_code(),
+  );
 }
 
 {
