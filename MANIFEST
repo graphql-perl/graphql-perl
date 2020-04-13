@@ -15,6 +15,7 @@ lib/GraphQL/Plugin/Convert.pm
 lib/GraphQL/Plugin/Convert/Test.pm
 lib/GraphQL/Plugin/Type.pm
 lib/GraphQL/Plugin/Type/DateTime.pm
+lib/GraphQL/PubSub.pm
 lib/GraphQL/Role/Abstract.pm
 lib/GraphQL/Role/Composite.pm
 lib/GraphQL/Role/FieldDeprecation.pm

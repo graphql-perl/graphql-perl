@@ -475,4 +475,44 @@ subtest 'fake promises' => sub {
   promise_test($p, [map [$_], qw(hi there)], "");
 };
 
+subtest 'pubsub' => sub {
+  require GraphQL::PubSub;
+  my $pubsub = GraphQL::PubSub->new;
+  my ($flag1, @flag2);
+  my $cb1 = sub { $flag1 = $_[0] };
+  my $cb2 = sub { @flag2 = @_ };
+  $pubsub->subscribe('channel1', $cb1);
+  $pubsub->subscribe('channel1', $cb2);
+  $pubsub->publish('channel1', 1);
+  is $flag1, 1, 'cb1 received first publish';
+  is_deeply \@flag2, [ 1 ], 'cb2 received first publish';
+  $pubsub->unsubscribe('channel1', $cb1);
+  $pubsub->publish('channel1', 2);
+  is $flag1, 1, 'cb1 did not receive second publish';
+  is_deeply \@flag2, [ 2 ], 'cb2 still received second publish';
+  $pubsub->subscribe('channel2', $cb1);
+  $pubsub->publish('channel1', 3);
+  is $flag1, 1, 'cb1 did not receive third publish';
+  is_deeply \@flag2, [ 3 ], 'cb2 still received third publish';
+  my $normal_cb_counter = 0;
+  my $normal_cb = sub { $normal_cb_counter++; die "aiiee" if $_[0] eq 'die' };
+  $pubsub->subscribe('errors', $normal_cb);
+  is_deeply [ $normal_cb_counter ], [ 0 ], 'init state';
+  $pubsub->publish('errors', 'live');
+  is_deeply [ $normal_cb_counter ], [ 1 ], 'normal';
+  $pubsub->publish('errors', 'die');
+  is_deeply [ $normal_cb_counter ], [ 2 ], 'call with an exception';
+  $pubsub->publish('errors', 'live');
+  is_deeply [ $normal_cb_counter ], [ 2 ], 'got unsubscribed so normal not run';
+  $normal_cb_counter = 0;
+  my $error_cb_called;
+  my $error_cb = sub { $error_cb_called = 1 };
+  $pubsub->subscribe('errors', $normal_cb, $error_cb);
+  is_deeply [ $normal_cb_counter, $error_cb_called ], [ 0, undef ], 'init state';
+  $pubsub->publish('errors', 'live');
+  is_deeply [ $normal_cb_counter, $error_cb_called ], [ 1, undef ], 'normal';
+  $pubsub->publish('errors', 'die');
+  is_deeply [ $normal_cb_counter, $error_cb_called ], [ 2, 1 ], 'error_cb called';
+};
+
 done_testing;
