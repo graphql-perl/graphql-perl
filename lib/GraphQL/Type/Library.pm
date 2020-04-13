@@ -132,7 +132,8 @@ A L</FieldMapInput>.
 
 =head3 subscribe
 
-Code-ref to return a given property from a given source-object.
+Code-ref to return a subscription to the field from a given
+source-object. See L<GraphQL::Subscription/subscribe>.
 
 =head3 deprecation_reason
 

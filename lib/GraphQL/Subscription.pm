@@ -158,7 +158,25 @@ fun subscribe(
     DEBUG and _debug('subscribe(result)', $result, $@);
     die "The subscription field '$field_name' returned non-AsyncIterator '$result'\n"
       if !is_AsyncIterator($result);
-    $result;
+    $result->map_then(
+      sub {
+        GraphQL::Execution::execute(
+          $schema,
+          $ast,
+          $_[0],
+          $context_value,
+          $variable_values,
+          $operation_name,
+          $field_resolver,
+          $promise_code,
+        )
+      },
+      sub {
+        my ($error) = @_;
+        die $error if !GraphQL::Error->is($error);
+        GraphQL::Execution::_build_response(GraphQL::Execution::_wrap_error($error));
+      },
+    );
   };
   $result = GraphQL::Execution::_build_response(GraphQL::Execution::_wrap_error($@)) if $@;
   $promise_code->{resolve}->($result);
