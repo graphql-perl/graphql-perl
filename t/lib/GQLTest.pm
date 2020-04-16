@@ -39,7 +39,7 @@ sub run_test {
       is $@, '' or diag(explain $@), return;
     }
   } elsif ($force_promise) {
-    isa_ok $got, 'FakePromise' or return;
+    isa_ok $got, 'FakePromise' or diag(explain $got), return;
     $got = eval { $got->get };
     is $@, '' or diag(explain $@), return;
   } else {
