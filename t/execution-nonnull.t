@@ -53,6 +53,7 @@ my $schema = GraphQL::Schema->new(query => $data_type);
 # sync_only does not touch *Nest
 sub check {
   my ($doc, $sync_only, $expected_return, $expected_throw) = @_;
+  local $Test::Builder::Level = $Test::Builder::Level + 1;
   my @descs = ([
     {
       doc => $doc,
