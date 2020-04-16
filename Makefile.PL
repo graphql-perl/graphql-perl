@@ -31,6 +31,7 @@ WriteMakefile(
     'JSON::PP' => '2.92', # number detection
     'DateTime' => 0,
     'DateTime::Format::ISO8601' => 0,
+    'curry' => 0,
   },
   dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
   clean => { FILES => 'GraphQL-*' },

@@ -92,6 +92,27 @@ subtest 'test the tests' => sub {
   is $p->status, undef;
   $p->resolve('hi');
   promise_test($p, ["hi"], "");
+  $p = FakePromise->new;
+  my $flag;
+  my $p2 = $p->then(sub { $flag = $_[0].'!' });
+  $p->resolve('hi');
+  is $flag, "hi!", 'appended then gets run on settling, not get';
+  promise_test($p2, ["hi!"], "");
+  $p2 = FakePromise->new;
+  $p = FakePromise->all($p2);
+  $p2->resolve('hi');
+  promise_test($p, [["hi"]], "");
+  $p2 = FakePromise->new;
+  $p = FakePromise->all($p2);
+  $p2->reject("hi\n");
+  promise_test($p, [], "hi\n");
+  $p = FakePromise->resolve(FakePromise->reject("yo\n"))->then(
+    sub { "replaced by then" },
+    sub { "replaced by catch" },
+  );
+  promise_test($p, ["replaced by catch"], "");
+  $p = FakePromise->all(FakePromise->resolve("hi"), 'there');
+  promise_test($p, [map [$_], qw(hi there)], "");
 };
 
 subtest 'does not return a Promise for initial errors' => sub {

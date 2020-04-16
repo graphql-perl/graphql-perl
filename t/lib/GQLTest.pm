@@ -60,54 +60,36 @@ sub promise_test {
 
 sub fake_promise_code {
   +{
-    resolve => sub { FakePromise->resolve(@_) },
-    reject => sub { FakePromise->reject(@_) },
-    all => sub { FakePromise->all(@_) },
+    resolve => FakePromise->curry::resolve,
+    reject => FakePromise->curry::reject,
+    all => FakePromise->curry::all,
   };
 }
 
 {
   package FakePromise;
   use Moo;
+  use GraphQL::PubSub;
+  use curry;
   has status => (is => 'rw'); # status = undef/'fulfilled'/'rejected'
   has _values => (is => 'rw');
   has parent => (is => 'ro');
   has handlers => (is => 'ro');
-  has _all => (is => 'ro');
-  sub values {
-    my $self = shift;
-    return @{$self->_values} if $self->_values;
-    if ($self->_all) {
-      my @values;
-      for (@{$self->_all}) {
-        if (ref $_ ne __PACKAGE__) {
-          push @values, [ $_ ];
-          next;
-        }
-        my ($e, @r) = _safe_call(sub { $_->get });
-        if ($e) {
-          $self->status('rejected');
-          @values = ($e);
-          last;
-        }
-        push @values, [ @r ];
-      }
-      $self->_values(\@values);
-    } elsif (my $p = $self->parent) {
-      # chained promise
-      my $e = $self->_safe_call_setvalues(sub { $p->get });
+  has pubsub => (is => 'lazy', builder => sub { GraphQL::PubSub->new });
+  sub BUILD {
+    my ($self, $args) = @_;
+    if (my $parent = $args->{parent}) {
+      $self->_get_or_subscribe($parent, $self->curry::settle);
     }
-    if (my $h = $self->handlers) {
-      my @values = @{$self->_values};
-      my $e = $self->status eq 'rejected' ? $values[0] : '';
-      if (!$e and $h->{then}) {
-        $e = $self->_safe_call_setvalues(sub { $h->{then}->(@values) });
-      }
-      if ($e and $h->{catch}) {
-        $e = $self->_safe_call_setvalues(sub { $h->{catch}->($e) });
-      }
+  }
+  sub _get_or_subscribe {
+    my ($self, $promise, $func) = @_;
+    if (defined(my $status = $promise->status)) {
+      # parent settled, copy now
+      $func->($status, @{$promise->_values});
+    } else {
+      $promise->pubsub->subscribe(settle => $func);
     }
-    @{$self->_values};
   }
   sub resolve {
     my $self = shift;
@@ -121,37 +103,79 @@ sub fake_promise_code {
     $self->settle('rejected', @_);
     $self;
   }
-  sub all { shift->new(status => 'fulfilled', _all => [ @_ ]) }
+  sub all {
+    my $self = shift;
+    die "all is a class method only" if ref $self;
+    $self = $self->new;
+    my ($i, @values) = (0);
+    my $unsettled = grep ref($_) eq __PACKAGE__, @_;
+    my @promise_deferral; # till after @values filled, avoid prematurely settle
+    for my $v (@_) {
+      if (ref(my $promise = $v) eq __PACKAGE__) {
+        my $this_value_index = $i;
+        push @values, undef;
+        push @promise_deferral, [ $promise, sub {
+          my ($status, @these_vals) = @_;
+          if ($status eq 'rejected') {
+            $self->settle($status, @these_vals);
+          } elsif (!defined $self->status) {
+            # if it IS defined, we already got rejected so it's over
+            $values[$this_value_index] = \@these_vals;
+            $unsettled--;
+            if ($unsettled <= 0) {
+              $self->settle('fulfilled', @values);
+            }
+          }
+        } ];
+      } else {
+        push @values, [ $v ];
+      }
+      $i++;
+    }
+    $self->_get_or_subscribe(@$_) for @promise_deferral;
+    $self;
+  }
   sub then {
     my $self = shift;
     $self->new(parent => $self, handlers => +{ then => shift, catch => shift });
   }
   sub catch { shift->then(undef, @_) }
-  sub _safe_call { my @r = eval { $_[0]->() }; ($@, @r); }
-  sub _safe_call_setvalues {
-    my ($self, $func) = @_;
-    my ($e, @r) = _safe_call($func);
-    $self->_values($e ? [ $e ] : \@r);
-    $self->status($e ? 'rejected' : 'fulfilled');
-    if (ref $self->_values->[0] eq __PACKAGE__) {
-      # handler returned a promise, get value
-      $e = $self->_safe_call_setvalues(sub { $self->_values->[0]->get });
-    }
-    $e;
+  sub _safe_call {
+    my @r = eval { $_[0]->() };
+    $@ ? ('rejected', $@) : ('fulfilled', @r);
+  }
+  sub _settled_with_promise {
+    my ($self, $value) = @_;
+    return 0 if ref($value) ne __PACKAGE__;
+    $self->_get_or_subscribe($value, $self->curry::settle);
+    1;
   }
   sub settle {
     my $self = shift;
     die "Error: tried to settle an already-settled promise"
       if defined $self->status;
-    my $status = shift;
+    my ($status, @values) = @_;
+    return if $self->_settled_with_promise($values[0]);
+    if (my $h = delete $self->{handlers}) {
+      # zap as no longer needed, might get rerun if was settled with promise
+      if ($status eq 'fulfilled' and $h->{then}) {
+        ($status, @values) = _safe_call(sub { $h->{then}->(@values) });
+        return if $self->_settled_with_promise($values[0]);
+      }
+      if ($status eq 'rejected' and $h->{catch}) {
+        ($status, @values) = _safe_call(sub { $h->{catch}->(@values) });
+        return if $self->_settled_with_promise($values[0]);
+      }
+    }
     $self->status($status);
-    $self->_values([ @_ ]);
+    $self->_values(\@values);
+    $self->pubsub->publish(settle => $status, @values) if $self->{pubsub};
   }
   sub get {
     my $self = shift;
-    die "Error: tried to 'get' a non-settled orphan promise"
-      if !defined $self->status and !$self->parent and !$self->_all;
-    my @values = $self->values;
+    die "Error: tried to 'get' a non-settled promise"
+      if !defined $self->status;
+    my @values = @{$self->_values};
     die @values if $self->status eq 'rejected';
     die "Tried to scalar-get but >1 value" if !wantarray and @values > 1;
     return $values[0] if !wantarray;
