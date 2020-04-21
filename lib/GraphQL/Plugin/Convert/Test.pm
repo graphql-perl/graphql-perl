@@ -30,6 +30,8 @@ Example class to allow testing of convert plugin consumers.
 Produces a schema and root value that defines the top-level query field
 C<helloWorld>. That will return the string C<Hello, world!>.
 
+Also has a mutation, C<echo>, that takes a String C<s>, and returns it.
+
 =head2 to_graphql(@values)
 
 Ignores all inputs.
@@ -38,8 +40,14 @@ Ignores all inputs.
 
 sub to_graphql {
   +{
-    schema => GraphQL::Schema->from_doc('type Query { helloWorld: String }'),
-    root_value => { helloWorld => 'Hello, world!' },
+    schema => GraphQL::Schema->from_doc(<<'EOF'),
+type Query { helloWorld: String! }
+type Mutation { echo(s: String!): String! }
+EOF
+    root_value => {
+      helloWorld => 'Hello, world!',
+      echo => sub { $_[0]->{s} },
+    },
   };
 }
 

@@ -75,6 +75,15 @@ subtest 'test convert plugin' => sub {
   ],
     { data => { helloWorld => 'Hello, world!' } },
   );
+  run_test([
+    $converted->{schema},
+    'mutation m($s: String = "yo") { echo(s: $s) }',
+    $converted->{root_value},
+    undef,
+    { s => "hi" },
+  ],
+    { data => { echo => 'hi' } },
+  );
 };
 
 subtest 'multi-line description' => sub {

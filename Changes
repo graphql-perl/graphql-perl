@@ -1,5 +1,6 @@
 - simplify Int and Float implementations
 - improve Boolean error-checking
+- Convert::Test has an "echo" mutation
 
 0.38 2019-12-08
 - error objects now stringify - thanks @jjn1056 for idea
