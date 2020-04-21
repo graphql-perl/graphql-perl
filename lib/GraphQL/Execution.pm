@@ -294,6 +294,7 @@ fun _execute_operation(
 ) :ReturnType(ExecutionPartialResult | Promise) {
   my $op_type = $operation->{operationType} || 'query';
   my $type = $context->{schema}->$op_type;
+  return _wrap_error("No $op_type in schema") if !$type;
   my ($fields) = $type->_collect_fields(
     $context,
     $operation->{selections},
