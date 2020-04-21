@@ -23,7 +23,7 @@ GraphQL::Plugin::Convert - GraphQL plugin API abstract class
   my $converted = GraphQL::Plugin::Convert::DBIC->to_graphql(sub { app->db });
   plugin GraphQL => {
     map { $_ => $converted->{$_} }
-      qw(schema resolver root_value)
+      qw(schema resolver root_value subscribe_resolver)
   };
 
   # OR, for knowledgeable consumers of GraphQL::Plugin::Convert APIs:
@@ -60,6 +60,11 @@ L<GraphQL::Execution/execute>. Optional.
 
 A hash-ref suitable for using as a C<$root_value> by
 L<GraphQL::Execution/execute>. Optional.
+
+=item subscribe_resolver
+
+A code-ref suitable for using as a C<$subscribe_resolver> by
+L<GraphQL::Subscription/subscribe>. Optional.
 
 =back
 

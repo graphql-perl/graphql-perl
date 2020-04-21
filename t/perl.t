@@ -7,6 +7,7 @@ my $JSON = JSON::MaybeXS->new->allow_nonref->canonical;
 
 use GraphQL::Schema;
 use GraphQL::Execution qw(execute);
+use GraphQL::Subscription qw(subscribe);
 use GraphQL::Type::Scalar qw($String $Boolean);
 use GraphQL::Type::Object;
 use GraphQL::Type::Interface;
@@ -69,7 +70,14 @@ subtest 'nice errors Schema.from_ast' => sub {
 
 subtest 'test convert plugin' => sub {
   require_ok 'GraphQL::Plugin::Convert::Test';
-  my $converted = GraphQL::Plugin::Convert::Test->to_graphql;
+  my $converted = GraphQL::Plugin::Convert::Test->to_graphql(
+    sub {
+      my $text = $_[1]->{s};
+      my $ai = fake_promise_iterator();
+      $ai->publish({ timedEcho => $text });
+      $ai;
+    },
+  );
   run_test([
     $converted->{schema}, '{helloWorld}', $converted->{root_value}
   ],
@@ -84,6 +92,15 @@ subtest 'test convert plugin' => sub {
   ],
     { data => { echo => 'hi' } },
   );
+  my $ai = subscribe(
+    $converted->{schema},
+    'subscription s { timedEcho(s: "argh") }',
+    $converted->{root_value},
+    (undef) x 4, fake_promise_code(),
+    $converted->{subscribe_resolver},
+  );
+  $ai = $ai->get;
+  promise_test($ai->next_p, [{ data => { timedEcho => 'argh' } }], '');
 };
 
 subtest 'multi-line description' => sub {

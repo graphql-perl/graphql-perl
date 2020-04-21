@@ -1,6 +1,6 @@
 - simplify Int and Float implementations
 - improve Boolean error-checking
-- Convert::Test has an "echo" mutation
+- Convert::Test has an "echo" mutation and optional "timedEcho" subscription
 - Subscriptions implemented
 
 0.38 2019-12-08
