@@ -39,7 +39,7 @@ Override method from L<Pegex::Grammar>.
 
 =cut
 
-sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.70)
+sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.72)
   {
     '+grammar' => 'graphql',
     '+include' => 'pegex-atoms',
@@ -1280,8 +1280,15 @@ sub make_tree {   # Generated/Inlined by Pegex::Grammar (0.70)
           '.rgx' => qr/\G(?:\s|\x{FEFF}|,|[\ \t]*\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*\((?:\s|\x{FEFF}|,|[\ \t]*\#[\ \t]*[^\r\n]*(?:\r?\n|\r!NL|\z))*/
         },
         {
-          '+min' => 1,
-          '.ref' => 'variableDefinition'
+          '.any' => [
+            {
+              '+min' => 1,
+              '.ref' => 'variableDefinition'
+            },
+            {
+              '.err' => 'Expected $argument: Type'
+            }
+          ]
         },
         {
           '-skip' => 1,

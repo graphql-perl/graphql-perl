@@ -62,7 +62,7 @@ objectField: name .(/- COLON -/) value .(-)
 
 objectField_const: name .(/- COLON -/) value_const
 
-variableDefinitions: .(/- LPAREN -/) variableDefinition+ .(/- RPAREN -/)
+variableDefinitions: .(/- LPAREN -/) ( variableDefinition+ | `Expected $argument: Type` ) .(/- RPAREN -/)
 
 variableDefinition: variable .(/- COLON -/) typedef defaultValue? .(-)
 
