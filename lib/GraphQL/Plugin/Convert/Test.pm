@@ -18,6 +18,9 @@ GraphQL::Plugin::Convert::Test - GraphQL plugin test class
     $converted->{schema}, '{helloWorld}', $converted->{root_value}
   )->{data}{helloWorld}, "\n";
 
+  # show schema from shell
+  perl -Maliased=GraphQL::Plugin::Convert::Test -e 'print Test->to_graphql->{schema}->to_doc'
+
 =head1 DESCRIPTION
 
 Example class to allow testing of convert plugin consumers.
