@@ -393,4 +393,86 @@ subtest 'error objects stringify' => sub {
   is $error.'', $msg;
 };
 
+subtest 'fake promises' => sub {
+  my $p = FakePromise->resolve('yo');
+  promise_test($p, ['yo'], '');
+  $p = FakePromise->resolve('yo')->then(sub { shift . 'ga' });
+  is $p->get, 'yoga';
+  is $p->get, 'yoga'; # check can re-get
+  $p = FakePromise->reject("yo\n");
+  promise_test($p, [], "yo\n");
+  $p = FakePromise->reject("f\n")->catch(sub { shift });
+  promise_test($p, ["f\n"], "");
+  $p = FakePromise->resolve("yo\n")->then(sub { die shift });
+  promise_test($p, [], "yo\n");
+  $p = FakePromise->reject("f\n")->catch(sub { shift })->then(sub { die shift });
+  promise_test($p, [], "f\n");
+  $p = FakePromise->resolve("yo\n")->then(sub { die shift })->catch(sub { shift });
+  promise_test($p, ["yo\n"], "");
+  $p = FakePromise->resolve('yo')->then(sub { FakePromise->resolve('y2') });
+  promise_test($p, ["y2"], "");
+  $p = FakePromise->resolve("s\n")->then(sub { FakePromise->reject(shift) });
+  promise_test($p, [], "s\n");
+  $p = FakePromise->resolve("s\n")->then(sub { FakePromise->reject(shift) })->catch(sub { shift });
+  promise_test($p, ["s\n"], "");
+  $p = FakePromise->all(FakePromise->reject("s\n"))->catch(sub { shift });
+  promise_test($p, ["s\n"], "");
+  $p = FakePromise->all('hi', FakePromise->resolve("yo"))->then(sub {
+    map @$_, @_
+  });
+  promise_test($p, [qw(hi yo)], "");
+  $p = FakePromise->all(
+    'hi',
+    FakePromise->resolve("yo")->then(sub { "$_[0]!" }),
+  )->then(sub { map ucfirst $_->[0], @_ }),;
+  promise_test($p, [qw(Hi Yo!)], "");
+  $p = FakePromise->all(
+    FakePromise->resolve("hi")->then(sub { "$_[0]!" }),
+    FakePromise->resolve("yo")->then(sub { "$_[0]!" }),
+  )->then(sub { map ucfirst $_->[0], @_ }),;
+  promise_test($p, [qw(Hi! Yo!)], "");
+  $p = FakePromise->all(
+    FakePromise->all(
+      FakePromise->reject("yo\n")->then(
+        # simulates rejection that will skip first "then"
+        sub { "$_[0]/" }
+      )->then(
+        # first catch
+        undef,
+        sub { die "$_[0]!\n" },
+      )->then(
+        # second catch
+        undef,
+        sub { die ">$_[0]" },
+      ),
+    ),
+  )->then(undef, sub { map "^$_", @_ }),;
+  promise_test($p, ["^>yo\n!\n"], "");
+  $p = FakePromise->new;
+  is $p->status, undef;
+  $p->resolve('hi');
+  promise_test($p, ["hi"], "");
+  $p = FakePromise->new;
+  my $flag;
+  my $p2 = $p->then(sub { $flag = $_[0].'!' });
+  $p->resolve('hi');
+  is $flag, "hi!", 'appended then gets run on settling, not get';
+  promise_test($p2, ["hi!"], "");
+  $p2 = FakePromise->new;
+  $p = FakePromise->all($p2);
+  $p2->resolve('hi');
+  promise_test($p, [["hi"]], "");
+  $p2 = FakePromise->new;
+  $p = FakePromise->all($p2);
+  $p2->reject("hi\n");
+  promise_test($p, [], "hi\n");
+  $p = FakePromise->resolve(FakePromise->reject("yo\n"))->then(
+    sub { "replaced by then" },
+    sub { "replaced by catch" },
+  );
+  promise_test($p, ["replaced by catch"], "");
+  $p = FakePromise->all(FakePromise->resolve("hi"), 'there');
+  promise_test($p, [map [$_], qw(hi there)], "");
+};
+
 done_testing;
