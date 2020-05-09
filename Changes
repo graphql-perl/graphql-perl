@@ -1,3 +1,5 @@
+- GraphQL::AsyncIterator->map_then now mutates object, returns self
+
 0.39 2020-05-06
 - simplify Int and Float implementations
 - improve Boolean error-checking
