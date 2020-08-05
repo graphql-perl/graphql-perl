@@ -126,13 +126,18 @@ sub _build_to_doc {
 
 =cut
 
+sub _leave_undef {
+  my ($closure) = @_;
+  sub { return undef if !defined $_[0]; goto &$closure; };
+}
+
 our $Int = GraphQL::Type::Scalar->new(
   name => 'Int',
   description =>
     'The `Int` scalar type represents non-fractional signed whole numeric ' .
     'values. Int can represent values between -(2^31) and 2^31 - 1.',
-  serialize => sub { defined $_[0] and !is_Int32Signed($_[0]) and die "Not an Int.\n"; $_[0]+0 },
-  parse_value => sub { defined $_[0] and !is_Int32Signed($_[0]) and die "Not an Int.\n"; $_[0]+0 },
+  serialize => _leave_undef(sub { !is_Int32Signed($_[0]) and die "Not an Int.\n"; $_[0]+0 }),
+  parse_value => _leave_undef(sub { !is_Int32Signed($_[0]) and die "Not an Int.\n"; $_[0]+0 }),
 );
 
 =head2 $Float
@@ -145,8 +150,8 @@ our $Float = GraphQL::Type::Scalar->new(
     'The `Float` scalar type represents signed double-precision fractional ' .
     'values as specified by ' .
     '[IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point).',
-  serialize => sub { defined $_[0] and !is_Num($_[0]) and die "Not a Float.\n"; $_[0]+0 },
-  parse_value => sub { defined $_[0] and !is_Num($_[0]) and die "Not a Float.\n"; $_[0]+0 },
+  serialize => _leave_undef(sub { !is_Num($_[0]) and die "Not a Float.\n"; $_[0]+0 }),
+  parse_value => _leave_undef(sub { !is_Num($_[0]) and die "Not a Float.\n"; $_[0]+0 }),
 );
 
 =head2 $String
@@ -159,8 +164,8 @@ our $String = GraphQL::Type::Scalar->new(
     'The `String` scalar type represents textual data, represented as UTF-8 ' .
     'character sequences. The String type is most often used by GraphQL to ' .
     'represent free-form human-readable text.',
-  serialize => sub { defined $_[0] and !is_Str($_[0]) and die "Not a String.\n"; $_[0] },
-  parse_value => sub { defined $_[0] and !is_Str($_[0]) and die "Not a String.\n"; $_[0] },
+  serialize => _leave_undef(sub { !is_Str($_[0]) and die "Not a String.\n"; $_[0] }),
+  parse_value => _leave_undef(sub { !is_Str($_[0]) and die "Not a String.\n"; $_[0] }),
 );
 
 =head2 $Boolean
@@ -171,8 +176,8 @@ our $Boolean = GraphQL::Type::Scalar->new(
   name => 'Boolean',
   description =>
     'The `Boolean` scalar type represents `true` or `false`.',
-  serialize => sub { defined $_[0] and !is_Bool($_[0]) and die "Not a Boolean.\n"; $_[0] ? JSON->true : JSON->false },
-  parse_value => sub { defined $_[0] and !is_bool($_[0]) and die "Not a Boolean.\n"; $_[0]+0 },
+  serialize => _leave_undef(sub { !is_Bool($_[0]) and die "Not a Boolean.\n"; $_[0] ? JSON->true : JSON->false }),
+  parse_value => _leave_undef(sub { !is_bool($_[0]) and die "Not a Boolean.\n"; $_[0]+0 }),
 );
 
 =head2 $ID
@@ -187,8 +192,8 @@ our $ID = GraphQL::Type::Scalar->new(
     'response as a String; however, it is not intended to be human-readable. ' .
     'When expected as an input type, any string (such as `"4"`) or integer ' .
     '(such as `4`) input value will be accepted as an ID.',
-  serialize => sub { defined $_[0] and Str->(@_); $_[0] },
-  parse_value => sub { defined $_[0] and Str->(@_); $_[0] },
+  serialize => _leave_undef(sub { Str->(@_); $_[0] }),
+  parse_value => _leave_undef(sub { Str->(@_); $_[0] }),
 );
 
 GraphQL::Plugin::Type->register($_) for ($Int, $Float, $String, $Boolean, $ID);

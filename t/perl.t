@@ -8,7 +8,7 @@ my $JSON = JSON::MaybeXS->new->allow_nonref->canonical;
 use GraphQL::Schema;
 use GraphQL::Execution qw(execute);
 use GraphQL::Subscription qw(subscribe);
-use GraphQL::Type::Scalar qw($String $Boolean);
+use GraphQL::Type::Scalar qw($Int $Float $String $Boolean);
 use GraphQL::Type::Object;
 use GraphQL::Type::Interface;
 
@@ -291,6 +291,10 @@ subtest 'test Scalar methods' => sub {
   is $scalar->to_doc, qq{"d"\nscalar s\n}, 'to_doc';
   is $Boolean->serialize->(1), 1, 'Boolean serialize';
   is $Boolean->parse_value->(JSON->true), 1, 'Boolean parse_value';
+  for my $type ($Int, $Float, $String, $Boolean) {
+    is $type->$_->(undef), undef, join(' ', $type->name, $_, 'null')
+      for qw(serialize parse_value);
+  }
 };
 
 subtest 'exercise __type root field more'=> sub {

@@ -1,3 +1,5 @@
+- Scalar types now correctly handle null values
+
 0.40 2020-05-09
 - GraphQL::AsyncIterator->map_then now mutates object, returns self
 
