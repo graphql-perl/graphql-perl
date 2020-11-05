@@ -1,7 +1,7 @@
 package GraphQL::Plugin::Type;
 
 use Moo;
-use Function::Parameters;
+use GraphQL::MaybeTypeCheck;
 use Types::Standard -all;
 
 =head1 NAME

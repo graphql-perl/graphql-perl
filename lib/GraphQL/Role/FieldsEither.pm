@@ -5,8 +5,8 @@ use strict;
 use warnings;
 use Moo::Role;
 use GraphQL::Debug qw(_debug);
+use GraphQL::MaybeTypeCheck;
 use Types::Standard -all;
-use Function::Parameters;
 use JSON::MaybeXS;
 with qw(GraphQL::Role::FieldDeprecation);
 

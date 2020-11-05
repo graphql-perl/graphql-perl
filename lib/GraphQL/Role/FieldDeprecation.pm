@@ -4,7 +4,7 @@ use 5.014;
 use strict;
 use warnings;
 use Moo::Role;
-use Function::Parameters;
+use GraphQL::MaybeTypeCheck;
 use Types::Standard -all;
 use JSON::MaybeXS;
 

@@ -6,8 +6,11 @@ use warnings;
 use Moo;
 use Types::Standard -all;
 use GraphQL::Type::Library -all;
-use Function::Parameters;
-use Return::Type;
+
+use Devel::StrictMode;
+
+use GraphQL::MaybeTypeCheck;
+
 use GraphQL::Debug qw(_debug);
 extends qw(GraphQL::Type);
 with qw(GraphQL::Role::Nullable);

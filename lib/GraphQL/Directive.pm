@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Moo;
 use MooX::Thunking;
-use Function::Parameters;
+use GraphQL::MaybeTypeCheck;
 use GraphQL::Debug qw(_debug);
 use Types::Standard -all;
 use GraphQL::Type::Library -all;

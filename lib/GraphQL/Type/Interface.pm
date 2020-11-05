@@ -5,8 +5,8 @@ use strict;
 use warnings;
 use Moo;
 use Types::Standard -all;
-use Function::Parameters;
-use Return::Type;
+use GraphQL::MaybeTypeCheck;
+
 extends qw(GraphQL::Type);
 with qw(
   GraphQL::Role::Output

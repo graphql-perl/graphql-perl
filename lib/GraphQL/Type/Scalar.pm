@@ -18,8 +18,7 @@ with qw(
   GraphQL::Role::Named
   GraphQL::Role::FieldsEither
 );
-use Function::Parameters;
-use Return::Type;
+use GraphQL::MaybeTypeCheck;
 use GraphQL::Plugin::Type;
 
 our $VERSION = '0.02';
