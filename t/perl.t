@@ -213,6 +213,26 @@ subtest 'list in query params' => sub {
   });
 };
 
+subtest 'list default value in Perl' => sub {
+  my $schema = GraphQL::Schema->new(
+    query => GraphQL::Type::Object->new(
+      name => 'Query',
+      fields => {
+        hello => {
+          type => $String,
+          args => { arg => { type => $String->list, default_value => ["yo"] } }
+        },
+      }
+    ),
+  );
+  run_test([
+    $schema, 'query q($a: [String]) {hello(arg: $a)}',
+    { hello => sub { $_[0]->{arg}[0] } },
+  ], {
+    'data' => { 'hello' => "yo" },
+  });
+};
+
 subtest 'input object with null value' => sub {
   my $schema = GraphQL::Schema->from_doc(<<'EOF');
 enum E1 { A, B }
