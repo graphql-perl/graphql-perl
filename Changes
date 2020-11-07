@@ -1,3 +1,4 @@
+0.43 2020-11-07
 - mutations now guaranteed to be executed in order - thanks @ccakes for prompt
 
 0.42 2020-11-07
