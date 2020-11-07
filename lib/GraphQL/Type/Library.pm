@@ -85,13 +85,14 @@ EOF
 =head2 FieldsGot
 
 Data item describing the fields found in a particular object in a query.
+Preserves their order.
 
 =cut
 
-declare "FieldsGot", as Map[
+declare "FieldsGot", as Tuple[ArrayRef[StrNameValid], Map[
   StrNameValid,
   ArrayRef[HashRef]
-];
+]];
 
 =head2 FieldMapInput
 

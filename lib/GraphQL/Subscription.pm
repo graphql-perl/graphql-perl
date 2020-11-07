@@ -122,16 +122,16 @@ fun subscribe(
     my ($fields) = $type->_collect_fields(
       $context,
       $operation->{selections},
-      {},
+      [[], {}],
       {},
     );
     DEBUG and _debug('subscribe(fields)', $fields, $root_value);
     # from GraphQL::Execution::_execute_fields
-    my @field_names = keys %$fields;
-    die "Subscription needs to have only one field; got (@field_names)\n"
-      if @field_names != 1;
-    my $result_name = $field_names[0];
-    my $nodes = $fields->{$result_name};
+    my ($field_names, $nodes_defs) = @$fields;
+    die "Subscription needs to have only one field; got (@$field_names)\n"
+      if @$field_names != 1;
+    my $result_name = $field_names->[0];
+    my $nodes = $nodes_defs->{$result_name};
     my $field_node = $nodes->[0];
     my $field_name = $field_node->{name};
     my $field_def = GraphQL::Execution::_get_field_def($context->{schema}, $type, $field_name);

@@ -298,7 +298,7 @@ fun _execute_operation(
   my ($fields) = $type->_collect_fields(
     $context,
     $operation->{selections},
-    {},
+    [[], {}],
     {},
   );
   DEBUG and _debug('_execute_operation(fields)', $fields, $root_value);
@@ -328,8 +328,9 @@ fun _execute_fields(
   my (%name2executionresult, @errors);
   my $promise_present;
   DEBUG and _debug('_execute_fields', $parent_type->to_string, $fields, $root_value);
-  for my $result_name (keys %$fields) { # TODO ordering of fields
-    my $nodes = $fields->{$result_name};
+  my ($field_names, $nodes_defs) = @$fields;
+  for my $result_name (@$field_names) {
+    my $nodes = $nodes_defs->{$result_name};
     my $field_node = $nodes->[0];
     my $field_name = $field_node->{name};
     my $field_def = _get_field_def($context->{schema}, $parent_type, $field_name);

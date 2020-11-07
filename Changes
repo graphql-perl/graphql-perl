@@ -1,3 +1,5 @@
+- mutations now guaranteed to be executed in order - thanks @ccakes for prompt
+
 0.42 2020-11-07
 - List needed a perl_to_graphql method - thanks @schoeer for report
 - so did InputObject

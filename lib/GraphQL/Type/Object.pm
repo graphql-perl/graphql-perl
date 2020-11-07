@@ -114,10 +114,13 @@ method _collect_fields(
     next if !_should_include_node($context->{variable_values}, $node);
     if ($selection->{kind} eq 'field') {
       my $use_name = $node->{alias} || $node->{name};
-      $fields_got = {
-        %$fields_got,
-        $use_name => [ @{$fields_got->{$use_name} || []}, $node ],
-      }; # like push but no mutation
+      my ($field_names, $nodes_defs) = @$fields_got;
+      $field_names = [ @$field_names, $use_name ] if !exists $nodes_defs->{$use_name};
+      $nodes_defs = {
+        %$nodes_defs,
+        $use_name => [ @{$nodes_defs->{$use_name} || []}, $node ],
+      };
+      $fields_got = [ $field_names, $nodes_defs ]; # no mutation
     } elsif ($selection->{kind} eq 'inline_fragment') {
       next if !$self->_fragment_condition_match($context, $node);
       ($fields_got, $visited_fragments) = $self->_collect_fields(
@@ -184,7 +187,7 @@ method _complete_value(
     # TODO promise stuff
     die GraphQL::Error->new(message => "Expected a value of type '@{[$self->to_string]}' but received: '@{[ref($result)||$result]}'.") if !$is_type_of;
   }
-  my $subfield_nodes = {};
+  my $subfield_nodes = [[], {}];
   my $visited_fragment_names = {};
   for (grep $_->{selections}, @$nodes) {
     ($subfield_nodes, $visited_fragment_names) = $self->_collect_fields(

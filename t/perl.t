@@ -192,6 +192,28 @@ EOF
   });
 };
 
+subtest 'mutations in order' => sub {
+  my $schema = GraphQL::Schema->from_doc(<<'EOF');
+type Query { q: String }
+type Mutation {
+  hello(arg: String): String
+}
+EOF
+  my @m;
+  run_test([
+    $schema, <<'EOF',
+mutation m {
+  h1: hello(arg: "Hi")
+  h2: hello(arg: "Hi2")
+}
+EOF
+    { hello => sub { push @m, $_[0]{arg}; $_[0]{arg} } }
+  ], {
+    'data' => { h1 => "Hi", h2 => "Hi2" },
+  });
+  is_deeply \@m, [ qw(Hi Hi2) ];
+};
+
 subtest 'list in query params' => sub {
   my $stringlist = GraphQL::Type::List->new(of => $String);
   is $stringlist->is_valid([ 'string' ]), 1, 'is_valid works';
