@@ -225,6 +225,7 @@ subtest 'list default value in Perl' => sub {
       }
     ),
   );
+  lives_ok { $schema->to_doc } 'can get SDL ok';
   run_test([
     $schema, 'query q($a: [String]) {hello(arg: $a)}',
     { hello => sub { $_[0]->{arg}[0] } },

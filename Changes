@@ -1,3 +1,5 @@
+- List needed a perl_to_graphql method - thanks @schoeer for report
+
 0.41 2020-08-05
 - Scalar types now correctly handle null values
 

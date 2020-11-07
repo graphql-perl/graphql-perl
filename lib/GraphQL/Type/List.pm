@@ -118,6 +118,22 @@ method graphql_to_perl(Any $item) :ReturnType(Maybe[ArrayRef]) {
   \@values;
 }
 
+method perl_to_graphql(Any $item) :ReturnType(Maybe[ArrayRef]) {
+  return $item if !defined $item;
+  $item = $self->uplift($item);
+  my $of = $self->of;
+  my $i = 0;
+  my @errors;
+  my @values = map {
+    my $value = eval { $of->perl_to_graphql($_) };
+    push @errors, qq{In element #$i: $@} if $@;
+    $i++;
+    $value;
+  } @$item;
+  die @errors if @errors;
+  \@values;
+}
+
 method _complete_value(
   HashRef $context,
   ArrayRef[HashRef] $nodes,
