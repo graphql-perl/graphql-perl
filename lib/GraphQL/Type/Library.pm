@@ -7,7 +7,7 @@ use Type::Library
   -base,
   -declare => qw(
     StrNameValid FieldMapInput ValuesMatchTypes DocumentLocation JSONable
-    ErrorResult
+    ErrorResult FieldsGot
   );
 use Type::Utils -all;
 use Types::TypeTiny -all;
@@ -81,6 +81,17 @@ declare "ValuesMatchTypes",
 EOF
     };
 };
+
+=head2 FieldsGot
+
+Data item describing the fields found in a particular object in a query.
+
+=cut
+
+declare "FieldsGot", as Map[
+  StrNameValid,
+  ArrayRef[HashRef]
+];
 
 =head2 FieldMapInput
 

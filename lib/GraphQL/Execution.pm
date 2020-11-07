@@ -323,7 +323,7 @@ fun _execute_fields(
   (InstanceOf['GraphQL::Type']) $parent_type,
   Any $root_value,
   ArrayRef $path,
-  Map[StrNameValid,ArrayRef[HashRef]] $fields,
+  FieldsGot $fields,
 ) :ReturnType(ExecutionPartialResult | Promise) {
   my (%name2executionresult, @errors);
   my $promise_present;
@@ -412,7 +412,7 @@ fun _execute_fields_serially(
   (InstanceOf['GraphQL::Type']) $parent_type,
   Any $root_value,
   ArrayRef $path,
-  Map[StrNameValid,ArrayRef[HashRef]] $fields,
+  FieldsGot $fields,
 ) {
   DEBUG and _debug('_execute_fields_serially', $parent_type->to_string, $fields, $root_value);
   # TODO implement

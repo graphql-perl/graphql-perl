@@ -105,7 +105,7 @@ method from_ast(
 method _collect_fields(
   HashRef $context,
   ArrayRef $selections,
-  Map[StrNameValid,ArrayRef[HashRef]] $fields_got,
+  FieldsGot $fields_got,
   Map[StrNameValid,Bool] $visited_fragments,
 ) {
   DEBUG and _debug('_collect_fields', $self->to_string, $fields_got, $selections);
