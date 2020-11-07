@@ -83,6 +83,15 @@ method graphql_to_perl(ExpectObject $item) :ReturnType(Maybe[HashRef]) {
   });
 }
 
+method perl_to_graphql(ExpectObject $item) :ReturnType(Maybe[HashRef]) {
+  return $item if !defined $item;
+  $item = $self->uplift($item);
+  my $fields = $self->fields;
+  $self->hashmap($item, $fields, sub {
+    $fields->{$_[0]}{type}->perl_to_graphql($_[1]);
+  });
+}
+
 method from_ast(
   HashRef $name2type,
   HashRef $ast_node,

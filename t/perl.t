@@ -9,6 +9,7 @@ use GraphQL::Schema;
 use GraphQL::Execution qw(execute);
 use GraphQL::Subscription qw(subscribe);
 use GraphQL::Type::Scalar qw($Int $Float $String $Boolean);
+use GraphQL::Type::InputObject;
 use GraphQL::Type::Object;
 use GraphQL::Type::Interface;
 
@@ -213,7 +214,7 @@ subtest 'list in query params' => sub {
   });
 };
 
-subtest 'list default value in Perl' => sub {
+subtest 'list/inputobject default value in Perl' => sub {
   my $schema = GraphQL::Schema->new(
     query => GraphQL::Type::Object->new(
       name => 'Query',
@@ -221,6 +222,20 @@ subtest 'list default value in Perl' => sub {
         hello => {
           type => $String,
           args => { arg => { type => $String->list, default_value => ["yo"] } }
+        },
+        field2 => {
+          type => $String,
+          args => {
+            f2arg => {
+              type => GraphQL::Type::InputObject->new(
+                name => 'TestInputObject',
+                fields => {
+                  b => { type => $String->list },
+                },
+              ),
+              default_value => { b => 'b' },
+            },
+          },
         },
       }
     ),
