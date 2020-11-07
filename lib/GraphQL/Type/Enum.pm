@@ -116,7 +116,7 @@ method graphql_to_perl(Maybe[Str] $item) {
 }
 
 method perl_to_graphql(Any $item) {
-  DEBUG and _debug('graphql_to_perl', $item, $self->_value2name);
+  DEBUG and _debug('perl_to_graphql', $item, $self->_value2name);
   return undef if !defined $item;
   $self->_value2name->{$item} // die "Expected a value of type '@{[$self->to_string]}' but received: @{[ref($item)||qq{'$item'}]}.\n";
 }
