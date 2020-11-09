@@ -348,6 +348,7 @@ subtest 'test Scalar methods' => sub {
   throws_ok { $scalar->parse_value->('string') } qr{Fake}, 'fake parse_value';
   is $scalar->to_doc, qq{"d"\nscalar s\n}, 'to_doc';
   is $Boolean->serialize->(1), 1, 'Boolean serialize';
+  is $Boolean->serialize->(JSON->true), 1, 'Boolean serialize blessed';
   is $Boolean->parse_value->(JSON->true), 1, 'Boolean parse_value';
   for my $type ($Int, $Float, $String, $Boolean) {
     is $type->$_->(undef), undef, join(' ', $type->name, $_, 'null')
