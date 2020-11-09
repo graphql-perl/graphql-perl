@@ -1,3 +1,5 @@
+- Allow serialising already-blessed bools (#30) - thanks @ccakes
+
 0.43 2020-11-07
 - mutations now guaranteed to be executed in order - thanks @ccakes for prompt
 
