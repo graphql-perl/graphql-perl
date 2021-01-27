@@ -407,12 +407,12 @@ declare "ExecutionPartialResult",
 
 =head2 Promise
 
-An object that has C<then>, C<resolve>, C<reject> methods.
+An object that has a C<then> method.
 
 =cut
 
 declare "Promise",
-  as HasMethods[qw(then resolve reject)];
+  as HasMethods[qw(then)];
 
 =head2 PromiseCode
 

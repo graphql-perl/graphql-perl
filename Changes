@@ -1,3 +1,5 @@
+- Promise only needs then method - resolve/reject go via PromiseCode - thanks @hitode909 for prompt
+
 0.44 2020-11-09
 - Allow serialising already-blessed bools (#30) - thanks @ccakes
 
