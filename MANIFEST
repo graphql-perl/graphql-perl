@@ -73,6 +73,7 @@ t/type-interface.t
 t/type-introspection.t
 t/type-schema.t
 t/util-buildschema.t
+util/benchmark.pl
 xt/manifest.t
 xt/pod-coverage.t
 xt/pod.t
