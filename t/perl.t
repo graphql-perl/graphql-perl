@@ -12,6 +12,7 @@ use GraphQL::Type::Scalar qw($Int $Float $String $Boolean);
 use GraphQL::Type::InputObject;
 use GraphQL::Type::Object;
 use GraphQL::Type::Interface;
+use GraphQL::Type::Enum;
 
 subtest 'DateTime->now as resolve' => sub {
   require DateTime;
@@ -471,6 +472,38 @@ subtest 'error objects stringify' => sub {
   my $msg = 'Something is not right...';
   my $error = GraphQL::Error->new(message => $msg);
   is $error.'', $msg;
+};
+
+subtest 'enum default value', sub {
+  my $ColorType = GraphQL::Type::Enum->new(
+    name => 'Color',
+    values => {
+      RED => { value => 0 },
+      GREEN => { value => 1 },
+      BLUE => { value => 2 },
+    },
+  );
+  my $schema = GraphQL::Schema->new(
+    query => GraphQL::Type::Object->new(
+      name => 'Query',
+      fields => {
+        colorEnum => {
+          type => $ColorType,
+          args => {
+            fromEnum => { type => $ColorType },
+          },
+          resolve => sub {
+            $_[1]->{fromInt} // $_[1]->{fromString} // $_[1]->{fromEnum};
+          },
+        },
+      }
+    ),
+  );
+  run_test(
+    [$schema, 'query c($val: Color = GREEN) { colorEnum(fromEnum: $val) }'],
+    { data => { colorEnum => 'GREEN' } },
+  );
+  done_testing;
 };
 
 subtest 'fake promises' => sub {
