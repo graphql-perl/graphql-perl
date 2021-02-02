@@ -1,0 +1,60 @@
+name: perl
+on:
+  push:
+    branches:
+      - '*'
+    tags-ignore:
+      - '*'
+  pull_request:
+jobs:
+  ubuntu:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        perl-version: ['5.8', '5.14', '5.20']
+        include:
+          - perl-version: '5.30'
+            os: ubuntu-latest
+            release-test: true
+            coverage: true
+    container: perl:${{ matrix.perl-version }}
+    steps:
+      - uses: actions/checkout@v2
+      - run: cpanm -n --with-recommends --installdeps .
+      - run: perl -V
+      - name: Run release tests # before others as may install useful stuff
+        if: ${{ matrix.release-test }}
+        env:
+          RELEASE_TESTING: 1
+        run: |
+          cpanm -n --installdeps --with-develop .
+          prove -lr xt
+      - name: Run tests (no coverage)
+        if: ${{ !matrix.coverage }}
+        run: prove -l -j4 t
+      - name: Run tests (with coverage)
+        if: ${{ matrix.coverage }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cpanm -n Devel::Cover::Report::Coveralls
+          HARNESS_OPTIONS='j4' cover -test -report Coveralls
+  non-linux:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          distribution: strawberry # ignored non-windows
+      - uses: perl-actions/install-with-cpanm@v1
+        with:
+          args: -n --installdeps .
+      - run: perl -V
+      - name: Run tests
+        run: prove -l -j4 t
