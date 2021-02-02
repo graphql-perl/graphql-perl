@@ -6,7 +6,6 @@ use warnings;
 use Moo;
 use Types::Standard -all;
 use GraphQL::MaybeTypeCheck;
-
 extends qw(GraphQL::Type);
 
 our $VERSION = '0.02';

@@ -7,7 +7,6 @@ use Moo;
 use Types::Standard -all;
 use GraphQL::Type::Library -all;
 use GraphQL::MaybeTypeCheck;
-
 use GraphQL::Debug qw(_debug);
 extends qw(GraphQL::Type);
 with qw(

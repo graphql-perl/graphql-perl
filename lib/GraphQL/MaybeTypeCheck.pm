@@ -8,7 +8,6 @@ use Attribute::Handlers;
 use Devel::StrictMode;
 use Import::Into;
 
-
 =head1 NAME
 
 GraphQL::MaybeTypeCheck - Conditional type-checking at runtime
@@ -26,14 +25,14 @@ GraphQL::MaybeTypeCheck - Conditional type-checking at runtime
 
 =head1 DESCRIPTION
 
-This module B<optionally> enabled type-checking in the caller as implemented by
+This module B<optionally> enables type-checking in the caller as implemented by
 L<Function::Parameters> and L<Return::Type> depending on whether L<Devel::StrictMode>
 is activated.
 
 =head3 C<Devel::StrictMode> ON
 
 When L<Devel::StrictMode> is active, this module will import L<Function::Parameters>
-into the caller with it's default configuration. As of writing, this includes
+into the caller with its default configuration. As of writing, this includes
 checking both argument count and type.
 
 When in strict mode this also C<require>s L<Return::Type> which registers the
@@ -74,8 +73,7 @@ sub import {
   if (STRICT) {
     Function::Parameters->import::into($caller, ':strict');
     require Return::Type;
-  }
-  else {
+  } else {
     Function::Parameters->import::into($caller, {
       fun    => {defaults => 'function_lax', check_argument_types => 0},
       method => {defaults => 'method_lax',   check_argument_types => 0},

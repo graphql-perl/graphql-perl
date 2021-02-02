@@ -9,7 +9,6 @@ use Types::Standard -all;
 use GraphQL::Type::Library -all;
 use MooX::Thunking;
 use GraphQL::MaybeTypeCheck;
-
 extends qw(GraphQL::Type);
 with qw(
   GraphQL::Role::Output

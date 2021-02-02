@@ -6,7 +6,6 @@ use warnings;
 use Moo;
 use Types::Standard -all;
 use GraphQL::MaybeTypeCheck;
-
 extends qw(GraphQL::Type);
 with qw(
   GraphQL::Role::Output
