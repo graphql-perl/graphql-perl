@@ -10,3 +10,4 @@ MYMETA\..*
 ^Makefile.bak$
 pm_to_blib
 \.swp$
+^\.github\/
