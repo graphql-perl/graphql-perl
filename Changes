@@ -1,3 +1,4 @@
+0.47 2021-02-02
 - type-checking now only when Devel::StrictMode STRICT (#31) - thanks @ccakes
 - can give default values to enums in queries (#33) - thanks @ccakes
 - eliminate tail-call in type expansion - thanks @ccakes
