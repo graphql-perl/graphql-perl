@@ -7,8 +7,7 @@ use Moo;
 use MooX::Thunking;
 use Types::Standard -all;
 use GraphQL::Type::Library -all;
-use Return::Type;
-use Function::Parameters;
+use GraphQL::MaybeTypeCheck;
 use GraphQL::Debug qw(_debug);
 extends qw(GraphQL::Type);
 with qw(

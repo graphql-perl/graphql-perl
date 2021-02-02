@@ -4,8 +4,7 @@ use 5.014;
 use strict;
 use warnings;
 use Moo;
-use Return::Type;
-use Function::Parameters;
+use GraphQL::MaybeTypeCheck;
 use Types::Standard qw(InstanceOf Any HashRef Str); # if -all causes objects to be class 'Object'!
 with 'GraphQL::Role::Listable';
 

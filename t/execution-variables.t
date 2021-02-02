@@ -1,6 +1,8 @@
 use lib 't/lib';
 use GQLTest;
 
+use Devel::StrictMode;
+
 BEGIN {
   use_ok( 'GraphQL::Type::Scalar', qw($String) ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::InputObject' ) || print "Bail out!\n";
@@ -138,6 +140,7 @@ subtest 'Handles objects and nullability', sub {
     };
 
     subtest 'does not use incorrect value', sub {
+      plan skip_all => 'Type check disabled' unless STRICT;
       my $doc = '{
         fieldWithObjectInput(input: ["foo", "bar", "baz"])
       }';
@@ -213,6 +216,7 @@ subtest 'Handles objects and nullability', sub {
     };
 
     subtest 'errors on null for nested non-null', sub {
+      plan skip_all => 'Type check disabled' unless STRICT;
       my $vars = { input => { a => 'foo', b => 'bar', c => undef } };
       run_test(
         [$schema, $doc, undef, undef, $vars],
@@ -224,6 +228,7 @@ subtest 'Handles objects and nullability', sub {
     };
 
     subtest 'errors on incorrect type', sub {
+      plan skip_all => 'Type check disabled' unless STRICT;
       my $vars = { input => 'foo bar' };
       run_test(
         [$schema, $doc, undef, undef, $vars],

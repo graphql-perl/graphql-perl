@@ -7,8 +7,8 @@ use Moo;
 use Types::Standard -all;
 use GraphQL::Type::Library -all;
 use GraphQL::Debug qw(_debug);
-use Function::Parameters;
-use Return::Type;
+use GraphQL::MaybeTypeCheck;
+
 extends qw(GraphQL::Type);
 with qw(
   GraphQL::Role::Input

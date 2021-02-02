@@ -12,6 +12,7 @@ lib/GraphQL/Introspection.pm
 lib/GraphQL/Language/Grammar.pm
 lib/GraphQL/Language/Parser.pm
 lib/GraphQL/Language/Receiver.pm
+lib/GraphQL/MaybeTypeCheck.pm
 lib/GraphQL/Plugin/Convert.pm
 lib/GraphQL/Plugin/Convert/Test.pm
 lib/GraphQL/Plugin/Type.pm

@@ -8,8 +8,7 @@ use GraphQL::Debug qw(_debug);
 use Types::TypeTiny -all;
 use Types::Standard -all;
 use GraphQL::Type::Library -all;
-use Function::Parameters;
-use Return::Type;
+use GraphQL::MaybeTypeCheck;
 
 use constant DEBUG => $ENV{GRAPHQL_DEBUG};
 

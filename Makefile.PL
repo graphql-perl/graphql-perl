@@ -17,10 +17,11 @@ WriteMakefile(
     'Test::More' => '0.88', # done_testing
     'Test::Exception' => '0.42',
     'Test::Deep' => '1.127',
-    'Import::Into' => '0',
   },
   PREREQ_PM => {
     'Moo' => '0',
+    'Attribute::Handlers' => '0',
+    'Import::Into' => '0',
     'Type::Tiny' => '0',
     'Module::Runtime' => '0',
     'Function::Parameters' => '2.001001',
@@ -31,6 +32,7 @@ WriteMakefile(
     'JSON::PP' => '2.92', # number detection
     'DateTime' => 0,
     'DateTime::Format::ISO8601' => 0,
+    'Devel::StrictMode' => 0,
     'curry' => 0,
   },
   dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },

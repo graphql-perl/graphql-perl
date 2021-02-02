@@ -1,5 +1,6 @@
 use lib 't/lib';
 use GQLTest;
+use Devel::StrictMode;
 
 my $JSON = JSON::MaybeXS->new->allow_nonref->canonical;
 
@@ -12,6 +13,7 @@ BEGIN {
 }
 
 subtest 'throws if no document is provided' => sub {
+  plan skip_all => 'Type check disabled' unless STRICT;
   my $schema = GraphQL::Schema->new(
     query => GraphQL::Type::Object->new(
       name => 'Type',

@@ -4,8 +4,7 @@ use 5.014;
 use strict;
 use warnings;
 use Moo::Role;
-use Function::Parameters;
-use Return::Type;
+use GraphQL::MaybeTypeCheck;
 use Types::Standard -all;
 
 our $VERSION = '0.02';

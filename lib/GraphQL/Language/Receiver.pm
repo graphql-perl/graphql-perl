@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use base 'Pegex::Receiver';
 use Types::Standard -all;
-use Function::Parameters;
+use GraphQL::MaybeTypeCheck;
 use JSON::MaybeXS;
 use Carp;
 

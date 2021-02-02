@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Moo::Role;
 use Types::Standard -all;
-use Function::Parameters;
+use GraphQL::MaybeTypeCheck;
 use GraphQL::Type::Library qw(StrNameValid);
 
 our $VERSION = '0.02';

@@ -8,8 +8,7 @@ use GraphQL::Debug qw(_debug);
 use Types::Standard -all;
 use GraphQL::Type::Library -all;
 use MooX::Thunking;
-use Function::Parameters;
-use Return::Type;
+use GraphQL::MaybeTypeCheck;
 extends qw(GraphQL::Type);
 with qw(
   GraphQL::Role::Output

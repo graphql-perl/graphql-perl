@@ -9,8 +9,7 @@ use Types::Standard -all;
 use Types::TypeTiny -all;
 use GraphQL::Type::Library -all;
 use GraphQL::PubSub;
-use Function::Parameters;
-use Return::Type;
+use GraphQL::MaybeTypeCheck;
 use curry;
 
 use constant DEBUG => $ENV{GRAPHQL_DEBUG};
