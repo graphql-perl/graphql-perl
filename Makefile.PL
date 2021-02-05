@@ -21,7 +21,7 @@ WriteMakefile(
   PREREQ_PM => {
     'Moo' => '0',
     'Attribute::Handlers' => '0',
-    'Import::Into' => '0',
+    'Import::Into' => '1.002003', # loads modules
     'Type::Tiny' => '0',
     'Module::Runtime' => '0',
     'Function::Parameters' => '2.001001',
