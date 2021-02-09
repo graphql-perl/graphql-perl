@@ -664,4 +664,17 @@ subtest 'asynciterator' => sub {
   throws_ok { $ai->publish(6) } qr{closed}, 'publish to closed off';
 };
 
+subtest "sane class heirarchy" => sub {
+  package OtherNamespace::Foo {
+    use GraphQL::Type::Object;
+  }
+
+  package OtherNamespace::Bar {
+    use GraphQL::MaybeTypeCheck;
+  }
+
+  is_deeply \@OtherNamespace::Foo::ISA, [], "OtherNamespace::Foo does not inherit MaybeTypeCheck";
+  is_deeply \@OtherNamespace::Bar::ISA, ['GraphQL::MaybeTypeCheck'], "OtherNamespace::Bar does inherit MaybeTypeCheck";
+};
+
 done_testing;
