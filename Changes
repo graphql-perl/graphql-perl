@@ -1,3 +1,5 @@
+- type-checking only on direct MaybeTypeCheck use (#35) - thanks @ccakes
+
 0.48 2021-02-05
 - require Import::Into 1.002003 as we depend on module-loading
 
