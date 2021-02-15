@@ -60,16 +60,12 @@ sub ReturnType : ATTR(CODE) {
 }
 
 sub import {
+  return unless $_[0] eq __PACKAGE__;
   my $caller = caller;
-
-  # Here we push ourselves onto @ISA of the caller so they use our ReturnType
-  # attribute which conditionally wraps the target sub depending on whetther
-  # strict mode is enabled or not.
   {
     no strict 'refs';
     push @{"${caller}::ISA"}, __PACKAGE__;
   }
-
   if (STRICT) {
     Function::Parameters->import::into($caller, ':strict');
     require Return::Type;
