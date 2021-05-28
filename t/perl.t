@@ -675,4 +675,41 @@ subtest "sane class hierarchy" => sub {
   is_deeply \@OtherNamespace::Bar::ISA, ['GraphQL::MaybeTypeCheck'], "OtherNamespace::Bar does inherit MaybeTypeCheck";
 };
 
+subtest 'can build a schema directly from the source with keyword override' => sub {
+  # define my own Scalar
+  # this serializes the return value uppercased
+  {
+    package GraphQL::Test::Type::MyScalar;
+    use Moo;
+    use Types::Standard -all;
+    use GraphQL::MaybeTypeCheck;
+    extends qw(GraphQL::Type::Scalar);
+    method from_ast(
+      HashRef $name2type,
+      HashRef $ast_node,
+    ) :ReturnType(InstanceOf[__PACKAGE__]) {
+      return $self->new(
+        $self->_from_ast_named($ast_node),
+        serialize   => sub { uc $_[0] },
+        parse_value => sub { lc $_[0] },
+      );
+    }
+  }
+  my $doc = <<'EOF';
+schema { query: Query }
+scalar TestScalar
+type Query {
+  test: TestScalar!
+}
+EOF
+  my $schema = GraphQL::Schema->from_doc(
+    $doc,
+    { %GraphQL::Schema::KIND2CLASS, scalar => 'GraphQL::Test::Type::MyScalar' }
+  );
+  run_test(
+    [$schema, '{ test }', { test => sub { 'test' } }],
+    { data => { test => 'TEST' } },
+  );
+};
+
 done_testing;
