@@ -1,3 +1,5 @@
+- from_doc accepts kind2class to override SDL keyword - thanks @mangano-ito
+
 0.50 2021-04-08
 - Scalar.parse_value was wrong for Boolean - thanks @ccakes for report
 
