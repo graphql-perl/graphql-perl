@@ -5,6 +5,7 @@ use Test::More;
 use Test::Exception;
 
 BEGIN {
+  use_ok( 'GraphQL::Plugin::Type::DateTime' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::Interface' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::Object' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::Enum' ) || print "Bail out!\n";

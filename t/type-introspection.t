@@ -4,6 +4,7 @@ use GQLTest;
 my $JSON = JSON::MaybeXS->new->allow_nonref;
 
 BEGIN {
+  use_ok( 'GraphQL::Plugin::Type::DateTime' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Schema' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::Object' ) || print "Bail out!\n";
   use_ok( 'GraphQL::Type::InputObject' ) || print "Bail out!\n";

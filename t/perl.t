@@ -7,6 +7,7 @@ my $JSON = JSON::MaybeXS->new->allow_nonref->canonical;
 
 use GraphQL::Schema;
 use GraphQL::Execution qw(execute);
+use GraphQL::Plugin::Type::DateTime;
 use GraphQL::Subscription qw(subscribe);
 use GraphQL::Type::Scalar qw($Int $Float $String $Boolean);
 use GraphQL::Type::InputObject;

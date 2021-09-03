@@ -10,7 +10,6 @@ use GraphQL::MaybeTypeCheck;
 use GraphQL::Debug qw(_debug);
 use GraphQL::Directive;
 use GraphQL::Introspection qw($SCHEMA_META_TYPE);
-use GraphQL::Plugin::Type::DateTime;
 use GraphQL::Language::Parser qw(parse);
 use GraphQL::Plugin::Type;
 use Module::Runtime qw(require_module);
@@ -70,8 +69,8 @@ has subscription => (is => 'ro', isa => InstanceOf['GraphQL::Type::Object']);
 =head2 types
 
 Defaults to the types returned by L<GraphQL::Plugin::Type/registered>.
-Note that this includes the non-standard C<DateTime> type, and the
-standard scalar types, always loaded by L<GraphQL::Type::Scalar>. If you
+Note that this includes the standard scalar types always loaded by
+L<GraphQL::Type::Scalar>. If you
 wish to supply an overriding value for this attribute, bear that in mind.
 
 =cut

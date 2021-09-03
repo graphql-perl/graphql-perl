@@ -1,3 +1,5 @@
+- not always load DateTime type - thanks @mangano-ito
+
 0.51 2021-07-04
 - from_doc accepts kind2class to override SDL keyword - thanks @mangano-ito
 
