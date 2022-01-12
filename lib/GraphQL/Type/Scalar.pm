@@ -163,7 +163,7 @@ our $String = GraphQL::Type::Scalar->new(
     'The `String` scalar type represents textual data, represented as UTF-8 ' .
     'character sequences. The String type is most often used by GraphQL to ' .
     'represent free-form human-readable text.',
-  serialize => _leave_undef(sub { !is_Str($_[0]) and die "Not a String.\n"; $_[0] }),
+  serialize => _leave_undef(sub { !is_Str($_[0]) and die "Not a String.\n"; $_[0].'' }),
   parse_value => _leave_undef(sub { !is_Str($_[0]) and die "Not a String.\n"; $_[0] }),
 );
 
