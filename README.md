@@ -42,12 +42,12 @@ This module is a port of the GraphQL reference implementation,
 [graphql-js](https://github.com/graphql-js/graphql-js), to Perl 5.
 
 It now supports Promises, allowing asynchronous operation. See
-[Mojolicious::Plugin::GraphQL](https://metacpan.org/pod/Mojolicious::Plugin::GraphQL) for an example of how to take advantage
+[Mojolicious::Plugin::GraphQL](https://metacpan.org/pod/Mojolicious%3A%3APlugin%3A%3AGraphQL) for an example of how to take advantage
 of this.
 
 As of 0.39, supports GraphQL subscriptions.
 
-See [GraphQL::Type](https://metacpan.org/pod/GraphQL::Type) for description of how to create GraphQL types.
+See [GraphQL::Type](https://metacpan.org/pod/GraphQL%3A%3AType) for description of how to create GraphQL types.
 
 ## Introduction to GraphQL
 
@@ -76,9 +76,9 @@ it makes this efficient in network traffic, time, and programming effort:
 
 ## Basic concepts
 
-GraphQL implements a system featuring a [schema](https://metacpan.org/pod/GraphQL::Schema),
-which features various classes of [types](https://metacpan.org/pod/GraphQL::Type), some of which
-are [objects](https://metacpan.org/pod/GraphQL::Type::Object). Special objects provide the roots
+GraphQL implements a system featuring a [schema](https://metacpan.org/pod/GraphQL%3A%3ASchema),
+which features various classes of [types](https://metacpan.org/pod/GraphQL%3A%3AType), some of which
+are [objects](https://metacpan.org/pod/GraphQL%3A%3AType%3A%3AObject). Special objects provide the roots
 of queries (mandatory), and mutations and subscriptions (both optional).
 
 Objects have fields, each of which can be specified to take arguments,
@@ -92,7 +92,7 @@ For more, see the JavaScript tutorial in ["SEE ALSO"](#see-also).
 ## Hooking your system up to GraphQL
 
 You will need to decide how to model your system in GraphQL terms. This
-will involve deciding on what [output object types](https://metacpan.org/pod/GraphQL::Type::Object)
+will involve deciding on what [output object types](https://metacpan.org/pod/GraphQL%3A%3AType%3A%3AObject)
 you have, what fields they have, and what arguments and return-types
 those fields have.
 
@@ -102,7 +102,7 @@ to ensure you can get all the information you need to proceed to avoid
 extra round-trips.
 
 The easiest way to achieve these things is to make a
-[GraphQL::Plugin::Convert](https://metacpan.org/pod/GraphQL::Plugin::Convert) subclass, to encapsulate the specifics of
+[GraphQL::Plugin::Convert](https://metacpan.org/pod/GraphQL%3A%3APlugin%3A%3AConvert) subclass, to encapsulate the specifics of
 your system. See the documentation for further information.
 
 Finally, you should consider whether you need "subscriptions". These
@@ -110,7 +110,7 @@ are designed to hook into WebSockets. Apollo has a [JavaScript
 module](https://github.com/apollographql/graphql-subscriptions) for this.
 
 Specifying types and fields is straightforward. See [the
-document](https://metacpan.org/pod/GraphQL::Type::Library#FieldMapOutput) for how to make resolvers.
+document](https://metacpan.org/pod/GraphQL%3A%3AType%3A%3ALibrary#FieldMapOutput) for how to make resolvers.
 
 # DEBUGGING
 
@@ -122,12 +122,12 @@ None yet.
 
 # SEE ALSO
 
-[SQL::Translator::Producer::GraphQL](https://metacpan.org/pod/SQL::Translator::Producer::GraphQL) - produce GraphQL schemas from a [DBIx::Class::Schema](https://metacpan.org/pod/DBIx::Class::Schema) (or in fact any SQL database)
+[SQL::Translator::Producer::GraphQL](https://metacpan.org/pod/SQL%3A%3ATranslator%3A%3AProducer%3A%3AGraphQL) - produce GraphQL schemas from a [DBIx::Class::Schema](https://metacpan.org/pod/DBIx%3A%3AClass%3A%3ASchema) (or in fact any SQL database)
 
-[GraphQL::Plugin::Convert::DBIC](https://metacpan.org/pod/GraphQL::Plugin::Convert::DBIC) - produce working GraphQL schema from
-a [DBIx::Class::Schema](https://metacpan.org/pod/DBIx::Class::Schema)
+[GraphQL::Plugin::Convert::DBIC](https://metacpan.org/pod/GraphQL%3A%3APlugin%3A%3AConvert%3A%3ADBIC) - produce working GraphQL schema from
+a [DBIx::Class::Schema](https://metacpan.org/pod/DBIx%3A%3AClass%3A%3ASchema)
 
-[GraphQL::Plugin::Convert::OpenAPI](https://metacpan.org/pod/GraphQL::Plugin::Convert::OpenAPI) - produce working GraphQL schema
+[GraphQL::Plugin::Convert::OpenAPI](https://metacpan.org/pod/GraphQL%3A%3APlugin%3A%3AConvert%3A%3AOpenAPI) - produce working GraphQL schema
 from an OpenAPI specification
 
 [Sample Mojolicious OpenAPI to GraphQL applet](https://github.com/graphql-perl/sample-mojolicious-openapi)
@@ -136,9 +136,9 @@ from an OpenAPI specification
 
 [Sample Mojolicious applet](https://github.com/graphql-perl/sample-mojolicious)
 
-[Dancer2::Plugin::GraphQL](https://metacpan.org/pod/Dancer2::Plugin::GraphQL)
+[Dancer2::Plugin::GraphQL](https://metacpan.org/pod/Dancer2%3A%3APlugin%3A%3AGraphQL)
 
-[Mojolicious::Plugin::GraphQL](https://metacpan.org/pod/Mojolicious::Plugin::GraphQL)
+[Mojolicious::Plugin::GraphQL](https://metacpan.org/pod/Mojolicious%3A%3APlugin%3A%3AGraphQL)
 
 [http://facebook.github.io/graphql/](http://facebook.github.io/graphql/) - GraphQL specification
 
