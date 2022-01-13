@@ -191,7 +191,7 @@ our $ID = GraphQL::Type::Scalar->new(
     'response as a String; however, it is not intended to be human-readable. ' .
     'When expected as an input type, any string (such as `"4"`) or integer ' .
     '(such as `4`) input value will be accepted as an ID.',
-  serialize => _leave_undef(sub { Str->(@_); $_[0] }),
+  serialize => _leave_undef(sub { Str->(@_); $_[0].'' }),
   parse_value => _leave_undef(sub { Str->(@_); $_[0] }),
 );
 

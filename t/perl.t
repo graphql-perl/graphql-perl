@@ -9,7 +9,7 @@ use GraphQL::Schema;
 use GraphQL::Execution qw(execute);
 use GraphQL::Plugin::Type::DateTime;
 use GraphQL::Subscription qw(subscribe);
-use GraphQL::Type::Scalar qw($Int $Float $String $Boolean);
+use GraphQL::Type::Scalar qw($Int $Float $String $Boolean $ID);
 use GraphQL::Type::InputObject;
 use GraphQL::Type::Object;
 use GraphQL::Type::Interface;
@@ -356,6 +356,9 @@ subtest 'test Scalar methods' => sub {
     is $type->$_->(undef), undef, join(' ', $type->name, $_, 'null')
       for qw(serialize parse_value);
   }
+
+  is $JSON->encode( $String->serialize->(1 + 1) ), '"2"', "String serialize a number json encodes as string";
+  is $JSON->encode( $ID->serialize->(1 + 1) ), '"2"', "String serialize a ID json encodes as string"
 };
 
 subtest 'exercise __type root field more'=> sub {
