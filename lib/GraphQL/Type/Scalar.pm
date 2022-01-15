@@ -163,7 +163,7 @@ our $String = GraphQL::Type::Scalar->new(
     'The `String` scalar type represents textual data, represented as UTF-8 ' .
     'character sequences. The String type is most often used by GraphQL to ' .
     'represent free-form human-readable text.',
-  serialize => _leave_undef(sub { !is_Str($_[0]) and die "Not a String.\n"; $_[0] }),
+  serialize => _leave_undef(sub { !is_Str($_[0]) and die "Not a String.\n"; $_[0].'' }),
   parse_value => _leave_undef(sub { !is_Str($_[0]) and die "Not a String.\n"; $_[0] }),
 );
 
@@ -191,7 +191,7 @@ our $ID = GraphQL::Type::Scalar->new(
     'response as a String; however, it is not intended to be human-readable. ' .
     'When expected as an input type, any string (such as `"4"`) or integer ' .
     '(such as `4`) input value will be accepted as an ID.',
-  serialize => _leave_undef(sub { Str->(@_); $_[0] }),
+  serialize => _leave_undef(sub { Str->(@_); $_[0].'' }),
   parse_value => _leave_undef(sub { Str->(@_); $_[0] }),
 );
 
