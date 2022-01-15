@@ -1,3 +1,6 @@
+0.53 2022-01-15
+- String and ID now always serialise to JSON strings - thanks @cliveholloway
+
 0.52 2021-09-03
 - not always load DateTime type - thanks @mangano-ito
 
