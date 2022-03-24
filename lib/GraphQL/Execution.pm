@@ -750,11 +750,11 @@ fun _default_field_resolver(
     ? $root_value->{$field_name}
     : $root_value;
   DEBUG and _debug('_default_field_resolver', $root_value, $field_name, $args, $property);
-  if (eval { CodeLike->($property); 1 }) {
+  if (length(ref $property) and eval { CodeLike->($property); 1 }) {
     DEBUG and _debug('_default_field_resolver', 'codelike');
     return $property->($args, $context, $info);
   }
-  if (is_InstanceOf($root_value) and $root_value->can($field_name)) {
+  if (length(ref $root_value) and is_InstanceOf($root_value) and $root_value->can($field_name)) {
     DEBUG and _debug('_default_field_resolver', 'method');
     return $root_value->$field_name($args, $context, $info);
   }
