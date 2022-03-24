@@ -17,6 +17,7 @@ use GraphQL::Introspection qw(
 use GraphQL::Directive;
 use GraphQL::Schema qw(lookup_type);
 use Exporter 'import';
+use Scalar::Util qw(blessed);
 
 =head1 NAME
 
@@ -750,11 +751,14 @@ fun _default_field_resolver(
     ? $root_value->{$field_name}
     : $root_value;
   DEBUG and _debug('_default_field_resolver', $root_value, $field_name, $args, $property);
-  if (length(ref $property) and eval { CodeLike->($property); 1 }) {
+  if (length(ref $property) and (
+    ref($property) eq 'CODE' or
+    (blessed $property and overload::Method($property, '&{}'))
+  )) {
     DEBUG and _debug('_default_field_resolver', 'codelike');
     return $property->($args, $context, $info);
   }
-  if (length(ref $root_value) and is_InstanceOf($root_value) and $root_value->can($field_name)) {
+  if (length(ref $root_value) and blessed($root_value) and $root_value->can($field_name)) {
     DEBUG and _debug('_default_field_resolver', 'method');
     return $root_value->$field_name($args, $context, $info);
   }

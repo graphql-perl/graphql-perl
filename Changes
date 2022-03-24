@@ -1,3 +1,5 @@
+- replace use of Type::Tiny assertions for performance reasons
+
 0.53 2022-01-15
 - String and ID now always serialise to JSON strings - thanks @cliveholloway
 
