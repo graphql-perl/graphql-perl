@@ -39,7 +39,7 @@ The above is from [the sample Dancer 2 applet](https://github.com/graphql-perl/s
 # DESCRIPTION
 
 This module is a port of the GraphQL reference implementation,
-[graphql-js](https://github.com/graphql-js/graphql-js), to Perl 5.
+[graphql-js](https://github.com/graphql/graphql-js), to Perl 5.
 
 It now supports Promises, allowing asynchronous operation. See
 [Mojolicious::Plugin::GraphQL](https://metacpan.org/pod/Mojolicious%3A%3APlugin%3A%3AGraphQL) for an example of how to take advantage
