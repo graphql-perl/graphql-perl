@@ -7,6 +7,31 @@ on:
       - '*'
   pull_request:
 jobs:
+  coverage:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install cpanm # from Text-Balanced
+        shell: bash
+        run: curl -L https://cpanmin.us | perl - --sudo App::cpanminus
+      - run: sudo cpanm -n --installdeps .
+      - run: perl -V
+      - name: Run release tests # before others as may install useful stuff
+        env:
+          RELEASE_TESTING: 1
+        run: |
+          sudo cpanm -n --installdeps --with-develop .
+          prove -lr xt
+      - name: Run tests (with coverage)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          sudo cpanm -n Devel::Cover::Report::Coveralls
+          HARNESS_OPTIONS='j4' cover -test -report Coveralls
   ubuntu:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -14,33 +39,13 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         perl-version: ['5.14', '5.20']
-        include:
-          - perl-version: '5.30'
-            os: ubuntu-latest
-            release-test: true
-            coverage: true
     container: perl:${{ matrix.perl-version }}
     steps:
       - uses: actions/checkout@v2
       - run: cpanm -n --installdeps .
       - run: perl -V
-      - name: Run release tests # before others as may install useful stuff
-        if: ${{ matrix.release-test }}
-        env:
-          RELEASE_TESTING: 1
-        run: |
-          cpanm -n --installdeps --with-develop .
-          prove -lr xt
       - name: Run tests (no coverage)
-        if: ${{ !matrix.coverage }}
         run: prove -l -j4 t
-      - name: Run tests (with coverage)
-        if: ${{ matrix.coverage }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          cpanm -n Devel::Cover::Report::Coveralls
-          HARNESS_OPTIONS='j4' cover -test -report Coveralls
   non-linux:
     runs-on: ${{ matrix.os }}
     strategy:
