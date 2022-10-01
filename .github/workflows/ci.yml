@@ -32,6 +32,11 @@ jobs:
         run: |
           sudo cpanm -n Devel::Cover::Report::Coveralls
           HARNESS_OPTIONS='j4' cover -test -report Coveralls
+      - name: Setup tmate session
+        if: ${{ always() }}
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: true
   ubuntu:
     runs-on: ${{ matrix.os }}
     strategy:
