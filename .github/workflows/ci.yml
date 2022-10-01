@@ -39,6 +39,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          cpanm -n Devel::Cover@1.36 # 1.38 breaks, see https://github.com/pjcj/Devel--Cover/pull/307
           cpanm -n Devel::Cover::Report::Coveralls
           HARNESS_OPTIONS='j4' cover -test -report Coveralls
   non-linux:
